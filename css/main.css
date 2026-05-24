@@ -156,10 +156,7 @@ html { overflow-x: hidden; }
   border: 1px solid var(--gray-200);
 }
 .badge-dot {
-  width: 6px; height: 6px;
-  background: #22c55e;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
+  display: none;
 }
 h1 {
   font-family: 'Bricolage Grotesque', sans-serif;
