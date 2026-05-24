@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dashboard – DMFlow</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+
+<!-- WELCOME MODAL -->
+<div class="dash-welcome-modal-overlay" id="welcomeModal">
+  <div class="dash-welcome-modal">
+    <button class="modal-close" onclick="document.getElementById('welcomeModal').style.display='none'">×</button>
+    <p class="modal-title-small">Welcome <span class="modal-username" id="modalUsername">@you</span></p>
+    <h2 class="modal-h1">Let's set up your first automation</h2>
+    <div class="modal-templates">
+      <div class="modal-template featured">
+        <div class="modal-template-badge">MOST POPULAR</div>
+        <h3>Send link on keyword</h3>
+        <p>Someone comments "LINK" → they get your link in DMs.</p>
+        <div class="modal-chat">
+          <div class="mc-in"><div class="mc-av">M</div><div class="mc-bubble-in">Need the LINK please!</div></div>
+          <div class="mc-bubble-out">Here's your link!</div>
+          <div class="mc-btn">🛍 Shop the look →</div>
+        </div>
+        <a href="automation-builder.html" class="btn-start-template">Start with this</a>
+      </div>
+      <div class="modal-template">
+        <div class="modal-template-badge" style="background:var(--gray-200);color:var(--text2);">STORY REPLY</div>
+        <h3>Send link on story reaction</h3>
+        <p>Someone reacts 🔥 or replies → they get your link in DMs.</p>
+        <div class="modal-chat">
+          <div class="mc-in"><div class="mc-av">J</div><div class="mc-bubble-in">🔥 reacted to your story</div></div>
+          <div class="mc-bubble-out">Here's the link!</div>
+          <div class="mc-btn">🛒 Shop now →</div>
+        </div>
+        <a href="automation-builder.html" class="btn-start-template" style="background:var(--gray-100);color:var(--black);">Or try this</a>
+      </div>
+    </div>
+    <div class="modal-features">
+      <span>⏱ Live in 2 minutes</span>
+      <span>⚡ Automatic replies</span>
+      <span>👁 Preview before going live</span>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE TOP BAR -->
+<div class="dash-mobile-topbar" style="display:none;">
+  <a href="../index.html" class="dash-mobile-logo">DM<span>Flow</span></a>
+  <div class="dash-hamburger" id="dashHamburger" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+<!-- Sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="dashboard">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo" style="display:flex;align-items:center;justify-content:space-between;">
+      <a href="../index.html" class="logo" style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;text-decoration:none;">DM<span style="color:#7C3AED;">Flow</span></a>
+    </div>
+
+    <!-- User info in sidebar -->
+    <div class="dash-user-header" id="sidebarUser">
+      <div class="dash-user-avatar" id="sidebarAvatar">U</div>
+      <div>
+        <div class="dash-user-name" id="sidebarName">User</div>
+        <div class="dash-user-email" id="sidebarEmail">Free Plan</div>
+      </div>
+    </div>
+
+    <!-- Connected IG Account -->
+    <div class="ig-connected-badge" id="igBadge" style="display:none;">
+      <div class="ig-dot"></div>
+      <div>
+        <div style="font-size:12px;font-weight:700;" id="igBadgeUser">@username</div>
+        <div style="font-size:11px;color:var(--text2);font-weight:400;">Instagram connected</div>
+      </div>
+      <a href="connect.html" style="margin-left:auto;font-size:11px;color:var(--purple);text-decoration:none;font-weight:600;">+ Add</a>
+    </div>
+
+    <a href="automation-builder.html" class="sidebar-new-btn">+ New Automation</a>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="active"><span class="sidebar-nav-icon">🏠</span> Home</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">⚡</span> Automations</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">📋</span> Templates</a>
+      <div class="sidebar-nav-item"><span class="sidebar-nav-icon">📁</span> My Content <span style="margin-left:auto;font-size:12px;">▾</span></div>
+      <div class="sidebar-sub open">
+        <a href="automation-builder.html">Posts & Reels</a>
+        <a href="automation-builder.html">Stories</a>
+      </div>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">👥</span> Contacts</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">🏷️</span> Keywords</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">💬</span> Inbox</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">⏮</span> Rewind</a>
+      <div class="sidebar-nav-item"><span class="sidebar-nav-icon">📊</span> Analytics <span style="margin-left:auto;font-size:12px;">▾</span></div>
+      <div class="sidebar-sub open">
+        <a href="automation-builder.html">Overview</a>
+        <a href="automation-builder.html">Audience Insights</a>
+        <a href="automation-builder.html">DM Reports</a>
+      </div>
+      <a href="platform-select.html"><span class="sidebar-nav-icon">📱</span> Add Platform</a>
+      <a href="security.html" target="_blank"><span class="sidebar-nav-icon">⚙️</span> Settings</a>
+      <a href="security.html" target="_blank"><span class="sidebar-nav-icon">❓</span> Support</a>
+      <a href="login.html" id="signOutLink" style="margin-top:8px;color:var(--text2);"><span class="sidebar-nav-icon">🚪</span> Sign out</a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-stat">
+        <div class="stat-label">DMs sent <span>0/500</span></div>
+        <div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div>
+      </div>
+      <div class="sidebar-stat">
+        <div class="stat-label">IG accounts <span>1/1</span></div>
+        <div class="stat-bar"><div class="stat-fill" style="width:100%"></div></div>
+      </div>
+      <a href="#pricing" style="display:block;text-align:center;font-size:12px;color:var(--purple);margin-top:8px;text-decoration:none;font-weight:600;">Buy More DMs</a>
+      <a href="../index.html#pricing" class="btn-upgrade">⬆ Upgrade Plan</a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="dash-main">
+    <!-- TRIAL BAR -->
+    <div class="dash-topbar" id="trialBar">
+      <span class="dash-topbar-text">Upgrade to unlock every feature and accelerate your growth</span>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a href="../index.html#pricing" class="btn-topbar-trial">Try 14 Days For Free</a>
+        <a href="../index.html#pricing" style="font-size:13px;color:var(--black);font-weight:600;text-decoration:none;">View pricing</a>
+      </div>
+      <button class="dash-topbar-close" onclick="document.getElementById('trialBar').style.display='none'">×</button>
+    </div>
+
+    <div class="dash-content">
+      <div style="margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;color:var(--black);letter-spacing:-0.8px;margin-bottom:6px;" id="greetingMsg">Good morning! 👋</h1>
+          <p style="font-size:14px;color:var(--text2);">Here's what's happening with your automations.</p>
+        </div>
+        <!-- IG account not connected warning -->
+        <div id="igWarning" style="display:none;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:12px;padding:10px 16px;font-size:13px;display:flex;align-items:center;gap:10px;">
+          <span>⚠️</span>
+          <span>No Instagram connected</span>
+          <a href="connect.html" style="color:var(--purple);font-weight:700;text-decoration:none;">Connect now →</a>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card-label">DMs sent this month</div>
+          <div class="stat-card-val">0</div>
+          <div class="stat-card-change">— Get started →</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Active automations</div>
+          <div class="stat-card-val">0</div>
+          <div class="stat-card-change">— Create one →</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Leads collected</div>
+          <div class="stat-card-val">0</div>
+          <div class="stat-card-change">— Upgrade to collect</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">IG accounts</div>
+          <div class="stat-card-val" id="igAccountCount">0</div>
+          <div class="stat-card-change" id="igAccountStatus" style="color:var(--text2);">— Connect one →</div>
+        </div>
+      </div>
+
+      <!-- IG ACCOUNT INFO CARD -->
+      <div id="igAccountCard" style="display:none;background:#fff;border:1.5px solid #e5e7eb;border-radius:16px;padding:20px 24px;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;margin:0;">Connected Instagram Account</h2>
+          <a href="connect.html" style="font-size:12px;color:#7C3AED;text-decoration:none;font-weight:600;">+ Add another</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div id="igCardAvatar" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;flex-shrink:0;">I</div>
+          <div style="flex:1;">
+            <div id="igCardUsername" style="font-size:15px;font-weight:700;color:#0A0A0F;">@username</div>
+            <div style="font-size:12px;color:#22c55e;font-weight:600;margin-top:2px;">● Live &amp; Active</div>
+          </div>
+          <div style="display:flex;gap:20px;text-align:center;">
+            <div><div id="igCardFollowers" style="font-size:15px;font-weight:800;color:#0A0A0F;">—</div><div style="font-size:11px;color:#6b7280;">Followers</div></div>
+            <div><div id="igCardPosts" style="font-size:15px;font-weight:800;color:#0A0A0F;">—</div><div style="font-size:11px;color:#6b7280;">Posts</div></div>
+            <div><div id="igCardDMs" style="font-size:15px;font-weight:800;color:#7C3AED;">0</div><div style="font-size:11px;color:#6b7280;">DMs sent</div></div>
+          </div>
+        </div>
+        <!-- Rules reminder -->
+        <div style="margin-top:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;font-size:12px;color:#166534;line-height:1.6;">
+          <strong>✅ Account health:</strong> No violations detected. Keep automations within Instagram's daily DM limits (500/day on Pro). Avoid sending the same message repeatedly to prevent spam flags.
+        </div>
+      </div>
+
+      <!-- QUICK START -->
+      <div style="background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:28px;margin-bottom:24px;">
+        <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px;">Quick start</h2>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:20px;">Create your first automation in under 2 minutes.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex-wrap:wrap;">
+          <a href="automation-builder.html" style="display:block;padding:16px;border:1.5px dashed var(--gray-200);border-radius:12px;text-decoration:none;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--gray-200)'">
+            <div style="font-size:24px;margin-bottom:8px;">🔗</div>
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Send link on comment</div>
+            <div style="font-size:12px;color:var(--text2);">Most popular</div>
+          </a>
+          <a href="automation-builder.html" style="display:block;padding:16px;border:1.5px dashed var(--gray-200);border-radius:12px;text-decoration:none;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--gray-200)'">
+            <div style="font-size:24px;margin-bottom:8px;">💬</div>
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Auto-reply comments</div>
+            <div style="font-size:12px;color:var(--text2);">New feature</div>
+          </a>
+          <a href="automation-builder.html" style="display:block;padding:16px;border:1.5px dashed var(--gray-200);border-radius:12px;text-decoration:none;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--gray-200)'">
+            <div style="font-size:24px;margin-bottom:8px;">📧</div>
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Collect emails</div>
+            <div style="font-size:12px;color:var(--text2);">Pro only</div>
+          </a>
+          <a href="automation-builder.html" style="display:block;padding:16px;border:1.5px dashed var(--gray-200);border-radius:12px;text-decoration:none;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--gray-200)'">
+            <div style="font-size:24px;margin-bottom:8px;">🏷️</div>
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Keyword triggers</div>
+            <div style="font-size:12px;color:var(--text2);">Set custom words</div>
+          </a>
+          <a href="automation-builder.html" style="display:block;padding:16px;border:1.5px dashed var(--gray-200);border-radius:12px;text-decoration:none;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--gray-200)'">
+            <div style="font-size:24px;margin-bottom:8px;">🔁</div>
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Story reactions</div>
+            <div style="font-size:12px;color:var(--text2);">React → get DM</div>
+          </a>
+          <a href="automation-builder.html" style="display:block;padding:16px;border:1.5px dashed var(--gray-200);border-radius:12px;text-decoration:none;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--gray-200)'">
+            <div style="font-size:24px;margin-bottom:8px;">🎁</div>
+            <div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Giveaway DMs</div>
+            <div style="font-size:12px;color:var(--text2);">Auto-pick winners</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- EMPTY AUTOMATIONS -->
+      <div style="background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:40px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:14px;">⚡</div>
+        <h3 style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;">No automations yet</h3>
+        <p style="font-size:14px;color:var(--text2);max-width:360px;margin:0 auto 20px;line-height:1.6;">Create your first automation and start converting comments into customers automatically.</p>
+        <a href="automation-builder.html" style="display:inline-block;padding:11px 24px;background:var(--black);color:#fff;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;">+ Create automation</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+// Load user + automations from backend
+(async function() {
+  const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+  if (!user || !API.getToken()) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  // Greeting
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const firstName = (user.name || 'there').split(' ')[0];
+  document.getElementById('greetingMsg').textContent = greeting + ', ' + firstName + '! 👋';
+
+  // Modal username
+  document.getElementById('modalUsername').textContent = user.igUsername ? '@' + user.igUsername : (user.name || 'you');
+
+  // Sidebar user
+  document.getElementById('sidebarName').textContent = user.name || user.email || 'User';
+  document.getElementById('sidebarEmail').textContent = user.email || (user.phone || '') + ' · ' + (user.plan || 'Free') + ' Plan';
+  document.getElementById('sidebarAvatar').textContent = (user.name || 'U')[0].toUpperCase();
+
+  // Sign out
+  document.getElementById('signOutLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('dmflow_user');
+    API.clearToken();
+    window.location.href = 'login.html';
+  });
+
+  // IG account from stored user
+  const igUser = user.instagram || {};
+  if (igUser.connected || user.igConnected) {
+    const igName = igUser.username || user.igUsername;
+    document.getElementById('igBadge').style.display = 'flex';
+    document.getElementById('igBadgeUser').textContent = '@' + igName;
+    document.getElementById('igAccountCount').textContent = '1';
+    document.getElementById('igAccountStatus').textContent = '1 connected';
+    document.getElementById('igAccountStatus').style.color = '#22c55e';
+    if (document.getElementById('igWarning')) document.getElementById('igWarning').style.display = 'none';
+    // Show IG account card
+    const card = document.getElementById('igAccountCard');
+    if (card) {
+      card.style.display = 'block';
+      document.getElementById('igCardUsername').textContent = '@' + igName;
+      document.getElementById('igCardAvatar').textContent = igName[0].toUpperCase();
+      // Load stored profile data if any
+      const prof = igUser.profile || {};
+      if (prof.followers) document.getElementById('igCardFollowers').textContent = fmtNum(prof.followers);
+      if (prof.posts) document.getElementById('igCardPosts').textContent = fmtNum(prof.posts);
+    }
+  } else {
+    document.getElementById('igBadge').style.display = 'none';
+    if (document.getElementById('igWarning')) document.getElementById('igWarning').style.display = 'flex';
+  }
+
+  function fmtNum(n) {
+    if (!n && n !== 0) return '—';
+    if (n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+    if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+    return n.toString();
+  }
+
+  // Only show welcome modal once
+  if (!localStorage.getItem('dmflow_modal_seen')) {
+    document.getElementById('welcomeModal').style.display = 'flex';
+    localStorage.setItem('dmflow_modal_seen', '1');
+  } else {
+    document.getElementById('welcomeModal').style.display = 'none';
+  }
+
+  // ── Load automations from backend ──────────────────────
+  try {
+    const automations = await API.getAutomations();
+
+    // Update DMs sent stat
+    const dmsSent   = automations.reduce((s, a) => s + (a.stats?.dmsSent || 0), 0);
+    const activeAutos = automations.filter(a => a.active).length;
+    const dmLimitEl = document.querySelector('.stat-bar .stat-fill');
+    const dmLabelEl = document.querySelector('.stat-label span');
+
+    if (dmLabelEl) dmLabelEl.textContent = dmsSent + '/' + (user.dmLimit || 500);
+    if (dmLimitEl) dmLimitEl.style.width = Math.min((dmsSent / (user.dmLimit || 500)) * 100, 100) + '%';
+
+    // Update stat cards
+    const statVals = document.querySelectorAll('.stat-card-val');
+    if (statVals[0]) statVals[0].textContent = dmsSent;         // DMs sent
+    if (statVals[1]) statVals[1].textContent = activeAutos;     // Active automations
+
+  } catch(e) {
+    console.warn('Could not load automations:', e.message);
+  }
+})();
+</script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+function toggleSidebar() {
+  const sb = document.querySelector('.sidebar');
+  const ov = document.getElementById('sidebarOverlay');
+  sb.classList.toggle('mob-open');
+  ov.classList.toggle('show');
+  document.body.style.overflow = sb.classList.contains('mob-open') ? 'hidden' : '';
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('mob-open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function checkMobile() {
+  const isMob = window.innerWidth <= 768;
+  const topbar = document.querySelector('.dash-mobile-topbar');
+  if (topbar) topbar.style.display = isMob ? 'flex' : 'none';
+  // Close sidebar when switching to desktop
+  if (!isMob) closeSidebar();
+}
+checkMobile();
+window.addEventListener('resize', checkMobile);
+</script>
+</body>
+</html>

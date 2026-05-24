@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Before you start – DMFlow</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+<div class="onboard-page">
+  <div class="onboard-box">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(200,255,0,0.15);border:1.5px solid var(--lime);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:700;color:var(--black);">
+        ✓ Instagram Connected!
+      </div>
+    </div>
+    <h1>Before you start</h1>
+    <p class="sub">4 quick questions to help us personalise DMFlow for you</p>
+    <div class="onboard-q">
+      <div class="onboard-q-num">1</div>
+      <div class="onboard-q-text">How did you discover us?</div>
+      <div class="onboard-options">
+        <button class="onboard-option" onclick="selectOption(this)">Instagram</button>
+        <button class="onboard-option" onclick="selectOption(this)">TikTok</button>
+        <button class="onboard-option" onclick="selectOption(this)">Search (Google, AI)</button>
+        <button class="onboard-option" onclick="selectOption(this)">YouTube</button>
+        <button class="onboard-option" onclick="selectOption(this)">X / Twitter</button>
+        <button class="onboard-option" onclick="selectOption(this)">Friend / Referral</button>
+        <button class="onboard-option" onclick="selectOption(this)">Other</button>
+      </div>
+    </div>
+    <div class="onboard-q">
+      <div class="onboard-q-num">2</div>
+      <div class="onboard-q-text">What better describes you?</div>
+      <div class="onboard-options">
+        <button class="onboard-option" onclick="selectOption(this)">Content creator</button>
+        <button class="onboard-option" onclick="selectOption(this)">Influencer</button>
+        <button class="onboard-option" onclick="selectOption(this)">Coach / Consultant</button>
+        <button class="onboard-option" onclick="selectOption(this)">E-commerce seller</button>
+        <button class="onboard-option" onclick="selectOption(this)">Agency</button>
+        <button class="onboard-option" onclick="selectOption(this)">Brand / Business</button>
+        <button class="onboard-option" onclick="selectOption(this)">Other</button>
+      </div>
+    </div>
+    <div class="onboard-q">
+      <div class="onboard-q-num">3</div>
+      <div class="onboard-q-text">What would you like to achieve?</div>
+      <div class="onboard-options">
+        <button class="onboard-option" onclick="selectOption(this)">Save time on repetitive DMs</button>
+        <button class="onboard-option" onclick="selectOption(this)">Send links automatically</button>
+        <button class="onboard-option" onclick="selectOption(this)">Auto-reply to comments</button>
+        <button class="onboard-option" onclick="selectOption(this)">Grow my following</button>
+        <button class="onboard-option" onclick="selectOption(this)">Run giveaways</button>
+        <button class="onboard-option" onclick="selectOption(this)">Collect leads / emails</button>
+      </div>
+    </div>
+    <div class="onboard-q">
+      <div class="onboard-q-num">4</div>
+      <div class="onboard-q-text">What country are you from?</div>
+      <select class="country-select">
+        <option value="">Select your country</option>
+        <option>United States</option>
+        <option>India</option>
+        <option>United Kingdom</option>
+        <option>Canada</option>
+        <option>Australia</option>
+        <option>Germany</option>
+        <option>France</option>
+        <option>Brazil</option>
+        <option>Mexico</option>
+        <option>Spain</option>
+        <option>Italy</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <button class="btn-onboard" onclick="finishOnboarding()">Continue to Dashboard →</button>
+  </div>
+</div>
+<script>
+function selectOption(btn) {
+  const group = btn.closest('.onboard-options');
+  group.querySelectorAll('.onboard-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function finishOnboarding() {
+  localStorage.setItem('dmflow_modal_seen', '0'); // reset so welcome modal shows
+  window.location.href = 'dashboard.html';
+}
+</script>
+<script src="../js/main.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+</body>
+</html>

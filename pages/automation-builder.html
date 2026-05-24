@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Automation Builder – DMFlow</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+
+<div class="dashboard">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <a href="../index.html" class="logo" style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;text-decoration:none;">DM<span style="color:#7C3AED;">Flow</span></a>
+    </div>
+    <div class="dash-user-header" id="sidebarUser">
+      <div class="dash-user-avatar" id="sidebarAvatar">U</div>
+      <div>
+        <div class="dash-user-name" id="sidebarName">User</div>
+        <div class="dash-user-email" id="sidebarEmail">Free Plan</div>
+      </div>
+    </div>
+    <div class="ig-connected-badge" id="igBadge" style="display:none;">
+      <div class="ig-dot"></div>
+      <div><div style="font-size:12px;font-weight:700;" id="igBadgeUser">@username</div><div style="font-size:11px;color:var(--text2);font-weight:400;">Connected</div></div>
+    </div>
+    <a href="automation-builder.html" class="sidebar-new-btn">+ New Automation</a>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html"><span class="sidebar-nav-icon">🏠</span> Home</a>
+      <a href="#" class="active"><span class="sidebar-nav-icon">⚡</span> Automations</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">📋</span> Templates</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">👥</span> Contacts</a>
+      <a href="automation-builder.html"><span class="sidebar-nav-icon">📊</span> Analytics</a>
+      <a href="security.html" target="_blank"><span class="sidebar-nav-icon">❓</span> Support</a>
+      <a href="login.html" id="signOutLink" style="margin-top:8px;color:var(--text2);"><span class="sidebar-nav-icon">🚪</span> Sign out</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-stat">
+        <div class="stat-label">DMs sent <span>0/500</span></div>
+        <div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div>
+      </div>
+      <a href="../index.html#pricing" class="btn-upgrade">⬆ Upgrade Plan</a>
+    </div>
+  </aside>
+
+  <div class="dash-main">
+    <!-- BUILDER TOPBAR -->
+    <div class="builder-topbar">
+      <div class="builder-help">❓ Need help?</div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;" id="builderTitle">Send link on keyword</div>
+      <div class="builder-actions">
+        <button class="btn-save-draft" onclick="saveDraft()">Save draft</button>
+        <a href="dashboard.html" class="btn-start-auto" onclick="startAutomation(event)">⚡ Start automation</a>
+      </div>
+    </div>
+
+    <!-- AUTOMATION TYPE SELECTOR -->
+    <div style="padding:16px 24px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="auto-type-btn active" onclick="selectAutoType(this,'Send link on keyword')">🔗 Send Link</button>
+        <button class="auto-type-btn" onclick="selectAutoType(this,'Auto-reply comments')">💬 Auto-reply Comment</button>
+        <button class="auto-type-btn" onclick="selectAutoType(this,'Auto DM on story reaction')">📸 Story Reaction DM</button>
+        <button class="auto-type-btn" onclick="selectAutoType(this,'Collect email via DM')">📧 Collect Email</button>
+        <button class="auto-type-btn" onclick="selectAutoType(this,'Send discount code')">🏷 Discount Code</button>
+      </div>
+    </div>
+
+    <div class="builder-layout">
+      <!-- PREVIEW -->
+      <div class="builder-preview">
+        <div style="width:100%;max-width:300px;">
+          <div class="preview-label">Preview</div>
+          <div class="preview-phone">
+            <div class="preview-status"><span>9:41</span><span>●●●</span></div>
+            <div class="preview-header">
+              <div class="prev-av" id="previewAvatar">M</div>
+              <div class="prev-name" id="previewIgUser">mia.styles</div>
+            </div>
+            <div class="prev-chat">
+              <div class="prev-in">
+                <div class="prev-bubble-in" id="previewTriggerMsg">Need the LINK please! 🔥</div>
+              </div>
+              <div class="prev-out">
+                <div class="prev-bubble-out" id="previewDmMsg">Hey! Here's the link you requested:</div>
+                <div class="prev-link-card" id="previewLinkCard">
+                  <div class="prev-link-icon">🛍</div>
+                  <div>
+                    <div class="prev-link-title" id="previewLinkTitle">Shop the look</div>
+                    <div class="prev-link-url" id="previewLinkUrl">yourstore.com/look</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto-reply comment preview -->
+          <div style="margin-top:14px;" id="commentReplyPreview" style="display:none;">
+            <div class="preview-label">Comment Auto-reply</div>
+            <div style="background:var(--gray-50);border-radius:12px;padding:14px;font-size:12px;">
+              <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+                <div style="width:22px;height:22px;background:var(--gray-200);border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">U</div>
+                <div>
+                  <span style="font-weight:700;color:var(--black);">user123 </span>
+                  <span style="color:var(--text2);" id="prevCommentTrigger">LINK</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-start;">
+                <div style="width:22px;height:22px;background:var(--purple);border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;">Y</div>
+                <div style="background:var(--gray-200);border-radius:8px;padding:6px 10px;color:var(--black);" id="prevCommentReply">Check your DMs! I've sent you the link 📩</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONFIG -->
+      <div class="builder-config">
+        <!-- Trigger -->
+        <div class="config-section">
+          <div class="config-section-head">
+            <div class="config-step-num done">✓</div>
+            <div class="config-section-title">Trigger</div>
+          </div>
+          <div class="config-row">
+            <span>📝 Post comment</span>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="config-or">or</div>
+          <div class="config-row">
+            <span>📸 Story reply / reaction</span>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="config-or">or</div>
+          <div class="config-row">
+            <span>💬 DM received (keyword)</span>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="config-section">
+          <div class="config-section-head">
+            <div class="config-step-num done">✓</div>
+            <div class="config-section-title">Keywords</div>
+          </div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">When someone comments or messages one of these keywords, the automation fires.</div>
+          <div class="keyword-input-wrap">
+            <input class="keyword-input" placeholder="Type keyword and press Enter" onkeydown="addKeyword(event, this)">
+          </div>
+          <div class="keywords-list" id="keywordsList">
+            <div class="keyword-tag">LINK <button onclick="this.parentNode.remove()">×</button></div>
+          </div>
+          <div class="suggested-keywords">
+            <button class="sug-kw" onclick="addSugKw(this)">+ PRICE</button>
+            <button class="sug-kw" onclick="addSugKw(this)">+ INFO</button>
+            <button class="sug-kw" onclick="addSugKw(this)">+ CODE</button>
+            <button class="sug-kw" onclick="addSugKw(this)">+ YES</button>
+            <button class="sug-kw" onclick="addSugKw(this)">+ BOOK</button>
+          </div>
+        </div>
+
+        <!-- Comment Auto-reply section (new) -->
+        <div class="config-section" id="commentReplySection">
+          <div class="config-section-head">
+            <div class="config-step-num">2</div>
+            <div class="config-section-title">Comment Auto-reply <span style="font-size:11px;background:var(--lime);color:var(--black);padding:2px 8px;border-radius:6px;font-weight:700;margin-left:8px;">NEW</span></div>
+          </div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:10px;">Automatically reply to the public comment (in addition to the DM).</div>
+          <div class="config-row">
+            <span>Enable comment auto-reply</span>
+            <div class="toggle" id="commentReplyToggle" onclick="toggleCommentReply(this)"></div>
+          </div>
+          <div id="commentReplyConfig" style="display:none;margin-top:12px;">
+            <textarea class="dm-textarea" placeholder="Reply text..." oninput="updateCommentReplyPreview(this.value)" style="margin-bottom:0;">Check your DMs! I've sent you the link 📩</textarea>
+          </div>
+        </div>
+
+        <!-- DM Message -->
+        <div class="config-section">
+          <div class="config-section-head">
+            <div class="config-step-num done">✓</div>
+            <div class="config-section-title">DM Message</div>
+          </div>
+          <textarea class="dm-textarea" placeholder="Hey {{name}}! Here's the link you asked for:" oninput="updatePreviewDm(this.value)">Hey! Here's the link you requested:</textarea>
+          <div class="char-count" id="dmCharCount">38 / 1000</div>
+          <div class="link-card-config">
+            <div class="link-card-config-top">
+              <span class="link-card-title">🛍 <span id="linkCardTitleText">Shop the look</span></span>
+              <span class="link-card-edit-hint" onclick="editLinkCard()">Click to edit</span>
+            </div>
+            <div style="font-size:11px;color:var(--text2);" id="linkCardUrlText">yourstore.com/look</div>
+          </div>
+          <!-- Link edit form (hidden by default) -->
+          <div id="linkEditForm" style="display:none;background:var(--gray-50);border-radius:10px;padding:14px;margin-top:8px;">
+            <div class="field-group" style="margin-bottom:10px;">
+              <label style="font-size:12px;">Button Title</label>
+              <input type="text" class="auth-input" style="padding:10px 12px;font-size:13px;" value="Shop the look" oninput="updateLinkTitle(this.value)">
+            </div>
+            <div class="field-group" style="margin-bottom:0;">
+              <label style="font-size:12px;">URL</label>
+              <input type="url" class="auth-input" style="padding:10px 12px;font-size:13px;" value="https://yourstore.com/look" oninput="updateLinkUrl(this.value)">
+            </div>
+          </div>
+          <button class="btn-add-link">+ Add another link</button>
+        </div>
+
+        <!-- Auto DM Settings (new) -->
+        <div class="config-section">
+          <div class="config-section-head">
+            <div class="config-step-num">3</div>
+            <div class="config-section-title">Auto DM Settings</div>
+          </div>
+          <div class="config-row">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Send to followers only</div>
+              <div style="font-size:12px;color:var(--text2);">Only people who follow you get the DM</div>
+            </div>
+            <div class="toggle" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="config-row" style="margin-top:10px;">
+            <div>
+              <div style="font-size:14px;font-weight:600;">One DM per person</div>
+              <div style="font-size:12px;color:var(--text2);">Don't send duplicates to the same user</div>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="config-row" style="margin-top:10px;">
+            <div>
+              <div style="font-size:14px;font-weight:600;">Add delay (avoid spam detection)</div>
+              <div style="font-size:12px;color:var(--text2);">Send after a short random delay</div>
+            </div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+
+        <!-- Advanced -->
+        <div class="config-section">
+          <div class="advanced-toggle" onclick="toggleAdvanced(this)">
+            Advanced settings
+            <span class="advanced-arrow">↓</span>
+          </div>
+          <div class="advanced-content" id="advancedContent" style="display:none;margin-top:14px;">
+            <div class="config-row">
+              <div>
+                <div style="font-size:14px;font-weight:600;">Exclude specific posts</div>
+                <div style="font-size:12px;color:var(--text2);">Don't trigger on certain post URLs</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="config-row" style="margin-top:10px;">
+              <div>
+                <div style="font-size:14px;font-weight:600;">UTM tracking</div>
+                <div style="font-size:12px;color:var(--text2);">Auto-add UTM params to links</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="config-row" style="margin-top:10px;">
+              <div>
+                <div style="font-size:14px;font-weight:600;">Active hours only</div>
+                <div style="font-size:12px;color:var(--text2);">Only send DMs between set hours</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.auto-type-btn {
+  padding: 8px 14px;
+  background: #fff;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text2);
+  transition: all .2s;
+}
+.auto-type-btn.active, .auto-type-btn:hover {
+  background: var(--black);
+  color: #fff;
+  border-color: var(--black);
+}
+</style>
+
+<script src="../js/main.js"></script>
+<script>
+// Load user
+(function() {
+  const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+  if (!user) { window.location.href = 'login.html'; return; }
+  document.getElementById('sidebarName').textContent = user.name || user.email || 'User';
+  document.getElementById('sidebarEmail').textContent = (user.plan || 'Free') + ' Plan';
+  document.getElementById('sidebarAvatar').textContent = (user.name || 'U')[0].toUpperCase();
+  if (user.igUsername) {
+    document.getElementById('igBadge').style.display = 'flex';
+    document.getElementById('igBadgeUser').textContent = '@' + user.igUsername;
+    document.getElementById('previewIgUser').textContent = user.igUsername;
+    document.getElementById('previewAvatar').textContent = user.igUsername[0].toUpperCase();
+  }
+  document.getElementById('signOutLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('dmflow_user'); localStorage.removeItem('dmflow_token');
+    window.location.href = '../index.html';
+  });
+})();
+
+function selectAutoType(btn, title) {
+  document.querySelectorAll('.auto-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('builderTitle').textContent = title;
+}
+
+function addKeyword(e, input) {
+  if (e.key === 'Enter' && input.value.trim()) {
+    const list = document.getElementById('keywordsList');
+    const tag = document.createElement('div');
+    tag.className = 'keyword-tag';
+    const kw = input.value.trim().toUpperCase();
+    tag.innerHTML = kw + ' <button onclick="this.parentNode.remove()">×</button>';
+    list.appendChild(tag);
+    document.getElementById('previewTriggerMsg').textContent = kw + '! 🔥';
+    document.getElementById('prevCommentTrigger').textContent = kw;
+    input.value = '';
+  }
+}
+
+function addSugKw(btn) {
+  const list = document.getElementById('keywordsList');
+  const tag = document.createElement('div');
+  tag.className = 'keyword-tag';
+  const kw = btn.textContent.replace('+ ', '');
+  tag.innerHTML = kw + ' <button onclick="this.parentNode.remove()">×</button>';
+  list.appendChild(tag);
+  btn.remove();
+}
+
+function toggleAdvanced(el) {
+  const arrow = el.querySelector('.advanced-arrow');
+  const content = document.getElementById('advancedContent');
+  arrow.classList.toggle('open');
+  content.style.display = content.style.display === 'none' ? '' : 'none';
+}
+
+function toggleCommentReply(toggle) {
+  toggle.classList.toggle('on');
+  const config = document.getElementById('commentReplyConfig');
+  const preview = document.getElementById('commentReplyPreview');
+  const isOn = toggle.classList.contains('on');
+  config.style.display = isOn ? '' : 'none';
+  preview.style.display = isOn ? '' : 'none';
+}
+
+function updateCommentReplyPreview(val) {
+  document.getElementById('prevCommentReply').textContent = val || '';
+}
+
+function updatePreviewDm(val) {
+  document.getElementById('previewDmMsg').textContent = val || '';
+  const len = (val || '').length;
+  document.getElementById('dmCharCount').textContent = len + ' / 1000';
+}
+
+function editLinkCard() {
+  const form = document.getElementById('linkEditForm');
+  form.style.display = form.style.display === 'none' ? '' : 'none';
+}
+
+function updateLinkTitle(val) {
+  document.getElementById('linkCardTitleText').textContent = val;
+  document.getElementById('previewLinkTitle').textContent = val;
+}
+
+function updateLinkUrl(val) {
+  const display = val.replace('https://','').replace('http://','');
+  document.getElementById('linkCardUrlText').textContent = display;
+  document.getElementById('previewLinkUrl').textContent = display;
+}
+
+function _buildPayload(active) {
+  const keywords = Array.from(document.querySelectorAll('#keywordsList .keyword-tag'))
+    .map(el => el.textContent.replace('×','').trim()).filter(Boolean);
+  const commentReplyEnabled = document.getElementById('commentReplyToggle')?.classList.contains('on');
+  const commentReplyText    = document.querySelector('#commentReplyConfig textarea')?.value || '';
+  const dmText              = document.querySelector('.dm-textarea')?.value || '';
+  const linkTitle           = document.getElementById('linkCardTitleText')?.textContent || '';
+  const linkUrl             = document.getElementById('linkCardUrlText')?.textContent || '';
+  const title               = document.getElementById('builderTitle')?.textContent || 'Untitled Automation';
+
+  return {
+    name: title,
+    active,
+    type: 'keyword_dm',
+    trigger: {
+      onComment:    true,
+      onStoryReply: false,
+      onDmKeyword:  false,
+      keywords,
+    },
+    actions: {
+      commentReply: { enabled: !!commentReplyEnabled, text: commentReplyText },
+      dm:           { enabled: true, text: dmText, linkTitle, linkUrl },
+    },
+  };
+}
+
+async function saveDraft() {
+  try {
+    const data = await API.createAutomation(_buildPayload(false));
+    showToast('Draft saved! ✓');
+  } catch(e) {
+    showToast('Save failed: ' + e.message, 'error');
+  }
+}
+
+async function startAutomation(e) {
+  e.preventDefault();
+  if (!confirm('Start this automation? It will go live immediately.')) return;
+  try {
+    await API.createAutomation(_buildPayload(true));
+    showToast('Automation live! ⚡ Redirecting...');
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 1000);
+  } catch(e) {
+    showToast('Error: ' + e.message, 'error');
+  }
+}
+
+function showToast(msg, type='success') {
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:24px;right:24px;background:${type==='success'?'#22c55e':'#ef4444'};color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.15);`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// Load templates from backend on page load
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const templates = await API.getTemplates();
+    // Could populate a template picker UI here in future
+    console.log('Templates loaded:', templates.length);
+  } catch(e) { /* backend may not be running in dev */ }
+});
+</script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+</body>
+</html>
