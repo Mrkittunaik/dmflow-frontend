@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DMFlow</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-webkit-font-smoothing:antialiased;}
+
+/* ── SHELL ── */
+.shell{display:flex;height:100vh;overflow:hidden;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:228px;min-width:228px;
+  background:linear-gradient(180deg,#fafaff 0%,#f5f5fc 60%,#f0f0f8 100%);
+  border-right:1px solid #E2E2EA;
+  display:flex;flex-direction:column;
+  height:100vh;overflow:hidden;
+  flex-shrink:0;
+  position:relative;
+  z-index:10;
+}
+
+/* Logo */
+.sb-logo{padding:18px 20px 14px;border-bottom:1px solid #E2E2EA;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sb-logo a{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;text-decoration:none;}
+.sb-logo a span{color:#7C3AED;}
+
+/* User block */
+.sb-user{padding:10px 14px;border-bottom:1px solid #F0F0F5;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sb-av{width:34px;height:34px;border-radius:10px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.sb-user-name{font-size:13px;font-weight:700;color:#0A0A0F;line-height:1.2;}
+.sb-user-plan{font-size:11px;color:#9898A8;}
+
+/* IG badge — hidden/removed per design update */
+.sb-ig-badge{display:none !important;}
+.sb-ig-dot{display:none;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sb-ig-name{font-size:12px;font-weight:700;color:#166534;}
+.sb-ig-sub{font-size:10px;color:#4ADE80;}
+
+/* New Automation btn — glass/blur style */
+.sb-new{
+  margin:12px 14px 4px;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 14px;
+  background:rgba(255,255,255,0.65);
+  color:#0A0A0F;
+  border-radius:12px;
+  font-size:13px;font-weight:700;
+  text-decoration:none;
+  transition:all .2s;
+  flex-shrink:0;cursor:pointer;
+  border:1.5px solid rgba(255,255,255,0.9);
+  box-shadow:0 2px 12px rgba(124,58,237,0.10),0 1px 4px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.8);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  position:relative;
+  overflow:hidden;
+}
+.sb-new::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(200,255,0,0.13) 0%,rgba(124,58,237,0.08) 100%);
+  pointer-events:none;
+}
+.sb-new:hover{
+  background:rgba(255,255,255,0.88);
+  box-shadow:0 4px 20px rgba(124,58,237,0.18),0 2px 8px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);
+  transform:translateY(-1px);
+}
+.sb-new svg{position:relative;z-index:1;}
+.sb-new span,
+.sb-new{position:relative;z-index:1;}
+
+/* Nav */
+.sb-nav{padding:6px 10px;flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;}
+.sb-nav::-webkit-scrollbar{width:3px;}
+.sb-nav::-webkit-scrollbar-thumb{background:#E2E2EA;border-radius:2px;}
+
+.sb-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;color:#2A2A3A;text-decoration:none;transition:background .15s,color .15s;cursor:pointer;user-select:none;white-space:nowrap;border:none;background:none;width:100%;font-family:inherit;}
+.sb-link:hover{background:#EBEBF0;color:#0A0A0F;}
+.sb-link.active{background:#0A0A0F!important;color:#fff!important;font-weight:700;border-left:3px solid #C8FF00;padding-left:7px;}
+.sb-link.active svg{opacity:1;stroke:#fff;}
+.sb-link svg{flex-shrink:0;opacity:.7;}
+
+.sb-section{font-size:10px;font-weight:800;color:#888;letter-spacing:.8px;padding:6px 12px 2px;text-transform:uppercase;}
+.sb-divider{height:1px;background:#F0F0F5;margin:6px 10px;}
+.sb-disabled{opacity:.4;cursor:not-allowed;pointer-events:none;display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;color:#2A2A3A;}
+.sb-disabled svg{flex-shrink:0;opacity:.5;}
+.sb-soon{margin-left:auto;font-size:9px;font-weight:700;background:#F0F0F5;color:#9898A8;padding:2px 7px;border-radius:10px;}
+
+/* Bottom stats */
+.sb-bottom{padding:12px 14px;border-top:1px solid #F0F0F5;flex-shrink:0;}
+.sb-stat{margin-bottom:8px;}
+.sb-stat-label{font-size:11px;color:#9898A8;display:flex;justify-content:space-between;margin-bottom:3px;}
+.sb-stat-label span{font-weight:700;color:#0A0A0F;}
+.sb-bar{height:3px;background:#E2E2EA;border-radius:2px;}
+.sb-fill{height:3px;background:#C8FF00;border-radius:2px;transition:width .4s;}
+.sb-upgrade{width:100%;padding:9px;background:#0A0A0F;color:#fff;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s;}
+.sb-upgrade:hover{background:#2A2A3A;}
+
+/* ── CONTENT IFRAME ── */
+.content-area{flex:1;height:100vh;overflow:hidden;position:relative;}
+#contentFrame{width:100%;height:100%;border:none;display:block;background:#F4F4F8;}
+
+/* ── MOBILE TOPBAR ── */
+.mob-topbar{display:none;align-items:center;justify-content:space-between;padding:0 16px;height:52px;background:#fff;border-bottom:1px solid #E2E2EA;position:fixed;top:0;left:0;right:0;z-index:50;}
+.hamburger{display:flex;flex-direction:column;gap:4px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:20px;height:2px;background:#0A0A0F;border-radius:1px;}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;}
+.sb-overlay.show{display:block;}
+
+/* ── PROFILE PIC support ── */
+.sb-av img{width:100%;height:100%;border-radius:10px;object-fit:cover;}
+
+@media(max-width:900px){
+  .mob-topbar{display:flex;}
+  .content-area{padding-top:52px;}
+
+  .sidebar{
+    position:fixed;top:0;left:0;z-index:100;
+    width:228px;min-width:228px;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    height:100vh;
+  }
+  .sidebar.mob-open{transform:translateX(0);}
+}
+
+/* Logo mark for mobile (hidden on desktop) */
+.sb-logo-mark{
+  display:none;
+  width:28px;height:28px;background:#0A0A0F;border-radius:7px;
+  align-items:center;justify-content:center;
+}
+.sb-logo-mark svg path{fill:#C8FF00;}
+</style>
+</head>
+<body>
+
+<!-- MOBILE TOPBAR -->
+<div class="mob-topbar">
+  <a href="#" style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#0A0A0F;text-decoration:none;">DM<span style="color:#7C3AED;">Flow</span></a>
+  <div class="hamburger" onclick="sidebarToggle()"><span></span><span></span><span></span></div>
+</div>
+<div class="sb-overlay" id="sbOverlay" onclick="sidebarClose()"></div>
+
+<div class="shell">
+
+  <!-- FIXED SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <a href="#">DM<span>Flow</span></a>
+      <div class="sb-logo-mark" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 28 28" fill="none"><path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#C8FF00"/></svg>
+      </div>
+    </div>
+
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv">U</div>
+      <div>
+        <div class="sb-user-name" id="sbName">User</div>
+        <div class="sb-user-plan" id="sbPlan">Free Plan</div>
+      </div>
+    </div>
+    <a class="sb-new" onclick="navigate('pages/app/automation-builder.html','automation-builder')">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      New Automation
+    </a>
+
+    <nav class="sb-nav">
+      <button class="sb-link" data-page="dashboard" onclick="navigate('pages/app/dashboard.html','dashboard')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+        Dashboard
+      </button>
+      <button class="sb-link" data-page="automation-builder" onclick="navigate('pages/app/automation-builder.html','automation-builder')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Automations
+      </button>
+
+      <div class="sb-divider"></div>
+      <div class="sb-section">Content</div>
+
+      <button class="sb-link" data-page="templates" onclick="navigate('pages/app/templates.html','templates')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 9l5 3-5 3V9z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Templates
+      </button>
+      <div class="sb-disabled">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/></svg>
+        Contacts <span class="sb-soon">Soon</span>
+      </div>
+      <div class="sb-disabled">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="7" y1="7" x2="7.01" y2="7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Keywords <span class="sb-soon">Soon</span>
+      </div>
+      <div class="sb-disabled">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Inbox <span class="sb-soon">Soon</span>
+      </div>
+
+      <div class="sb-divider"></div>
+      <div class="sb-section">Analytics</div>
+
+      <button class="sb-link" data-page="analytics" onclick="navigate('pages/app/analytics.html','analytics')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Analytics
+      </button>
+
+      <div class="sb-divider"></div>
+
+      <button class="sb-link" data-page="platform-select" onclick="navigate('pages/onboarding/platform-select.html','platform-select')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M12 18h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Add Platform
+      </button>
+      <button class="sb-link" data-page="security" onclick="navigate('pages/settings/security.html','security')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Settings
+      </button>
+      <button class="sb-link" data-page="support" onclick="navigate('pages/settings/support.html','support')">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Support
+      </button>
+      <button class="sb-link" id="sbSignOut" style="color:#9898A8;" onclick="signOut()">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Sign out
+      </button>
+    </nav>
+
+    <div class="sb-bottom">
+      <div class="sb-stat">
+        <div class="sb-stat-label">DMs sent <span id="dmsLabel">0/500</span></div>
+        <div class="sb-bar"><div class="sb-fill" id="dmsFill" style="width:0%"></div></div>
+      </div>
+      <div class="sb-stat">
+        <div class="sb-stat-label">IG accounts <span id="igCountLabel">0/1</span></div>
+        <div class="sb-bar"><div class="sb-fill" id="igFill" style="width:0%"></div></div>
+      </div>
+      <a href="index.html#pricing" class="sb-upgrade">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Upgrade Plan
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENT AREA — only this switches, sidebar never moves -->
+  <div class="content-area">
+    <iframe id="contentFrame" src="pages/app/dashboard.html" title="DMFlow Content"></iframe>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // ── Load user info ──
+  function loadUserInfo() {
+    try {
+      const user     = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+      const name     = user.name || user.displayName || 'User';
+      const plan     = user.plan || 'Free';
+      const ig       = user.instagram || {};
+      const igUser   = ig.username || user.instagramUsername || user.igUsername || '';
+      const igPic    = ig.profilePic || user.igProfilePic || '';
+      const dmsSent  = user.dmsSent  || 0;
+      const dmsLimit = user.dmsLimit || 500;
+      const igLimit  = user.igLimit  || 1;
+      const igCount  = igUser ? 1 : 0;
+      const q = id => document.getElementById(id);
+
+      // Avatar — show IG profile pic if available, else letter
+      const avEl = q('sbAv');
+      if (avEl) {
+        if (igPic) {
+          avEl.innerHTML = '<img src="' + igPic + '" alt="profile" onerror="this.parentNode.textContent=\'' + name.charAt(0).toUpperCase() + '\'">';
+          avEl.style.background = 'transparent';
+          avEl.style.padding = '0';
+        } else {
+          avEl.textContent = name.charAt(0).toUpperCase();
+          avEl.style.background = '';
+        }
+      }
+
+      // Name — show @igUsername if connected, else real name
+      if (q('sbName'))       q('sbName').textContent       = igUser ? '@' + igUser : name;
+      if (q('sbPlan'))       q('sbPlan').textContent       = plan.charAt(0).toUpperCase() + plan.slice(1);
+      if (q('dmsLabel'))     q('dmsLabel').textContent     = dmsSent + '/' + dmsLimit;
+      if (q('dmsFill'))      q('dmsFill').style.width      = Math.min((dmsSent / dmsLimit) * 100, 100) + '%';
+      if (q('igCountLabel')) q('igCountLabel').textContent = igCount + '/' + igLimit;
+      if (q('igFill'))       q('igFill').style.width       = Math.min((igCount / igLimit) * 100, 100) + '%';
+    } catch (e) {}
+  }
+  loadUserInfo();
+
+  // Re-load user info when iframe posts a message (e.g. after IG connect)
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'dmflow_user_updated') {
+      loadUserInfo();
+    }
+  });
+
+  // ── Navigate: only iframe src changes, sidebar stays put ──
+  window.navigate = function (path, page) {
+    const frame = document.getElementById('contentFrame');
+    frame.src = path;
+    // Update active link
+    document.querySelectorAll('.sb-link[data-page]').forEach(l => l.classList.remove('active'));
+    const active = document.querySelector('.sb-link[data-page="' + page + '"]');
+    if (active) active.classList.add('active');
+    // Close mobile sidebar
+    sidebarClose();
+  };
+
+  // ── Set default active ──
+  document.querySelector('.sb-link[data-page="dashboard"]')?.classList.add('active');
+
+  // ── Sign out ──
+  window.signOut = function () {
+    localStorage.removeItem('dmflow_user');
+    localStorage.removeItem('dmflow_token');
+    window.location.href = 'pages/auth/login.html';
+  };
+
+  // ── Mobile sidebar ──
+  window.sidebarToggle = function () {
+    document.getElementById('sidebar')?.classList.toggle('mob-open');
+    document.getElementById('sbOverlay')?.classList.toggle('show');
+  };
+  window.sidebarClose = function () {
+    document.getElementById('sidebar')?.classList.remove('mob-open');
+    document.getElementById('sbOverlay')?.classList.remove('show');
+  };
+})();
+</script>
+</body>
+</html>

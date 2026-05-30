@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Templates – DMFlow</title>
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-webkit-font-smoothing:antialiased;}
+.main{width:100%;height:100vh;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:#fff;border-bottom:1px solid #E2E2EA;flex-shrink:0;}
+.topbar-title{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;color:#0A0A0F;}
+.topbar-sub{font-size:12px;color:#9898A8;margin-top:1px;}
+.search-wrap{position:relative;width:260px;}
+.search-wrap input{width:100%;padding:8px 12px 8px 34px;border:1.5px solid #E2E2EA;border-radius:9px;font-size:13px;font-family:inherit;outline:none;background:#F8F8FC;transition:border-color .2s;}
+.search-wrap input:focus{border-color:#7C3AED;background:#fff;}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#9898A8;pointer-events:none;}
+
+/* CATEGORY TABS */
+.cat-bar{display:flex;align-items:center;gap:6px;padding:14px 28px;background:#fff;border-bottom:1px solid #E2E2EA;flex-shrink:0;overflow-x:auto;}
+.cat-bar::-webkit-scrollbar{display:none;}
+.cat-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid #E2E2EA;background:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;white-space:nowrap;transition:all .18s;}
+.cat-btn:hover{border-color:#7C3AED;color:#7C3AED;}
+.cat-btn.active{background:#0A0A0F;color:#fff;border-color:#0A0A0F;}
+.cat-btn .cat-count{background:rgba(255,255,255,.2);border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;}
+.cat-btn:not(.active) .cat-count{background:#F0F0F5;color:#9898A8;}
+
+/* SCROLL AREA */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px 28px;}
+.scroll-area::-webkit-scrollbar{width:4px;}
+.scroll-area::-webkit-scrollbar-thumb{background:#E2E2EA;border-radius:2px;}
+
+/* SECTION HEADER */
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;margin-top:8px;}
+.section-head:first-child{margin-top:0;}
+.section-label{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;color:#0A0A0F;}
+.section-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;}
+
+/* GRID */
+.tpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:32px;}
+
+/* TEMPLATE CARD */
+.tpl-card{background:#fff;border:1.5px solid #E2E2EA;border-radius:16px;overflow:hidden;transition:box-shadow .2s,border-color .2s;cursor:pointer;display:flex;flex-direction:column;}
+.tpl-card:hover{border-color:#7C3AED;box-shadow:0 4px 20px rgba(124,58,237,.1);}
+.tpl-card-top{padding:16px 18px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.tpl-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tpl-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px;}
+.tpl-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px;}
+.tpl-name{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:700;color:#0A0A0F;margin-bottom:4px;line-height:1.3;}
+.tpl-desc{font-size:12px;color:#9898A8;line-height:1.5;padding:0 18px 12px;}
+
+/* DM PREVIEW */
+.tpl-preview{margin:0 14px 14px;background:#F8F8FC;border-radius:12px;padding:12px;border:1px solid #F0F0F5;}
+.tpl-preview-label{font-size:9px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.msg-row{display:flex;gap:7px;align-items:flex-end;margin-bottom:6px;}
+.msg-row.out{flex-direction:row-reverse;}
+.msg-av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.msg-bubble{max-width:80%;padding:6px 10px;border-radius:10px;font-size:11px;line-height:1.4;}
+.msg-bubble.in{background:#E2E2EA;border-radius:10px 10px 10px 2px;color:#0A0A0F;}
+.msg-bubble.out{background:#0A0A0F;color:#fff;border-radius:10px 10px 2px 10px;}
+/* Link card preview */
+.msg-link-card{max-width:80%;background:#fff;border:1px solid #E2E2EA;border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:8px;}
+.msg-link-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.msg-link-title{font-size:11px;font-weight:700;color:#0A0A0F;}
+.msg-link-url{font-size:10px;color:#9898A8;}
+/* Button card */
+.msg-btn-card{max-width:85%;background:#fff;border:1.5px solid #7C3AED;border-radius:10px;padding:8px 14px;text-align:center;font-size:11px;font-weight:700;color:#7C3AED;}
+/* Discount card */
+.msg-discount{max-width:85%;background:linear-gradient(135deg,#FEF9C3,#FEF3C7);border:1.5px solid #F59E0B;border-radius:10px;padding:10px 12px;}
+.msg-discount-code{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:#92400E;letter-spacing:2px;text-align:center;}
+.msg-discount-sub{font-size:10px;color:#B45309;text-align:center;margin-top:2px;}
+/* Email form */
+.msg-form{max-width:90%;background:#fff;border:1px solid #E2E2EA;border-radius:10px;padding:10px 12px;}
+.msg-form-field{background:#F4F4F8;border-radius:6px;padding:6px 10px;font-size:11px;color:#9898A8;margin-bottom:6px;}
+.msg-form-btn{background:#0A0A0F;color:#fff;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;text-align:center;}
+
+/* CARD FOOTER */
+.tpl-footer{padding:12px 18px;border-top:1px solid #F0F0F5;display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.tpl-stats{display:flex;gap:14px;}
+.tpl-stat{font-size:11px;color:#9898A8;}
+.tpl-stat span{font-weight:700;color:#0A0A0F;}
+.btn-use{display:flex;align-items:center;gap:5px;padding:7px 14px;background:#0A0A0F;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;}
+.btn-use:hover{background:#2A2A3A;}
+.btn-use-outline{background:#fff;color:#7C3AED;border:1.5px solid #7C3AED;}
+.btn-use-outline:hover{background:#F8F4FF;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:#C0C0CC;}
+.empty-state h3{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;color:#9898A8;margin-top:12px;}
+.empty-state p{font-size:13px;color:#C0C0CC;margin-top:4px;}
+
+/* PRO LOCK */
+.pro-lock{position:relative;}
+.pro-lock::after{content:'PRO';position:absolute;top:10px;right:10px;background:#F59E0B;color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:5px;letter-spacing:.5px;}
+
+@media(max-width:700px){
+  .tpl-grid{grid-template-columns:1fr;}
+  .topbar{padding:12px 16px;}
+  .scroll-area{padding:16px;}
+  .cat-bar{padding:10px 16px;}
+}
+</style>
+</head>
+<body>
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">DM Templates</div>
+      <div class="topbar-sub">Ready-made automations — pick one and go live in seconds</div>
+    </div>
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="Search templates..." oninput="filterSearch(this.value)">
+    </div>
+  </div>
+
+  <!-- CATEGORY TABS -->
+  <div class="cat-bar">
+    <button class="cat-btn active" onclick="filterCat('all',this)">
+      All <span class="cat-count">18</span>
+    </button>
+    <button class="cat-btn" onclick="filterCat('sales',this)">
+      🛍 Sales <span class="cat-count">5</span>
+    </button>
+    <button class="cat-btn" onclick="filterCat('link',this)">
+      🔗 Send Link <span class="cat-count">4</span>
+    </button>
+    <button class="cat-btn" onclick="filterCat('shop',this)">
+      🛒 Shop Button <span class="cat-count">3</span>
+    </button>
+    <button class="cat-btn" onclick="filterCat('email',this)">
+      📧 Email Collect <span class="cat-count">2</span>
+    </button>
+    <button class="cat-btn" onclick="filterCat('discount',this)">
+      🏷 Discount <span class="cat-count">2</span>
+    </button>
+    <button class="cat-btn" onclick="filterCat('story',this)">
+      📸 Story DM <span class="cat-count">2</span>
+    </button>
+  </div>
+
+  <!-- MAIN SCROLL -->
+  <div class="scroll-area" id="scrollArea">
+
+    <!-- SALES -->
+    <div class="section-group" data-cat="sales">
+      <div class="section-head">
+        <div class="section-label">🛍 Sales</div>
+        <div class="section-badge" style="background:#FEF3C7;color:#92400E;">Convert comments to buyers</div>
+      </div>
+      <div class="tpl-grid">
+
+        <div class="tpl-card" data-cat="sales" data-name="product drop dm">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Product Drop DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF3C7;color:#92400E;">Sales</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Popular</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FEF9C3;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="#F59E0B" stroke-width="1.8"/><path d="M16 10a4 4 0 01-8 0" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">When someone comments "DROP" or "WANT" on your product post, instantly DM them the shop link with a buy button.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">DROP</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Hey! The new drop is live 🔥 Here's your exclusive link:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-link-card">
+                <div class="msg-link-icon" style="background:#FEF3C7;"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="#F59E0B" stroke-width="2"/></svg></div>
+                <div><div class="msg-link-title">Shop the Drop</div><div class="msg-link-url">yourstore.com/drop</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>DROP, WANT, SHOP</span></div></div>
+            <button class="btn-use" onclick="useTemplate('product_drop')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="sales" data-name="flash sale dm">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Flash Sale DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF3C7;color:#92400E;">Sales</span>
+                <span class="tpl-badge" style="background:#FEE2E2;color:#991B1B;">Urgent</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FEE2E2;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Trigger a flash sale DM with discount code when someone comments "SALE" — perfect for limited-time drops.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">SALE 🔥</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">⚡ Flash sale — 30% off for the next 2 hours! Use this code:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-discount">
+                <div class="msg-discount-code">FLASH30</div>
+                <div class="msg-discount-sub">Expires in 2 hours · 30% off</div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>SALE, DEAL, OFF</span></div></div>
+            <button class="btn-use" onclick="useTemplate('flash_sale')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="sales" data-name="new collection sales">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">New Collection Launch</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF3C7;color:#92400E;">Sales</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#EDE9FE;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">When followers comment on your new collection reveal post, DM them early access link with shop button.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">COLLECTION 😍</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">You're one of the first to see this ✨ Here's your early access:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-btn-card">🌟 Shop Early Access</div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>COLLECTION, ACCESS, NEW</span></div></div>
+            <button class="btn-use" onclick="useTemplate('collection_launch')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="sales" data-name="waitlist sales">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Waitlist Signup DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF3C7;color:#92400E;">Sales</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Lead Gen</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#F0FDF4;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#22C55E" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Add followers to your waitlist automatically when they comment on your teaser post. Collect emails via DM.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">WAITLIST</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">You're on the list! 🎉 Drop your email and we'll notify you first:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-form">
+                <div class="msg-form-field">your@email.com</div>
+                <div class="msg-form-btn">Join Waitlist ✓</div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>WAITLIST, JOIN, NOTIFY</span></div></div>
+            <button class="btn-use" onclick="useTemplate('waitlist')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card pro-lock" data-cat="sales" data-name="abandoned cart sales">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Abandoned Cart Recovery</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF3C7;color:#92400E;">Sales</span>
+                <span class="tpl-badge" style="background:#FEF9C3;color:#92400E;">PRO</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FEF9C3;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" stroke="#F59E0B" stroke-width="1.8"/><circle cx="20" cy="21" r="1" stroke="#F59E0B" stroke-width="1.8"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Re-engage followers who showed interest but didn't buy — send a personal follow-up DM with a special offer.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Hey! Noticed you were checking out our new arrivals 👀 Still interested? Here's 10% off just for you:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-discount"><div class="msg-discount-code">SAVE10</div><div class="msg-discount-sub">10% off · Limited time</div></div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat" style="color:#F59E0B;font-weight:600;">Upgrade to use</div></div>
+            <button class="btn-use btn-use-outline" onclick="upgradePro()">Upgrade to PRO</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SEND LINK -->
+    <div class="section-group" data-cat="link">
+      <div class="section-head">
+        <div class="section-label">🔗 Send Link</div>
+        <div class="section-badge" style="background:#EDE9FE;color:#5B21B6;">Drive traffic instantly</div>
+      </div>
+      <div class="tpl-grid">
+
+        <div class="tpl-card" data-cat="link" data-name="send link keyword">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Send Link on Keyword</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#EDE9FE;color:#5B21B6;">Link</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Most Used</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#EDE9FE;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">The classic — someone comments "LINK" and instantly gets a DM with your link. Works for any content.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">LINK please!</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Here's the link you asked for! 🔗</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-link-card">
+                <div class="msg-link-icon" style="background:#EDE9FE;"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div><div class="msg-link-title">View Link</div><div class="msg-link-url">yoursite.com/page</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>LINK, URL, SEND</span></div></div>
+            <button class="btn-use" onclick="useTemplate('send_link')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="link" data-name="bio link tree">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Bio / Link-in-Bio DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#EDE9FE;color:#5B21B6;">Link</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#F0F9FF;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#0EA5E9" stroke-width="1.8"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20" stroke="#0EA5E9" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">When someone asks about your website or wants to know more, send them your link-in-bio or Linktree automatically.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">Where's your website?</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Here's everything in one place 👇</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-link-card">
+                <div class="msg-link-icon" style="background:#F0F9FF;"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#0EA5E9" stroke-width="1.8"/></svg></div>
+                <div><div class="msg-link-title">My Links</div><div class="msg-link-url">linktr.ee/yourbrand</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>WEBSITE, BIO, LINKS</span></div></div>
+            <button class="btn-use" onclick="useTemplate('bio_link')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="link" data-name="freebie download">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Free Download / Freebie</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#EDE9FE;color:#5B21B6;">Link</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Lead Gen</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#F0FDF4;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7 10 12 15 17 10" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Give away a free guide, PDF, or resource when someone comments. Perfect for coaches and creators.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">FREE 🙏</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Your free guide is ready! Download it here 👇</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-link-card">
+                <div class="msg-link-icon" style="background:#F0FDF4;"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#22C55E" stroke-width="1.8"/></svg></div>
+                <div><div class="msg-link-title">📄 Free Guide PDF</div><div class="msg-link-url">yoursite.com/freeguide</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>FREE, GUIDE, PDF, DOWNLOAD</span></div></div>
+            <button class="btn-use" onclick="useTemplate('freebie')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="link" data-name="event ticket booking">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Event / Ticket Link</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#EDE9FE;color:#5B21B6;">Link</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FFF7ED;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#F97316" stroke-width="1.8"/><line x1="16" y1="2" x2="16" y2="6" stroke="#F97316" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="2" x2="8" y2="6" stroke="#F97316" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="21" y2="10" stroke="#F97316" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Promote events or workshops — send ticket/registration link when someone shows interest in your post.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">TICKET 🎟</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Seats are filling fast! Grab yours now 🎉</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-btn-card">🎟 Get My Ticket</div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>TICKET, BOOK, REGISTER, EVENT</span></div></div>
+            <button class="btn-use" onclick="useTemplate('event_ticket')">Use Template →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SHOP BUTTON -->
+    <div class="section-group" data-cat="shop">
+      <div class="section-head">
+        <div class="section-label">🛒 Shop Button</div>
+        <div class="section-badge" style="background:#FEE2E2;color:#991B1B;">Tap to buy</div>
+      </div>
+      <div class="tpl-grid">
+
+        <div class="tpl-card" data-cat="shop" data-name="shop button product">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Shop Now Button</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEE2E2;color:#991B1B;">Shop</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">High Convert</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FEE2E2;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" stroke="#EF4444" stroke-width="1.8"/><circle cx="20" cy="21" r="1" stroke="#EF4444" stroke-width="1.8"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Send a big clickable "Shop Now" button card that drives direct traffic to your product page. One tap to buy.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">WHERE BUY</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">So easy — just tap below to order! 🛒</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-btn-card">🛒 Shop Now</div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>BUY, ORDER, WHERE, SHOP</span></div></div>
+            <button class="btn-use" onclick="useTemplate('shop_now')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="shop" data-name="price check shop">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Price + Shop Button</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEE2E2;color:#991B1B;">Shop</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#F0FDF4;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">When someone asks about price, DM them the price and a direct shop button — removes friction to buy.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">How much is this?</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">It's $49 🏷 Ready to order? Tap below!</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-btn-card">💳 Buy Now — $49</div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>PRICE, COST, HOW MUCH</span></div></div>
+            <button class="btn-use" onclick="useTemplate('price_shop')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="shop" data-name="collab shop affiliate">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Collab / Affiliate Link</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEE2E2;color:#991B1B;">Shop</span>
+                <span class="tpl-badge" style="background:#EDE9FE;color:#5B21B6;">Creator</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#EDE9FE;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#7C3AED" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Share your affiliate or collab product links with a branded shop button. Great for UGC creators and influencers.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">COLLAB</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Here's my affiliate link — use it to get my discount too! 🤝</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-btn-card">🤝 Shop My Collab</div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>COLLAB, AFFILIATE, CODE</span></div></div>
+            <button class="btn-use" onclick="useTemplate('collab')">Use Template →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EMAIL COLLECT -->
+    <div class="section-group" data-cat="email">
+      <div class="section-head">
+        <div class="section-label">📧 Email Collect</div>
+        <div class="section-badge" style="background:#F0FDF4;color:#166534;">Grow your list</div>
+      </div>
+      <div class="tpl-grid">
+
+        <div class="tpl-card" data-cat="email" data-name="email collect newsletter">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Newsletter Signup DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Email</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#F0FDF4;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Grow your email list — DM followers asking them to join your newsletter when they comment on your post.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">SUBSCRIBE</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Welcome to the list! 💌 Drop your email below:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-form">
+                <div class="msg-form-field">your@email.com</div>
+                <div class="msg-form-btn">Subscribe ✓</div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>SUBSCRIBE, EMAIL, NEWSLETTER</span></div></div>
+            <button class="btn-use" onclick="useTemplate('newsletter')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="email" data-name="lead magnet email">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Lead Magnet Email Capture</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Email</span>
+                <span class="tpl-badge" style="background:#EDE9FE;color:#5B21B6;">Creator</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#EDE9FE;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Offer something valuable (checklist, mini-course, guide) in exchange for an email address — classic lead magnet flow.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">CHECKLIST</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">I'll send it straight to your inbox! What's your email? 📬</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-form">
+                <div class="msg-form-field">your@email.com</div>
+                <div class="msg-form-btn">Send Me the Checklist →</div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>CHECKLIST, GUIDE, SEND, GET</span></div></div>
+            <button class="btn-use" onclick="useTemplate('lead_magnet')">Use Template →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DISCOUNT -->
+    <div class="section-group" data-cat="discount">
+      <div class="section-head">
+        <div class="section-label">🏷 Discount Code</div>
+        <div class="section-badge" style="background:#FEF9C3;color:#92400E;">Send promo codes via DM</div>
+      </div>
+      <div class="tpl-grid">
+
+        <div class="tpl-card" data-cat="discount" data-name="discount code promo">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Promo Code DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF9C3;color:#92400E;">Discount</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FEF9C3;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="7" y1="7" x2="7.01" y2="7" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">DM a unique discount code to anyone who comments the magic word. Great for promotions and follower rewards.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">CODE 🙌</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Here's your exclusive code! 🎁 Use it at checkout:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-discount"><div class="msg-discount-code">SAVE20</div><div class="msg-discount-sub">20% off your entire order</div></div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>CODE, DISCOUNT, PROMO</span></div></div>
+            <button class="btn-use" onclick="useTemplate('promo_code')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="discount" data-name="birthday discount special">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Follower Special Offer</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FEF9C3;color:#92400E;">Discount</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Loyalty</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FEE2E2;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Reward loyal followers with a special discount — send a thank you message with an exclusive code just for them.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">LOYAL ❤️</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">Thank you for your support! You're amazing 💜 Here's a special gift:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-discount"><div class="msg-discount-code">VIP15</div><div class="msg-discount-sub">15% off — just for you ❤️</div></div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>LOYAL, VIP, THANKS, LOVE</span></div></div>
+            <button class="btn-use" onclick="useTemplate('vip_discount')">Use Template →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- STORY DM -->
+    <div class="section-group" data-cat="story">
+      <div class="section-head">
+        <div class="section-label">📸 Story DM</div>
+        <div class="section-badge" style="background:#FFF7ED;color:#C2410C;">Reply to story reactions</div>
+      </div>
+      <div class="tpl-grid">
+
+        <div class="tpl-card" data-cat="story" data-name="story reaction dm auto">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Story Reaction DM</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FFF7ED;color:#C2410C;">Story</span>
+                <span class="tpl-badge" style="background:#F0FDF4;color:#166534;">Auto-reply</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#FFF7ED;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#F97316" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" stroke="#F97316" stroke-width="1.5"/><polyline points="21 15 16 10 5 21" stroke="#F97316" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">When someone reacts to your story with 🔥 or a message, automatically DM them with more details or a link.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">🔥🔥🔥</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">So glad you love it! 🧡 Here's more info:</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-link-card">
+                <div class="msg-link-icon" style="background:#FFF7ED;"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#F97316" stroke-width="1.8"/></svg></div>
+                <div><div class="msg-link-title">See Full Details</div><div class="msg-link-url">yoursite.com/info</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Trigger: <span>Story reaction</span></div></div>
+            <button class="btn-use" onclick="useTemplate('story_reaction')">Use Template →</button>
+          </div>
+        </div>
+
+        <div class="tpl-card" data-cat="story" data-name="story poll dm vote">
+          <div class="tpl-card-top">
+            <div>
+              <div class="tpl-name">Story Poll Follow-up</div>
+              <div class="tpl-badges">
+                <span class="tpl-badge" style="background:#FFF7ED;color:#C2410C;">Story</span>
+              </div>
+            </div>
+            <div class="tpl-icon" style="background:#EDE9FE;">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="tpl-desc">Follow up on story poll voters — DM everyone who voted YES with the next step, link, or exclusive offer.</div>
+          <div class="tpl-preview">
+            <div class="tpl-preview-label">DM Preview</div>
+            <div class="msg-row"><div class="msg-av" style="background:#E2E2EA;color:#5A5A6E;">U</div><div class="msg-bubble in">YES 👍</div></div>
+            <div class="msg-row out"><div class="msg-av" style="background:#7C3AED;color:#fff;">Y</div><div class="msg-bubble out">You voted YES! Here's what comes next 👇</div></div>
+            <div class="msg-row out" style="margin-top:4px;">
+              <div style="width:20px;flex-shrink:0;"></div>
+              <div class="msg-btn-card">✅ Get Access Now</div>
+            </div>
+          </div>
+          <div class="tpl-footer">
+            <div class="tpl-stats"><div class="tpl-stat">Keywords: <span>YES, VOTE, POLL</span></div></div>
+            <button class="btn-use" onclick="useTemplate('story_poll')">Use Template →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /scroll-area -->
+</div><!-- /main -->
+
+<script>
+// Template data mapping to automation-builder presets
+const TEMPLATE_PRESETS = {
+  product_drop:      { title:'Product Drop DM',         keywords:['DROP','WANT','SHOP'],      dm:'Hey! The new drop is live 🔥 Here\'s your exclusive link:', linkTitle:'Shop the Drop', linkUrl:'https://yourstore.com/drop', type:'keyword_dm' },
+  flash_sale:        { title:'Flash Sale DM',            keywords:['SALE','DEAL','OFF'],        dm:'⚡ Flash sale — 30% off for the next 2 hours! Use code:', linkTitle:'Flash Sale', linkUrl:'https://yourstore.com/sale', type:'discount_code' },
+  collection_launch: { title:'New Collection Launch',    keywords:['COLLECTION','ACCESS','NEW'],dm:'You\'re one of the first to see this ✨ Here\'s your early access:', linkTitle:'Shop Early Access', linkUrl:'https://yourstore.com/new', type:'keyword_dm' },
+  waitlist:          { title:'Waitlist Signup DM',        keywords:['WAITLIST','JOIN','NOTIFY'], dm:'You\'re on the list! 🎉 Drop your email and we\'ll notify you first:', linkTitle:'Join Waitlist', linkUrl:'https://yourstore.com/waitlist', type:'email_collect' },
+  send_link:         { title:'Send Link on Keyword',      keywords:['LINK','URL','SEND'],        dm:'Here\'s the link you asked for! 🔗', linkTitle:'View Link', linkUrl:'https://yoursite.com/page', type:'keyword_dm' },
+  bio_link:          { title:'Bio / Link-in-Bio DM',      keywords:['WEBSITE','BIO','LINKS'],    dm:'Here\'s everything in one place 👇', linkTitle:'My Links', linkUrl:'https://linktr.ee/yourbrand', type:'keyword_dm' },
+  freebie:           { title:'Free Download / Freebie',   keywords:['FREE','GUIDE','PDF','DOWNLOAD'], dm:'Your free guide is ready! Download it here 👇', linkTitle:'📄 Free Guide PDF', linkUrl:'https://yoursite.com/freeguide', type:'keyword_dm' },
+  event_ticket:      { title:'Event / Ticket Link',       keywords:['TICKET','BOOK','REGISTER','EVENT'], dm:'Seats are filling fast! Grab yours now 🎉', linkTitle:'Get My Ticket', linkUrl:'https://yoursite.com/event', type:'keyword_dm' },
+  shop_now:          { title:'Shop Now Button',           keywords:['BUY','ORDER','WHERE','SHOP'], dm:'So easy — just tap below to order! 🛒', linkTitle:'Shop Now', linkUrl:'https://yourstore.com', type:'keyword_dm' },
+  price_shop:        { title:'Price + Shop Button',       keywords:['PRICE','COST','HOW MUCH'],  dm:'It\'s $49 🏷 Ready to order? Tap below!', linkTitle:'Buy Now — $49', linkUrl:'https://yourstore.com/buy', type:'keyword_dm' },
+  collab:            { title:'Collab / Affiliate Link',   keywords:['COLLAB','AFFILIATE','CODE'], dm:'Here\'s my affiliate link — use it to get my discount too! 🤝', linkTitle:'Shop My Collab', linkUrl:'https://yourstore.com/collab', type:'keyword_dm' },
+  newsletter:        { title:'Newsletter Signup DM',      keywords:['SUBSCRIBE','EMAIL','NEWSLETTER'], dm:'Welcome to the list! 💌 Drop your email below:', linkTitle:'Subscribe', linkUrl:'https://yoursite.com/subscribe', type:'email_collect' },
+  lead_magnet:       { title:'Lead Magnet Email Capture', keywords:['CHECKLIST','GUIDE','SEND','GET'], dm:'I\'ll send it straight to your inbox! What\'s your email? 📬', linkTitle:'Send Me the Checklist', linkUrl:'https://yoursite.com/checklist', type:'email_collect' },
+  promo_code:        { title:'Promo Code DM',             keywords:['CODE','DISCOUNT','PROMO'],  dm:'Here\'s your exclusive code! 🎁 Use it at checkout:', linkTitle:'Promo Code', linkUrl:'https://yourstore.com', type:'discount_code' },
+  vip_discount:      { title:'Follower Special Offer',    keywords:['LOYAL','VIP','THANKS','LOVE'], dm:'Thank you for your support! You\'re amazing 💜 Here\'s a special gift:', linkTitle:'VIP Code', linkUrl:'https://yourstore.com', type:'discount_code' },
+  story_reaction:    { title:'Story Reaction DM',         keywords:['REACTION'],                dm:'So glad you love it! 🧡 Here\'s more info:', linkTitle:'See Full Details', linkUrl:'https://yoursite.com/info', type:'story_dm' },
+  story_poll:        { title:'Story Poll Follow-up',      keywords:['YES','VOTE','POLL'],        dm:'You voted YES! Here\'s what comes next 👇', linkTitle:'Get Access Now', linkUrl:'https://yoursite.com/access', type:'story_dm' },
+};
+
+function useTemplate(id) {
+  const preset = TEMPLATE_PRESETS[id];
+  if (!preset) return;
+  // Save preset to localStorage so automation-builder can pick it up
+  localStorage.setItem('dmflow_tpl_preset', JSON.stringify(preset));
+  // Navigate parent frame to automation builder
+  if (window.parent && window.parent !== window) {
+    window.parent.navigate('pages/app/automation-builder.html', 'automation-builder');
+  } else {
+    window.location.href = 'automation-builder.html';
+  }
+}
+
+function upgradePro() {
+  if (window.parent && window.parent !== window) {
+    window.parent.navigate('../../index.html#pricing', 'upgrade');
+  } else {
+    window.location.href = '../../index.html#pricing';
+  }
+}
+
+// Filter by category tab
+function filterCat(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tpl-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+  // Show/hide section headers
+  document.querySelectorAll('.section-group').forEach(group => {
+    const visible = group.querySelectorAll('.tpl-card:not([style*="display: none"])');
+    group.style.display = (cat === 'all' || group.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// Filter by search
+function filterSearch(q) {
+  const query = q.toLowerCase().trim();
+  document.querySelectorAll('.tpl-card').forEach(card => {
+    const name = card.dataset.name || '';
+    const text = card.textContent.toLowerCase();
+    card.style.display = (!query || text.includes(query)) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>
