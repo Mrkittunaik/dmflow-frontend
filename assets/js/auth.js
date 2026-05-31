@@ -2,7 +2,7 @@
 // Works with Express/MongoDB backend. Google OAuth via backend redirect.
 
 const DMFLOW_CONFIG = {
-  BACKEND_URL: (document.querySelector('meta[name="dmflow-api"]')?.content || window.DMFLOW_API_URL || 'http://localhost:4000').replace(/\/$/, ''),
+ BACKEND_URL: (document.querySelector('meta[name="dmflow-api"]')?.content || window.DMFLOW_API_URL || 'https://dmflow-backend-u9h8.onrender.com').replace(/\/$/, ''),
 };
 
 // ─── Storage helpers ──────────────────────────────────────
