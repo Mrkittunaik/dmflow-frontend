@@ -506,6 +506,16 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
           el.textContent = avatarLetter;
           el.style.background = avatarBg;
 
+          // Clear the expired URL from localStorage so it doesn't persist
+          try {
+            const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+            if (stored.instagram && stored.instagram.profilePic === url) {
+              stored.instagram.profilePic = '';
+              localStorage.setItem('dmflow_user', JSON.stringify(stored));
+              localStorage.removeItem(AVATAR_TS_KEY);
+            }
+          } catch(e) {}
+
           // Then try to recover via backend (with retry limit)
           if (retryCount < AVATAR_MAX_RETRY && window.API && API.getToken()) {
             API.getMe({ noCache: true }).then(function(fresh) {
@@ -518,6 +528,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                   if (!stored.instagram) stored.instagram = {};
                   stored.instagram.profilePic = freshPic;
                   localStorage.setItem('dmflow_user', JSON.stringify(stored));
+                  localStorage.setItem(AVATAR_TS_KEY, Date.now().toString());
                 } catch(e) {}
                 // Retry with new URL on both elements
                 [q('sbAv'), q('mobAv')].forEach(function(av) {
@@ -563,31 +574,25 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
       if (q('igCountLabel')) q('igCountLabel').textContent = igCount + '/' + igLimit;
       if (q('igFill'))       q('igFill').style.width       = Math.min((igCount / igLimit) * 100, 100) + '%';
 
-      // ── Proactive CDN URL refresh ──
-      // If profilePic exists but was fetched >20h ago, silently refresh before it expires
-      if (igPic && igUser && window.API && API.getToken()) {
-        const lastFetch = parseInt(localStorage.getItem(AVATAR_TS_KEY) || '0');
-        const age = Date.now() - lastFetch;
-        if (age > AVATAR_TTL_MS) {
-          API.getMe({ noCache: true }).then(function(fresh) {
-            if (!fresh) return;
-            const freshPic = (fresh.instagram || {}).profilePic || '';
-            if (freshPic) {
-              try {
-                const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
-                if (!stored.instagram) stored.instagram = {};
-                stored.instagram.profilePic = freshPic;
-                localStorage.setItem('dmflow_user', JSON.stringify(stored));
-                localStorage.setItem(AVATAR_TS_KEY, Date.now().toString());
-              } catch(e) {}
-              // Only re-render if we got a fresh URL
-              if (freshPic !== igPic) {
-                renderAvatarImg(document.getElementById('sbAv'),    freshPic, '10px');
-                renderAvatarImg(document.getElementById('mobAv'),   freshPic, '8px');
-              }
-            }
-          }).catch(function() {});
-        }
+      // Proactive CDN URL refresh
+      // Instagram CDN URLs expire in 24-48h, so always silently refresh on every load
+      if (igUser && window.API && API.getToken()) {
+        API.getMe({ noCache: true }).then(function(fresh) {
+          if (!fresh) return;
+          const freshPic = (fresh.instagram || {}).profilePic || '';
+          if (freshPic) {
+            try {
+              const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+              if (!stored.instagram) stored.instagram = {};
+              stored.instagram.profilePic = freshPic;
+              localStorage.setItem('dmflow_user', JSON.stringify(stored));
+              localStorage.setItem(AVATAR_TS_KEY, Date.now().toString());
+            } catch(e) {}
+            // Always re-render with fresh URL (old URL may be expired)
+            renderAvatarImg(document.getElementById('sbAv'),  freshPic, '10px', 0);
+            renderAvatarImg(document.getElementById('mobAv'), freshPic, '8px',  0);
+          }
+        }).catch(function() {});
       }
 
     } catch (e) {}
@@ -608,7 +613,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
           merged.instagram = {
             connected:  freshIg.connected  ?? existing.instagram?.connected  ?? false,
             username:   freshIg.username   || existing.instagram?.username   || '',
-            profilePic: freshIg.profilePic || existing.instagram?.profilePic || '',
+            profilePic: freshIg.profilePic || '', // always use fresh; don't fall back to potentially expired URL
             userId:     freshIg.userId     || existing.instagram?.userId     || '',
             pageId:     freshIg.pageId     || existing.instagram?.pageId     || '',
           };
@@ -630,7 +635,32 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
   })();
 
   window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'dmflow_user_updated') { loadUserInfo(); }
+    if (!e.data || e.data.type !== 'dmflow_user_updated') return;
+    // First render immediately from localStorage (fast)
+    loadUserInfo();
+    // Then fetch fresh from backend and re-render with real profilePic
+    if (window.API && API.getToken()) {
+      API.getMe({ noCache: true }).then(function(fresh) {
+        if (!fresh) return;
+        try {
+          const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+          const freshIg = fresh.instagram || {};
+          stored.instagram = {
+            connected:  freshIg.connected  ?? stored.instagram?.connected  ?? false,
+            username:   freshIg.username   || stored.instagram?.username   || '',
+            profilePic: freshIg.profilePic || stored.instagram?.profilePic || '',
+            userId:     freshIg.userId     || stored.instagram?.userId     || '',
+            pageId:     freshIg.pageId     || stored.instagram?.pageId     || '',
+          };
+          stored.name     = fresh.name     || stored.name;
+          stored.plan     = fresh.plan     || stored.plan     || 'free';
+          stored.dmsSent  = fresh.dmsSent  || stored.dmsSent  || 0;
+          stored.dmsLimit = fresh.dmsLimit || stored.dmsLimit || 500;
+          localStorage.setItem('dmflow_user', JSON.stringify(stored));
+        } catch(e) {}
+        loadUserInfo(); // re-render with fresh profilePic
+      }).catch(function() {});
+    }
   });
 
   // ── Current active page tracking ──
