@@ -144,3 +144,4 @@ const API = (() => {
     ping: () => req('GET', '/health', null, { silent: true, timeout: 5000 }),
   };
 })();
+window.API = API;
