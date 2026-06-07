@@ -35,7 +35,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 
 /* User block */
 .sb-user{padding:10px 14px;border-bottom:1px solid #F0F0F5;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.sb-av{width:34px;height:34px;border-radius:10px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.sb-av{width:34px;height:34px;border-radius:10px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;overflow:hidden;transition:background .3s;}
 .sb-user-name{font-size:13px;font-weight:700;color:#0A0A0F;line-height:1.2;}
 .sb-user-plan{font-size:11px;color:#9898A8;}
 
@@ -45,6 +45,23 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .sb-ig-name{font-size:12px;font-weight:700;color:#166534;}
 .sb-ig-sub{font-size:10px;color:#4ADE80;}
+
+/* ── AVATAR ADVANCED STATES ── */
+/* Shimmer skeleton while image is loading */
+.sb-av.av-loading{background:linear-gradient(90deg,#E2E2EA 25%,#EBEBF0 50%,#E2E2EA 75%);background-size:200% 100%;animation:avShimmer 1.4s ease infinite;}
+.mob-av.av-loading{background:linear-gradient(90deg,#E2E2EA 25%,#EBEBF0 50%,#E2E2EA 75%);background-size:200% 100%;animation:avShimmer 1.4s ease infinite;}
+@keyframes avShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Fade-in for avatar image once loaded */
+.sb-av img,.mob-av img{
+  width:100%;height:100%;object-fit:cover;border-radius:inherit;
+  opacity:0;transition:opacity .35s ease;
+}
+.sb-av img.av-ready,.mob-av img.av-ready{opacity:1;}
+
+/* Profile pic support */
+.sb-av img{border-radius:10px;}
+.mob-av img{border-radius:8px;}
 
 /* New Automation btn — clean frosted white glass */
 .sb-new{
@@ -113,9 +130,6 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 #contentFrame{width:100%;height:100%;border:none;display:block;background:#F4F4F8;transition:opacity .18s ease;}
 #contentFrame.loading{opacity:0;}
 
-/* ── PROFILE PIC support ── */
-.sb-av img{width:100%;height:100%;border-radius:10px;object-fit:cover;}
-
 /* ── MOBILE TOPBAR ── */
 .mob-topbar{
   display:none;align-items:center;justify-content:space-between;
@@ -129,8 +143,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .mob-logo-text{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;color:#0A0A0F;letter-spacing:-.3px;}
 .mob-logo-text span{color:#7C3AED;}
 .mob-topbar-right{display:flex;align-items:center;gap:8px;}
-.mob-av{width:28px;height:28px;border-radius:8px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden;}
-.mob-av img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
+.mob-av{width:28px;height:28px;border-radius:8px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden;transition:background .3s;}
 
 /* ── BOTTOM NAV ── */
 .bottom-nav{
@@ -232,15 +245,10 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .sb-logo-mark svg path{fill:#C8FF00;}
 
 @media(max-width:900px){
-  /* Show mobile topbar (icon only) */
   .mob-topbar{display:flex;}
-  /* Push content down for topbar, up for bottom nav */
   .content-area{padding-top:48px;padding-bottom:calc(62px + env(safe-area-inset-bottom));}
-  /* iframe must also shrink */
   #contentFrame{height:100%;}
-  /* Hide desktop sidebar entirely */
   .sidebar{display:none !important;}
-  /* Show bottom nav */
   .bottom-nav{display:flex;}
 }
 </style>
@@ -439,6 +447,13 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
     return;
   }
 
+  // ── Avatar system constants ──
+  // Instagram CDN profile_picture_url expires ~24-48h.
+  // We proactively refresh after 20h so the URL never goes stale visually.
+  const AVATAR_TTL_MS    = 20 * 60 * 60 * 1000; // 20 hours
+  const AVATAR_TS_KEY    = 'dmflow_avatar_ts';
+  const AVATAR_MAX_RETRY = 2;
+
   // ── Load user info ──
   function loadUserInfo() {
     try {
@@ -454,10 +469,6 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
       const igCount  = igUser ? 1 : 0;
       const q = id => document.getElementById(id);
 
-      // Avatar — 3 states:
-      // 1. IG connected + has profile pic → show image
-      // 2. IG connected + no profile pic (instagram_business_basic scope) → IG gradient + initial
-      // 3. Not connected → purple + name initial
       const avEl    = q('sbAv');
       const mobAvEl = q('mobAv');
       const avatarLetter = igUser ? igUser.charAt(0).toUpperCase() : name.charAt(0).toUpperCase();
@@ -465,18 +476,84 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
         ? 'linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)'
         : '#7C3AED';
 
-      function applyAvatar(el, radius) {
-        if (!el) return;
+      // ── Core: render image into an avatar element ──
+      // Shows shimmer → fade-in image on load → fallback on error
+      function renderAvatarImg(el, url, radius, retryCount) {
+        if (!el || !url) return;
+        retryCount = retryCount || 0;
+
+        el.innerHTML = '';
+        el.classList.add('av-loading');
+        el.style.background = '';
         el.style.padding = '0';
-        if (igPic) {
-          el.innerHTML = '<img src="' + igPic + '" alt="profile" style="width:100%;height:100%;object-fit:cover;border-radius:' + radius + ';" onerror="this.parentNode.innerHTML=\''+avatarLetter+'\';this.parentNode.style.background=\''+avatarBg+'\'">';
+
+        const img = document.createElement('img');
+        img.alt = 'profile';
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:' + radius + ';display:block;';
+
+        img.onload = function() {
+          el.classList.remove('av-loading');
           el.style.background = 'transparent';
-        } else {
+          img.classList.add('av-ready'); // triggers CSS fade-in
+          // Stamp timestamp on first successful load
+          localStorage.setItem(AVATAR_TS_KEY, Date.now().toString());
+        };
+
+        img.onerror = function() {
+          el.classList.remove('av-loading');
+          // Show letter fallback immediately so UI isn't blank
+          el.innerHTML = '';
           el.textContent = avatarLetter;
           el.style.background = avatarBg;
+
+          // Then try to recover via backend (with retry limit)
+          if (retryCount < AVATAR_MAX_RETRY && window.API && API.getToken()) {
+            API.getMe({ noCache: true }).then(function(fresh) {
+              if (!fresh) return;
+              const freshPic = (fresh.instagram || {}).profilePic || '';
+              if (freshPic && freshPic !== url) {
+                // Persist fresh URL to localStorage
+                try {
+                  const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+                  if (!stored.instagram) stored.instagram = {};
+                  stored.instagram.profilePic = freshPic;
+                  localStorage.setItem('dmflow_user', JSON.stringify(stored));
+                } catch(e) {}
+                // Retry with new URL on both elements
+                [q('sbAv'), q('mobAv')].forEach(function(av) {
+                  if (!av) return;
+                  var r = av.id === 'sbAv' ? '10px' : '8px';
+                  renderAvatarImg(av, freshPic, r, retryCount + 1);
+                });
+              }
+            }).catch(function() {});
+          }
+        };
+
+        img.src = url; // set src AFTER attaching handlers
+        el.appendChild(img);
+      }
+
+      // ── Show letter fallback ──
+      function renderAvatarLetter(el) {
+        if (!el) return;
+        el.classList.remove('av-loading');
+        el.innerHTML = '';
+        el.textContent = avatarLetter;
+        el.style.background = avatarBg;
+        el.style.padding = '';
+      }
+
+      // ── Apply avatar to element ──
+      function applyAvatar(el, radius) {
+        if (!el) return;
+        if (igPic) {
+          renderAvatarImg(el, igPic, radius);
+        } else {
+          renderAvatarLetter(el);
         }
       }
-      applyAvatar(avEl, '10px');
+      applyAvatar(avEl,    '10px');
       applyAvatar(mobAvEl, '8px');
 
       if (q('sbName'))       q('sbName').textContent       = igUser ? '@' + igUser : name;
@@ -485,6 +562,34 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
       if (q('dmsFill'))      q('dmsFill').style.width      = Math.min((dmsSent / dmsLimit) * 100, 100) + '%';
       if (q('igCountLabel')) q('igCountLabel').textContent = igCount + '/' + igLimit;
       if (q('igFill'))       q('igFill').style.width       = Math.min((igCount / igLimit) * 100, 100) + '%';
+
+      // ── Proactive CDN URL refresh ──
+      // If profilePic exists but was fetched >20h ago, silently refresh before it expires
+      if (igPic && igUser && window.API && API.getToken()) {
+        const lastFetch = parseInt(localStorage.getItem(AVATAR_TS_KEY) || '0');
+        const age = Date.now() - lastFetch;
+        if (age > AVATAR_TTL_MS) {
+          API.getMe({ noCache: true }).then(function(fresh) {
+            if (!fresh) return;
+            const freshPic = (fresh.instagram || {}).profilePic || '';
+            if (freshPic) {
+              try {
+                const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+                if (!stored.instagram) stored.instagram = {};
+                stored.instagram.profilePic = freshPic;
+                localStorage.setItem('dmflow_user', JSON.stringify(stored));
+                localStorage.setItem(AVATAR_TS_KEY, Date.now().toString());
+              } catch(e) {}
+              // Only re-render if we got a fresh URL
+              if (freshPic !== igPic) {
+                renderAvatarImg(document.getElementById('sbAv'),    freshPic, '10px');
+                renderAvatarImg(document.getElementById('mobAv'),   freshPic, '8px');
+              }
+            }
+          }).catch(function() {});
+        }
+      }
+
     } catch (e) {}
   }
   loadUserInfo();
@@ -498,10 +603,8 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
           const existing = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
           const freshIg  = fresh.instagram || {};
           const merged   = { ...existing, ...fresh };
-          // Map backend field names to frontend-expected names (backend may return dmsSentMonth/dmLimit)
           merged.dmsSent  = fresh.dmsSent  || fresh.dmsSentMonth || existing.dmsSent  || 0;
           merged.dmsLimit = fresh.dmsLimit || fresh.dmLimit      || existing.dmsLimit || 500;
-          // Always prefer fresh instagram data from server; fall back to existing only if fresh is empty
           merged.instagram = {
             connected:  freshIg.connected  ?? existing.instagram?.connected  ?? false,
             username:   freshIg.username   || existing.instagram?.username   || '',
@@ -513,12 +616,12 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
           localStorage.setItem('dmflow_user', JSON.stringify(merged));
           loadUserInfo();
 
-          // Auto-refresh Instagram token if connected and token is near expiry (within 15 days)
+          // Auto-refresh Instagram token if near expiry (within 15 days)
           if (merged.instagram?.connected && API.getToken()) {
             const expiry = fresh.instagram?.tokenExpiry;
             const daysLeft = expiry ? (new Date(expiry) - Date.now()) / (1000 * 60 * 60 * 24) : 999;
             if (daysLeft < 15) {
-              API.refreshIgToken().catch(() => {}); // silent refresh
+              API.refreshIgToken().catch(() => {});
             }
           }
         }
@@ -534,11 +637,10 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
   let _currentPage = 'dashboard';
 
   // ── Bottom nav active state ──
-  const BN_PAGES = ['dashboard','inbox','automation-builder'];
+  const BN_PAGES   = ['dashboard','inbox','automation-builder'];
   const MORE_PAGES = ['contacts','keywords','analytics','templates','settings','support','platform-select'];
 
   function updateBottomNav(page) {
-    // Reset all bn-items
     document.querySelectorAll('.bn-item').forEach(el => el.classList.remove('active'));
     document.getElementById('bn-more')?.classList.remove('active');
 
@@ -549,7 +651,6 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
       document.getElementById('bn-more')?.classList.add('active');
     }
 
-    // More popup items highlight
     const mpMap = {
       contacts: 'mpContacts', keywords: 'mpKeywords', analytics: 'mpAnalytics',
       templates: 'mpTemplates', settings: 'mpSettings', support: 'mpSettings',
@@ -561,40 +662,34 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
   // ── Navigate: iframe src changes, sidebar + bottom nav update ──
   window.navigate = function (path, page) {
     const frame = document.getElementById('contentFrame');
-    // Smooth fade transition
     frame.classList.add('loading');
     setTimeout(() => {
       frame.src = path;
       frame.onload = () => { frame.classList.remove('loading'); };
-      setTimeout(() => frame.classList.remove('loading'), 400); // fallback
+      setTimeout(() => frame.classList.remove('loading'), 400);
     }, 80);
     _currentPage = page;
 
-    // Desktop sidebar active
     document.querySelectorAll('.sb-link[data-page]').forEach(l => l.classList.remove('active'));
     const active = document.querySelector('.sb-link[data-page="' + page + '"]');
     if (active) active.classList.add('active');
 
-    // Mobile bottom nav active
     updateBottomNav(page);
-
     sidebarClose();
   };
 
-  // ── Bottom nav navigate (alias for mobile) ──
   window.bnNav = function(path, page) { window.navigate(path, page); };
 
-  // ── Set default active ──
   document.querySelector('.sb-link[data-page="dashboard"]')?.classList.add('active');
   updateBottomNav('dashboard');
 
   // ── Sign out ──
   window.signOut = async function () {
-    // Call backend to clear HTTP-only cookie, then wipe all local storage
     try { await API.logout(); } catch(e) {}
     localStorage.removeItem('dmflow_user');
     localStorage.removeItem('dmflow_token');
     localStorage.removeItem('dmflow_modal_seen');
+    localStorage.removeItem('dmflow_avatar_ts');
     sessionStorage.clear();
     window.location.replace('pages/auth/login.html');
   };
@@ -611,7 +706,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
     document.getElementById('moreOverlay')?.classList.remove('show');
   };
 
-  // ── Legacy sidebar mobile ──
+  // ── Sidebar mobile ──
   window.sidebarToggle = function () {
     document.getElementById('sidebar')?.classList.toggle('mob-open');
     document.getElementById('sbOverlay')?.classList.toggle('show');
@@ -622,7 +717,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
     closeMore();
   };
 
-  // ── Handle Back button clicks from inside iframes → go to Dashboard ──
+  // ── Handle messages from iframes ──
   window.addEventListener('message', function(e) {
     if (e.data && e.data.type === 'dmflow_back') {
       window.navigate('pages/app/dashboard.html', 'dashboard');
