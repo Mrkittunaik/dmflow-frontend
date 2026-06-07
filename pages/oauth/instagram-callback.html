@@ -142,9 +142,24 @@ body{font-family:'Instrument Sans',sans-serif;background:#F8F8FC;display:flex;al
         document.getElementById('msg').textContent = 'Instagram connected! Redirecting...';
         document.getElementById('spinner').style.display = 'none';
       }, 600);
+
+      // ── Auto-update sidebar DP instantly — no logout needed ──
+      // Post message to parent app.html so it re-renders avatar immediately
+      try {
+        if (window.top && window.top !== window) {
+          window.top.postMessage({ type: 'dmflow_user_updated' }, '*');
+        }
+      } catch(e) {}
+
       setTimeout(() => { window.location.href = '../onboarding/connecting.html'; }, 1400);
     }).catch(() => {
       // getMe failed — igData already saved above, just proceed
+      // Still notify parent to update with whatever we have
+      try {
+        if (window.top && window.top !== window) {
+          window.top.postMessage({ type: 'dmflow_user_updated' }, '*');
+        }
+      } catch(e) {}
       setTimeout(() => {
         doneStep(4, 0);
         document.getElementById('spinner').style.display = 'none';
