@@ -624,12 +624,120 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 #preview-pld .pld-comment-row{display:flex;align-items:center;gap:6px;background:#F8F8FC;border-radius:8px;padding:7px 10px;margin-bottom:6px;font-size:11px;}
 #preview-pld .pld-owner-reply{display:flex;align-items:center;gap:6px;background:#F8F8FC;border-radius:8px;padding:7px 10px;margin-top:6px;font-size:10px;color:#5A5A6E;}
 
+/* ── SHELL & SIDEBAR ── */
+.shell{display:flex;height:100vh;overflow:hidden;}
+.sidebar{width:228px;min-width:228px;background:linear-gradient(180deg,#fafaff 0%,#f5f5fc 60%,#f0f0f8 100%);border-right:1px solid #E2E2EA;display:flex;flex-direction:column;height:100vh;overflow:hidden;flex-shrink:0;position:relative;z-index:10;}
+.sb-logo{padding:18px 20px 14px;border-bottom:1px solid #E2E2EA;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sb-logo a{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;text-decoration:none;}
+.sb-logo a span{color:#7C3AED;}
+.sb-user{padding:10px 14px;border-bottom:1px solid #F0F0F5;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sb-av{width:34px;height:34px;border-radius:10px;background:#7C3AED;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.sb-av img{width:100%;height:100%;border-radius:10px;object-fit:cover;}
+.sb-user-name{font-size:13px;font-weight:700;color:#0A0A0F;line-height:1.2;}
+.sb-user-plan{font-size:11px;color:#9898A8;}
+.sb-nav{padding:6px 10px;flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;}
+.sb-nav::-webkit-scrollbar{width:3px;}
+.sb-nav::-webkit-scrollbar-thumb{background:#E2E2EA;border-radius:2px;}
+.sb-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;color:#2A2A3A;text-decoration:none;transition:background .15s,color .15s;cursor:pointer;user-select:none;white-space:nowrap;border:none;background:none;width:100%;font-family:inherit;}
+.sb-link:hover{background:#EBEBF0;color:#0A0A0F;}
+.sb-link.active{background:#0A0A0F!important;color:#fff!important;font-weight:700!important;}
+.sb-link.active svg{opacity:1!important;stroke:#fff!important;}
+.sb-link svg{flex-shrink:0;opacity:.7;}
+.sb-section{font-size:10px;font-weight:800;color:#888;letter-spacing:.8px;padding:6px 12px 2px;text-transform:uppercase;}
+.sb-divider{height:1px;background:#F0F0F5;margin:6px 10px;}
+.sb-bottom{padding:10px 14px;border-top:1px solid #F0F0F5;flex-shrink:0;}
+.sb-stat{margin-bottom:6px;}
+.sb-stat-label{font-size:11px;color:#9898A8;display:flex;justify-content:space-between;margin-bottom:3px;}
+.sb-bar{height:3px;background:#F0F0F5;border-radius:2px;}
+.sb-fill{height:100%;background:#7C3AED;border-radius:2px;transition:width .3s;}
+.sb-upgrade{display:flex;align-items:center;gap:6px;margin-top:8px;padding:8px 12px;background:#0A0A0F;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;}
+.sb-upgrade svg{flex-shrink:0;}
+.main{flex:1;overflow:hidden;}
+
 </style>
 </head>
 <body>
+<div class="shell">
 
 <!-- SIDEBAR -->
-</div>
+<aside class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <a href="../../index.html">DM<span>Flow</span></a>
+  </div>
+  <div class="sb-user">
+    <div class="sb-av" id="sbAv">U</div>
+    <div>
+      <div class="sb-user-name" id="sbName">User</div>
+      <div class="sb-user-plan" id="sbPlan">Free</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <button class="sb-link" onclick="window.location.href='dashboard.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+      Dashboard
+    </button>
+    <button class="sb-link active">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Automations
+    </button>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Content</div>
+    <button class="sb-link" onclick="window.location.href='templates.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 9l5 3-5 3V9z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Templates
+    </button>
+    <button class="sb-link" onclick="window.location.href='contacts.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/></svg>
+      Contacts
+    </button>
+    <button class="sb-link" onclick="window.location.href='keywords.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="7" y1="7" x2="7.01" y2="7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Keywords
+    </button>
+    <button class="sb-link" onclick="window.location.href='inbox.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Inbox
+    </button>
+    <div class="sb-divider"></div>
+    <div class="sb-section">Analytics</div>
+    <button class="sb-link" onclick="window.location.href='analytics.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Analytics
+    </button>
+    <div class="sb-divider"></div>
+    <button class="sb-link" onclick="window.location.href='../onboarding/platform-select.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M12 18h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Add Platform
+    </button>
+    <button class="sb-link" onclick="window.location.href='../settings/settings.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Settings
+    </button>
+    <button class="sb-link" onclick="window.location.href='../settings/support.html'">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      Support
+    </button>
+    <button class="sb-link" id="sbSignOut" style="color:#9898A8;" onclick="signOut()">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Sign out
+    </button>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-stat">
+      <div class="sb-stat-label">DMs sent <span id="dmsLabel">0/500</span></div>
+      <div class="sb-bar"><div class="sb-fill" id="dmsFill" style="width:0%"></div></div>
+    </div>
+    <div class="sb-stat">
+      <div class="sb-stat-label">IG accounts <span id="igCountLabel">0/1</span></div>
+      <div class="sb-bar"><div class="sb-fill" id="igFill" style="width:0%"></div></div>
+    </div>
+    <button class="sb-upgrade" onclick="window.location.href='../../index.html#pricing'">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Upgrade Plan
+    </button>
+  </div>
+</aside>
+
 <!-- MAIN -->
   <div class="main" style="width:100%;height:100vh;min-height:100vh;">
 
@@ -3664,5 +3772,6 @@ const _origBuildPayload = typeof _buildPayload !== 'undefined' ? _buildPayload :
 
 </script>
 
+</div><!-- /.shell -->
 </body>
 </html>
