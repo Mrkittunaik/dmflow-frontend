@@ -96,10 +96,14 @@ html{overflow-x:hidden}
 /* MODAL OVERLAY */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
-.modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:680px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.3)}
-.modal-close{position:sticky;top:16px;float:right;margin:16px 16px 0 0;width:32px;height:32px;border:1.5px solid var(--gray-200);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text2);z-index:10;transition:all .2s}
+.modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:680px;max-height:90vh;overflow-y:auto;overflow-x:hidden;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.3);scrollbar-width:thin;scrollbar-color:var(--gray-200) transparent}
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-track{background:transparent}
+.modal::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:4px}
+.modal-top-bar{position:sticky;top:0;z-index:10;display:flex;justify-content:flex-end;padding:14px 16px 0;background:#fff}
+.modal-close{width:32px;height:32px;border:1.5px solid var(--gray-200);border-radius:8px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text2);transition:all .2s;flex-shrink:0}
 .modal-close:hover{border-color:var(--black);color:var(--black)}
-.modal-body{padding:36px 40px;clear:both}
+.modal-body{padding:8px 40px 36px}
 
 /* STEPPER */
 .stepper{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px;overflow-x:auto;padding-bottom:4px}
@@ -140,6 +144,20 @@ select.form-input{cursor:pointer}
 .file-upload-text{font-size:13px;color:var(--text2)}
 .file-upload-text strong{color:var(--purple)}
 .file-name{font-size:13px;font-weight:600;color:var(--purple);margin-top:4px;word-break:break-all}
+
+/* SIGNATURE TABS */
+.sig-tabs{display:flex;gap:0;border:1.5px solid var(--gray-200);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.sig-tab{flex:1;padding:9px 16px;border:none;background:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);transition:all .2s}
+.sig-tab.active{background:var(--purple);color:#fff}
+.sig-tab:not(.active):hover{background:var(--gray-100)}
+.sig-panel{display:none}
+.sig-panel.active{display:block}
+
+/* BANK SKIP */
+.skip-bank-bar{background:var(--gray-50);border:1.5px dashed var(--gray-200);border-radius:10px;padding:12px 16px;margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.skip-bank-bar span{font-size:13px;color:var(--text2)}
+.btn-skip{padding:7px 16px;border:1.5px solid var(--gray-200);border-radius:8px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--text2);transition:all .2s}
+.btn-skip:hover{border-color:var(--purple);color:var(--purple)}
 
 /* SIGNATURE */
 #sigCanvas{border:2px solid var(--gray-200);border-radius:12px;cursor:crosshair;width:100%;touch-action:none;display:block;background:#fff}
@@ -222,14 +240,17 @@ select.form-input{cursor:pointer}
 /* RESPONSIVE */
 @media(max-width:768px){
   .nav-links{display:none}
-  .nav-inner{padding:16px 20px}
+  .nav-inner{padding:12px 16px}
+  .nav-right .btn-ghost:not(.hr-login-btn){display:none}
+  .nav-right .btn-primary{padding:7px 12px;font-size:12px}
+  .hr-login-btn{padding:6px 10px!important;font-size:11px!important}
   .careers-hero{padding:60px 20px}
   .section{padding:60px 20px}
   .jobs-grid{grid-template-columns:1fr}
   .joining-section{padding:60px 20px}
   .joining-input-row{flex-direction:column}
   .btn-continue{width:100%}
-  .modal-body{padding:24px 20px}
+  .modal-body{padding:8px 20px 28px}
   .form-grid{grid-template-columns:1fr}
   .form-grid.single{grid-template-columns:1fr}
   .success-cards{grid-template-columns:1fr}
@@ -264,7 +285,7 @@ select.form-input{cursor:pointer}
       <li><a href="careers.html" style="color:var(--black);font-weight:600">Careers</a></li>
     </ul>
     <div class="nav-right">
-      <a href="hr.html" class="btn-ghost" style="font-size:13px;color:var(--purple);border-color:rgba(124,58,237,0.3)">HR Login</a>
+      <a href="hr.html" class="btn-ghost hr-login-btn" style="font-size:13px;color:var(--purple);border-color:rgba(124,58,237,0.3)">HR Login</a>
       <a href="../../pages/auth/login.html" class="btn-ghost">Log in</a>
       <a href="../../pages/auth/register.html" class="btn-primary">Start free →</a>
     </div>
@@ -355,7 +376,6 @@ select.form-input{cursor:pointer}
         <a href="../../index.html#features">About</a>
         <a href="../../index.html#pricing">Pricing</a>
         <a href="careers.html" class="active">Careers</a>
-        <a href="hr.html" style="color:rgba(200,255,0,0.7)">HR Login</a>
         <a href="mailto:support@dmflow.app">Contact</a>
       </div>
       <div class="footer-col">
@@ -384,7 +404,9 @@ select.form-input{cursor:pointer}
 <!-- JOINING FORM MODAL -->
 <div class="modal-overlay" id="joiningModal">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="modal-top-bar">
+      <button class="modal-close" onclick="closeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
     <div class="modal-body">
 
       <!-- STEPPER -->
@@ -444,29 +466,6 @@ select.form-input{cursor:pointer}
                 <div class="file-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M6 21v-1a6 6 0 0 1 12 0v1"/></svg></div>
                 <div class="file-upload-text">Click to upload or drag & drop<br><strong>JPG, PNG</strong> up to 2MB</div>
                 <div class="file-name" id="passportName"></div>
-              </div>
-            </div>
-            <!-- Device Declaration -->
-            <div class="form-group full">
-              <label class="form-label">Device / Equipment Available <span>*</span></label>
-              <div class="form-hint" style="margin-bottom:8px">Select all devices you have access to for this internship</div>
-              <div style="display:flex;flex-wrap:wrap;gap:10px">
-                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_mobile">
-                  <input type="checkbox" id="dev_mobile" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_mobile',this.checked)">
-                  📱 Mobile
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_laptop">
-                  <input type="checkbox" id="dev_laptop" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_laptop',this.checked)">
-                  💻 Laptop
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_mouse">
-                  <input type="checkbox" id="dev_mouse" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_mouse',this.checked)">
-                  🖱️ Mouse
-                </label>
-                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_touchpad">
-                  <input type="checkbox" id="dev_touchpad" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_touchpad',this.checked)">
-                  ✋ Touchpad
-                </label>
               </div>
             </div>
           </div>
@@ -535,7 +534,7 @@ select.form-input{cursor:pointer}
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">NOC from College <span>*</span></label>
+              <label class="form-label">NOC from College <span style="font-size:11px;color:var(--gray-400);font-weight:400">(Optional)</span></label>
               <div class="form-hint">No Objection Certificate issued by your college/university for this internship</div>
               <div class="file-upload-area" style="margin-top:8px" id="nocArea" onclick="triggerFile('f_noc')">
                 <input type="file" id="f_noc" accept="image/*,application/pdf" onchange="handleFile(this,'nocArea','nocName')">
@@ -586,22 +585,45 @@ select.form-input{cursor:pointer}
               </select>
             </div>
           </div>
+          <div class="skip-bank-bar">
+            <span>Don't have bank details handy? You can fill these later.</span>
+            <button class="btn-skip" onclick="skipBankDetails()">Skip for now</button>
+          </div>
           <div class="step-footer">
             <button class="btn-back" onclick="prevStep(3)">← Back</button>
             <span class="step-progress">Step 4 of 6</span>
             <button class="btn-next" onclick="nextStep(3)">Next →</button>
           </div>
         </div>
-
-        <!-- STEP 5: SIGNATURE -->
         <div class="form-step" id="step4">
           <div class="step-title">Digital Signature</div>
-          <div class="step-desc">Sign below using your mouse or finger on a touchscreen.</div>
-          <canvas id="sigCanvas" width="600" height="160"></canvas>
-          <div class="sig-actions">
-            <button class="btn-clear" onclick="clearSig()">Clear</button>
-            <span class="sig-hint">Use mouse or touch to sign</span>
+          <div class="step-desc">Sign digitally or upload a photo of your signature.</div>
+
+          <div class="sig-tabs">
+            <button class="sig-tab active" id="sigTabDraw" onclick="switchSigTab('draw')">✏️ Draw Signature</button>
+            <button class="sig-tab" id="sigTabUpload" onclick="switchSigTab('upload')">📷 Upload Photo</button>
           </div>
+
+          <!-- Draw Panel -->
+          <div class="sig-panel active" id="sigPanelDraw">
+            <canvas id="sigCanvas" width="600" height="160"></canvas>
+            <div class="sig-actions">
+              <button class="btn-clear" onclick="clearSig()">Clear</button>
+              <span class="sig-hint">Use mouse or finger to sign</span>
+            </div>
+          </div>
+
+          <!-- Upload Panel -->
+          <div class="sig-panel" id="sigPanelUpload">
+            <div class="file-upload-area" id="sigUploadArea" onclick="triggerFile('f_sigphoto')" style="min-height:120px">
+              <input type="file" id="f_sigphoto" accept="image/*" onchange="handleSigPhoto(this)">
+              <div class="file-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M6 21v-1a6 6 0 0 1 12 0v1"/></svg></div>
+              <div class="file-upload-text">Click to upload a photo of your signature<br><strong>JPG, PNG</strong> up to 2MB</div>
+              <div class="file-name" id="sigPhotoName"></div>
+            </div>
+            <img id="sigPhotoPreview" src="" alt="Signature preview" style="display:none;max-height:120px;border:1.5px solid var(--gray-200);border-radius:10px;margin-top:12px;object-fit:contain;width:100%">
+          </div>
+
           <div class="declaration-box" style="margin-top:20px">
             <label class="declaration-check">
               <input type="checkbox" id="f_declaration">
@@ -648,13 +670,6 @@ select.form-input{cursor:pointer}
               <div class="review-item"><span class="review-label">College ID</span><span class="review-val" id="r_collegeid">–</span></div>
               <div class="review-item"><span class="review-label">Aadhar Card (ID Proof)</span><span class="review-val" id="r_aadhar">–</span></div>
               <div class="review-item"><span class="review-label">NOC from College</span><span class="review-val" id="r_noc">–</span></div>
-            </div>
-          </div>
-
-          <div class="review-section">
-            <div class="review-section-title">Device / Equipment</div>
-            <div class="review-grid">
-              <div class="review-item" style="grid-column:1/-1"><span class="review-label">Available Devices</span><span class="review-val" id="r_devices">–</span></div>
             </div>
           </div>
 
@@ -877,7 +892,7 @@ function validateStep(n) {
     ['f_name','f_dob','f_phone','f_email','f_address'],
     ['f_college','f_branch','f_year','f_enrollment'],
     [],
-    ['f_accname','f_accno','f_accno2','f_ifsc','f_bankname','f_acctype'],
+    [],
     [],
     []
   ];
@@ -887,20 +902,18 @@ function validateStep(n) {
     if(el && !el.value.trim()){el.classList.add('error');ok=false;}
     else if(el) el.classList.remove('error');
   });
-  if(n===0){
-    const devs = ['dev_mobile','dev_laptop','dev_mouse','dev_touchpad'].some(id=>document.getElementById(id)?.checked);
-    if(!devs){alert('Please select at least one device/equipment you have access to.');return false;}
-  }
   if(n===2){
     if(!document.getElementById('f_aadhar')?.files?.[0]){alert('Please upload your Aadhar Card (ID Proof).');return false;}
-    if(!document.getElementById('f_noc')?.files?.[0]){alert('Please upload your NOC from college.');return false;}
+    // NOC is optional — no check needed
   }
   if(n===3){
+    // Bank is optional if skipped
     const a=document.getElementById('f_accno').value, b=document.getElementById('f_accno2').value;
     if(a&&b&&a!==b){document.getElementById('f_accno2').classList.add('error');alert('Account numbers do not match.');return false;}
   }
   if(n===4){
-    if(!sigHasSig){alert('Please add your signature before proceeding.');return false;}
+    const sigOk = sigHasSig || sigPhotoDataUrl;
+    if(!sigOk){alert('Please draw or upload your signature before proceeding.');return false;}
     if(!document.getElementById('f_declaration').checked){alert('Please accept the declaration to proceed.');return false;}
   }
   if(!ok) alert('Please fill in all required fields.');
@@ -924,16 +937,20 @@ function buildReview() {
   document.getElementById('r_collegeid').textContent=fn('f_collegeid');
   document.getElementById('r_aadhar').textContent=fn('f_aadhar');
   document.getElementById('r_noc').textContent=fn('f_noc');
-  // Devices
-  const devMap = {dev_mobile:'Mobile',dev_laptop:'Laptop',dev_mouse:'Mouse',dev_touchpad:'Touchpad'};
-  const selectedDevs = Object.entries(devMap).filter(([id])=>document.getElementById(id)?.checked).map(([,label])=>label);
-  document.getElementById('r_devices').textContent = selectedDevs.length ? selectedDevs.join(', ') : 'None selected';
-  document.getElementById('r_accname').textContent=g('f_accname');
-  document.getElementById('r_accno').textContent='••••'+g('f_accno').slice(-4);
-  document.getElementById('r_ifsc').textContent=g('f_ifsc');
-  document.getElementById('r_bankname').textContent=g('f_bankname');
-  document.getElementById('r_acctype').textContent=g('f_acctype');
-  document.getElementById('r_sig').src=document.getElementById('sigCanvas').toDataURL();
+  // Bank (optional)
+  const accno = g('f_accno');
+  document.getElementById('r_accname').textContent=g('f_accname')||'Not provided';
+  document.getElementById('r_accno').textContent=accno&&accno!=='–'?'••••'+accno.slice(-4):'Not provided';
+  document.getElementById('r_ifsc').textContent=g('f_ifsc')||'Not provided';
+  document.getElementById('r_bankname').textContent=g('f_bankname')||'Not provided';
+  document.getElementById('r_acctype').textContent=g('f_acctype')||'Not provided';
+  // Signature preview
+  const sigImgEl = document.getElementById('r_sig');
+  if(sigPhotoDataUrl) {
+    sigImgEl.src = sigPhotoDataUrl;
+  } else {
+    sigImgEl.src = document.getElementById('sigCanvas').toDataURL();
+  }
 }
 
 // ── SUBMIT ───────────────────────────────────────────────────
@@ -946,15 +963,13 @@ async function submitForm() {
   ['f_name','f_dob','f_phone','f_email','f_address','f_college','f_branch','f_year','f_enrollment','f_accname','f_accno','f_ifsc','f_bankname','f_acctype'].forEach(id=>{
     fd.append(id.replace('f_',''), document.getElementById(id)?.value||'');
   });
-  // Devices
-  const devMap = {dev_mobile:'Mobile',dev_laptop:'Laptop',dev_mouse:'Mouse',dev_touchpad:'Touchpad'};
-  const selectedDevs = Object.entries(devMap).filter(([id])=>document.getElementById(id)?.checked).map(([,label])=>label);
-  fd.append('devices', selectedDevs.join(', '));
   ['f_passport','f_collegeid','f_aadhar','f_noc'].forEach(id=>{
     const el=document.getElementById(id);
     if(el?.files?.[0]) fd.append(id.replace('f_',''), el.files[0]);
   });
-  fd.append('signature', document.getElementById('sigCanvas').toDataURL());
+  // Signature: prefer drawn canvas, fallback to uploaded photo
+  const sigData = sigPhotoDataUrl || document.getElementById('sigCanvas').toDataURL();
+  fd.append('signature', sigData);
 
   try {
     const res = await fetch(`${API}/api/joiner/submit/${currentJoiningId}`,{method:'POST',body:fd});
@@ -995,15 +1010,42 @@ function handleFile(input, areaId, nameId){
     nameEl.textContent = '+ '+input.files[0].name;
   }
 }
-function styleDevLabel(labelId, checked){
-  const el = document.getElementById(labelId);
-  if(!el) return;
-  el.style.borderColor = checked ? 'var(--purple)' : 'var(--gray-200)';
-  el.style.background = checked ? 'rgba(124,58,237,0.06)' : '';
-  el.style.color = checked ? 'var(--purple)' : '';
+// ── SKIP BANK ─────────────────────────────────────────────────
+function skipBankDetails() {
+  ['f_accname','f_accno','f_accno2','f_ifsc','f_bankname'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const at=document.getElementById('f_acctype'); if(at) at.value='';
+  goToStep(4);
 }
 
 // ── SIGNATURE ────────────────────────────────────────────────
+let sigCurrentTab = 'draw';
+let sigPhotoDataUrl = null;
+
+function switchSigTab(tab) {
+  sigCurrentTab = tab;
+  document.getElementById('sigTabDraw').classList.toggle('active', tab==='draw');
+  document.getElementById('sigTabUpload').classList.toggle('active', tab==='upload');
+  document.getElementById('sigPanelDraw').classList.toggle('active', tab==='draw');
+  document.getElementById('sigPanelUpload').classList.toggle('active', tab==='upload');
+}
+
+function handleSigPhoto(input) {
+  if(!input.files[0]) return;
+  const file = input.files[0];
+  document.getElementById('sigPhotoName').textContent = '+ '+file.name;
+  document.getElementById('sigUploadArea').classList.add('has-file');
+  const reader = new FileReader();
+  reader.onload = e => {
+    sigPhotoDataUrl = e.target.result;
+    const preview = document.getElementById('sigPhotoPreview');
+    preview.src = sigPhotoDataUrl;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
 const canvas = document.getElementById('sigCanvas');
 const ctx = canvas.getContext('2d');
 let drawing = false, sigHasSig = false;
