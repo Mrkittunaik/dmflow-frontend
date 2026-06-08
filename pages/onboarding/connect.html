@@ -190,7 +190,7 @@ body{
 /* ── PROFILE CARD ── */
 .profile-card{
   border-radius:18px;border:1.5px solid #E8E8F0;
-  overflow:hidden;display:none;
+  overflow:visible;display:none;
   box-shadow:0 4px 20px rgba(0,0,0,.05);
 }
 .profile-card.show{display:block;animation:fadeUp .3s cubic-bezier(.22,.68,.36,1);}
@@ -198,7 +198,7 @@ body{
 
 /* Banner */
 .pc-banner{
-  height:72px;position:relative;
+  height:72px;position:relative;overflow:hidden;border-radius:18px 18px 0 0;
   background:linear-gradient(135deg,#FCAF45 0%,#FF7B00 20%,#FF3C5F 50%,#D300C5 75%,#833AB4 100%);
 }
 .pc-banner-shimmer{
@@ -214,11 +214,12 @@ body{
 
 /* Avatar */
 .pc-av-outer{
-  width:68px;height:68px;border-radius:50%;
+  width:72px;height:72px;border-radius:50%;
   background:linear-gradient(135deg,#FCAF45,#FF3C5F,#833AB4);
-  padding:2.5px;margin-top:-34px;
+  padding:2.5px;margin-top:-36px;
   box-shadow:0 4px 16px rgba(0,0,0,.18);
   flex-shrink:0;
+  position:relative;z-index:2;
 }
 .pc-av-inner{
   width:100%;height:100%;border-radius:50%;
@@ -374,7 +375,7 @@ body{
   .at-prefix,.ig-input{height:48px;}
   .ig-input{font-size:14px;}
   .pc-banner{height:60px;}
-  .pc-av-outer{width:58px;height:58px;margin-top:-29px;}
+  .pc-av-outer{width:62px;height:62px;margin-top:-31px;position:relative;z-index:2;}
   .pc-av-inner{font-size:20px;}
   .pc-username{font-size:15px;}
   .pc-stat strong{font-size:14px;}
