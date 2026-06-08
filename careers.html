@@ -408,6 +408,14 @@ select.form-input{cursor:pointer}
         <div class="form-step active" id="step0">
           <div class="step-title">Personal Details</div>
           <div class="step-desc">Your basic personal information for the joining records.</div>
+
+          <!-- Internship Offer Info Banner -->
+          <div id="internBanner" style="background:linear-gradient(135deg,rgba(124,58,237,0.06),rgba(200,255,0,0.06));border:1.5px solid rgba(124,58,237,0.2);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:none">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--purple);margin-bottom:10px">Your Internship Offer</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px" id="internBannerGrid"></div>
+            <div style="font-size:12px;color:var(--text2)">Please complete this joining form to confirm your acceptance.</div>
+          </div>
+
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Full Name <span>*</span></label>
@@ -436,6 +444,29 @@ select.form-input{cursor:pointer}
                 <div class="file-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="10" r="3"/><path d="M6 21v-1a6 6 0 0 1 12 0v1"/></svg></div>
                 <div class="file-upload-text">Click to upload or drag & drop<br><strong>JPG, PNG</strong> up to 2MB</div>
                 <div class="file-name" id="passportName"></div>
+              </div>
+            </div>
+            <!-- Device Declaration -->
+            <div class="form-group full">
+              <label class="form-label">Device / Equipment Available <span>*</span></label>
+              <div class="form-hint" style="margin-bottom:8px">Select all devices you have access to for this internship</div>
+              <div style="display:flex;flex-wrap:wrap;gap:10px">
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_mobile">
+                  <input type="checkbox" id="dev_mobile" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_mobile',this.checked)">
+                  📱 Mobile
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_laptop">
+                  <input type="checkbox" id="dev_laptop" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_laptop',this.checked)">
+                  💻 Laptop
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_mouse">
+                  <input type="checkbox" id="dev_mouse" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_mouse',this.checked)">
+                  🖱️ Mouse
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;transition:all .2s" id="devLabel_touchpad">
+                  <input type="checkbox" id="dev_touchpad" style="accent-color:var(--purple);width:15px;height:15px" onchange="styleDevLabel('devLabel_touchpad',this.checked)">
+                  ✋ Touchpad
+                </label>
               </div>
             </div>
           </div>
@@ -490,11 +521,11 @@ select.form-input{cursor:pointer}
 
         <!-- STEP 3: DOCUMENTS -->
         <div class="form-step" id="step2">
-          <div class="step-title">KYC Documents</div>
-          <div class="step-desc">Upload your identity and professional documents for verification.</div>
+          <div class="step-title">Documents</div>
+          <div class="step-desc">Upload your ID proof and No Objection Certificate (NOC) from your college.</div>
           <div class="form-grid single">
             <div class="form-group">
-              <label class="form-label">Aadhar Card <span>*</span></label>
+              <label class="form-label">ID Proof – Aadhar Card <span>*</span></label>
               <div class="form-hint">Front and back side as single PDF or image</div>
               <div class="file-upload-area" style="margin-top:8px" id="aadharArea" onclick="triggerFile('f_aadhar')">
                 <input type="file" id="f_aadhar" accept="image/*,application/pdf" onchange="handleFile(this,'aadharArea','aadharName')">
@@ -504,21 +535,13 @@ select.form-input{cursor:pointer}
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label">PAN Card <span>*</span></label>
-              <div class="file-upload-area" style="margin-top:8px" id="panArea" onclick="triggerFile('f_pan')">
-                <input type="file" id="f_pan" accept="image/*,application/pdf" onchange="handleFile(this,'panArea','panName')">
-                <div class="file-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22M6 15h4M14 15h4"/></svg></div>
-                <div class="file-upload-text">Upload PAN Card<br><strong>JPG, PNG, PDF</strong> up to 5MB</div>
-                <div class="file-name" id="panName"></div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Resume / CV <span>*</span></label>
-              <div class="file-upload-area" style="margin-top:8px" id="resumeArea" onclick="triggerFile('f_resume')">
-                <input type="file" id="f_resume" accept="application/pdf,.doc,.docx" onchange="handleFile(this,'resumeArea','resumeName')">
-                <div class="file-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><line x1="8" y1="9" x2="10" y2="9"/></svg></div>
-                <div class="file-upload-text">Upload your Resume<br><strong>PDF, DOC</strong> up to 5MB</div>
-                <div class="file-name" id="resumeName"></div>
+              <label class="form-label">NOC from College <span>*</span></label>
+              <div class="form-hint">No Objection Certificate issued by your college/university for this internship</div>
+              <div class="file-upload-area" style="margin-top:8px" id="nocArea" onclick="triggerFile('f_noc')">
+                <input type="file" id="f_noc" accept="image/*,application/pdf" onchange="handleFile(this,'nocArea','nocName')">
+                <div class="file-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><path d="M9 9h1"/></svg></div>
+                <div class="file-upload-text">Upload NOC from College<br><strong>JPG, PNG, PDF</strong> up to 5MB</div>
+                <div class="file-name" id="nocName"></div>
               </div>
             </div>
           </div>
@@ -623,9 +646,15 @@ select.form-input{cursor:pointer}
             <div class="review-grid">
               <div class="review-item"><span class="review-label">Passport Photo</span><span class="review-val" id="r_passport">–</span></div>
               <div class="review-item"><span class="review-label">College ID</span><span class="review-val" id="r_collegeid">–</span></div>
-              <div class="review-item"><span class="review-label">Aadhar Card</span><span class="review-val" id="r_aadhar">–</span></div>
-              <div class="review-item"><span class="review-label">PAN Card</span><span class="review-val" id="r_pan">–</span></div>
-              <div class="review-item"><span class="review-label">Resume</span><span class="review-val" id="r_resume">–</span></div>
+              <div class="review-item"><span class="review-label">Aadhar Card (ID Proof)</span><span class="review-val" id="r_aadhar">–</span></div>
+              <div class="review-item"><span class="review-label">NOC from College</span><span class="review-val" id="r_noc">–</span></div>
+            </div>
+          </div>
+
+          <div class="review-section">
+            <div class="review-section-title">Device / Equipment</div>
+            <div class="review-grid">
+              <div class="review-item" style="grid-column:1/-1"><span class="review-label">Available Devices</span><span class="review-val" id="r_devices">–</span></div>
             </div>
           </div>
 
@@ -684,6 +713,38 @@ select.form-input{cursor:pointer}
         </div>
 
         <p style="font-size:13px;color:var(--text2)">Check your email for confirmation. Documents will be available after HR approval.</p>
+
+        <!-- Demo Internship Certificate -->
+        <div id="demoCertificate" style="margin-top:24px;border:2px solid var(--gray-200);border-radius:16px;overflow:hidden;text-align:left;display:none">
+          <div style="background:linear-gradient(135deg,var(--purple),#a855f7);padding:16px 20px;color:#fff">
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:0.7;margin-bottom:4px">DMFlow Internship</div>
+            <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800">Certificate of Internship</div>
+            <div style="font-size:11px;opacity:0.65;margin-top:2px">Demo Preview – Issued upon completion</div>
+          </div>
+          <div style="padding:20px 24px;background:#fff">
+            <p style="font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:16px">
+              This is to certify that <strong id="cert_name" style="color:var(--black)">—</strong> has successfully completed an internship at <strong style="color:var(--purple)">DMFlow</strong> as
+              <strong id="cert_role" style="color:var(--black)">—</strong> for a period of <strong id="cert_duration" style="color:var(--black)">—</strong>,
+              with a stipend of <strong id="cert_stipend" style="color:var(--black)">—</strong>.
+              During this period, the intern demonstrated dedication, technical skill, and professional conduct.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--gray-200);padding-top:14px">
+              <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:2px">Start Date</div><div style="font-size:13px;font-weight:700;color:var(--black)" id="cert_start">—</div></div>
+              <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:2px">Mode</div><div style="font-size:13px;font-weight:700;color:var(--black)" id="cert_mode">—</div></div>
+              <div style="grid-column:1/-1;border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:4px;display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2)">Authorised by</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--black);margin-top:2px">HR, DMFlow</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="width:60px;height:2px;background:linear-gradient(90deg,var(--purple),var(--lime));margin-bottom:4px;border-radius:2px"></div>
+                  <div style="font-size:10px;color:var(--text2)">Official Seal</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--gray-50);padding:10px 20px;font-size:11px;color:var(--text2);border-top:1px solid var(--gray-200)">⚠ This is a preview. The actual certificate will be emailed upon internship completion.</div>
+        </div>
       </div>
 
     </div><!-- /modal-body -->
@@ -702,12 +763,7 @@ async function loadJobs() {
     const roles = await res.json();
     renderJobs(roles.filter(r => r.active !== false));
   } catch(e) {
-    // Demo fallback
-    renderJobs([
-      {_id:'1',title:'Full Stack Developer Intern',stipend:'₹8,000/mo',duration:'3 months',skills:['Node.js','React','MongoDB'],mode:'Remote',formLink:'https://forms.gle/example1'},
-      {_id:'2',title:'Frontend Developer Intern',stipend:'₹6,000/mo',duration:'2 months',skills:['HTML','CSS','JavaScript'],mode:'Remote',formLink:'https://forms.gle/example2'},
-      {_id:'3',title:'Social Media & Marketing Intern',stipend:'₹5,000/mo',duration:'2 months',skills:['Content Writing','Instagram','Analytics'],mode:'Hybrid',formLink:'https://forms.gle/example3'},
-    ]);
+    renderJobs([]);
   }
 }
 
@@ -769,6 +825,20 @@ async function verifyJoiningId() {
 function openModal(data) {
   document.getElementById('joiningModal').classList.add('open');
   document.body.style.overflow='hidden';
+  // Populate internship banner
+  if (data && (data.role || data.stipend || data.duration)) {
+    const banner = document.getElementById('internBanner');
+    const grid = document.getElementById('internBannerGrid');
+    const items = [
+      {label:'Role', val: data.role||'–'},
+      {label:'Stipend', val: data.stipend||'–'},
+      {label:'Duration', val: data.duration||'–'},
+      {label:'Start Date', val: data.startDate||'–'},
+      {label:'Mode', val: data.mode||'–'},
+    ];
+    grid.innerHTML = items.map(i=>`<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:2px">${i.label}</div><div style="font-size:13px;font-weight:700;color:var(--black)">${i.val}</div></div>`).join('');
+    banner.style.display='block';
+  }
   goToStep(0);
 }
 
@@ -817,12 +887,19 @@ function validateStep(n) {
     if(el && !el.value.trim()){el.classList.add('error');ok=false;}
     else if(el) el.classList.remove('error');
   });
+  if(n===0){
+    const devs = ['dev_mobile','dev_laptop','dev_mouse','dev_touchpad'].some(id=>document.getElementById(id)?.checked);
+    if(!devs){alert('Please select at least one device/equipment you have access to.');return false;}
+  }
+  if(n===2){
+    if(!document.getElementById('f_aadhar')?.files?.[0]){alert('Please upload your Aadhar Card (ID Proof).');return false;}
+    if(!document.getElementById('f_noc')?.files?.[0]){alert('Please upload your NOC from college.');return false;}
+  }
   if(n===3){
     const a=document.getElementById('f_accno').value, b=document.getElementById('f_accno2').value;
     if(a&&b&&a!==b){document.getElementById('f_accno2').classList.add('error');alert('Account numbers do not match.');return false;}
   }
   if(n===4){
-    const sigData = document.getElementById('sigCanvas').toDataURL();
     if(!sigHasSig){alert('Please add your signature before proceeding.');return false;}
     if(!document.getElementById('f_declaration').checked){alert('Please accept the declaration to proceed.');return false;}
   }
@@ -846,8 +923,11 @@ function buildReview() {
   document.getElementById('r_passport').textContent=fn('f_passport');
   document.getElementById('r_collegeid').textContent=fn('f_collegeid');
   document.getElementById('r_aadhar').textContent=fn('f_aadhar');
-  document.getElementById('r_pan').textContent=fn('f_pan');
-  document.getElementById('r_resume').textContent=fn('f_resume');
+  document.getElementById('r_noc').textContent=fn('f_noc');
+  // Devices
+  const devMap = {dev_mobile:'Mobile',dev_laptop:'Laptop',dev_mouse:'Mouse',dev_touchpad:'Touchpad'};
+  const selectedDevs = Object.entries(devMap).filter(([id])=>document.getElementById(id)?.checked).map(([,label])=>label);
+  document.getElementById('r_devices').textContent = selectedDevs.length ? selectedDevs.join(', ') : 'None selected';
   document.getElementById('r_accname').textContent=g('f_accname');
   document.getElementById('r_accno').textContent='••••'+g('f_accno').slice(-4);
   document.getElementById('r_ifsc').textContent=g('f_ifsc');
@@ -866,7 +946,11 @@ async function submitForm() {
   ['f_name','f_dob','f_phone','f_email','f_address','f_college','f_branch','f_year','f_enrollment','f_accname','f_accno','f_ifsc','f_bankname','f_acctype'].forEach(id=>{
     fd.append(id.replace('f_',''), document.getElementById(id)?.value||'');
   });
-  ['f_passport','f_collegeid','f_aadhar','f_pan','f_resume'].forEach(id=>{
+  // Devices
+  const devMap = {dev_mobile:'Mobile',dev_laptop:'Laptop',dev_mouse:'Mouse',dev_touchpad:'Touchpad'};
+  const selectedDevs = Object.entries(devMap).filter(([id])=>document.getElementById(id)?.checked).map(([,label])=>label);
+  fd.append('devices', selectedDevs.join(', '));
+  ['f_passport','f_collegeid','f_aadhar','f_noc'].forEach(id=>{
     const el=document.getElementById(id);
     if(el?.files?.[0]) fd.append(id.replace('f_',''), el.files[0]);
   });
@@ -874,7 +958,6 @@ async function submitForm() {
 
   try {
     const res = await fetch(`${API}/api/joiner/submit/${currentJoiningId}`,{method:'POST',body:fd});
-    // success either way for demo
   } catch(e){}
 
   // Show success
@@ -888,6 +971,18 @@ async function submitForm() {
   document.getElementById('s_duration').textContent = d.duration||'–';
   document.getElementById('s_start').textContent = d.startDate||'–';
   document.getElementById('s_mode').textContent = d.mode||'–';
+
+  // Populate certificate preview
+  const certEl = document.getElementById('demoCertificate');
+  if(certEl){
+    certEl.style.display='block';
+    document.getElementById('cert_name').textContent = document.getElementById('f_name')?.value||'—';
+    document.getElementById('cert_role').textContent = d.role||'—';
+    document.getElementById('cert_duration').textContent = d.duration||'—';
+    document.getElementById('cert_stipend').textContent = d.stipend||'—';
+    document.getElementById('cert_start').textContent = d.startDate||'—';
+    document.getElementById('cert_mode').textContent = d.mode||'—';
+  }
 }
 
 // ── FILE UPLOAD ──────────────────────────────────────────────
@@ -899,6 +994,13 @@ function handleFile(input, areaId, nameId){
     area.classList.add('has-file');
     nameEl.textContent = '+ '+input.files[0].name;
   }
+}
+function styleDevLabel(labelId, checked){
+  const el = document.getElementById(labelId);
+  if(!el) return;
+  el.style.borderColor = checked ? 'var(--purple)' : 'var(--gray-200)';
+  el.style.background = checked ? 'rgba(124,58,237,0.06)' : '';
+  el.style.color = checked ? 'var(--purple)' : '';
 }
 
 // ── SIGNATURE ────────────────────────────────────────────────
