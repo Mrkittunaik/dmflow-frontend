@@ -697,30 +697,38 @@ function viewJoiner(id) {
     </div>
     <div class="detail-section">
       <div class="detail-section-title">Uploaded Documents</div>
-      <div class="doc-links">
-        ${j.passportUrl?`<a class="doc-link" href="${j.passportUrl}" target="_blank"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='3'/><circle cx='12' cy='10' r='3'/><path d='M6 21v-1a6 6 0 0 1 12 0v1'/></svg> Passport Photo</a>`:'<span class="doc-link" style="color:var(--gray-400)"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='18' rx='3'/><circle cx='12' cy='10' r='3'/><path d='M6 21v-1a6 6 0 0 1 12 0v1'/></svg> No passport</span>'}
-        ${j.collegeidUrl?`<a class="doc-link" href="${j.collegeidUrl}" target="_blank"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='5' width='20' height='14' rx='2'/><path d='M8 10h2m-1-1v2M14 9h2M14 13h2'/></svg> College ID</a>`:'<span class="doc-link" style="color:var(--gray-400)"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='5' width='20' height='14' rx='2'/><path d='M8 10h2m-1-1v2M14 9h2M14 13h2'/></svg> No college ID</span>'}
-        ${j.aadharUrl?`<a class="doc-link" href="${j.aadharUrl}" target="_blank"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='5' width='20' height='14' rx='2'/><circle cx='8' cy='12' r='2'/><path d='M14 9h4M14 12h4M14 15h2'/></svg> Aadhar</a>`:'<span class="doc-link" style="color:var(--gray-400)"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='5' width='20' height='14' rx='2'/><circle cx='8' cy='12' r='2'/><path d='M14 9h4M14 12h4M14 15h2'/></svg> No Aadhar</span>'}
-        ${j.panUrl?`<a class="doc-link" href="${j.panUrl}" target="_blank"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='4' width='22' height='16' rx='2'/><path d='M1 10h22M6 15h4M14 15h4'/></svg> PAN Card</a>`:'<span class="doc-link" style="color:var(--gray-400)"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='1' y='4' width='22' height='16' rx='2'/><path d='M1 10h22M6 15h4M14 15h4'/></svg> No PAN</span>'}
-        ${j.resumeUrl?`<a class="doc-link" href="${j.resumeUrl}" target="_blank"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='8' y1='13' x2='16' y2='13'/></svg> Resume</a>`:'<span class="doc-link" style="color:var(--gray-400)"><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='8' y1='13' x2='16' y2='13'/></svg> No resume</span>'}
-      </div>
+      <div class="doc-links" id="joinerDocLinks"></div>
     </div>
-    ${j.signatureUrl?`<div class="detail-section">
-      <div class="detail-section-title">Digital Signature</div>
-      <div class="sig-preview"><img src="${j.signatureUrl}" alt="Signature"></div>
-    </div>`:''}
+    <div id="joinerSigSection"></div>
   `;
 
-  footer.innerHTML = `
-    <button class="btn-ghost-sm" onclick="closeJoinerModal()">Close</button>
-    ${j.status==='pending'?`
-      <button class="btn-danger" onclick="updateJoinerStatus('${j._id}','rejected')"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg> Reject</button>
-      <button class="btn-primary btn-sm btn-purple" onclick="updateJoinerStatus('${j._id}','approved')"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg> Approve</button>
-    `:''}
-    <button class="btn-ghost-sm" onclick="downloadDocsZip('${j._id}')"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' y1='15' x2='12' y2='3'/></svg> Download ZIP</button>
-    <button class="btn-ghost-sm" onclick="genOfferLetterPDF('${j._id}')"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='8' y1='13' x2='16' y2='13'/></svg> Offer Letter PDF</button>
-    <button class="btn-ghost-sm" onclick="genCertPDF('${j._id}')"><svg width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='8' r='6'/><path d='M15.477 12.89L17 22l-5-3-5 3 1.523-9.11'/></svg> Certificate PDF</button>
-  `;
+  // Build doc links safely (avoids nested backtick syntax errors)
+  function docLink(url, label, svgPath) {
+    var svg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + svgPath + '</svg>';
+    if (url) return '<a class="doc-link" href="' + url + '" target="_blank">' + svg + ' ' + label + '</a>';
+    return '<span class="doc-link" style="color:var(--gray-400)">' + svg + ' No ' + label.toLowerCase() + '</span>';
+  }
+  document.getElementById('joinerDocLinks').innerHTML =
+    docLink(j.passportUrl,  'Passport Photo', "<rect x='3' y='3' width='18' height='18' rx='3'/><circle cx='12' cy='10' r='3'/><path d='M6 21v-1a6 6 0 0 1 12 0v1'/>") +
+    docLink(j.collegeidUrl, 'College ID',     "<rect x='2' y='5' width='20' height='14' rx='2'/><path d='M8 10h2m-1-1v2M14 9h2M14 13h2'/>") +
+    docLink(j.aadharUrl,    'Aadhar',         "<rect x='2' y='5' width='20' height='14' rx='2'/><circle cx='8' cy='12' r='2'/><path d='M14 9h4M14 12h4M14 15h2'/>") +
+    docLink(j.panUrl,       'PAN Card',       "<rect x='1' y='4' width='22' height='16' rx='2'/><path d='M1 10h22M6 15h4M14 15h4'/>") +
+    docLink(j.resumeUrl,    'Resume',         "<path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='8' y1='13' x2='16' y2='13'/>");
+  if (j.signatureUrl) {
+    document.getElementById('joinerSigSection').innerHTML =
+      '<div class="detail-section"><div class="detail-section-title">Digital Signature</div><div class="sig-preview"><img src="' + j.signatureUrl + '" alt="Signature"></div></div>';
+  }
+
+  var pendingBtns = j.status === 'pending'
+    ? '<button class="btn-danger" onclick="updateJoinerStatus(\''+j._id+'\',\'rejected\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Reject</button>'
+    + '<button class="btn-primary btn-sm btn-purple" onclick="updateJoinerStatus(\''+j._id+'\',\'approved\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Approve</button>'
+    : '';
+  footer.innerHTML =
+    '<button class="btn-ghost-sm" onclick="closeJoinerModal()">Close</button>'
+    + pendingBtns
+    + '<button class="btn-ghost-sm" onclick="downloadDocsZip(\''+j._id+'\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download ZIP</button>'
+    + '<button class="btn-ghost-sm" onclick="genOfferLetterPDF(\''+j._id+'\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/></svg> Offer Letter PDF</button>'
+    + '<button class="btn-ghost-sm" onclick="genCertPDF(\''+j._id+'\')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg> Certificate PDF</button>';
 
   document.getElementById('joinerModal').classList.add('open');
   document.body.style.overflow = 'hidden';
