@@ -597,69 +597,130 @@ const connectBtn  = document.getElementById('connectBtn');
 const connectBtnText = document.getElementById('connectBtnText');
 
 let currentUsername = '';
-let profileData = null;
-let dropdownTimer = null;
+let profileData     = null;
+let dropdownTimer   = null;
+let searchAbort     = null; // AbortController for in-flight requests
 
-// ── Helpers
+// ── Format numbers (1234567 → 1.2M)
 function fmt(n) {
-  if (!n) return null;
+  if (!n && n !== 0) return null;
   if (n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
   if (n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
   return n.toLocaleString();
 }
 
-// ── Render profile card
+// ── Animate number count-up (like GrabGram)
+function animateCount(el, target) {
+  if (!target) { el.textContent = fmt(target) || '0'; return; }
+  const duration = 600;
+  const start    = Date.now();
+  const from     = 0;
+  function step() {
+    const p = Math.min((Date.now() - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3); // ease-out cubic
+    el.textContent = fmt(Math.floor(from + (target - from) * ease));
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ── Show skeleton loading state inside card
+function showSkeleton() {
+  profileCard.classList.add('show');
+
+  // Avatar skeleton
+  pcAvInner.innerHTML = '';
+  pcAvInner.className = 'pc-av-inner';
+  pcAvInner.style.cssText = '';
+  const skelAv = document.createElement('div');
+  skelAv.className = 'skeleton';
+  skelAv.style.cssText = 'width:100%;height:100%;border-radius:50%;';
+  pcAvInner.appendChild(skelAv);
+
+  // Text skeletons
+  pcUsername.innerHTML = '<span class="skeleton" style="display:inline-block;width:120px;height:16px;border-radius:6px;"></span>';
+  pcFullname.innerHTML = '<span class="skeleton" style="display:inline-block;width:80px;height:12px;border-radius:4px;margin-top:4px;"></span>';
+  pcFullname.style.display = 'block';
+  pcCategory.style.display = 'none';
+  verifiedIcon.style.display = 'none';
+
+  // Stats skeleton
+  pcStats.innerHTML = ['Followers','Following','Posts'].map(() => `
+    <div class="pc-stat">
+      <strong><span class="skeleton" style="display:inline-block;width:44px;height:14px;border-radius:4px;"></span></strong>
+      <span><span class="skeleton" style="display:inline-block;width:52px;height:10px;border-radius:3px;margin-top:4px;"></span></span>
+    </div>
+  `).join('');
+  pcStats.style.display = 'flex';
+
+  pcBio.classList.remove('show');
+  pcPrivate.classList.remove('show');
+  bizWarn.classList.remove('show');
+  statusBadge.className = 'status-badge unknown';
+  statusText.textContent = 'Loading…';
+  connectBtn.className = 'connect-btn';
+  connectBtnText.textContent = 'Connect with Instagram';
+  infoBox.classList.remove('show');
+}
+
+// ── Render real profile card
 function renderCard(data) {
   profileData = data;
-  const { username, profilePic, followers, following, posts,
+  const { username, followers, following, posts,
           isBusinessOrCreator, fullName, isVerified, found,
           biography, category, isPrivate } = data;
 
-  // Avatar
+  // ── Avatar — show initials instantly, load proxy in background
   pcAvInner.innerHTML = '';
-  pcAvInner.className = 'pc-av-inner';
-  if (profilePic) {
-    const img = new Image();
-    img.onload = () => {
-      pcAvInner.classList.add('has-pic');
-      pcAvInner.classList.remove('initials');
-      pcAvInner.appendChild(img);
-    };
-    img.onerror = () => {
-      pcAvInner.classList.add('initials');
-      pcAvInner.textContent = (username[0] || 'I').toUpperCase();
-    };
-    img.src = profilePic;
+  pcAvInner.className = 'pc-av-inner initials';
+  pcAvInner.style.cssText = '';
+  pcAvInner.textContent = (username[0] || 'I').toUpperCase();
+
+  const avatarUrl = `${API_BASE}/api/ig/avatar/${encodeURIComponent(username)}`;
+  const img = new Image();
+  img.onload = () => {
+    pcAvInner.innerHTML = '';
+    pcAvInner.className = 'pc-av-inner has-pic';
     img.alt = username;
     img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
-    // Show initial while loading
-    pcAvInner.classList.add('initials');
+    pcAvInner.appendChild(img);
+  };
+  img.onerror = () => {
+    pcAvInner.className = 'pc-av-inner initials';
     pcAvInner.textContent = (username[0] || 'I').toUpperCase();
-  } else {
-    pcAvInner.classList.add('initials');
-    pcAvInner.textContent = (username[0] || 'I').toUpperCase();
-  }
+  };
+  img.src = avatarUrl;
 
-  // Name & verified
+  // ── Name & verified
   pcUsername.textContent = '@' + username;
   verifiedIcon.style.display = isVerified ? 'inline-flex' : 'none';
   pcFullname.textContent = fullName || '';
   pcFullname.style.display = fullName ? 'block' : 'none';
 
-  // Category
+  // ── Category
   pcCategory.textContent = category || '';
   pcCategory.style.display = category ? 'block' : 'none';
 
-  // Stats
-  const statsHTML = [
-    followers && `<div class="pc-stat"><strong>${fmt(followers)}</strong><span>Followers</span></div>`,
-    following && `<div class="pc-stat"><strong>${fmt(following)}</strong><span>Following</span></div>`,
-    posts     && `<div class="pc-stat"><strong>${fmt(posts)}</strong><span>Posts</span></div>`,
-  ].filter(Boolean).join('');
-  pcStats.innerHTML = statsHTML;
-  pcStats.style.display = statsHTML ? 'flex' : 'none';
+  // ── Stats with count-up animation
+  const statItems = [
+    { val: followers, label: 'Followers' },
+    { val: following, label: 'Following' },
+    { val: posts,     label: 'Posts'     },
+  ].filter(s => s.val);
 
-  // Bio
+  if (statItems.length) {
+    pcStats.innerHTML = statItems.map(s =>
+      `<div class="pc-stat"><strong class="stat-num"></strong><span>${s.label}</span></div>`
+    ).join('');
+    pcStats.style.display = 'flex';
+    pcStats.querySelectorAll('.stat-num').forEach((el, i) => {
+      setTimeout(() => animateCount(el, statItems[i].val), i * 80);
+    });
+  } else {
+    pcStats.style.display = 'none';
+  }
+
+  // ── Bio
   if (biography) {
     pcBio.textContent = biography;
     pcBio.classList.add('show');
@@ -667,15 +728,13 @@ function renderCard(data) {
     pcBio.classList.remove('show');
   }
 
-  // Private
-  if (isPrivate) pcPrivate.classList.add('show');
-  else pcPrivate.classList.remove('show');
+  // ── Private badge
+  isPrivate ? pcPrivate.classList.add('show') : pcPrivate.classList.remove('show');
 
-  // Status badge + button
+  // ── Status badge + connect button
   statusBadge.className = 'status-badge';
   bizWarn.classList.remove('show');
   connectBtn.className = 'connect-btn';
-  connectBtnText.textContent = 'Connect with Instagram';
 
   if (!found || isBusinessOrCreator === null) {
     statusBadge.classList.add('unknown');
@@ -699,61 +758,90 @@ function renderCard(data) {
   infoBox.classList.add('show');
 }
 
-// ── Do search
+// ── Do search — with abort, skeleton, retry on network error
 async function doSearch() {
   const val = igInput.value.replace(/^@+/,'').trim().toLowerCase();
   if (!val) { igInput.focus(); showToast('Enter a username to search.','info'); return; }
 
+  // Cancel any previous in-flight request
+  if (searchAbort) searchAbort.abort();
+  searchAbort = new AbortController();
+
   currentUsername = val;
   closeDropdown();
-
-  // Loading state
   searchBtn.classList.add('loading');
-  profileCard.classList.remove('show');
-  infoBox.classList.remove('show');
-  connectBtn.className = 'connect-btn';
-  connectBtnText.textContent = 'Connect with Instagram';
+  showSkeleton();
 
-  try {
-    const token = localStorage.getItem('dmflow_token');
-    const res = await fetch(`${API_BASE}/api/ig/lookup?username=${encodeURIComponent(val)}`, {
-      headers: token ? { 'Authorization': 'Bearer ' + token } : {},
-    });
-    if (!res.ok) throw new Error('lookup failed');
-    const data = await res.json();
+  const token = localStorage.getItem('dmflow_token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+
+  let data = null;
+  let attempts = 0;
+  const MAX_ATTEMPTS = 2;
+
+  while (attempts < MAX_ATTEMPTS) {
+    try {
+      const res = await fetch(
+        `${API_BASE}/api/ig/lookup?username=${encodeURIComponent(val)}`,
+        { headers, signal: searchAbort.signal }
+      );
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      data = await res.json();
+      break; // success
+    } catch(e) {
+      if (e.name === 'AbortError') return; // user searched something else
+      attempts++;
+      if (attempts < MAX_ATTEMPTS) await new Promise(r => setTimeout(r, 800)); // wait before retry
+    }
+  }
+
+  searchBtn.classList.remove('loading');
+
+  if (data) {
     renderCard(data);
-    // Save intent
+    // Save intent to localStorage
     const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
     u.igUsernameIntent = val;
     localStorage.setItem('dmflow_user', JSON.stringify(u));
-  } catch(e) {
-    // Fallback card
-    renderCard({ found:false, username:val, profilePic:'', followers:0,
-      following:0, posts:0, isBusinessOrCreator:null,
-      fullName:'', isVerified:false, biography:'', category:'', isPrivate:false });
-    showToast('Could not load live profile — you can still connect.','info');
-  } finally {
-    searchBtn.classList.remove('loading');
+  } else {
+    // All retries failed — show fallback card, user can still OAuth
+    renderCard({
+      found: false, username: val, profilePic: '',
+      followers: 0, following: 0, posts: 0,
+      isBusinessOrCreator: null, fullName: '',
+      isVerified: false, biography: '', category: '', isPrivate: false,
+    });
+    showToast('Could not load live profile — you can still connect.', 'info');
   }
 }
 
-// ── Dropdown for known accounts
+// ── Dropdown for known/recent accounts
 function openDropdown(query) {
   const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
   const suggestions = [];
 
   if (u.instagram?.username?.toLowerCase().includes(query))
-    suggestions.push({ username: u.instagram.username, pic: u.instagram.profilePic||'', sub:'Connected account' });
+    suggestions.push({
+      username: u.instagram.username,
+      pic: `${API_BASE}/api/ig/avatar/${encodeURIComponent(u.instagram.username)}`,
+      sub: 'Connected account',
+    });
 
   if (u.igUsernameIntent && u.igUsernameIntent.includes(query) && u.igUsernameIntent !== u.instagram?.username)
-    suggestions.push({ username: u.igUsernameIntent, pic:'', sub:'Recently searched' });
+    suggestions.push({
+      username: u.igUsernameIntent,
+      pic: `${API_BASE}/api/ig/avatar/${encodeURIComponent(u.igUsernameIntent)}`,
+      sub: 'Recently searched',
+    });
 
   if (!suggestions.length) { closeDropdown(); return; }
 
-  dropdown.innerHTML = suggestions.slice(0,3).map(s => `
+  dropdown.innerHTML = suggestions.slice(0, 3).map(s => `
     <div class="drop-item" onclick="selectSuggestion('${s.username}')">
       <div class="drop-av">
-        ${s.pic ? `<img src="${s.pic}" alt="" onerror="this.parentNode.textContent='${(s.username[0]||'I').toUpperCase()}'">` : (s.username[0]||'I').toUpperCase()}
+        <img src="${s.pic}" alt=""
+          onerror="this.style.display='none';this.parentNode.textContent='${(s.username[0]||'I').toUpperCase()}'">
       </div>
       <div>
         <div class="drop-name">@${s.username}</div>
@@ -782,6 +870,7 @@ igInput.addEventListener('input', function() {
     connectBtn.className = 'connect-btn';
     connectBtnText.textContent = 'Connect with Instagram';
     currentUsername = '';
+    if (searchAbort) { searchAbort.abort(); searchAbort = null; }
     closeDropdown();
     return;
   }
@@ -792,11 +881,11 @@ document.addEventListener('click', e => {
   if (!igInput.closest('.search-wrap').contains(e.target)) closeDropdown();
 });
 
-// ── Connect
+// ── Connect button
 function doConnect() {
-  if (!currentUsername) { showToast('Search for your username first.','info'); return; }
+  if (!currentUsername) { showToast('Search for your username first.', 'info'); return; }
   if (profileData?.found && profileData.isBusinessOrCreator === false) {
-    showToast('Please switch to a Creator or Business account first.','error');
+    showToast('Please switch to a Creator or Business account first.', 'error');
     return;
   }
   connectBtnText.textContent = 'Opening Meta login…';
@@ -813,11 +902,11 @@ function doConnect() {
     connectBtn.style.opacity = '';
     connectBtn.style.pointerEvents = '';
     connectBtnText.textContent = 'Connect as @' + currentUsername;
-    showToast('Instagram connection unavailable. Please try again later.','error');
+    showToast('Instagram connection unavailable. Please try again later.', 'error');
   }
 }
 
-// ── Prefill on load
+// ── Prefill on load (if user already searched or connected before)
 window.addEventListener('DOMContentLoaded', () => {
   const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
   const pre = u.instagram?.username || u.igUsernameIntent || '';
