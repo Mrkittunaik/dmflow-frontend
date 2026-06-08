@@ -456,13 +456,17 @@ function switchTab(name, btn) {
 // ── ROLES ─────────────────────────────────────────────────────
 async function loadRoles() {
   try {
-    const res = await fetch(`${API}/api/roles`, {
-      headers: hrToken ? {'Authorization':'Bearer '+hrToken} : {}
+    const res = await fetch(`${API}/api/hr/roles`, {
+      headers: {'Authorization':'Bearer '+hrToken}
     });
     if (!res.ok) throw new Error();
     allRoles = await res.json();
   } catch(e) {
-    allRoles = [];
+    // fallback to public roles if auth fails
+    try {
+      const res2 = await fetch(`${API}/api/roles`);
+      allRoles = res2.ok ? await res2.json() : [];
+    } catch { allRoles = []; }
   }
   renderRoles();
   populateGenRoleSelect();
@@ -532,6 +536,18 @@ async function saveRole() {
   if (!title) { document.getElementById('rm_title').classList.add('error'); alert('Job title is required.'); return; }
   if (!formLink) { document.getElementById('rm_formLink').classList.add('error'); alert('Google Form link is required.'); return; }
 
+  const certImgInput = document.getElementById('rm_certImg');
+  const certImgPreview = document.getElementById('certTplPreview');
+  // Use new uploaded image, or existing stored image if editing
+  let certTemplateImg = '';
+  if (certImgInput.files[0]) {
+    // Already loaded into preview src via handleCertTplImg
+    certTemplateImg = certImgPreview.src || '';
+  } else if (editingRoleId) {
+    const existing = allRoles.find(r=>r._id===editingRoleId);
+    certTemplateImg = existing?.certTemplateImg || '';
+  }
+
   const payload = {
     title,
     stipend: document.getElementById('rm_stipend').value.trim(),
@@ -539,14 +555,15 @@ async function saveRole() {
     skills: document.getElementById('rm_skills').value.split(',').map(s=>s.trim()).filter(Boolean),
     mode: document.getElementById('rm_mode').value,
     active: document.getElementById('rm_active').value === 'true',
-    formLink
+    formLink,
+    certTemplateImg
   };
 
   const btn = document.getElementById('saveRoleBtn');
   btn.textContent = 'Saving…'; btn.disabled = true;
 
   try {
-    const url = editingRoleId ? `${API}/api/roles/${editingRoleId}` : `${API}/api/roles`;
+    const url = editingRoleId ? `${API}/api/hr/roles/${editingRoleId}` : `${API}/api/hr/roles`;
     const method = editingRoleId ? 'PUT' : 'POST';
     const res = await fetch(url, {
       method,
@@ -576,7 +593,7 @@ async function saveRole() {
 async function toggleRole(id, active) {
   allRoles = allRoles.map(r=>r._id===id?{...r,active}:r);
   try {
-    await fetch(`${API}/api/roles/${id}`, {
+    await fetch(`${API}/api/hr/roles/${id}`, {
       method:'PATCH',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+hrToken},
       body:JSON.stringify({active})
@@ -589,7 +606,7 @@ async function deleteRole(id) {
   if (!confirm('Delete this role? This cannot be undone.')) return;
   allRoles = allRoles.filter(r=>r._id!==id);
   try {
-    await fetch(`${API}/api/roles/${id}`, {method:'DELETE', headers:{'Authorization':'Bearer '+hrToken}});
+    await fetch(`${API}/api/hr/roles/${id}`, {method:'DELETE', headers:{'Authorization':'Bearer '+hrToken}});
   } catch(e){}
   renderRoles();
   populateGenRoleSelect();
@@ -822,15 +839,19 @@ async function generateJoiningId() {
   const roleId = document.getElementById('genRole').value;
   if (!roleId) { alert('Please select a role.'); return; }
 
+  const selectedRole = allRoles.find(r => r._id === roleId);
+  const roleTitle = selectedRole?.title || '';
+
   const btn = document.getElementById('genBtn');
   btn.textContent = 'Generating…'; btn.disabled = true;
 
   const payload = {
     roleId,
-    stipend: document.getElementById('genStipend').value.trim(),
-    duration: document.getElementById('genDuration').value.trim(),
-    startDate: document.getElementById('genStartDate').value,
-    mode: document.getElementById('genMode').value,
+    role: roleTitle,   // backend requires this string
+    stipend:     document.getElementById('genStipend').value.trim(),
+    duration:    document.getElementById('genDuration').value.trim(),
+    startDate:   document.getElementById('genStartDate').value,
+    mode:        document.getElementById('genMode').value,
     offerLetter: document.getElementById('genOfferLetter').value.trim(),
     certTemplate: document.getElementById('genCertTemplate').value.trim()
   };
@@ -842,10 +863,10 @@ async function generateJoiningId() {
       body:JSON.stringify(payload)
     });
     const data = await res.json();
-    if (!res.ok || !data.joiningId) throw new Error();
+    if (!res.ok || !data.joiningId) throw new Error(data.error || 'Failed');
     generatedId = data.joiningId;
   } catch(e) {
-    // Demo: generate random 8-char ID
+    // Demo fallback: generate random 8-char ID
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     generatedId = 'DMFL' + Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
   }
