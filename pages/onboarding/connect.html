@@ -677,7 +677,7 @@ function renderCard(data) {
   pcAvInner.style.cssText = '';
   pcAvInner.textContent = (username[0] || 'I').toUpperCase();
 
-  const avatarUrl = `${API_BASE}/api/ig/avatar/${encodeURIComponent(username)}`;
+  const avatarUrl = `/api/ig-avatar/${encodeURIComponent(username)}`;
   const img = new Image();
   img.onload = () => {
     pcAvInner.innerHTML = '';
@@ -783,10 +783,9 @@ async function doSearch() {
 
   while (attempts < MAX_ATTEMPTS) {
     try {
-      const res = await fetch(
-        `${API_BASE}/api/ig/lookup?username=${encodeURIComponent(val)}`,
-        { headers, signal: searchAbort.signal }
-      );
+      // Use Cloudflare Pages Function (same-origin, never blocked by Instagram)
+      const lookupUrl = `/api/ig-lookup?username=${encodeURIComponent(val)}`;
+      const res = await fetch(lookupUrl, { signal: searchAbort.signal });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       data = await res.json();
       break; // success
@@ -825,14 +824,14 @@ function openDropdown(query) {
   if (u.instagram?.username?.toLowerCase().includes(query))
     suggestions.push({
       username: u.instagram.username,
-      pic: `${API_BASE}/api/ig/avatar/${encodeURIComponent(u.instagram.username)}`,
+      pic: `/api/ig-avatar/${encodeURIComponent(u.instagram.username)}`,
       sub: 'Connected account',
     });
 
   if (u.igUsernameIntent && u.igUsernameIntent.includes(query) && u.igUsernameIntent !== u.instagram?.username)
     suggestions.push({
       username: u.igUsernameIntent,
-      pic: `${API_BASE}/api/ig/avatar/${encodeURIComponent(u.igUsernameIntent)}`,
+      pic: `/api/ig-avatar/${encodeURIComponent(u.igUsernameIntent)}`,
       sub: 'Recently searched',
     });
 
