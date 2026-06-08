@@ -822,11 +822,11 @@ async function verifyJoiningId() {
     currentJoiningData = data;
     openModal(data);
   } catch(e) {
-    // Demo: accept any 8-char ID
+    // If backend unreachable, open form without offer details
     if (id.length === 8) {
       currentJoiningId = id;
-      currentJoiningData = {role:'Full Stack Developer Intern',stipend:'₹8,000/mo',duration:'3 months',startDate:'2026-07-01',mode:'Remote'};
-      openModal(currentJoiningData);
+      currentJoiningData = {};
+      openModal({});
     } else {
       errEl.textContent = 'Invalid or expired Joining ID. Please check and try again.';
       errEl.classList.add('show');
