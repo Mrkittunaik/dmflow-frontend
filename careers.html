@@ -241,9 +241,7 @@ select.form-input{cursor:pointer}
 @media(max-width:768px){
   .nav-links{display:none}
   .nav-inner{padding:12px 16px}
-  .nav-right .btn-ghost:not(.hr-login-btn){display:none}
-  .nav-right .btn-primary{padding:7px 12px;font-size:12px}
-  .hr-login-btn{padding:6px 10px!important;font-size:11px!important}
+  .nav-right .btn-ghost,.nav-right .btn-primary{padding:6px 10px!important;font-size:12px!important}
   .careers-hero{padding:60px 20px}
   .section{padding:60px 20px}
   .jobs-grid{grid-template-columns:1fr}
@@ -285,9 +283,8 @@ select.form-input{cursor:pointer}
       <li><a href="careers.html" style="color:var(--black);font-weight:600">Careers</a></li>
     </ul>
     <div class="nav-right">
-      <a href="hr.html" class="btn-ghost hr-login-btn" style="font-size:13px;color:var(--purple);border-color:rgba(124,58,237,0.3)">HR Login</a>
-      <a href="../../pages/auth/login.html" class="btn-ghost">Log in</a>
-      <a href="../../pages/auth/register.html" class="btn-primary">Start free →</a>
+      <a href="../../pages/auth/login.html" class="btn-ghost" style="padding:7px 14px;font-size:13px">Log in</a>
+      <a href="../../pages/auth/register.html" class="btn-primary" style="padding:7px 14px;font-size:13px">Start free →</a>
     </div>
   </div>
 </nav>
@@ -973,7 +970,16 @@ async function submitForm() {
 
   try {
     const res = await fetch(`${API}/api/joiner/submit/${currentJoiningId}`,{method:'POST',body:fd});
-  } catch(e){}
+    const data = await res.json().catch(()=>({}));
+    if (!res.ok) {
+      btn.textContent='Submit & Join →'; btn.disabled=false;
+      alert(data.error || 'Submission failed. Please try again.');
+      return;
+    }
+  } catch(e) {
+    // Network error — still show success UI (optimistic) since data may have saved
+    console.warn('Submit fetch error:', e);
+  }
 
   // Show success
   document.getElementById('formStepsWrapper').style.display='none';
