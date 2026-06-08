@@ -811,32 +811,39 @@ let currentJoiningId = null;
 async function verifyJoiningId() {
   const id = document.getElementById('joiningIdInput').value.trim().toUpperCase();
   const errEl = document.getElementById('joiningError');
+  const btn = document.querySelector('.btn-continue');
   errEl.classList.remove('show');
   if (id.length < 4) { errEl.textContent='Please enter a valid Joining ID.'; errEl.classList.add('show'); return; }
 
+  btn.textContent = 'Verifying…'; btn.disabled = true;
   try {
     const res = await fetch(`${API}/api/joiner/verify/${id}`);
     const data = await res.json();
-    if (!res.ok || !data.valid) throw new Error(data.message||'Invalid ID');
+    if (!res.ok || !data.valid) throw new Error(data.message || 'Invalid or expired Joining ID.');
     currentJoiningId = id;
     currentJoiningData = data;
-    openModal(data);
+    // role comes from slot — lock it, no manual select needed
+    openModal(data, false);
   } catch(e) {
-    // If backend unreachable, open form without offer details
-    if (id.length === 8) {
+    // Backend unreachable but ID looks like valid DMFL format → allow entry with manual role select
+    if (/^DMFL[A-Z0-9]{4}$/.test(id)) {
       currentJoiningId = id;
       currentJoiningData = {};
-      openModal({});
+      openModal({}, true); // true = show role selector
     } else {
-      errEl.textContent = 'Invalid or expired Joining ID. Please check and try again.';
+      errEl.textContent = e.message || 'Invalid or expired Joining ID. Please check and try again.';
       errEl.classList.add('show');
     }
+  } finally {
+    btn.textContent = 'Continue →'; btn.disabled = false;
   }
 }
 
-function openModal(data) {
+function openModal(data, showRoleSelect) {
   document.getElementById('joiningModal').classList.add('open');
   document.body.style.overflow='hidden';
+  // Push state so browser back button closes the modal naturally
+  if (!location.hash.includes('joining')) history.pushState({ joiningModal: true }, '', '#joining');
   // Populate internship banner
   if (data && (data.role || data.stipend || data.duration)) {
     const banner = document.getElementById('internBanner');
@@ -851,12 +858,64 @@ function openModal(data) {
     grid.innerHTML = items.map(i=>`<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:2px">${i.label}</div><div style="font-size:13px;font-weight:700;color:var(--black)">${i.val}</div></div>`).join('');
     banner.style.display='block';
   }
+
+  // If backend was unreachable (fallback), show a role selector so user picks their role
+  const roleSelectorEl = document.getElementById('roleSelectFallback');
+  if (showRoleSelect) {
+    if (!roleSelectorEl) {
+      const div = document.createElement('div');
+      div.id = 'roleSelectFallback';
+      div.style.cssText = 'background:rgba(255,200,0,0.07);border:1.5px solid rgba(200,150,0,0.25);border-radius:12px;padding:14px 18px;margin-bottom:20px';
+      div.innerHTML = `
+        <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#a16207;margin-bottom:10px">⚠ Offline Mode — Select Your Role</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="grid-column:1/-1">
+            <label style="font-size:13px;font-weight:600;color:var(--black);display:block;margin-bottom:5px">Internship Role <span style="color:#ef4444">*</span></label>
+            <select id="fallbackRole" class="form-input" onchange="onFallbackRoleChange(this.value)">
+              <option value="">Loading roles…</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:3px">Stipend</label>
+            <div id="fallbackStipend" style="font-size:13px;font-weight:700;color:var(--black)">–</div>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:3px">Duration</label>
+            <div id="fallbackDuration" style="font-size:13px;font-weight:700;color:var(--black)">–</div>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:3px">Mode</label>
+            <div id="fallbackMode" style="font-size:13px;font-weight:700;color:var(--black)">–</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-top:10px">Server is temporarily unreachable. Select your role to continue.</div>
+      `;
+      document.getElementById('step0').insertBefore(div, document.getElementById('step0').querySelector('.form-grid'));
+    } else {
+      roleSelectorEl.style.display = 'block';
+    }
+    // Load roles into the fallback selector
+    fetch(`${API}/api/roles`).then(r=>r.json()).then(roles=>{
+      const sel = document.getElementById('fallbackRole');
+      if (!sel) return;
+      const active = roles.filter(r=>r.active!==false);
+      sel.innerHTML = '<option value="">Select your role…</option>' +
+        active.map(r=>`<option value="${r._id}" data-title="${r.title}" data-stipend="${r.stipend||''}" data-duration="${r.duration||''}" data-mode="${r.mode||'Remote'}">${r.title}</option>`).join('');
+    }).catch(()=>{
+      const sel = document.getElementById('fallbackRole');
+      if (sel) sel.innerHTML = '<option value="">Could not load roles</option>';
+    });
+  } else if (roleSelectorEl) {
+    roleSelectorEl.style.display = 'none';
+  }
   goToStep(0);
 }
 
 function closeModal() {
   document.getElementById('joiningModal').classList.remove('open');
   document.body.style.overflow='';
+  // If we pushed #joining into history, go back so URL is clean
+  if (location.hash === '#joining') history.back();
 }
 
 // ── STEPPER ──────────────────────────────────────────────────
@@ -899,6 +958,19 @@ function validateStep(n) {
     if(el && !el.value.trim()){el.classList.add('error');ok=false;}
     else if(el) el.classList.remove('error');
   });
+  // If fallback role selector is visible, require a role to be selected
+  if (n === 0) {
+    const fallbackSel = document.getElementById('fallbackRole');
+    if (fallbackSel && fallbackSel.closest('#roleSelectFallback') && fallbackSel.offsetParent !== null) {
+      if (!fallbackSel.value) {
+        fallbackSel.style.borderColor = '#ef4444';
+        alert('Please select your internship role to continue.');
+        return false;
+      } else {
+        fallbackSel.style.borderColor = '';
+      }
+    }
+  }
   if(n===2){
     if(!document.getElementById('f_aadhar')?.files?.[0]){alert('Please upload your Aadhar Card (ID Proof).');return false;}
     // NOC is optional — no check needed
@@ -1080,6 +1152,34 @@ function clearSig(){ ctx.clearRect(0,0,canvas.width,canvas.height); sigHasSig=fa
 window.addEventListener('resize', resizeCanvas);
 setTimeout(resizeCanvas, 100);
 ctx.strokeStyle='#0A0A0F'; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.lineJoin='round';
+
+// Browser back button closes modal
+window.addEventListener('popstate', function(e) {
+  const modal = document.getElementById('joiningModal');
+  if (modal.classList.contains('open')) {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// If page loaded with #joining hash (e.g. forward nav), remove it cleanly
+if (location.hash === '#joining') history.replaceState(null, '', location.pathname);
+
+// Fallback role selector: when user picks a role, store it in currentJoiningData
+function onFallbackRoleChange(roleId) {
+  const sel = document.getElementById('fallbackRole');
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt || !opt.value) return;
+  currentJoiningData = {
+    role:     opt.dataset.title    || '',
+    stipend:  opt.dataset.stipend  || '–',
+    duration: opt.dataset.duration || '–',
+    mode:     opt.dataset.mode     || 'Remote',
+  };
+  document.getElementById('fallbackStipend').textContent  = currentJoiningData.stipend;
+  document.getElementById('fallbackDuration').textContent = currentJoiningData.duration;
+  document.getElementById('fallbackMode').textContent     = currentJoiningData.mode;
+}
 
 // Close on overlay click
 document.getElementById('joiningModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal(); });
