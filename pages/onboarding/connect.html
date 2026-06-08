@@ -7,731 +7,800 @@
 <title>Connect Instagram – DMFlow</title>
 <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/main.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{
-  background:#F2F2F7;
+  background:#F0F0F5;
   font-family:'Instrument Sans',sans-serif;
-  display:flex;flex-direction:column;
-  min-height:100vh;
+  display:flex;flex-direction:column;min-height:100vh;
 }
 
-/* ── TOP BAR ── */
-.cn-topbar{
+/* ── TOPBAR ── */
+.topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;height:56px;
-  background:#fff;border-bottom:1px solid #EBEBF0;
-  flex-shrink:0;position:sticky;top:0;z-index:50;
+  padding:0 28px;height:58px;
+  background:#fff;border-bottom:1px solid #E8E8F0;
+  position:sticky;top:0;z-index:100;flex-shrink:0;
 }
-.cn-logo{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;font-weight:800;color:#0A0A0F;text-decoration:none;letter-spacing:-0.3px;}
-.cn-logo span{color:#7C3AED;}
-.cn-back{display:flex;align-items:center;gap:5px;font-size:13px;color:#6B6B80;text-decoration:none;font-weight:500;padding:6px 10px;border-radius:8px;transition:all .18s;}
-.cn-back:hover{background:#F4F4F8;color:#0A0A0F;}
-.cn-back svg{transition:transform .18s;}
-.cn-back:hover svg{transform:translateX(-2px);}
+.logo{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;text-decoration:none;letter-spacing:-.4px;}
+.logo span{color:#7C3AED;}
+.back-btn{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;color:#6B7280;font-weight:500;
+  text-decoration:none;padding:7px 12px;border-radius:10px;
+  transition:all .18s;border:1px solid transparent;
+}
+.back-btn:hover{background:#F5F5FA;color:#111;border-color:#E8E8F0;}
+.back-btn svg{transition:transform .18s;}
+.back-btn:hover svg{transform:translateX(-2px);}
 
 /* ── BODY ── */
-.cn-body{
+.page-body{
   flex:1;display:flex;align-items:flex-start;justify-content:center;
-  padding:28px 16px 40px;overflow-y:auto;
+  padding:32px 16px 48px;overflow-y:auto;
 }
 
 /* ── CARD ── */
-.cn-card{
+.card{
   background:#fff;border-radius:24px;
-  border:1px solid #E5E5EF;
-  box-shadow:0 2px 24px rgba(0,0,0,.06),0 0 0 0 transparent;
-  padding:28px 28px 24px;
-  width:100%;max-width:460px;
-  display:flex;flex-direction:column;gap:22px;
-  animation:cardIn .35s cubic-bezier(.22,.61,.36,1) both;
+  border:1px solid #E8E8F0;
+  box-shadow:0 4px 32px rgba(0,0,0,.07);
+  padding:32px;width:100%;max-width:480px;
+  display:flex;flex-direction:column;gap:24px;
+  animation:slideUp .4s cubic-bezier(.22,.68,.36,1) both;
 }
-@keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── STEP BAR ── */
-.step-bar{display:flex;align-items:center;}
-.sb-item{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;}
-.sb-dot{
-  width:24px;height:24px;border-radius:50%;
+/* ── STEPS ── */
+.steps{display:flex;align-items:center;gap:0;}
+.step{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;white-space:nowrap;}
+.step-dot{
+  width:26px;height:26px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;flex-shrink:0;
-  transition:all .3s;
+  font-size:11px;font-weight:800;flex-shrink:0;transition:all .3s;
 }
-.sb-dot.done{background:#22c55e;color:#fff;}
-.sb-dot.active{background:#7C3AED;color:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.15);}
-.sb-dot.inactive{background:#F0F0F5;color:#B0B0C0;}
-.sb-item.done{color:#0A0A0F;}
-.sb-item.active{color:#0A0A0F;}
-.sb-item.inactive{color:#B0B0C0;}
-.sb-line{flex:1;height:2px;background:#F0F0F5;margin:0 6px;border-radius:2px;}
-.sb-line.done{background:linear-gradient(90deg,#22c55e,#7C3AED);}
+.step-dot.done{background:#10B981;color:#fff;box-shadow:0 2px 8px rgba(16,185,129,.3);}
+.step-dot.active{background:#7C3AED;color:#fff;box-shadow:0 0 0 5px rgba(124,58,237,.12);}
+.step-dot.idle{background:#EEF0F5;color:#A0A8B8;}
+.step.done{color:#374151;}
+.step.active{color:#111;}
+.step.idle{color:#A0A8B8;}
+.step-line{flex:1;height:2px;margin:0 8px;border-radius:2px;background:#EEF0F5;}
+.step-line.done{background:linear-gradient(90deg,#10B981,#7C3AED);}
 
 /* ── HEADER ── */
-.cn-ig-icon{
-  width:52px;height:52px;border-radius:16px;
-  background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+.ig-logo{
+  width:54px;height:54px;border-radius:18px;
+  background:linear-gradient(135deg,#FCAF45,#FF7B00,#FF3C5F,#D300C5,#833AB4);
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:12px;
-  box-shadow:0 4px 16px rgba(220,39,67,.25);
+  box-shadow:0 6px 20px rgba(211,0,197,.22);
+  margin-bottom:14px;
 }
-.cn-header h2{
+.card-header h2{
   font-family:'Bricolage Grotesque',sans-serif;
-  font-size:22px;font-weight:800;color:#0A0A0F;
-  letter-spacing:-0.5px;margin-bottom:5px;
+  font-size:23px;font-weight:800;color:#0A0A0F;
+  letter-spacing:-.5px;margin-bottom:6px;
+  line-height:1.2;
 }
-.cn-header p{font-size:13px;color:#6B6B80;line-height:1.6;}
-.cn-header strong{color:#0A0A0F;}
+.card-header p{font-size:13.5px;color:#6B7280;line-height:1.65;}
+.card-header strong{color:#111;font-weight:700;}
 
-/* ── HOW-TO STEPS ── */
-.how-steps{display:flex;flex-direction:column;gap:8px;}
-.how-step{
-  display:flex;align-items:flex-start;gap:11px;
-  font-size:12.5px;color:#6B6B80;line-height:1.55;
-  padding:9px 12px;border-radius:10px;
-  background:#FAFAFA;border:1px solid #F0F0F5;
+/* ── GUIDE STEPS ── */
+.guide{display:flex;flex-direction:column;gap:6px;}
+.guide-step{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:10px 14px;border-radius:12px;
+  background:#FAFAFA;border:1px solid #F0F0F8;
+  font-size:12.5px;color:#6B7280;line-height:1.6;
+  transition:border-color .2s;
 }
-.how-num{
-  width:20px;height:20px;border-radius:50%;
-  background:#EDE9FF;
+.guide-step:hover{border-color:#DDD5FE;}
+.guide-num{
+  min-width:22px;height:22px;border-radius:50%;
+  background:#EDE9FE;color:#7C3AED;
+  font-size:11px;font-weight:800;
   display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:800;color:#7C3AED;
   flex-shrink:0;margin-top:1px;
 }
 
-/* ── SEARCH SECTION ── */
-.search-section{display:flex;flex-direction:column;gap:10px;}
-.search-label{font-size:12px;font-weight:700;color:#3A3A4A;letter-spacing:.2px;}
+/* ── SEARCH ── */
+.search-label{
+  font-size:11px;font-weight:700;color:#374151;
+  letter-spacing:.6px;text-transform:uppercase;
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+}
+.search-label::after{content:'';flex:1;height:1px;background:#EEF0F5;}
 
-.ig-search-wrap{position:relative;}
-.ig-input-row{
+.search-wrap{position:relative;}
+.input-row{
   display:flex;align-items:center;
-  border:2px solid #E5E5EF;border-radius:13px;
-  overflow:visible;transition:border-color .2s,box-shadow .2s;
-  background:#fff;position:relative;
+  border:2px solid #E8E8F0;border-radius:14px;
+  background:#fff;transition:all .2s;overflow:hidden;
 }
-.ig-input-row:focus-within{
+.input-row:focus-within{
   border-color:#7C3AED;
-  box-shadow:0 0 0 4px rgba(124,58,237,.1);
+  box-shadow:0 0 0 4px rgba(124,58,237,.08);
 }
-.ig-prefix{
-  padding:0 13px;font-size:15px;font-weight:700;color:#B0B0C0;
-  background:#FAFAFA;border-right:2px solid #E5E5EF;
-  display:flex;align-items:center;height:50px;flex-shrink:0;
-  border-radius:11px 0 0 11px;
-  transition:border-color .2s;
+.at-prefix{
+  height:52px;padding:0 14px;
+  font-size:16px;font-weight:700;color:#CBD5E1;
+  background:#F8F9FC;border-right:2px solid #E8E8F0;
+  display:flex;align-items:center;flex-shrink:0;
+  transition:all .2s;
 }
-.ig-input-row:focus-within .ig-prefix{border-right-color:#C4B5FD;}
+.input-row:focus-within .at-prefix{
+  color:#7C3AED;border-right-color:#DDD5FE;background:#F5F3FF;
+}
 .ig-input{
-  flex:1;border:none;outline:none;padding:0 12px;
-  font-size:14px;font-family:'Instrument Sans',sans-serif;
-  height:50px;background:transparent;color:#0A0A0F;
-  min-width:0;
+  flex:1;border:none;outline:none;
+  padding:0 14px;height:52px;
+  font-size:15px;font-family:'Instrument Sans',sans-serif;
+  color:#0A0A0F;background:transparent;min-width:0;
 }
-.ig-input::placeholder{color:#C8C8D8;}
+.ig-input::placeholder{color:#CBD5E1;}
 
 /* Search button */
-.ig-search-btn{
-  width:36px;height:36px;border-radius:10px;
+.search-btn{
+  width:40px;height:40px;border-radius:11px;
   background:#7C3AED;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-right:7px;
+  margin-right:6px;flex-shrink:0;
   transition:all .18s;
 }
-.ig-search-btn:hover{background:#6D28D9;transform:scale(1.05);}
-.ig-search-btn:active{transform:scale(.97);}
-.ig-search-btn.loading{background:#C4B5FD;cursor:not-allowed;pointer-events:none;}
-.ig-search-btn svg{transition:opacity .2s;}
-
-/* Spinner inside button */
-.btn-spinner{
-  width:16px;height:16px;border:2px solid rgba(255,255,255,.4);
-  border-top-color:#fff;border-radius:50%;
-  animation:spin .7s linear infinite;display:none;
-}
-.ig-search-btn.loading .btn-spinner{display:block;}
-.ig-search-btn.loading .btn-icon{display:none;}
+.search-btn:hover{background:#6D28D9;transform:scale(1.06);}
+.search-btn:active{transform:scale(.96);}
+.search-btn.loading{background:#C4B5FD;pointer-events:none;}
+.search-btn .ico{display:flex;}
+.search-btn .spin{display:none;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite;}
+.search-btn.loading .ico{display:none;}
+.search-btn.loading .spin{display:block;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── DROPDOWN ── */
-.ig-dropdown{
-  position:absolute;left:0;right:0;top:calc(100% + 6px);
-  background:#fff;border:1.5px solid #E5E5EF;
-  border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.1);
-  z-index:99;overflow:hidden;display:none;
-  animation:dropIn .15s cubic-bezier(.22,.61,.36,1);
+.dropdown{
+  position:absolute;left:0;right:0;top:calc(100% + 8px);
+  background:#fff;border:1.5px solid #E8E8F0;
+  border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.1);
+  z-index:200;overflow:hidden;
+  display:none;
+  animation:popIn .15s cubic-bezier(.22,.68,.36,1);
 }
-.ig-dropdown.show{display:block;}
-@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.dd-item{
-  display:flex;align-items:center;gap:11px;
-  padding:11px 14px;cursor:pointer;
-  transition:background .15s;border-bottom:1px solid #F5F5FA;
+.dropdown.open{display:block;}
+@keyframes popIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+.drop-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;cursor:pointer;
+  transition:background .12s;
 }
-.dd-item:last-child{border-bottom:none;}
-.dd-item:hover{background:#F8F7FF;}
-.dd-av{
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);
+.drop-item:not(:last-child){border-bottom:1px solid #F5F5FA;}
+.drop-item:hover{background:#F8F7FF;}
+.drop-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#FCAF45,#FF3C5F,#833AB4);
   display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:14px;font-weight:800;flex-shrink:0;
-  overflow:hidden;
+  color:#fff;font-size:15px;font-weight:800;overflow:hidden;
 }
-.dd-av img{width:100%;height:100%;object-fit:cover;}
-.dd-username{font-size:13px;font-weight:700;color:#0A0A0F;}
-.dd-sub{font-size:11px;color:#9898A8;margin-top:1px;}
+.drop-av img{width:100%;height:100%;object-fit:cover;}
+.drop-name{font-size:13px;font-weight:700;color:#111;}
+.drop-sub{font-size:11.5px;color:#9CA3AF;margin-top:1px;}
 
 /* ── PROFILE CARD ── */
 .profile-card{
-  border:1.5px solid #E5E5EF;border-radius:16px;
+  border-radius:18px;border:1.5px solid #E8E8F0;
   overflow:hidden;display:none;
-  animation:cardFade .25s cubic-bezier(.22,.61,.36,1);
+  box-shadow:0 4px 20px rgba(0,0,0,.05);
 }
-.profile-card.show{display:block;}
-@keyframes cardFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.profile-card.show{display:block;animation:fadeUp .3s cubic-bezier(.22,.68,.36,1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 
-/* Card top — gradient banner */
+/* Banner */
 .pc-banner{
-  height:52px;
-  background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
-  position:relative;
+  height:72px;position:relative;
+  background:linear-gradient(135deg,#FCAF45 0%,#FF7B00 20%,#FF3C5F 50%,#D300C5 75%,#833AB4 100%);
 }
-.pc-main{
-  padding:0 16px 16px;
+.pc-banner-shimmer{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  animation:bannerShimmer 2.5s ease-in-out infinite;
+}
+@keyframes bannerShimmer{0%,100%{opacity:0;transform:translateX(-100%)}50%{opacity:1;transform:translateX(100%)}}
+
+/* Profile main */
+.pc-body{background:#fff;padding:0 18px 18px;}
+.pc-top{display:flex;align-items:flex-end;justify-content:space-between;padding-top:0;margin-bottom:12px;}
+
+/* Avatar */
+.pc-av-outer{
+  width:68px;height:68px;border-radius:50%;
+  background:linear-gradient(135deg,#FCAF45,#FF3C5F,#833AB4);
+  padding:2.5px;margin-top:-34px;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+  flex-shrink:0;
+}
+.pc-av-inner{
+  width:100%;height:100%;border-radius:50%;
   background:#fff;
-  position:relative;
-}
-.pc-av-wrap{
-  position:relative;display:inline-block;
-  margin-top:-28px;margin-bottom:8px;
-}
-.pc-av{
-  width:56px;height:56px;border-radius:50%;
-  background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);
-  border:3px solid #fff;
-  box-shadow:0 2px 12px rgba(0,0,0,.15);
   display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:22px;font-weight:800;
-  overflow:hidden;flex-shrink:0;
+  overflow:hidden;font-size:24px;font-weight:800;color:#fff;
 }
-.pc-av img{width:100%;height:100%;object-fit:cover;}
-
-.pc-av-ring{
-  position:absolute;inset:-3px;border-radius:50%;
-  background:linear-gradient(135deg,#f09433,#bc1888);
-  z-index:-1;display:none;
+.pc-av-inner.has-pic{background:transparent;}
+.pc-av-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.pc-av-inner.initials{
+  background:linear-gradient(135deg,#FCAF45,#FF3C5F,#833AB4);
 }
-.pc-av-ring.show{display:block;}
-
-.pc-info{display:flex;align-items:flex-start;justify-content:space-between;}
-.pc-details{}
-.pc-username{font-size:15px;font-weight:800;color:#0A0A0F;font-family:'Bricolage Grotesque',sans-serif;}
-.pc-fullname{font-size:12px;color:#9898A8;margin-top:1px;}
-.pc-stats{display:flex;gap:14px;margin-top:8px;}
-.pc-stat{font-size:11px;color:#6B6B80;}
-.pc-stat strong{font-size:13px;font-weight:700;color:#0A0A0F;display:block;}
 
 /* Status badge */
-.pc-badge{
+.status-badge{
   display:inline-flex;align-items:center;gap:5px;
-  padding:5px 11px;border-radius:20px;
-  font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;
+  padding:5px 12px;border-radius:20px;
+  font-size:11px;font-weight:700;
+  margin-bottom:6px;
 }
-.pc-badge.ready{background:#dcfce7;color:#15803d;}
-.pc-badge.ready::before{content:'';width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;}
-.pc-badge.warn{background:#fef3c7;color:#92400e;}
-.pc-badge.warn::before{content:'';width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block;}
-.pc-badge.unknown{background:#F4F4F8;color:#6B6B80;}
-.pc-badge.unknown::before{content:'';width:6px;height:6px;border-radius:50%;background:#9CA3AF;display:inline-block;}
+.status-badge.ready{background:#D1FAE5;color:#065F46;}
+.status-badge.ready .dot{background:#10B981;}
+.status-badge.warn{background:#FEF3C7;color:#92400E;}
+.status-badge.warn .dot{background:#F59E0B;}
+.status-badge.unknown{background:#F3F4F6;color:#6B7280;}
+.status-badge.unknown .dot{background:#9CA3AF;}
+.status-badge .dot{width:6px;height:6px;border-radius:50%;}
 
-/* Not business warning strip */
-.not-biz-strip{
-  margin:10px 0 0;padding:10px 13px;
-  background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;
+/* Profile info */
+.pc-info{}
+.pc-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.pc-username{font-family:'Bricolage Grotesque',sans-serif;font-size:17px;font-weight:800;color:#111;letter-spacing:-.3px;}
+.verified-icon{display:inline-flex;flex-shrink:0;}
+.pc-fullname{font-size:12.5px;color:#9CA3AF;margin-top:2px;}
+.pc-category{font-size:11.5px;color:#7C3AED;font-weight:600;margin-top:4px;}
+
+/* Stats */
+.pc-stats{display:flex;gap:20px;margin-top:10px;padding-top:10px;border-top:1px solid #F5F5FA;}
+.pc-stat{}
+.pc-stat strong{display:block;font-size:15px;font-weight:800;color:#111;font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.3px;line-height:1;}
+.pc-stat span{font-size:11px;color:#9CA3AF;font-weight:500;margin-top:2px;display:block;}
+
+/* Bio */
+.pc-bio{
+  font-size:12.5px;color:#6B7280;line-height:1.6;
+  margin-top:10px;padding-top:10px;border-top:1px solid #F5F5FA;
   display:none;
 }
-.not-biz-strip.show{display:flex;align-items:flex-start;gap:9px;}
-.not-biz-strip svg{flex-shrink:0;margin-top:1px;}
-.not-biz-strip p{font-size:12px;color:#78350f;line-height:1.55;}
-.not-biz-strip a{color:#7C3AED;font-weight:600;text-decoration:none;}
-.not-biz-strip a:hover{text-decoration:underline;}
+.pc-bio.show{display:block;}
 
-/* Verified tick */
-.verified-badge{
-  display:inline-flex;margin-left:4px;vertical-align:middle;
+/* Private badge */
+.pc-private{
+  display:none;align-items:center;gap:6px;
+  font-size:12px;color:#6B7280;font-weight:500;
+  background:#F9FAFB;border:1px solid #E8E8F0;
+  border-radius:8px;padding:6px 10px;margin-top:8px;
 }
+.pc-private.show{display:flex;}
 
-/* Loading skeleton */
-.profile-card.loading .pc-banner{background:linear-gradient(90deg,#F0F0F5 25%,#E8E8EF 50%,#F0F0F5 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Not business warning */
+.biz-warn{
+  display:none;align-items:flex-start;gap:10px;
+  background:#FFFBEB;border:1.5px solid #FCD34D;
+  border-radius:12px;padding:12px 14px;margin-top:12px;
+}
+.biz-warn.show{display:flex;}
+.biz-warn svg{flex-shrink:0;margin-top:1px;}
+.biz-warn p{font-size:12.5px;color:#78350F;line-height:1.6;}
+.biz-warn a{color:#7C3AED;font-weight:600;text-decoration:none;}
+.biz-warn a:hover{text-decoration:underline;}
 
 /* ── INFO BOX ── */
 .info-box{
-  background:#FAFAFA;border:1.5px solid #F0F0F5;border-radius:14px;
-  padding:14px 16px;display:flex;flex-direction:column;gap:9px;
+  background:#FAFAFA;border:1.5px solid #EEEFF5;
+  border-radius:14px;padding:14px 16px;
+  display:none;flex-direction:column;gap:10px;
 }
+.info-box.show{display:flex;}
 .info-box-title{
-  font-size:12px;font-weight:700;color:#3A3A4A;
-  display:flex;align-items:center;gap:6px;
-  padding-bottom:8px;border-bottom:1px solid #F0F0F5;
+  font-size:11.5px;font-weight:700;color:#374151;
+  display:flex;align-items:center;gap:7px;
+  padding-bottom:10px;border-bottom:1px solid #EEEFF5;
+  text-transform:uppercase;letter-spacing:.4px;
 }
-.info-item{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:#6B6B80;line-height:1.55;}
-.info-item svg{flex-shrink:0;margin-top:1px;}
-.info-item a{color:#7C3AED;text-decoration:none;font-weight:600;}
-.info-item a:hover{text-decoration:underline;}
+.info-row{display:flex;align-items:flex-start;gap:10px;}
+.info-row svg{flex-shrink:0;margin-top:1px;color:#9CA3AF;}
+.info-row span{font-size:12.5px;color:#6B7280;line-height:1.6;}
+.info-row a{color:#7C3AED;font-weight:600;text-decoration:none;}
+.info-row a:hover{text-decoration:underline;}
 
 /* ── CONNECT BTN ── */
-.btn-connect-ig{
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  padding:15px;border-radius:13px;
-  background:linear-gradient(135deg,#f09433 0%,#e6683c 20%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
-  color:#fff;font-size:14px;font-weight:700;
+.connect-btn{
+  width:100%;padding:16px;border-radius:14px;
+  background:linear-gradient(135deg,#FCAF45 0%,#FF7B00 15%,#FF3C5F 45%,#D300C5 75%,#833AB4 100%);
+  color:#fff;font-size:15px;font-weight:700;
   font-family:'Instrument Sans',sans-serif;
-  border:none;cursor:pointer;text-decoration:none;
-  transition:all .2s;opacity:0.45;pointer-events:none;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all .22s;
+  opacity:.4;pointer-events:none;
   position:relative;overflow:hidden;
-  box-shadow:0 4px 20px rgba(220,39,67,.0);
+  box-shadow:0 4px 24px rgba(211,0,197,0);
 }
-.btn-connect-ig::after{
+.connect-btn::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(255,255,255,.12),transparent);
-  pointer-events:none;
+  background:linear-gradient(to bottom,rgba(255,255,255,.14) 0%,transparent 60%);
 }
-.btn-connect-ig.ready{
+.connect-btn.active{
   opacity:1;pointer-events:auto;
-  box-shadow:0 4px 20px rgba(220,39,67,.3);
+  box-shadow:0 6px 28px rgba(211,0,197,.28);
 }
-.btn-connect-ig.ready:hover{filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 6px 24px rgba(220,39,67,.4);}
-.btn-connect-ig.ready:active{transform:translateY(0);filter:brightness(.97);}
-.btn-connect-ig.blocked{
+.connect-btn.active:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 8px 32px rgba(211,0,197,.35);}
+.connect-btn.active:active{transform:translateY(0);filter:brightness(.97);}
+.connect-btn.blocked{
   opacity:1;pointer-events:auto;
   background:linear-gradient(135deg,#F59E0B,#EF4444);
-  box-shadow:0 4px 20px rgba(239,68,68,.25);
+  box-shadow:0 4px 20px rgba(239,68,68,.2);
+  cursor:not-allowed;
 }
+.connect-btn.blocked:hover{filter:none;transform:none;}
+.btn-pulse{
+  width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.8);
+  animation:pulse 1.8s ease-in-out infinite;display:none;
+}
+.connect-btn.active .btn-pulse{display:block;}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 
 /* ── META FOOTER ── */
-.meta-footer{text-align:center;padding-top:2px;}
-.meta-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:#F4F4F8;border-radius:8px;padding:6px 12px;
-  font-size:11px;color:#6B6B80;font-weight:600;margin-bottom:8px;
+.meta-footer{text-align:center;}
+.meta-partner{
+  display:inline-flex;align-items:center;gap:7px;
+  background:#F0F1F8;border-radius:10px;padding:7px 14px;
+  font-size:11.5px;color:#6B7280;font-weight:600;margin-bottom:10px;
 }
-.meta-links{display:flex;justify-content:center;gap:14px;font-size:11px;flex-wrap:wrap;}
-.meta-links a{color:#B0B0C0;text-decoration:none;transition:color .15s;}
+.meta-links{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;}
+.meta-links a{font-size:11.5px;color:#B0B8C8;text-decoration:none;transition:color .15s;}
 .meta-links a:hover{color:#7C3AED;}
-.meta-links span{color:#E0E0EA;}
+.meta-links span{color:#DDE1EA;font-size:10px;}
+
+/* ── SKELETON LOADING ── */
+.skeleton{
+  border-radius:6px;background:linear-gradient(90deg,#F0F0F5 25%,#E8E8EF 50%,#F0F0F5 75%);
+  background-size:200% 100%;animation:skelShimmer 1.3s infinite;
+}
+@keyframes skelShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* ── MOBILE ── */
-@media(max-width:480px){
-  .cn-topbar{padding:0 16px;}
-  .cn-body{padding:16px 12px 32px;}
-  .cn-card{padding:20px 18px 20px;border-radius:20px;gap:18px;}
-  .cn-header h2{font-size:20px;}
-  .how-step{font-size:12px;padding:8px 10px;}
-  .ig-prefix{height:46px;}
-  .ig-input{height:46px;font-size:13px;}
-  .ig-search-btn{width:32px;height:32px;margin-right:7px;}
-  .pc-av{width:50px;height:50px;font-size:19px;}
-  .pc-banner{height:44px;}
-  .pc-av-wrap{margin-top:-25px;}
+@media(max-width:520px){
+  .topbar{padding:0 18px;}
+  .page-body{padding:20px 12px 40px;}
+  .card{padding:22px 18px;border-radius:20px;gap:20px;}
+  .card-header h2{font-size:20px;}
+  .at-prefix,.ig-input{height:48px;}
+  .ig-input{font-size:14px;}
+  .pc-banner{height:60px;}
+  .pc-av-outer{width:58px;height:58px;margin-top:-29px;}
+  .pc-av-inner{font-size:20px;}
+  .pc-username{font-size:15px;}
+  .pc-stat strong{font-size:14px;}
+  .connect-btn{padding:14px;font-size:14px;}
 }
 </style>
 </head>
 <body>
 
-<div class="cn-topbar">
-  <a href="../../index.html" class="cn-logo">DM<span>Flow</span></a>
-  <a href="platform-select.html" class="cn-back">
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="../../index.html" class="logo">DM<span>Flow</span></a>
+  <a href="platform-select.html" class="back-btn">
     <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     Back to platforms
   </a>
 </div>
 
-<div class="cn-body">
-  <div class="cn-card">
+<!-- PAGE BODY -->
+<div class="page-body">
+<div class="card">
 
-    <!-- Step bar -->
-    <div class="step-bar">
-      <div class="sb-item done">
-        <div class="sb-dot done">
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        Account
+  <!-- Step indicator -->
+  <div class="steps">
+    <div class="step done">
+      <div class="step-dot done">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="sb-line done"></div>
-      <div class="sb-item active">
-        <div class="sb-dot active">2</div>
-        Instagram
-      </div>
-      <div class="sb-line"></div>
-      <div class="sb-item inactive">
-        <div class="sb-dot inactive">3</div>
-        Setup
-      </div>
+      Account
     </div>
-
-    <!-- Header -->
-    <div class="cn-header">
-      <div class="cn-ig-icon">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-          <rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="1.8"/>
-          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8"/>
-          <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
-        </svg>
-      </div>
-      <h2>Connect your Instagram</h2>
-      <p>Enter your username and we'll launch Meta's official OAuth login. Must be a <strong>Creator or Business</strong> account.</p>
+    <div class="step-line done"></div>
+    <div class="step active">
+      <div class="step-dot active">2</div>
+      Instagram
     </div>
-
-    <!-- How-to steps -->
-    <div class="how-steps">
-      <div class="how-step">
-        <div class="how-num">1</div>
-        <span>In Instagram go to <strong>Settings → Account type → Switch to Professional Account</strong> (Creator or Business).</span>
-      </div>
-      <div class="how-step">
-        <div class="how-num">2</div>
-        <span>Enter your Instagram username below and click the <strong>search icon</strong> to preview your profile.</span>
-      </div>
-      <div class="how-step">
-        <div class="how-num">3</div>
-        <span>Click <strong>Connect with Instagram</strong> and approve permissions on the Meta screen.</span>
-      </div>
+    <div class="step-line"></div>
+    <div class="step idle">
+      <div class="step-dot idle">3</div>
+      Setup
     </div>
+  </div>
 
-    <!-- Username search -->
-    <div class="search-section">
-      <div class="search-label">YOUR INSTAGRAM USERNAME</div>
-      <div class="ig-search-wrap">
-        <div class="ig-input-row">
-          <div class="ig-prefix">@</div>
-          <input type="text" id="igInput" class="ig-input" placeholder="yourusername"
-            autocomplete="off" spellcheck="false" autocapitalize="none"
-            inputmode="url" maxlength="30">
-          <button class="ig-search-btn" id="searchBtn" onclick="doSearch()" title="Search profile">
-            <span class="btn-icon">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
-                <circle cx="11" cy="11" r="7" stroke="white" stroke-width="2.2"/>
-                <path d="M16.5 16.5L21 21" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <div class="btn-spinner"></div>
-          </button>
-        </div>
-        <!-- Dropdown suggestions (connected accounts) -->
-        <div class="ig-dropdown" id="igDropdown"></div>
-      </div>
-
-      <!-- Live Profile Card -->
-      <div class="profile-card" id="profileCard">
-        <div class="pc-banner" id="pcBanner"></div>
-        <div class="pc-main">
-          <div class="pc-av-wrap">
-            <div class="pc-av-ring" id="pcRing"></div>
-            <div class="pc-av" id="pcAv"></div>
-          </div>
-          <div class="pc-info">
-            <div class="pc-details">
-              <div class="pc-username" id="pcUsername">@username</div>
-              <div class="pc-fullname" id="pcFullname"></div>
-              <div class="pc-stats" id="pcStats"></div>
-            </div>
-            <div class="pc-badge unknown" id="pcBadge">Checking…</div>
-          </div>
-          <!-- Not business warning -->
-          <div class="not-biz-strip" id="notBizStrip">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <p>This looks like a <strong>Personal account</strong>. DMFlow requires a Creator or Business account. <a href="https://help.instagram.com/502981923235522" target="_blank">Switch account type →</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Read before connecting -->
-    <div class="info-box" id="infoBox" style="display:none;">
-      <div class="info-box-title">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Read before connecting
-      </div>
-      <div class="info-item">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#6B6B80" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#6B6B80" stroke-width="2" stroke-linecap="round"/></svg>
-        <span>We never store your password — only a Meta OAuth token you can revoke anytime.</span>
-      </div>
-      <div class="info-item">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#6B6B80" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#6B6B80" stroke-width="2" stroke-linecap="round"/></svg>
-        <span>Daily DM limits apply per plan. Exceeding limits may trigger a temporary block.</span>
-      </div>
-      <div class="info-item">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#6B6B80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="#6B6B80" stroke-width="2"/></svg>
-        <span>By connecting you agree to <a href="https://help.instagram.com/581066165581870" target="_blank">Instagram's Platform Policy</a> and DMFlow's <a href="../settings/terms.html">Terms</a>.</span>
-      </div>
-    </div>
-
-    <!-- Connect button -->
-    <button class="btn-connect-ig" id="connectBtn" onclick="doConnect()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+  <!-- Header -->
+  <div class="card-header">
+    <div class="ig-logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="1.8"/>
         <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8"/>
-        <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+        <circle cx="17.5" cy="6.5" r="1.3" fill="white"/>
       </svg>
-      <span id="connectBtnText">Connect with Instagram</span>
-    </button>
+    </div>
+    <h2>Connect your Instagram</h2>
+    <p>Enter your username and search to preview your profile. Must be a <strong>Creator or Business</strong> account to use DMFlow.</p>
+  </div>
 
-    <!-- Meta footer -->
-    <div class="meta-footer">
-      <div class="meta-badge">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        DMFlow is a Meta Tech Partner
+  <!-- Guide steps -->
+  <div class="guide">
+    <div class="guide-step">
+      <div class="guide-num">1</div>
+      <span>Go to Instagram <strong>Settings → Account type → Switch to Professional Account</strong> (Creator or Business).</span>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">2</div>
+      <span>Type your username below and tap the <strong>search button</strong> to load your live profile.</span>
+    </div>
+    <div class="guide-step">
+      <div class="guide-num">3</div>
+      <span>Click <strong>Connect with Instagram</strong> and approve on the Meta login screen.</span>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div>
+    <div class="search-label">Instagram Username</div>
+    <div class="search-wrap">
+      <div class="input-row">
+        <div class="at-prefix">@</div>
+        <input type="text" id="igInput" class="ig-input"
+          placeholder="yourusername"
+          autocomplete="off" spellcheck="false"
+          autocapitalize="none" inputmode="url" maxlength="30">
+        <button class="search-btn" id="searchBtn" onclick="doSearch()" title="Search profile">
+          <span class="ico">
+            <svg width="17" height="17" fill="none" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7.5" stroke="white" stroke-width="2.2"/>
+              <path d="M17 17L22 22" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <div class="spin"></div>
+        </button>
       </div>
-      <div class="meta-links">
-        <a href="../settings/terms.html">Platform Terms</a>
-        <span>·</span>
-        <a href="../settings/privacy.html">Privacy Policy</a>
-        <span>·</span>
-        <a href="#" onclick="alert('Contact support@dmflow.app');return false;">Need help?</a>
+      <!-- Dropdown -->
+      <div class="dropdown" id="dropdown"></div>
+    </div>
+  </div>
+
+  <!-- Profile card -->
+  <div class="profile-card" id="profileCard">
+    <div class="pc-banner">
+      <div class="pc-banner-shimmer"></div>
+    </div>
+    <div class="pc-body">
+      <div class="pc-top">
+        <div class="pc-av-outer" id="pcAvOuter">
+          <div class="pc-av-inner initials" id="pcAvInner"></div>
+        </div>
+        <div class="status-badge unknown" id="statusBadge">
+          <div class="dot"></div>
+          <span id="statusText">Checking…</span>
+        </div>
+      </div>
+
+      <div class="pc-info">
+        <div class="pc-name-row">
+          <span class="pc-username" id="pcUsername"></span>
+          <span class="verified-icon" id="verifiedIcon" style="display:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#3B82F6"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </span>
+        </div>
+        <div class="pc-fullname" id="pcFullname"></div>
+        <div class="pc-category" id="pcCategory"></div>
+      </div>
+
+      <div class="pc-stats" id="pcStats" style="display:none;"></div>
+
+      <div class="pc-bio" id="pcBio"></div>
+
+      <div class="pc-private" id="pcPrivate">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#6B7280" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#6B7280" stroke-width="2" stroke-linecap="round"/></svg>
+        Private account — automation works on public posts only
+      </div>
+
+      <div class="biz-warn" id="bizWarn">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 9v4m0 4h.01" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>
+        <p>This appears to be a <strong>Personal account</strong>. DMFlow requires a Creator or Business account to send DMs. <a href="https://help.instagram.com/502981923235522" target="_blank">How to switch →</a></p>
       </div>
     </div>
-
   </div>
-</div>
+
+  <!-- Info box -->
+  <div class="info-box" id="infoBox">
+    <div class="info-box-title">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#6B7280" stroke-width="2"/><path d="M12 8v4m0 4h.01" stroke="#6B7280" stroke-width="2" stroke-linecap="round"/></svg>
+      Before you connect
+    </div>
+    <div class="info-row">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#9CA3AF" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>We <strong>never</strong> store your password — only a Meta OAuth token you can revoke anytime from Instagram settings.</span>
+    </div>
+    <div class="info-row">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#9CA3AF" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"/></svg>
+      <span>Daily DM limits apply per plan. Exceeding limits may cause a temporary send block.</span>
+    </div>
+    <div class="info-row">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="#9CA3AF" stroke-width="2"/></svg>
+      <span>By connecting you agree to <a href="https://help.instagram.com/581066165581870" target="_blank">Instagram's Platform Policy</a> and DMFlow's <a href="../settings/terms.html">Terms of Service</a>.</span>
+    </div>
+  </div>
+
+  <!-- Connect button -->
+  <button class="connect-btn" id="connectBtn" onclick="doConnect()">
+    <div class="btn-pulse"></div>
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
+      <rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="1.8"/>
+      <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8"/>
+      <circle cx="17.5" cy="6.5" r="1.3" fill="white"/>
+    </svg>
+    <span id="connectBtnText">Connect with Instagram</span>
+  </button>
+
+  <!-- Meta footer -->
+  <div class="meta-footer">
+    <div class="meta-partner">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.791-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+      DMFlow is a Meta Tech Partner
+    </div>
+    <div class="meta-links">
+      <a href="../settings/terms.html">Platform Terms</a>
+      <span>·</span>
+      <a href="../settings/privacy.html">Privacy Policy</a>
+      <span>·</span>
+      <a href="#" onclick="alert('Contact support@dmflow.app');return false;">Need help?</a>
+    </div>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /page-body -->
 
 <script src="../../assets/js/main.js"></script>
 <script src="../../assets/js/config.js"></script>
 <script src="../../assets/js/api.js"></script>
 <script src="../../assets/js/auth.js"></script>
 <script>
-// ── Auth guard ──────────────────────────────────────────────
-const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
-if (!user) window.location.href = '../auth/login.html';
-
-// ── Elements ────────────────────────────────────────────────
-const igInput      = document.getElementById('igInput');
-const searchBtn    = document.getElementById('searchBtn');
-const igDropdown   = document.getElementById('igDropdown');
-const profileCard  = document.getElementById('profileCard');
-const pcAv         = document.getElementById('pcAv');
-const pcRing       = document.getElementById('pcRing');
-const pcUsername   = document.getElementById('pcUsername');
-const pcFullname   = document.getElementById('pcFullname');
-const pcStats      = document.getElementById('pcStats');
-const pcBadge      = document.getElementById('pcBadge');
-const notBizStrip  = document.getElementById('notBizStrip');
-const infoBox      = document.getElementById('infoBox');
-const connectBtn   = document.getElementById('connectBtn');
-const connectBtnText = document.getElementById('connectBtnText');
+// ── Auth guard
+const _user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+if (!_user) window.location.href = '../auth/login.html';
 
 const API_BASE = window.DMFLOW_API_URL ||
   document.querySelector('meta[name="dmflow-api"]')?.content ||
   'https://dmflow-backend-u9h8.onrender.com';
 
-let currentUsername = '';
-let searchTimer = null;
-let profileData = null;
+// Elements
+const igInput     = document.getElementById('igInput');
+const searchBtn   = document.getElementById('searchBtn');
+const dropdown    = document.getElementById('dropdown');
+const profileCard = document.getElementById('profileCard');
+const pcAvInner   = document.getElementById('pcAvInner');
+const pcUsername  = document.getElementById('pcUsername');
+const pcFullname  = document.getElementById('pcFullname');
+const pcCategory  = document.getElementById('pcCategory');
+const pcStats     = document.getElementById('pcStats');
+const pcBio       = document.getElementById('pcBio');
+const pcPrivate   = document.getElementById('pcPrivate');
+const bizWarn     = document.getElementById('bizWarn');
+const statusBadge = document.getElementById('statusBadge');
+const statusText  = document.getElementById('statusText');
+const verifiedIcon= document.getElementById('verifiedIcon');
+const infoBox     = document.getElementById('infoBox');
+const connectBtn  = document.getElementById('connectBtn');
+const connectBtnText = document.getElementById('connectBtnText');
 
-// ── Format followers ─────────────────────────────────────────
-function fmtNum(n) {
-  if (!n || n === 0) return '';
-  if (n >= 1_000_000) return (n/1_000_000).toFixed(1).replace('.0','') + 'M';
-  if (n >= 1_000) return (n/1_000).toFixed(1).replace('.0','') + 'K';
-  return n.toString();
+let currentUsername = '';
+let profileData = null;
+let dropdownTimer = null;
+
+// ── Helpers
+function fmt(n) {
+  if (!n) return null;
+  if (n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'K';
+  return n.toLocaleString();
 }
 
-// ── Render profile card ──────────────────────────────────────
+// ── Render profile card
 function renderCard(data) {
   profileData = data;
-  const { username, profilePic, followers, isBusinessOrCreator, fullName, isVerified, found } = data;
+  const { username, profilePic, followers, following, posts,
+          isBusinessOrCreator, fullName, isVerified, found,
+          biography, category, isPrivate } = data;
 
   // Avatar
-  pcAv.innerHTML = '';
+  pcAvInner.innerHTML = '';
+  pcAvInner.className = 'pc-av-inner';
   if (profilePic) {
-    const img = document.createElement('img');
+    const img = new Image();
+    img.onload = () => {
+      pcAvInner.classList.add('has-pic');
+      pcAvInner.classList.remove('initials');
+      pcAvInner.appendChild(img);
+    };
+    img.onerror = () => {
+      pcAvInner.classList.add('initials');
+      pcAvInner.textContent = (username[0] || 'I').toUpperCase();
+    };
     img.src = profilePic;
     img.alt = username;
-    img.onerror = () => { pcAv.innerHTML = username[0]?.toUpperCase() || 'I'; };
-    pcAv.appendChild(img);
-    pcRing.classList.add('show');
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+    // Show initial while loading
+    pcAvInner.classList.add('initials');
+    pcAvInner.textContent = (username[0] || 'I').toUpperCase();
   } else {
-    pcAv.textContent = username[0]?.toUpperCase() || 'I';
-    pcRing.classList.remove('show');
+    pcAvInner.classList.add('initials');
+    pcAvInner.textContent = (username[0] || 'I').toUpperCase();
   }
 
-  // Username + verified
-  pcUsername.innerHTML = '@' + username +
-    (isVerified ? `<span class="verified-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="#3B82F6"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>` : '');
-
-  // Full name
+  // Name & verified
+  pcUsername.textContent = '@' + username;
+  verifiedIcon.style.display = isVerified ? 'inline-flex' : 'none';
   pcFullname.textContent = fullName || '';
+  pcFullname.style.display = fullName ? 'block' : 'none';
+
+  // Category
+  pcCategory.textContent = category || '';
+  pcCategory.style.display = category ? 'block' : 'none';
 
   // Stats
-  const fol = fmtNum(followers);
-  pcStats.innerHTML = fol ? `<div class="pc-stat"><strong>${fol}</strong>followers</div>` : '';
+  const statsHTML = [
+    followers && `<div class="pc-stat"><strong>${fmt(followers)}</strong><span>Followers</span></div>`,
+    following && `<div class="pc-stat"><strong>${fmt(following)}</strong><span>Following</span></div>`,
+    posts     && `<div class="pc-stat"><strong>${fmt(posts)}</strong><span>Posts</span></div>`,
+  ].filter(Boolean).join('');
+  pcStats.innerHTML = statsHTML;
+  pcStats.style.display = statsHTML ? 'flex' : 'none';
 
-  // Badge
-  pcBadge.className = 'pc-badge';
-  notBizStrip.classList.remove('show');
-  connectBtn.classList.remove('ready','blocked');
+  // Bio
+  if (biography) {
+    pcBio.textContent = biography;
+    pcBio.classList.add('show');
+  } else {
+    pcBio.classList.remove('show');
+  }
+
+  // Private
+  if (isPrivate) pcPrivate.classList.add('show');
+  else pcPrivate.classList.remove('show');
+
+  // Status badge + button
+  statusBadge.className = 'status-badge';
+  bizWarn.classList.remove('show');
+  connectBtn.className = 'connect-btn';
   connectBtnText.textContent = 'Connect with Instagram';
 
   if (!found || isBusinessOrCreator === null) {
-    // Unknown — couldn't determine
-    pcBadge.classList.add('unknown');
-    pcBadge.textContent = 'Preview';
-    connectBtn.classList.add('ready');
+    statusBadge.classList.add('unknown');
+    statusText.textContent = 'Preview';
+    connectBtn.classList.add('active');
     connectBtnText.textContent = 'Continue as @' + username;
   } else if (isBusinessOrCreator) {
-    pcBadge.classList.add('ready');
-    pcBadge.innerHTML = '✓ Ready';
-    connectBtn.classList.add('ready');
+    statusBadge.classList.add('ready');
+    statusText.textContent = 'Ready to connect';
+    connectBtn.classList.add('active');
     connectBtnText.textContent = 'Connect as @' + username;
   } else {
-    // Personal account
-    pcBadge.classList.add('warn');
-    pcBadge.textContent = 'Not Business';
-    notBizStrip.classList.add('show');
+    statusBadge.classList.add('warn');
+    statusText.textContent = 'Not Business/Creator';
+    bizWarn.classList.add('show');
     connectBtn.classList.add('blocked');
     connectBtnText.textContent = 'Switch to Creator/Business first';
   }
 
   profileCard.classList.add('show');
-  infoBox.style.display = 'flex';
+  infoBox.classList.add('show');
 }
 
-// ── Search profile ───────────────────────────────────────────
+// ── Do search
 async function doSearch() {
   const val = igInput.value.replace(/^@+/,'').trim().toLowerCase();
-  if (!val || val.length < 1) {
-    showToast('Enter an Instagram username first.', 'info');
-    igInput.focus();
-    return;
-  }
+  if (!val) { igInput.focus(); showToast('Enter a username to search.','info'); return; }
+
   currentUsername = val;
-  igDropdown.classList.remove('show');
+  closeDropdown();
 
   // Loading state
   searchBtn.classList.add('loading');
   profileCard.classList.remove('show');
-  infoBox.style.display = 'none';
-  connectBtn.classList.remove('ready','blocked');
+  infoBox.classList.remove('show');
+  connectBtn.className = 'connect-btn';
   connectBtnText.textContent = 'Connect with Instagram';
 
   try {
     const token = localStorage.getItem('dmflow_token');
     const res = await fetch(`${API_BASE}/api/ig/lookup?username=${encodeURIComponent(val)}`, {
-      headers: token ? { Authorization: 'Bearer ' + token } : {}
+      headers: token ? { 'Authorization': 'Bearer ' + token } : {},
     });
-
-    if (!res.ok) throw new Error('Lookup failed');
+    if (!res.ok) throw new Error('lookup failed');
     const data = await res.json();
     renderCard(data);
-
     // Save intent
     const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
     u.igUsernameIntent = val;
     localStorage.setItem('dmflow_user', JSON.stringify(u));
-
-  } catch(err) {
-    // Fallback — show placeholder card (unknown state)
-    renderCard({
-      found: false,
-      username: val,
-      profilePic: '',
-      followers: 0,
-      isBusinessOrCreator: null,
-      fullName: '',
-      isVerified: false,
-    });
+  } catch(e) {
+    // Fallback card
+    renderCard({ found:false, username:val, profilePic:'', followers:0,
+      following:0, posts:0, isBusinessOrCreator:null,
+      fullName:'', isVerified:false, biography:'', category:'', isPrivate:false });
+    showToast('Could not load live profile — you can still connect.','info');
   } finally {
     searchBtn.classList.remove('loading');
   }
 }
 
-// ── Input handling ───────────────────────────────────────────
-igInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') { e.preventDefault(); doSearch(); }
-});
-
-igInput.addEventListener('input', function() {
-  const val = this.value.replace(/^@+/,'').trim().toLowerCase();
-
-  // Hide card if input cleared
-  if (!val) {
-    profileCard.classList.remove('show');
-    infoBox.style.display = 'none';
-    connectBtn.classList.remove('ready','blocked');
-    connectBtnText.textContent = 'Connect with Instagram';
-    currentUsername = '';
-    igDropdown.classList.remove('show');
-    return;
-  }
-
-  // Show connected account suggestion if matches
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => showDropdown(val), 200);
-});
-
-// ── Dropdown (connected accounts from localStorage/user) ─────
-function showDropdown(query) {
+// ── Dropdown for known accounts
+function openDropdown(query) {
+  const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
   const suggestions = [];
 
-  // Add connected IG account if matches
-  const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
-  if (u.instagram?.username && u.instagram.username.toLowerCase().includes(query)) {
-    suggestions.push({
-      username: u.instagram.username,
-      profilePic: u.instagram.profilePic || '',
-      sub: 'Connected account',
-    });
-  }
-  // Add previous intent if different and matches
-  if (u.igUsernameIntent && u.igUsernameIntent.includes(query) &&
-      u.igUsernameIntent !== u.instagram?.username) {
-    suggestions.push({ username: u.igUsernameIntent, profilePic: '', sub: 'Recently used' });
-  }
+  if (u.instagram?.username?.toLowerCase().includes(query))
+    suggestions.push({ username: u.instagram.username, pic: u.instagram.profilePic||'', sub:'Connected account' });
 
-  if (!suggestions.length) { igDropdown.classList.remove('show'); return; }
+  if (u.igUsernameIntent && u.igUsernameIntent.includes(query) && u.igUsernameIntent !== u.instagram?.username)
+    suggestions.push({ username: u.igUsernameIntent, pic:'', sub:'Recently searched' });
 
-  igDropdown.innerHTML = suggestions.slice(0,3).map(s => `
-    <div class="dd-item" onclick="selectSuggestion('${s.username}')">
-      <div class="dd-av">
-        ${s.profilePic
-          ? `<img src="${s.profilePic}" alt="${s.username}" onerror="this.parentNode.textContent='${s.username[0].toUpperCase()}'"/>`
-          : s.username[0].toUpperCase()}
+  if (!suggestions.length) { closeDropdown(); return; }
+
+  dropdown.innerHTML = suggestions.slice(0,3).map(s => `
+    <div class="drop-item" onclick="selectSuggestion('${s.username}')">
+      <div class="drop-av">
+        ${s.pic ? `<img src="${s.pic}" alt="" onerror="this.parentNode.textContent='${(s.username[0]||'I').toUpperCase()}'">` : (s.username[0]||'I').toUpperCase()}
       </div>
       <div>
-        <div class="dd-username">@${s.username}</div>
-        <div class="dd-sub">${s.sub}</div>
+        <div class="drop-name">@${s.username}</div>
+        <div class="drop-sub">${s.sub}</div>
       </div>
     </div>
   `).join('');
-  igDropdown.classList.add('show');
+  dropdown.classList.add('open');
 }
+
+function closeDropdown() { dropdown.classList.remove('open'); }
 
 function selectSuggestion(val) {
   igInput.value = val;
-  igDropdown.classList.remove('show');
+  closeDropdown();
   doSearch();
 }
 
-// Close dropdown on outside click
-document.addEventListener('click', (e) => {
-  if (!igInput.closest('.ig-search-wrap').contains(e.target))
-    igDropdown.classList.remove('show');
-});
-
-// ── Connect ──────────────────────────────────────────────────
-function doConnect() {
-  if (!currentUsername) { showToast('Search for your username first.', 'info'); return; }
-
-  // Block if personal account
-  if (profileData && profileData.found && profileData.isBusinessOrCreator === false) {
-    showToast('Switch to a Creator or Business account first.', 'error');
+// ── Input listeners
+igInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
+igInput.addEventListener('input', function() {
+  const val = this.value.replace(/^@+/,'').trim().toLowerCase();
+  if (!val) {
+    profileCard.classList.remove('show');
+    infoBox.classList.remove('show');
+    connectBtn.className = 'connect-btn';
+    connectBtnText.textContent = 'Connect with Instagram';
+    currentUsername = '';
+    closeDropdown();
     return;
   }
+  clearTimeout(dropdownTimer);
+  dropdownTimer = setTimeout(() => openDropdown(val), 180);
+});
+document.addEventListener('click', e => {
+  if (!igInput.closest('.search-wrap').contains(e.target)) closeDropdown();
+});
 
+// ── Connect
+function doConnect() {
+  if (!currentUsername) { showToast('Search for your username first.','info'); return; }
+  if (profileData?.found && profileData.isBusinessOrCreator === false) {
+    showToast('Please switch to a Creator or Business account first.','error');
+    return;
+  }
   connectBtnText.textContent = 'Opening Meta login…';
-  connectBtn.style.opacity = '0.7';
+  connectBtn.style.opacity = '.6';
   connectBtn.style.pointerEvents = 'none';
 
   const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
@@ -741,22 +810,18 @@ function doConnect() {
   if (typeof connectInstagram === 'function') {
     connectInstagram(currentUsername);
   } else {
-    connectBtn.style.opacity = '1';
-    connectBtn.style.pointerEvents = 'auto';
+    connectBtn.style.opacity = '';
+    connectBtn.style.pointerEvents = '';
     connectBtnText.textContent = 'Connect as @' + currentUsername;
-    showToast('Instagram connection unavailable. Please try again later.', 'error');
+    showToast('Instagram connection unavailable. Please try again later.','error');
   }
 }
 
-// ── Prefill on load ──────────────────────────────────────────
+// ── Prefill on load
 window.addEventListener('DOMContentLoaded', () => {
   const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
-  const prefill = u.instagram?.username || u.igUsernameIntent || '';
-  if (prefill) {
-    igInput.value = prefill;
-    // Small delay so page renders first
-    setTimeout(() => doSearch(), 400);
-  }
+  const pre = u.instagram?.username || u.igUsernameIntent || '';
+  if (pre) { igInput.value = pre; setTimeout(doSearch, 350); }
 });
 </script>
 </body>
