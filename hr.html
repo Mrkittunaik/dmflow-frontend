@@ -409,16 +409,11 @@ async function hrLogin() {
     sessionStorage.setItem('hrToken', hrToken);
     showDashboard();
   } catch(e) {
-    // Demo: accept hr / dmflow2024
-    if (username === 'hr' && password === 'dmflow2024') {
-      hrToken = 'demo-token';
-      sessionStorage.setItem('hrToken', hrToken);
-      showDashboard();
-    } else {
-      err.textContent = 'Invalid credentials. (Demo: hr / dmflow2024)';
-      err.classList.add('show');
-      btn.textContent = 'Sign In →'; btn.disabled = false;
-    }
+    err.textContent = e.message === 'Failed to fetch'
+      ? 'Unable to reach server. Please check your connection.'
+      : (e.message || 'Invalid credentials. Please try again.');
+    err.classList.add('show');
+    btn.textContent = 'Sign In →'; btn.disabled = false;
   }
 }
 
@@ -451,16 +446,12 @@ function switchTab(name, btn) {
 async function loadRoles() {
   try {
     const res = await fetch(`${API}/api/roles`, {
-      headers: hrToken !== 'demo-token' ? {'Authorization':'Bearer '+hrToken} : {}
+      headers: hrToken ? {'Authorization':'Bearer '+hrToken} : {}
     });
     if (!res.ok) throw new Error();
     allRoles = await res.json();
   } catch(e) {
-    allRoles = [
-      {_id:'1',title:'Full Stack Developer Intern',stipend:'₹8,000/mo',duration:'3 months',skills:['Node.js','React','MongoDB'],mode:'Remote',active:true,formLink:'https://forms.gle/example1'},
-      {_id:'2',title:'Frontend Developer Intern',stipend:'₹6,000/mo',duration:'2 months',skills:['HTML','CSS','JavaScript'],mode:'Remote',active:true,formLink:'https://forms.gle/example2'},
-      {_id:'3',title:'Social Media Intern',stipend:'₹5,000/mo',duration:'2 months',skills:['Content Writing','Instagram'],mode:'Hybrid',active:false,formLink:''},
-    ];
+    allRoles = [];
   }
   renderRoles();
   populateGenRoleSelect();
@@ -593,10 +584,7 @@ async function loadJoiners() {
     if (!res.ok) throw new Error();
     allJoiners = await res.json();
   } catch(e) {
-    allJoiners = [
-      {_id:'j1',joiningId:'DMFL1234',name:'Riya Sharma',role:'Full Stack Developer Intern',status:'pending',submittedAt:'2026-06-01',email:'riya@example.com',phone:'9876543210',college:'IIIT Nagpur',branch:'Computer Science',stipend:'₹8,000/mo',duration:'3 months',startDate:'2026-07-01',mode:'Remote'},
-      {_id:'j2',joiningId:'DMFL5678',name:'Arjun Mehta',role:'Frontend Developer Intern',status:'approved',submittedAt:'2026-05-28',email:'arjun@example.com',phone:'9123456780',college:'VIT Pune',branch:'Information Tech',stipend:'₹6,000/mo',duration:'2 months',startDate:'2026-07-15',mode:'Remote'},
-    ];
+    allJoiners = [];
   }
   renderJoiners(allJoiners);
 }
