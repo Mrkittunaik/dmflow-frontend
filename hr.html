@@ -259,9 +259,9 @@ tr:hover td{background:var(--gray-50)}
       <div class="card" style="max-width:580px">
         <p style="font-size:14px;color:var(--text2);margin-bottom:20px">Create a unique 8-character ID for a selected candidate. Share this ID so they can access the joining form on the Careers page.</p>
         <div class="form-grid">
-          <div class="form-group-m full">
+        <div class="form-group-m full">
             <label class="form-label">Select Role <span style="color:#ef4444">*</span></label>
-            <select class="form-input" id="genRole">
+            <select class="form-input" id="genRole" onchange="autoFillFromRole(this.value)">
               <option value="">Select a role…</option>
             </select>
           </div>
@@ -354,6 +354,17 @@ tr:hover td{background:var(--gray-50)}
           <label class="form-label">Google Form Application Link <span style="color:#ef4444">*</span></label>
           <input type="url" class="form-input" id="rm_formLink" placeholder="https://forms.gle/...">
           <div class="form-hint">Candidates click "Apply Now" on the careers page which opens this link in a new tab.</div>
+        </div>
+        <div class="form-group-m full">
+          <label class="form-label">Certificate Template Image <span style="font-size:11px;color:var(--gray-400);font-weight:400">(Optional)</span></label>
+          <div class="form-hint" style="margin-bottom:8px">Upload a certificate template image to show candidates as a preview</div>
+          <div style="border:2px dashed var(--gray-200);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--gray-50);position:relative" id="certTplArea" onclick="document.getElementById('rm_certImg').click()">
+            <input type="file" id="rm_certImg" accept="image/*" style="display:none" onchange="handleCertTplImg(this)">
+            <div style="color:var(--purple);margin-bottom:6px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+            <div style="font-size:13px;color:var(--text2)">Click to upload certificate template<br><strong style="color:var(--purple)">PNG, JPG</strong> up to 5MB</div>
+            <div id="certTplName" style="font-size:13px;font-weight:600;color:var(--purple);margin-top:4px"></div>
+          </div>
+          <img id="certTplPreview" src="" alt="Certificate preview" style="display:none;width:100%;max-height:200px;object-fit:contain;border:1.5px solid var(--gray-200);border-radius:10px;margin-top:10px">
         </div>
       </div>
     </div>
@@ -498,6 +509,13 @@ function openRoleModal(id) {
   document.getElementById('rm_mode').value = r?.mode||'Remote';
   document.getElementById('rm_active').value = String(r?.active !== false);
   document.getElementById('rm_formLink').value = r?.formLink||'';
+  // Reset cert template image
+  document.getElementById('rm_certImg').value = '';
+  document.getElementById('certTplName').textContent = '';
+  document.getElementById('certTplArea').style.borderColor = '';
+  const prev = document.getElementById('certTplPreview');
+  if (r?.certTemplateImg) { prev.src = r.certTemplateImg; prev.style.display = 'block'; }
+  else { prev.src = ''; prev.style.display = 'none'; }
   document.getElementById('roleModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -776,6 +794,28 @@ function populateGenRoleSelect() {
   const cur = sel.value;
   sel.innerHTML = '<option value="">Select a role…</option>' +
     allRoles.map(r=>`<option value="${r._id}" ${r._id===cur?'selected':''}>${r.title}</option>`).join('');
+}
+
+function autoFillFromRole(roleId) {
+  if (!roleId) return;
+  const role = allRoles.find(r => r._id === roleId);
+  if (!role) return;
+  if (role.stipend) document.getElementById('genStipend').value = role.stipend;
+  if (role.duration) document.getElementById('genDuration').value = role.duration;
+  if (role.mode) document.getElementById('genMode').value = role.mode;
+}
+
+function handleCertTplImg(input) {
+  if (!input.files[0]) return;
+  document.getElementById('certTplName').textContent = '+ ' + input.files[0].name;
+  document.getElementById('certTplArea').style.borderColor = 'var(--purple)';
+  const reader = new FileReader();
+  reader.onload = e => {
+    const prev = document.getElementById('certTplPreview');
+    prev.src = e.target.result;
+    prev.style.display = 'block';
+  };
+  reader.readAsDataURL(input.files[0]);
 }
 
 async function generateJoiningId() {
