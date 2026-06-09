@@ -238,6 +238,97 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .spin{display:inline-block;width:16px;height:16px;border:2px solid #DDDDE5;border-top-color:#7C3AED;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .grid-loading{grid-column:1/-1;padding:24px;text-align:center;color:#9898A8;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  html,body{overflow:auto;}
+  .app{flex-direction:column;height:auto;min-height:100vh;}
+  .main{height:auto;overflow:visible;}
+
+  /* topbar */
+  .topbar{padding:0 14px;height:52px;}
+  .topbar-help{display:none;}
+  .topbar-title{font-size:13px;}
+  .btn-draft{padding:6px 12px;font-size:11px;}
+  .btn-start{padding:6px 12px;font-size:11px;}
+
+  /* type bar horizontal scroll */
+  .type-bar{padding:8px 14px;overflow-x:auto;}
+  .type-bar::-webkit-scrollbar{display:none;}
+  .type-tabs{flex-wrap:nowrap;width:max-content;}
+
+  /* builder body stacks vertically */
+  .builder-body{flex-direction:column;overflow:visible;}
+  .builder-scroll{overflow:visible;}
+  .builder-cols{
+    display:flex;
+    flex-direction:column;
+    min-height:unset;
+  }
+
+  /* preview col goes on TOP, full width, not sticky */
+  .preview-col{
+    position:static;
+    height:auto;
+    border-right:none;
+    border-bottom:1.5px solid #EBEBF0;
+    padding:16px 14px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  /* phone mockup centered, smaller */
+  .phone{max-width:200px;}
+
+  /* selected card below phone */
+  .sel-card{order:2;}
+  .phone-wrap{order:1;}
+  .preview-label{order:0;}
+
+  /* steps col full width */
+  .steps-col{padding:14px 14px 80px;}
+
+  /* post grid: 3 cols × 100px each */
+  .post-grid{
+    grid-template-columns:repeat(3,100px);
+    gap:6px;
+    justify-content:start;
+  }
+  .media-item{
+    width:100px;
+    height:100px;
+    aspect-ratio:unset;
+  }
+
+  /* media tabs scroll */
+  .media-tabs{
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    padding-bottom:4px;
+  }
+  .media-tabs::-webkit-scrollbar{display:none;}
+  .media-tab{white-space:nowrap;}
+
+  /* step cards */
+  .step-head{padding:12px 14px;gap:10px;}
+  .step-body{padding:0 14px 14px;}
+  .step-title{font-size:12px;}
+  .step-subtitle{font-size:10px;}
+
+  /* kw input row stacks */
+  .kw-input-row{flex-direction:row;}
+  .kw-input{font-size:12px;}
+
+  /* dm textarea */
+  .dm-textarea{font-size:12px;}
+
+  /* apply all btn */
+  .apply-all-btn{font-size:12px;padding:9px;}
+
+  /* toast above bottom */
+  .toast{bottom:16px;font-size:12px;}
+}
 </style>
 </head>
 <body>
