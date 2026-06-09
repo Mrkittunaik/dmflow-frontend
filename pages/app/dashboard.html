@@ -280,25 +280,37 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
       automations.slice(0, 5).forEach(auto => {
         const card = document.createElement('div');
         card.className = 'auto-card';
-        // thumbnail from mediaUrl or null
         const thumb = auto.mediaUrl || auto.thumbnailUrl || '';
+        const fallbackIcon = (ICONS[auto.type]||ICONS.keyword_dm).replace(/'/g,"&#39;").replace(/"/g,'&quot;');
         const thumbHtml = thumb
-          ? `<div class="auto-card-icon" style="padding:0;overflow:hidden;"><img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.parentNode.innerHTML='${(ICONS[auto.type]||ICONS.keyword_dm).replace(/'/g,'&#39;')}'"></div>`
+          ? `<div class="auto-card-icon" style="padding:0;overflow:hidden;border:2px solid #E2E2EA;"><img src="${thumb}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none';this.parentNode.innerHTML='<div style=padding:6px>${fallbackIcon}</div>';"></div>`
           : `<div class="auto-card-icon">${ICONS[auto.type] || ICONS.keyword_dm}</div>`;
         const crEnabled = auto.actions?.commentReply?.enabled || auto.commentReply?.enabled;
+        // Keywords display
+        const kws = (auto.trigger && auto.trigger.keywords) ? auto.trigger.keywords : (auto.keywords || []);
+        const allComments = (auto.trigger && auto.trigger.allComments) || auto.allComments;
+        let kwHtml = '';
+        if (allComments) {
+          kwHtml = '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;background:#F0F0F5;border-radius:6px;padding:2px 7px;color:#5A5A6E;font-weight:600;">All comments</span>';
+        } else if (kws.length > 0) {
+          const shown = kws.slice(0,3);
+          kwHtml = shown.map(k => `<span style="display:inline-flex;font-size:10px;background:#F4EEFF;border-radius:6px;padding:2px 7px;color:#7C3AED;font-weight:700;">${k}</span>`).join('');
+          if (kws.length > 3) kwHtml += `<span style="font-size:10px;color:#9898A8;font-weight:600;">+${kws.length-3}</span>`;
+        }
         card.innerHTML = `
           <div class="auto-status-dot ${auto.active ? 'live' : ''}"></div>
           ${thumbHtml}
-          <div class="auto-card-info">
+          <div class="auto-card-info" style="flex:1;min-width:0;">
             <div class="auto-card-name">${auto.name}</div>
             <div class="auto-card-type">${LABELS[auto.type] || auto.type} · ${auto.active ? '<span style="color:#22C55E;font-weight:700;">Live</span>' : '<span style="color:#9898A8;">Paused</span>'}</div>
+            ${kwHtml ? `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;align-items:center;">${kwHtml}</div>` : ''}
             ${crEnabled ? '<div style="font-size:10px;color:#7C3AED;font-weight:600;margin-top:2px;">💬 Comment reply ON</div>' : ''}
           </div>
           <div class="auto-card-stats">
             <div class="auto-stat"><div class="auto-stat-val">${auto.stats?.triggered || 0}</div><div class="auto-stat-lbl">Triggered</div></div>
             <div class="auto-stat"><div class="auto-stat-val">${auto.stats?.dmsSent || 0}</div><div class="auto-stat-lbl">DMs sent</div></div>
           </div>
-          <div class="toggle ${auto.active ? 'on' : ''}" onclick="toggleAuto(this,'${auto._id}')"></div>
+          <div class="toggle ${auto.active ? 'on' : ''}" onclick="toggleAuto(this,'${auto._id}')" title="${auto.active ? 'Click to pause' : 'Click to activate'}"></div>
           <div class="auto-card-actions">
             <button class="auto-action-btn" title="Edit" onclick="goTo('pages/app/automation-builder.html?edit=${auto._id}','automation-builder')">
               <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -312,7 +324,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
     }
   }
 
-  async function toggleAuto(toggle, id) {
+    async function toggleAuto(toggle, id) {
     toggle.classList.toggle('on');
     const isOn = toggle.classList.contains('on');
     const dot = toggle.closest('.auto-card').querySelector('.auto-status-dot');
