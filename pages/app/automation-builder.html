@@ -721,7 +721,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
               <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Selected Post</div>
               <div style="position:relative;border-radius:12px;overflow:hidden;border:2px solid #7C3AED33;background:#F4F4F8;">
                 <img id="previewPostImg" src="" alt="" style="width:100%;display:block;aspect-ratio:1;object-fit:cover;">
-                <div id="previewPostReelBadge" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;">
+                <div id="previewPostReelBadge" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.25);align-items:center;justify-content:center;">
                   <div style="background:rgba(0,0,0,.5);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></div>
                 </div>
                 <!-- Simulated comment on post -->
@@ -1025,9 +1025,9 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
             <div class="config-section-head" style="cursor:pointer;" onclick="toggleSection(this)">
               <div class="config-step-num" id="stepNumPost">1</div>
               <div class="config-section-title">Select Post or Reel</div>
-              <button class="section-collapse-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="section-collapse-btn open"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
-            <div class="section-body collapsed">
+            <div class="section-body">
             <p style="font-size:12px;color:#9898A8;margin-bottom:10px;">Choose which content triggers this automation when someone comments.</p>
             <div class="media-tab-bar">
               <button class="media-tab active" onclick="slSetMediaTab(this,'posts')">Posts</button>
@@ -2313,10 +2313,11 @@ function _buildPayload(active) {
   // Detect active type
   const activePanel = document.querySelector('.auto-config-panel.active');
   const type = activePanel ? activePanel.id.replace('panel-','') : 'send-link';
-  // Grab selected media ID and thumbnail from whichever grid is visible
-  const selectedMediaEl = document.querySelector('.post-grid-item.selected, .reel-grid-item.selected');
+  // Grab selected media only from the send-link panel grids (slPostGrid / slReelGrid)
+  const selectedMediaEl = document.querySelector('#slPostGrid .post-grid-item.selected, #slReelGrid .reel-grid-item.selected');
   const mediaId = selectedMediaEl ? (selectedMediaEl.dataset.mediaId || '') : '';
-  const mediaUrl = selectedMediaEl ? (selectedMediaEl.querySelector('img')?.src || '') : '';
+  const mediaUrl = selectedMediaEl ? (selectedMediaEl.dataset.imgSrc || selectedMediaEl.querySelector('img')?.src || '') : '';
+  const mediaType = selectedMediaEl ? (selectedMediaEl.classList.contains('reel-grid-item') ? 'REEL' : 'IMAGE') : '';
 
   if (type === 'send-link') {
     const keywords = Array.from(document.querySelectorAll('#keywordsList .keyword-tag'))
@@ -2326,7 +2327,7 @@ function _buildPayload(active) {
     const dmText = document.querySelector('#panel-send-link .dm-textarea')?.value || '';
     const linkTitle = document.getElementById('linkCardTitleText')?.textContent || '';
     const linkUrl = document.getElementById('linkCardUrlText')?.textContent || '';
-    return { name: title, active, type: 'keyword_dm', mediaId, mediaUrl,
+    return { name: title, active, type: 'keyword_dm', mediaId, mediaUrl, mediaType,
       trigger: { onComment: true, onStoryReply: false, onDmKeyword: false, keywords },
       actions: { commentReply: { enabled: !!commentReplyEnabled, text: commentReplyText }, dm: { enabled: true, text: dmText, linkTitle, linkUrl } } };
   } else if (type === 'auto-reply-comment') {
@@ -2977,8 +2978,10 @@ function selectLiveMode(mode) {
 function slSetMediaTab(btn, tab) {
   btn.closest('.media-tab-bar').querySelectorAll('.media-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const pgWrap = document.getElementById('slPostGrid') ? document.getElementById('slPostGrid').closest('.post-grid-scroll') : null;
-  const rgWrap = document.getElementById('slReelGrid') ? document.getElementById('slReelGrid').closest('.post-grid-scroll') : null;
+  const pg = document.getElementById('slPostGrid');
+  const rg = document.getElementById('slReelGrid');
+  const pgWrap = pg ? pg.closest('.post-grid-scroll') : null;
+  const rgWrap = document.getElementById('slReelGridWrap');
   if (tab === 'reels') {
     if(pgWrap) pgWrap.style.display='none';
     if(rgWrap) rgWrap.style.display='';
@@ -2989,15 +2992,15 @@ function slSetMediaTab(btn, tab) {
     if(pgWrap) pgWrap.style.display='';
     if(rgWrap) rgWrap.style.display='';
   }
-  slClearSelection();
 }
 function slSelectPost(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#slPostGrid .post-grid-item, #slReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   el.dataset.mediaId = mediaId || '';
+  el.dataset.imgSrc = imgSrc || '';
+  el.dataset.mediaName = name || '';
   _slShowBanner(name, imgSrc);
   _updateLeftPreview(name, imgSrc, false);
-  // Smart keyword suggestions based on post caption
   if (window._updateSmartKeywordSuggestions) _updateSmartKeywordSuggestions(el.dataset.caption || name || '');
   checkCompletion();
 }
@@ -3005,6 +3008,8 @@ function slSelectReel(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#slPostGrid .post-grid-item, #slReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   el.dataset.mediaId = mediaId || '';
+  el.dataset.imgSrc = imgSrc || '';
+  el.dataset.mediaName = name || '';
   _slShowBanner(name, imgSrc);
   _updateLeftPreview(name, imgSrc, true);
   if (window._updateSmartKeywordSuggestions) _updateSmartKeywordSuggestions(el.dataset.caption || name || '');
@@ -3018,17 +3023,14 @@ function _updateLeftPreview(name, imgSrc, isReel) {
   const reelBadge = document.getElementById('previewPostReelBadge');
   if(wrap) wrap.style.display = '';
   if(noPost) noPost.style.display = 'none';
-  if(img) img.src = imgSrc || '';
-  if(nameEl) nameEl.textContent = isReel ? '🎬 ' + name : name;
+  if(img && imgSrc) img.src = imgSrc;
+  if(nameEl) nameEl.textContent = isReel ? 'Reel' : 'Post';
   // Show/hide reel play overlay
   if(reelBadge) reelBadge.style.display = isReel ? 'flex' : 'none';
   // Sync keyword to preview comment
   const kw = document.querySelector('#keywordsList .keyword-tag');
   const kwEl = document.getElementById('previewPostKw');
   if(kwEl && kw) kwEl.textContent = kw.textContent.replace('×','').trim();
-  // Update the "Selected Post" label in preview
-  const labelEl = wrap ? wrap.previousElementSibling : null;
-  if(labelEl && labelEl.style) labelEl.textContent = isReel ? 'Selected Reel' : 'Selected Post';
 }
 function _slShowBanner(name, imgSrc) {
   const b = document.getElementById('slSelectedBanner');
@@ -3065,57 +3067,46 @@ function arcSetMediaTab(btn, tab) {
   btn.classList.add('active');
   const pg = document.getElementById('arcPostGrid');
   const rg = document.getElementById('arcReelGrid');
-  const pgWrap = pg ? pg.parentElement : null;
-  const rgWrap = rg ? rg.parentElement : null;
-  if (tab === 'reels') {
-    if(pgWrap && pgWrap !== pg) pgWrap.style.display='none'; else if(pg) pg.style.display='none';
-    if(rgWrap && rgWrap !== rg) rgWrap.style.display=''; else if(rg) rg.style.display='';
-    if(pg) pg.style.display='none'; if(rg) rg.style.display='';
-  } else if (tab === 'posts') {
-    if(pg) pg.style.display=''; if(rg) rg.style.display='none';
-  } else {
-    if(pg) pg.style.display=''; if(rg) rg.style.display='';
-  }
+  if (tab === 'reels') { if(pg) pg.style.display='none'; if(rg) rg.style.display=''; }
+  else if (tab === 'posts') { if(pg) pg.style.display=''; if(rg) rg.style.display='none'; }
+  else { if(pg) pg.style.display=''; if(rg) rg.style.display=''; }
   arcClearSelection();
 }
 function arcSelectPost(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#arcPostGrid .post-grid-item, #arcReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   el.dataset.mediaId = mediaId || '';
-  _arcShowBanner(name, imgSrc, false);
+  _arcShowBanner(name, imgSrc);
   const info = document.getElementById('postSelectedInfo-arc');
   if(info) info.textContent = name + ' selected ✓';
-  _updateArcLeftPreview(name, imgSrc, false);
+  _updateArcLeftPreview(name, imgSrc);
 }
 function arcSelectReel(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#arcPostGrid .post-grid-item, #arcReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   el.dataset.mediaId = mediaId || '';
-  _arcShowBanner(name, imgSrc, true);
+  _arcShowBanner(name, imgSrc);
   const info = document.getElementById('postSelectedInfo-arc');
-  if(info) info.textContent = '🎬 ' + name + ' selected ✓';
-  _updateArcLeftPreview(name, imgSrc, true);
+  if(info) info.textContent = name + ' selected ✓';
+  _updateArcLeftPreview(name, imgSrc);
 }
-function _updateArcLeftPreview(name, imgSrc, isReel) {
+function _updateArcLeftPreview(name, imgSrc) {
   // Update the ARC comment thread preview image
   const arcImgBox = document.querySelector('#preview-arc .arc-post-img');
   if(arcImgBox) {
     arcImgBox.style.background = 'none';
-    const playOverlay = isReel ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;"><div style="background:rgba(0,0,0,.5);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></div></div>` : '';
-    arcImgBox.innerHTML = `<div style="position:relative;width:100%;height:100%;"><img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="">${playOverlay}</div>`;
+    arcImgBox.innerHTML = '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="">';
   }
   const arcTitle = document.querySelector('#preview-arc .arc-post-title');
   if(arcTitle) arcTitle.textContent = name;
 }
-function _arcShowBanner(name, imgSrc, isReel) {
+function _arcShowBanner(name, imgSrc) {
   const b = document.getElementById('arcSelectedBanner');
   const t = document.getElementById('arcSelectedThumb');
   const n = document.getElementById('arcSelectedName');
-  const sub = b ? b.querySelector('.selected-reel-sub') : null;
   if(b) b.classList.add('show');
   if(t && imgSrc) t.src = imgSrc;
-  if(n) n.textContent = (isReel ? '🎬 ' : '') + name;
-  if(sub) sub.textContent = isReel ? 'Auto-reply applies to this reel' : 'Auto-reply applies to this post';
+  if(n) n.textContent = name;
 }
 function arcClearSelection() {
   document.querySelectorAll('#arcPostGrid .post-grid-item, #arcReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
@@ -3435,16 +3426,16 @@ function pldSetMediaTab(btn, tab) {
   btn.closest('.media-tab-bar').querySelectorAll('.media-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const pg = document.getElementById('pldPostGrid');
+  const pgWrap = pg ? pg.closest('.post-grid-scroll') : null;
   const rgWrap = document.getElementById('pldReelGridWrap');
-  const pgScroll = pg ? pg.closest('.post-grid-scroll') : null;
   if (tab === 'reels') {
-    if(pgScroll) pgScroll.style.display='none'; else if(pg) pg.style.display='none';
+    if(pgWrap) pgWrap.style.display='none';
     if(rgWrap) rgWrap.style.display='';
   } else if (tab === 'posts') {
-    if(pgScroll) pgScroll.style.display=''; else if(pg) pg.style.display='';
+    if(pgWrap) pgWrap.style.display='';
     if(rgWrap) rgWrap.style.display='none';
   } else {
-    if(pgScroll) pgScroll.style.display=''; else if(pg) pg.style.display='';
+    if(pgWrap) pgWrap.style.display='';
     if(rgWrap) rgWrap.style.display='';
   }
   pldClearSelection();
