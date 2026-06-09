@@ -49,20 +49,20 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .builder-scroll::-webkit-scrollbar-thumb{background:#DDDDE5;border-radius:2px;}
 
 /* ── TWO-COLUMN LAYOUT ── */
-.builder-cols{display:grid;grid-template-columns:296px 1fr;min-height:100%;gap:0;}
+.builder-cols{display:grid;grid-template-columns:280px 1fr;min-height:100%;gap:0;}
 
 /* ── LEFT PREVIEW PANEL ── */
-.preview-col{background:#F0F0F6;border-right:1.5px solid #EBEBF0;padding:20px 16px;display:flex;flex-direction:column;gap:16px;position:sticky;top:0;height:calc(100vh - 112px);overflow-y:auto;}
+.preview-col{background:#F0F0F6;border-right:1.5px solid #EBEBF0;padding:20px 16px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:calc(100vh - 112px);overflow-y:auto;flex-shrink:0;width:280px;min-width:280px;align-items:center;}
 .preview-col::-webkit-scrollbar{display:none;}
 .preview-label{font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.6px;}
 
 /* Selected post/reel preview card */
-.sel-card{background:#fff;border-radius:12px;border:1.5px solid #DDDDE5;overflow:hidden;}
-.sel-card-empty{padding:20px;text-align:center;}
+.sel-card{background:#fff;border-radius:12px;border:1.5px solid #DDDDE5;overflow:hidden;flex-shrink:0;display:none;width:100%;}
+.sel-card-empty{padding:20px;text-align:center;display:none!important;}
 .sel-card-empty svg{color:#C4C4D0;margin-bottom:8px;}
 .sel-card-empty-title{font-size:12px;font-weight:700;color:#9898A8;}
 .sel-card-empty-sub{font-size:11px;color:#C4C4D0;margin-top:2px;}
-.sel-card-media{position:relative;aspect-ratio:1;background:#F4F4F8;}
+.sel-card-media{position:relative;aspect-ratio:1;background:#F4F4F8;max-height:140px;overflow:hidden;}
 .sel-card-media img{width:100%;height:100%;object-fit:cover;display:block;}
 .sel-card-media-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 .sel-card-type-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;letter-spacing:.03em;}
@@ -80,8 +80,8 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .sel-card-comment-kw{opacity:.9;color:#FDE68A;}
 
 /* Phone mockup */
-.phone-wrap{flex-shrink:0;}
-.phone{background:#0A0A0F;border-radius:28px;padding:10px;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;max-width:210px;margin:0 auto;}
+.phone-wrap{flex-shrink:0;width:100%;display:flex;justify-content:center;}
+.phone{background:#0A0A0F;border-radius:26px;padding:9px;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;width:200px;flex-shrink:0;}
 .phone-screen{background:#fff;border-radius:20px;overflow:hidden;}
 .phone-statusbar{background:#0A0A0F;display:flex;justify-content:space-between;align-items:center;padding:6px 14px 4px;color:#fff;font-size:9px;font-weight:700;}
 .phone-statusbar-time{font-size:10px;font-weight:800;}
@@ -99,7 +99,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .phone-link-url{font-size:9px;color:#9898A8;margin-top:1px;}
 
 /* ── RIGHT STEPS COLUMN ── */
-.steps-col{padding:20px 24px;}
+.steps-col{padding:20px 24px;flex:1;min-width:0;overflow-x:hidden;}
 
 /* Step card */
 .step-card{background:#fff;border-radius:14px;border:1.5px solid #EBEBF0;margin-bottom:10px;overflow:hidden;transition:border-color .15s;}
@@ -137,8 +137,8 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .media-tab{padding:5px 14px;background:#fff;border:1.5px solid #DDDDE5;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;transition:all .15s;}
 .media-tab.active{background:#0A0A0F;color:#fff;border-color:#0A0A0F;}
 
-.post-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
-.media-item{position:relative;aspect-ratio:1;border-radius:9px;overflow:hidden;cursor:pointer;border:2px solid transparent;background:#F4F4F8;transition:all .15s;}
+.post-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px;width:100%;}
+.media-item{position:relative;width:100%;aspect-ratio:1/1;height:auto;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;background:#F4F4F8;transition:all .15s;}
 .media-item:hover{border-color:#C4B5FD;transform:scale(1.02);}
 .media-item.selected{border-color:#7C3AED;box-shadow:0 0 0 3px rgba(124,58,237,.18);}
 .media-item img{width:100%;height:100%;object-fit:cover;display:block;}
@@ -240,94 +240,83 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .grid-loading{grid-column:1/-1;padding:24px;text-align:center;color:#9898A8;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:8px;}
 
 /* ── MOBILE ── */
-@media(max-width:768px){
-  html,body{overflow:auto;}
+@media(max-width:900px){
+  html,body{overflow-x:hidden;overflow-y:auto;height:auto;}
   .app{flex-direction:column;height:auto;min-height:100vh;}
-  .main{height:auto;overflow:visible;}
+  .main{flex:none;height:auto;overflow:visible;}
 
-  /* topbar */
-  .topbar{padding:0 14px;height:52px;}
+  /* topbar sticky */
+  .topbar{padding:0 14px;height:52px;position:sticky;top:0;z-index:100;background:#fff;box-shadow:0 1px 0 #EBEBF0;}
   .topbar-help{display:none;}
   .topbar-title{font-size:13px;}
-  .btn-draft{padding:6px 12px;font-size:11px;}
-  .btn-start{padding:6px 12px;font-size:11px;}
+  .btn-draft{padding:6px 12px;font-size:11px;border-radius:7px;}
+  .btn-start{padding:6px 12px;font-size:11px;gap:4px;border-radius:7px;}
 
-  /* type bar horizontal scroll */
-  .type-bar{padding:8px 14px;overflow-x:auto;}
+  /* type bar sticky scrollable */
+  .type-bar{padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:52px;z-index:99;background:#FAFAFA;border-bottom:1.5px solid #EBEBF0;}
   .type-bar::-webkit-scrollbar{display:none;}
-  .type-tabs{flex-wrap:nowrap;width:max-content;}
+  .type-tabs{flex-wrap:nowrap;width:max-content;gap:5px;}
+  .type-tab{padding:5px 11px;font-size:11px;}
 
-  /* builder body stacks vertically */
-  .builder-body{flex-direction:column;overflow:visible;}
-  .builder-scroll{overflow:visible;}
-  .builder-cols{
-    display:flex;
-    flex-direction:column;
-    min-height:unset;
-  }
+  /* builder fully scrollable */
+  .builder-body{flex-direction:column;overflow:visible;height:auto;}
+  .builder-scroll{overflow:visible;height:auto;}
+  .builder-cols{display:flex!important;flex-direction:column!important;min-height:unset;height:auto;}
 
-  /* preview col goes on TOP, full width, not sticky */
+  /* ── PREVIEW SECTION on mobile: stacks, phone centered ── */
   .preview-col{
-    position:static;
-    height:auto;
-    border-right:none;
-    border-bottom:1.5px solid #EBEBF0;
-    padding:16px 14px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+    position:static!important;height:auto!important;width:100%!important;flex-shrink:0;
+    border-right:none;border-bottom:1.5px solid #EBEBF0;
+    padding:14px 16px;
+    display:flex!important;flex-direction:column!important;
+    align-items:center;gap:10px;background:#F0F0F6;
   }
+  .preview-label{display:none;}
+  /* sel-card: full width, compact when shown */
+  .sel-card{width:100%!important;max-width:320px;border-radius:10px;}
+  .sel-card-media{max-height:120px!important;}
+  /* phone centered, compact */
+  .phone-wrap{width:100%;display:flex;justify-content:center;flex:none;}
+  .phone{width:190px;border-radius:22px;padding:8px;}
+  .phone-screen{border-radius:16px;}
+  .phone-dm-body{min-height:70px;padding:8px;}
+  .phone-bubble-in{font-size:9px;padding:5px 8px;}
+  .phone-bubble-out{font-size:9px;padding:5px 8px;}
+  .phone-link-card{padding:6px;}
+  .phone-link-icon{width:22px;height:22px;}
+  .phone-link-title{font-size:9px;}
+  .phone-link-url{font-size:8px;}
 
-  /* phone mockup centered, smaller */
-  .phone{max-width:200px;}
+  /* steps full width */
+  .steps-col{padding:14px 14px 90px;width:100%;}
 
-  /* selected card below phone */
-  .sel-card{order:2;}
-  .phone-wrap{order:1;}
-  .preview-label{order:0;}
+  /* ── POST GRID: 4 cols on mobile ── */
+  .post-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;width:100%!important;}
+  .media-item{width:100%!important;height:auto!important;aspect-ratio:1/1!important;border-radius:8px;}
+  .media-badge{font-size:7.5px;padding:2px 5px;}
+  .media-caption{font-size:7.5px;}
 
-  /* steps col full width */
-  .steps-col{padding:14px 14px 80px;}
-
-  /* post grid: 3 cols × 100px each */
-  .post-grid{
-    grid-template-columns:repeat(3,100px);
-    gap:6px;
-    justify-content:start;
-  }
-  .media-item{
-    width:100px;
-    height:100px;
-    aspect-ratio:unset;
-  }
-
-  /* media tabs scroll */
-  .media-tabs{
-    overflow-x:auto;
-    flex-wrap:nowrap;
-    padding-bottom:4px;
-  }
+  /* media tabs */
+  .media-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;gap:5px;margin-bottom:10px;}
   .media-tabs::-webkit-scrollbar{display:none;}
-  .media-tab{white-space:nowrap;}
+  .media-tab{white-space:nowrap;font-size:11px;padding:5px 12px;}
 
   /* step cards */
+  .step-card{border-radius:12px;margin-bottom:8px;}
   .step-head{padding:12px 14px;gap:10px;}
   .step-body{padding:0 14px 14px;}
-  .step-title{font-size:12px;}
-  .step-subtitle{font-size:10px;}
+  .step-title{font-size:12.5px;}
+  .step-subtitle{font-size:10.5px;}
+  .step-num{width:24px;height:24px;font-size:10px;}
 
-  /* kw input row stacks */
-  .kw-input-row{flex-direction:row;}
-  .kw-input{font-size:12px;}
-
-  /* dm textarea */
-  .dm-textarea{font-size:12px;}
-
-  /* apply all btn */
+  /* inputs */
+  .kw-input{font-size:13px;}
+  .dm-textarea{font-size:13px;}
   .apply-all-btn{font-size:12px;padding:9px;}
+  .sel-banner{margin-top:6px;}
 
-  /* toast above bottom */
-  .toast{bottom:16px;font-size:12px;}
+  .toast{bottom:80px;font-size:12px;padding:9px 18px;}
+  .pro-card{padding:24px 18px;margin:12px;}
 }
 </style>
 </head>
@@ -733,66 +722,109 @@ document.addEventListener('DOMContentLoaded', async () => {
 ═══════════════════════════════════════ */
 let _mediaCache = null;
 
+/* ── DEMO PLACEHOLDER MEDIA (shown when no IG account connected) ── */
+const DEMO_POSTS = [
+  {id:'demo1',caption:'#trending #viral',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo2',caption:'Hi 😊',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo3',caption:'#god',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo4',caption:'New post',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo5',caption:'Check this',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo6',caption:'My life',media_url:'',media_type:'IMAGE',_demo:true},
+];
+const DEMO_REELS = [
+  {id:'demoreel1',caption:'Reel 1',media_url:'',media_type:'REEL',_demo:true},
+  {id:'demoreel2',caption:'Reel 2',media_url:'',media_type:'REEL',_demo:true},
+  {id:'demoreel3',caption:'Reel 3',media_url:'',media_type:'REEL',_demo:true},
+];
+
 async function loadMedia() {
   if (_mediaCache) { renderGrids(_mediaCache); return; }
-  setGridLoading(true);
+  // Show demo immediately so grid is never blank
+  renderGrids({ posts: DEMO_POSTS, reels: DEMO_REELS }, null, true);
+  if (!window.API || !API.getToken()) return; // stay on demo
   try {
-    if (!window.API || !API.getToken()) {
-      renderGrids({ posts: [], reels: [] }, 'not_connected');
-      return;
-    }
     const res = await API.getIgMedia('all');
     const all = Array.isArray(res) ? res : (res.media || res.data || []);
     const isReel = m => ['VIDEO','REELS','REEL'].includes((m.media_type||m.type||'').toUpperCase());
     const posts = all.filter(m => !isReel(m));
     const reels = all.filter(m => isReel(m));
-    _mediaCache = { posts, reels };
-    renderGrids(_mediaCache);
+    if (posts.length || reels.length) {
+      _mediaCache = { posts, reels };
+      renderGrids(_mediaCache);
+    }
+    // else keep demo visible
   } catch(e) {
+    // keep demo, show reconnect banner if token expired
     const msg = e.message || '';
-    const errType = msg.includes('expired') ? 'expired' : msg.includes('connect') ? 'not_connected' : 'error';
-    renderGrids({ posts: [], reels: [] }, errType);
-  }
-  setGridLoading(false);
-}
-
-function setGridLoading(on) {
-  const msg = on ? '<div class="grid-loading"><div class="spin"></div>Loading…</div>' : '';
-  if (on) {
-    document.getElementById('postGrid').innerHTML = msg;
-    document.getElementById('reelGrid').innerHTML = msg;
+    if (msg.includes('expired')) {
+      document.getElementById('postGrid').insertAdjacentHTML('beforebegin',
+        `<div style="background:#FEF3C7;border-radius:8px;padding:8px 12px;font-size:11px;color:#92400E;margin-bottom:8px;">
+          ⚠️ Instagram session expired.
+          <a href="#" onclick="event.preventDefault();window.top&&window.top.navigate&&window.top.navigate('pages/onboarding/connect.html','connect')" style="color:#7C3AED;font-weight:700;">Reconnect →</a>
+        </div>`);
+    }
   }
 }
 
-function renderGrids({ posts, reels }, err) {
-  document.getElementById('postGrid').innerHTML = posts.length
-    ? posts.map(m => mediaItem(m, false)).join('')
-    : `<div class="media-empty-msg">${errMsg(err, 'posts')}</div>`;
+function setGridLoading(on) {} // no-op, demo shows instantly now
 
-  document.getElementById('reelGrid').innerHTML = reels.length
-    ? reels.map(m => mediaItem(m, true)).join('')
-    : `<div class="media-empty-msg">${errMsg(err, 'reels')}</div>`;
+function renderGrids({ posts, reels }, err, isDemo) {
+  const demoNotice = isDemo
+    ? `<div style="grid-column:1/-1;background:#F0F4FF;border-radius:8px;padding:7px 10px;font-size:11px;color:#3B5BDB;margin-bottom:6px;font-weight:600;display:flex;align-items:center;gap:7px;">
+<svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="1" fill="currentColor"/></svg>
+        Connect Instagram to see your real posts
+       </div>` : '';
+
+  document.getElementById('postGrid').innerHTML = demoNotice + (posts.length
+    ? posts.map(m => mediaItem(m, false, isDemo)).join('')
+    : `<div class="media-empty-msg">No posts found</div>`);
+
+  document.getElementById('reelGrid').innerHTML = demoNotice + (reels.length
+    ? reels.map(m => mediaItem(m, true, isDemo)).join('')
+    : `<div class="media-empty-msg">No reels found</div>`);
 }
 
-function errMsg(err, type) {
-  if (!err || err === 'not_connected') return `Connect Instagram to see your ${type}`;
-  if (err === 'expired') return `⚠️ Instagram session expired. <a href="#" onclick="event.preventDefault();window.top&&window.top.navigate&&window.top.navigate('pages/onboarding/connect.html','connect')" style="color:#7C3AED;font-weight:600;">Reconnect</a>`;
-  return `⚠️ Could not load ${type}. <a href="#" onclick="event.preventDefault();_mediaCache=null;loadMedia()" style="color:#7C3AED;">Retry</a>`;
-}
+const DEMO_GRADS = [
+  'linear-gradient(135deg,#F97316,#EF4444)',
+  'linear-gradient(135deg,#8B5CF6,#3B82F6)',
+  'linear-gradient(135deg,#10B981,#06B6D4)',
+  'linear-gradient(135deg,#F59E0B,#EF4444)',
+  'linear-gradient(135deg,#EC4899,#8B5CF6)',
+  'linear-gradient(135deg,#14B8A6,#22C55E)',
+];
+let _demoGradIdx = 0;
 
-function mediaItem(m, isReel) {
-  const cap = (m.caption || (isReel ? 'Reel' : 'Post')).substring(0, 20);
+function mediaItem(m, isReel, isDemo) {
+  const cap = (m.caption || (isReel ? 'Reel' : 'Post')).substring(0, 22);
   const fullCap = (m.caption || '').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
   const img = (m.thumbnail_url || m.media_url || '').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
   const id = (m.id || m._id || '').toString().replace(/'/g,'&#39;');
   const capEsc = cap.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
   const fn = isReel ? 'selectReel' : 'selectPost';
+  const grad = DEMO_GRADS[_demoGradIdx++ % DEMO_GRADS.length];
+  const bgStyle = isDemo ? `background:${grad};` : '';
+
+  // Badge: POST icon for posts, REEL film icon for reels
+  const badge = isReel
+    ? `<span class="media-badge" style="display:flex;align-items:center;gap:3px;">
+        <svg width="9" height="9" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2" stroke="#fff" stroke-width="2"/><path d="M7 6V4M12 6V4M17 6V4M7 20v-2M12 20v-2M17 20v-2" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        REEL</span>`
+    : `<span class="media-badge" style="display:flex;align-items:center;gap:3px;">
+        <svg width="9" height="9" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#fff" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#fff"/><polyline points="21 15 16 10 5 21" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        POST</span>`;
+
+  // Play icon only on reels
+  const playIcon = isReel
+    ? `<div class="media-reel-play"><div class="media-reel-circle">
+        <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21" fill="#fff"/></svg>
+       </div></div>` : '';
+
   return `<div class="media-item" data-id="${id}" data-img="${img}" data-cap="${fullCap}" onclick="${fn}(this,'${capEsc}','${img}','${id}')">
     ${img
       ? `<img src="${img}" alt="${capEsc}" onerror="this.style.display='none'">`
-      : `<div class="media-item-no-img">${capEsc}</div>`}
-    <span class="media-badge">${isReel ? 'REEL' : 'POST'}</span>
-    ${isReel ? `<div class="media-reel-play"><div class="media-reel-circle"><svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></div></div>` : ''}
+      : `<div style="width:100%;height:100%;${bgStyle}${isDemo?'opacity:.7;':''}"></div>`}
+    ${badge}
+    ${playIcon}
     <div class="media-caption">${capEsc}</div>
     <div class="media-check">
       <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#7C3AED"/><path d="M7 12l4 4 6-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -887,6 +919,7 @@ function applyAll() {
    LEFT PREVIEW CARD
 ═══════════════════════════════════════ */
 function showSelCard(name, imgSrc, isReel) {
+  document.getElementById('selCard').style.display = 'block';
   document.getElementById('selEmpty').style.display = 'none';
   document.getElementById('selFilled').style.display = 'block';
   const thumb = document.getElementById('selThumb');
@@ -906,7 +939,8 @@ function showSelCard(name, imgSrc, isReel) {
 }
 
 function hideSelCard() {
-  document.getElementById('selEmpty').style.display = 'block';
+  document.getElementById('selCard').style.display = 'none';
+  document.getElementById('selEmpty').style.display = 'none';
   document.getElementById('selFilled').style.display = 'none';
 }
 
