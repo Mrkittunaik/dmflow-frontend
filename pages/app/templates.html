@@ -886,5 +886,44 @@ function filterSearch(q) {
   });
 }
 </script>
+
+<!-- PRO LOCK OVERLAY -->
+<div id="proLockOverlay" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(248,248,252,.92);backdrop-filter:blur(8px);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px;">
+  <div style="background:#fff;border-radius:22px;padding:36px 32px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.12);">
+    <div style="width:56px;height:56px;background:linear-gradient(135deg,#7C3AED,#5B21B6);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="26" height="26" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div id="proLockTitle" style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#0A0A0F;margin-bottom:8px;">Pro Feature</div>
+    <div id="proLockSub" style="font-size:13px;color:#5A5A6E;margin-bottom:24px;line-height:1.5;">Upgrade to DMFlow Pro to access this feature and manage your contacts, templates, and keywords.</div>
+    <button onclick="triggerUpgrade()" style="width:100%;padding:13px;background:linear-gradient(135deg,#7C3AED,#5B21B6);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px;">✦ Upgrade to Pro</button>
+    <button onclick="goBack()" style="width:100%;padding:10px;background:none;border:1.5px solid #E2E2EA;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;">← Go Back</button>
+  </div>
+</div>
+<script>
+(function() {
+  const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+  const plan = (user && (user.plan || '')).toLowerCase();
+  if (!user || !plan || plan === 'free') {
+    const overlay = document.getElementById('proLockOverlay');
+    if (overlay) { overlay.style.display = 'flex'; }
+  }
+  window.triggerUpgrade = function() {
+    if (window.parent && window.parent !== window) {
+      try { window.parent.openUpgradeModal(); return; } catch(e) {}
+      window.parent.postMessage({ type: 'dmflow_upgrade' }, '*');
+    } else {
+      window.location.href = '../../app.html?upgrade=1';
+    }
+  };
+  window.goBack = function() {
+    if (window.parent && window.parent !== window && window.parent.navigate) {
+      window.parent.navigate('pages/app/dashboard.html', 'dashboard');
+    } else {
+      history.back();
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
