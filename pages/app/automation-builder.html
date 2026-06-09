@@ -619,6 +619,25 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .cr-chip{background:#F0F0F5;border-radius:10px;padding:8px 12px;font-size:11px;color:#0A0A0F;display:inline-block;max-width:100%;}
 .cr-mention{color:#7C3AED;font-weight:700;}
 .auto-type-btn.product-dm-btn.active{background:linear-gradient(135deg,#7C3AED,#6D28D9);border-color:#7C3AED;box-shadow:0 4px 14px rgba(124,58,237,.3);}
+.auto-type-btn.pro-locked-type{opacity:.75;border-style:dashed;}
+.auto-type-btn.pro-locked-type:hover{background:#F4EEFF;color:#7C3AED;border-color:#7C3AED;border-style:dashed;}
+
+/* ── PRO UPGRADE MODAL ── */
+#proUpgradeModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(10,10,15,.55);backdrop-filter:blur(4px);}
+#proUpgradeModal.open{display:flex;}
+.pro-modal-card{background:#fff;border-radius:20px;padding:32px 28px;max-width:400px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,.18);text-align:center;animation:modalPop .25s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes modalPop{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+.pro-modal-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:800;margin-bottom:16px;}
+.pro-modal-title{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#0A0A0F;margin-bottom:8px;}
+.pro-modal-sub{font-size:13px;color:#5A5A6E;margin-bottom:20px;line-height:1.5;}
+.pro-modal-features{background:#F8F8FC;border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:left;}
+.pro-modal-feature{display:flex;align-items:center;gap:8px;font-size:13px;color:#0A0A0F;padding:4px 0;}
+.pro-modal-feature svg{flex-shrink:0;color:#7C3AED;}
+.pro-modal-price{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;color:#0A0A0F;margin-bottom:4px;}
+.pro-modal-price span{font-size:14px;font-weight:500;color:#9898A8;}
+.pro-modal-btn{width:100%;padding:13px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .2s;margin-bottom:8px;}
+.pro-modal-btn:hover{opacity:.9;}
+.pro-modal-close{font-size:12px;color:#9898A8;cursor:pointer;background:none;border:none;font-family:inherit;}
 /* Preview: Product Link DM */
 #preview-pld .pld-flow-arrow{text-align:center;padding:5px 0;color:#7C3AED;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px;}
 #preview-pld .pld-comment-row{display:flex;align-items:center;gap:6px;background:#F8F8FC;border-radius:8px;padding:7px 10px;margin-bottom:6px;font-size:11px;}
@@ -659,6 +678,31 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
         <button class="auto-type-btn product-dm-btn" onclick="switchAutoType('product-link-dm')">
           <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Product Link DM
+        </button>
+        <button class="auto-type-btn pro-locked-type" onclick="showProUpgrade('Comment Auto-reply')">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10h8M8 14h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Comment Reply
+          <span style="font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;">PRO</span>
+        </button>
+        <button class="auto-type-btn pro-locked-type" onclick="showProUpgrade('Story Reaction DM')">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/></svg>
+          Story DM
+          <span style="font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;">PRO</span>
+        </button>
+        <button class="auto-type-btn pro-locked-type" onclick="showProUpgrade('Collect Email Flow')">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Collect Email
+          <span style="font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;">PRO</span>
+        </button>
+        <button class="auto-type-btn pro-locked-type" onclick="showProUpgrade('Discount Code DM')">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Discount Code
+          <span style="font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;">PRO</span>
+        </button>
+        <button class="auto-type-btn pro-locked-type" onclick="showProUpgrade('Live Reply AI')">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Live Reply AI
+          <span style="font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;">PRO</span>
         </button>
       </div>
     </div>
@@ -1222,7 +1266,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                 <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#7C3AED" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/></svg>
               </div>
               <div class="config-section-title">Advanced Settings</div>
-              <span style="font-size:10px;font-weight:700;background:#F4EEFF;color:#7C3AED;border-radius:6px;padding:2px 8px;margin-left:4px;">PRO</span>
+              <span class="pro-lock-section" style="font-size:10px;font-weight:700;background:#F4EEFF;color:#7C3AED;border-radius:6px;padding:2px 8px;margin-left:4px;">PRO</span>
               <button class="section-collapse-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
             <div class="section-body collapsed" id="advancedContent" style="display:flex;flex-direction:column;gap:10px;">
@@ -2415,9 +2459,10 @@ function _renderBuilderGrids({ posts, reels }, loadError) {
 
   function postItem(m, clickFn) {
     const cap = (m.caption || 'Post').substring(0, 18);
+    const fullCap = (m.caption || '');
     const img = m.thumbnail_url || m.media_url || '';
     const id  = m.id || m._id || '';
-    return `<div class="post-grid-item" onclick="${clickFn}(this,${JSON.stringify(cap)},${JSON.stringify(img)},${JSON.stringify(id)})">
+    return `<div class="post-grid-item" data-caption="${fullCap.replace(/"/g,'&quot;')}" onclick="${clickFn}(this,${JSON.stringify(cap)},${JSON.stringify(img)},${JSON.stringify(id)});this.dataset.caption=${JSON.stringify(fullCap)};">
       ${img ? `<img src="${img}" alt="${cap}">` : `<div style="width:100%;height:100%;background:#F4F4F8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9898A8;">${cap}</div>`}
       <span class="post-type-badge">POST</span>
       <div class="post-overlay-label">${cap}</div>
@@ -2427,9 +2472,10 @@ function _renderBuilderGrids({ posts, reels }, loadError) {
 
   function reelItem(m, clickFn) {
     const cap = (m.caption || 'Reel').substring(0, 18);
+    const fullCap = (m.caption || '');
     const img = m.thumbnail_url || m.media_url || '';
     const id  = m.id || m._id || '';
-    return `<div class="reel-grid-item" onclick="${clickFn}(this,${JSON.stringify(cap)},${JSON.stringify(img)},${JSON.stringify(id)})">
+    return `<div class="reel-grid-item" data-caption="${fullCap.replace(/"/g,'&quot;')}" onclick="${clickFn}(this,${JSON.stringify(cap)},${JSON.stringify(img)},${JSON.stringify(id)});this.dataset.caption=${JSON.stringify(fullCap)};">
       ${img ? `<img src="${img}" alt="${cap}">` : `<div style="width:100%;height:100%;background:#F4F4F8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9898A8;">${cap}</div>`}
       <div class="reel-play-icon"><svg width="8" height="8" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg><span class="reel-play-badge">REEL</span></div>
       <div class="reel-name-label">${cap}</div>
@@ -2953,6 +2999,9 @@ function slSelectPost(el, name, imgSrc, mediaId) {
   el.dataset.mediaId = mediaId || '';
   _slShowBanner(name, imgSrc);
   _updateLeftPreview(name, imgSrc, false);
+  // Smart keyword suggestions based on post caption
+  if (window._updateSmartKeywordSuggestions) _updateSmartKeywordSuggestions(el.dataset.caption || name || '');
+  checkCompletion();
 }
 function slSelectReel(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#slPostGrid .post-grid-item, #slReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
@@ -2960,6 +3009,8 @@ function slSelectReel(el, name, imgSrc, mediaId) {
   el.dataset.mediaId = mediaId || '';
   _slShowBanner(name, imgSrc);
   _updateLeftPreview(name, imgSrc, true);
+  if (window._updateSmartKeywordSuggestions) _updateSmartKeywordSuggestions(el.dataset.caption || name || '');
+  checkCompletion();
 }
 function _updateLeftPreview(name, imgSrc, isReel) {
   const wrap = document.getElementById('previewPostWrap');
@@ -3793,5 +3844,191 @@ const _origBuildPayload = typeof _buildPayload !== 'undefined' ? _buildPayload :
 
 </script>
 
+<!-- PRO UPGRADE MODAL -->
+<div id="proUpgradeModal" onclick="if(event.target===this)closeProModal()">
+  <div class="pro-modal-card">
+    <div class="pro-modal-badge">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>
+      PRO Feature
+    </div>
+    <div class="pro-modal-title" id="proModalTitle">Unlock This Feature</div>
+    <div class="pro-modal-sub" id="proModalSub">Upgrade to DMFlow Pro to access this automation type and many more powerful features.</div>
+    <div class="pro-modal-features">
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Comment Auto-reply DM</div>
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Story Reaction DM</div>
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email Collection Flow</div>
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Discount Code DM</div>
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Live Reply AI — Unlimited DMs</div>
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advanced Settings &amp; Follower Gate</div>
+      <div class="pro-modal-feature"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacts, Templates &amp; Keywords Manager</div>
+    </div>
+    <div class="pro-modal-price">₹999<span>/month</span></div>
+    <button class="pro-modal-btn" onclick="handleUpgradeClick()">
+      ✦ Upgrade to Pro Now
+    </button>
+    <button class="pro-modal-close" onclick="closeProModal()">Maybe later</button>
+  </div>
+</div>
+
+<script>
+// ── PRO UPGRADE MODAL ──
+function showProUpgrade(featureName) {
+  const modal = document.getElementById('proUpgradeModal');
+  const title = document.getElementById('proModalTitle');
+  const sub = document.getElementById('proModalSub');
+  if (title) title.textContent = 'Unlock ' + (featureName || 'This Feature');
+  if (sub) sub.textContent = 'Upgrade to DMFlow Pro to access ' + (featureName || 'this feature') + ' and many more powerful automation types.';
+  if (modal) modal.classList.add('open');
+}
+function closeProModal() {
+  const modal = document.getElementById('proUpgradeModal');
+  if (modal) modal.classList.remove('open');
+}
+function handleUpgradeClick() {
+  closeProModal();
+  if (window.parent && window.parent !== window) {
+    try { window.parent.openUpgradeModal(); return; } catch(e) {}
+    window.parent.postMessage({ type: 'dmflow_upgrade' }, '*');
+  } else {
+    window.location.href = '../../app.html?upgrade=1';
+  }
+}
+
+// ── PRO LOCK: Advanced Settings section ──
+// Override toggleSection to block PRO section for free users
+const _origToggleSection = window.toggleSection;
+window.toggleSection = function(headerEl) {
+  // Check if PRO-locked
+  const isPro = headerEl.querySelector('.pro-lock-section');
+  if (isPro) {
+    const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+    const plan = (user && (user.plan || user.subscription?.plan || '')).toLowerCase();
+    if (!plan || plan === 'free') {
+      showProUpgrade('Advanced Settings');
+      return;
+    }
+  }
+  _origToggleSection(headerEl);
+};
+
+// ── AUTO-SAVE: debounced save on input change ──
+let _autoSaveTimer = null;
+function _scheduleAutoSave() {
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(async function() {
+    if (!window.API || !API.getToken()) return;
+    try {
+      const payload = window._buildPayload ? _buildPayload(false) : null;
+      if (!payload) return;
+      const editId = window._editAutomationId;
+      if (editId) {
+        await API.updateAutomation(editId, payload);
+      } else {
+        const res = await API.createAutomation(payload);
+        if (res && res._id) window._editAutomationId = res._id;
+      }
+      // Silent save — just update title to show saved
+      const titleEl = document.getElementById('builderTitle');
+      if (titleEl) {
+        const orig = titleEl.textContent;
+        titleEl.style.color = '#22C55E';
+        setTimeout(() => { titleEl.style.color = ''; }, 1200);
+      }
+    } catch(e) { /* silent */ }
+  }, 2200);
+}
+
+// Hook auto-save to all textareas/inputs in builder
+document.addEventListener('DOMContentLoaded', function() {
+  const builderScroll = document.querySelector('.builder-scroll');
+  if (builderScroll) {
+    builderScroll.addEventListener('input', function(e) {
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') {
+        _scheduleAutoSave();
+      }
+    });
+  }
+});
+
+// ── SMART KEYWORD SUGGESTIONS based on post caption/type ──
+const _kwSuggestionsMap = {
+  fashion: ['LINK','SHOP','BUY','PRICE','OUTFIT','STYLE','WHERE'],
+  food:    ['RECIPE','LINK','HOW','MAKE','INGREDIENTS','VIDEO'],
+  travel:  ['INFO','LINK','HOTEL','BOOK','WHERE','DETAILS'],
+  fitness: ['PLAN','LINK','WORKOUT','JOIN','YES','HOW'],
+  beauty:  ['LINK','SHOP','PRODUCT','CODE','DISCOUNT','BRAND'],
+  default: ['LINK','PRICE','INFO','CODE','YES','BOOK','SHOP']
+};
+
+function _getSmartSuggestions(caption) {
+  if (!caption) return _kwSuggestionsMap.default;
+  const c = caption.toLowerCase();
+  if (c.includes('outfit') || c.includes('fashion') || c.includes('style') || c.includes('wear')) return _kwSuggestionsMap.fashion;
+  if (c.includes('recipe') || c.includes('food') || c.includes('eat') || c.includes('cook')) return _kwSuggestionsMap.food;
+  if (c.includes('travel') || c.includes('hotel') || c.includes('trip') || c.includes('flight')) return _kwSuggestionsMap.travel;
+  if (c.includes('workout') || c.includes('fitness') || c.includes('gym') || c.includes('train')) return _kwSuggestionsMap.fitness;
+  if (c.includes('beauty') || c.includes('makeup') || c.includes('skin') || c.includes('hair')) return _kwSuggestionsMap.beauty;
+  return _kwSuggestionsMap.default;
+}
+
+// Update suggested keywords when a post is selected
+window._updateSmartKeywordSuggestions = function(caption) {
+  const sugsContainer = document.querySelector('#panel-send-link .suggested-keywords');
+  if (!sugsContainer) return;
+  const existing = Array.from(document.querySelectorAll('#keywordsList .keyword-tag')).map(t => t.textContent.replace('×','').trim());
+  const suggestions = _getSmartSuggestions(caption).filter(s => !existing.includes(s));
+  sugsContainer.innerHTML = '';
+  suggestions.slice(0, 6).forEach(kw => {
+    const btn = document.createElement('button');
+    btn.className = 'sug-kw';
+    btn.textContent = '+ ' + kw;
+    btn.onclick = function() { addSugKw(this); };
+    sugsContainer.appendChild(btn);
+  });
+};
+
+// ── SMART DM MESSAGE SUGGESTIONS ──
+const _dmSuggestions = [
+  "Hey {{name}}! Here's the link you asked about 👇",
+  "Hey! Here's the link you requested:",
+  "Hey {{name}}, thanks for your interest! Here's exactly what you were looking for:",
+  "Hey! As promised, here's your link 🔗",
+  "Hi {{name}}! You asked for it, here it is:"
+];
+
+window._showDmSuggestions = function() {
+  const ta = document.getElementById('dmTextarea');
+  if (!ta || ta.value.trim()) return;
+  // show suggestion chips above textarea
+  const existing = document.getElementById('dmSuggestionChips');
+  if (existing) return;
+  const wrap = document.createElement('div');
+  wrap.id = 'dmSuggestionChips';
+  wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;';
+  _dmSuggestions.forEach(s => {
+    const btn = document.createElement('button');
+    btn.style.cssText = 'background:#F4EEFF;border:1.5px solid #C4B5FD;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;color:#7C3AED;cursor:pointer;font-family:inherit;text-align:left;';
+    btn.textContent = s.length > 44 ? s.slice(0,44)+'…' : s;
+    btn.onclick = function() {
+      ta.value = s;
+      updatePreviewDm(s);
+      checkCompletion();
+      wrap.remove();
+    };
+    wrap.appendChild(btn);
+  });
+  ta.parentNode.insertBefore(wrap, ta);
+};
+
+// Hook: show suggestions when DM message section opens
+document.addEventListener('click', function(e) {
+  const head = e.target.closest('.config-section-head');
+  if (!head) return;
+  const title = head.querySelector('.config-section-title');
+  if (title && title.textContent.trim() === 'DM Message') {
+    setTimeout(_showDmSuggestions, 320);
+  }
+});
+</script>
 </body>
 </html>
