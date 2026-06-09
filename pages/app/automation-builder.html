@@ -2463,8 +2463,13 @@ function _renderBuilderGrids({ posts, reels }, loadError) {
     const fullCap = (m.caption || '');
     const img = m.thumbnail_url || m.media_url || '';
     const id  = m.id || m._id || '';
-    return `<div class="post-grid-item" data-caption="${fullCap.replace(/"/g,'&quot;')}" onclick="${clickFn}(this,${JSON.stringify(cap)},${JSON.stringify(img)},${JSON.stringify(id)});this.dataset.caption=${JSON.stringify(fullCap)};">
-      ${img ? `<img src="${img}" alt="${cap}">` : `<div style="width:100%;height:100%;background:#F4F4F8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9898A8;">${cap}</div>`}
+    return `<div class="post-grid-item"
+      data-caption="${fullCap.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}"
+      data-img="${img.replace(/"/g,'&quot;')}"
+      data-media-id="${id}"
+      data-name="${cap.replace(/"/g,'&quot;')}"
+      onclick="${clickFn}(this)">
+      ${img ? `<img src="${img}" alt="">` : `<div style="width:100%;height:100%;background:#F4F4F8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9898A8;">${cap}</div>`}
       <span class="post-type-badge">POST</span>
       <div class="post-overlay-label">${cap}</div>
       <div class="post-selected-check">${checkSvg}</div>
@@ -2476,8 +2481,13 @@ function _renderBuilderGrids({ posts, reels }, loadError) {
     const fullCap = (m.caption || '');
     const img = m.thumbnail_url || m.media_url || '';
     const id  = m.id || m._id || '';
-    return `<div class="reel-grid-item" data-caption="${fullCap.replace(/"/g,'&quot;')}" onclick="${clickFn}(this,${JSON.stringify(cap)},${JSON.stringify(img)},${JSON.stringify(id)});this.dataset.caption=${JSON.stringify(fullCap)};">
-      ${img ? `<img src="${img}" alt="${cap}">` : `<div style="width:100%;height:100%;background:#F4F4F8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9898A8;">${cap}</div>`}
+    return `<div class="reel-grid-item"
+      data-caption="${fullCap.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}"
+      data-img="${img.replace(/"/g,'&quot;')}"
+      data-media-id="${id}"
+      data-name="${cap.replace(/"/g,'&quot;')}"
+      onclick="${clickFn}(this)">
+      ${img ? `<img src="${img}" alt="">` : `<div style="width:100%;height:100%;background:#F4F4F8;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9898A8;">${cap}</div>`}
       <div class="reel-play-icon"><svg width="8" height="8" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg><span class="reel-play-badge">REEL</span></div>
       <div class="reel-name-label">${cap}</div>
       <div class="post-selected-check">${smallCheck}</div>
@@ -2994,22 +3004,30 @@ function slSetMediaTab(btn, tab) {
   }
 }
 function slSelectPost(el, name, imgSrc, mediaId) {
+  // Read from dataset (new approach) with param fallback
+  name = el.dataset.name || name || 'Post';
+  imgSrc = el.dataset.img || imgSrc || '';
+  mediaId = el.dataset.mediaId || mediaId || '';
   document.querySelectorAll('#slPostGrid .post-grid-item, #slReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
-  el.dataset.mediaId = mediaId || '';
-  el.dataset.imgSrc = imgSrc || '';
-  el.dataset.mediaName = name || '';
+  el.dataset.mediaId = mediaId;
+  el.dataset.imgSrc = imgSrc;
+  el.dataset.mediaName = name;
   _slShowBanner(name, imgSrc);
   _updateLeftPreview(name, imgSrc, false);
   if (window._updateSmartKeywordSuggestions) _updateSmartKeywordSuggestions(el.dataset.caption || name || '');
   checkCompletion();
 }
 function slSelectReel(el, name, imgSrc, mediaId) {
+  // Read from dataset (new approach) with param fallback
+  name = el.dataset.name || name || 'Reel';
+  imgSrc = el.dataset.img || imgSrc || '';
+  mediaId = el.dataset.mediaId || mediaId || '';
   document.querySelectorAll('#slPostGrid .post-grid-item, #slReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
-  el.dataset.mediaId = mediaId || '';
-  el.dataset.imgSrc = imgSrc || '';
-  el.dataset.mediaName = name || '';
+  el.dataset.mediaId = mediaId;
+  el.dataset.imgSrc = imgSrc;
+  el.dataset.mediaName = name;
   _slShowBanner(name, imgSrc);
   _updateLeftPreview(name, imgSrc, true);
   if (window._updateSmartKeywordSuggestions) _updateSmartKeywordSuggestions(el.dataset.caption || name || '');
