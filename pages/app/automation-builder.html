@@ -2977,19 +2977,17 @@ function selectLiveMode(mode) {
 function slSetMediaTab(btn, tab) {
   btn.closest('.media-tab-bar').querySelectorAll('.media-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const pg = document.getElementById('slPostGrid');
-  const rg = document.getElementById('slReelGrid');
-  const pgWrap = pg ? pg.closest('.post-grid-scroll') : null;
-  const rgWrap = document.getElementById('slReelGridWrap');
+  const pgWrap = document.getElementById('slPostGrid') ? document.getElementById('slPostGrid').closest('.post-grid-scroll') : null;
+  const rgWrap = document.getElementById('slReelGrid') ? document.getElementById('slReelGrid').closest('.post-grid-scroll') : null;
   if (tab === 'reels') {
-    if(pgWrap) pgWrap.style.display='none'; if(pg) pg.style.display='none';
-    if(rgWrap) rgWrap.style.display=''; if(rg) rg.style.display='';
+    if(pgWrap) pgWrap.style.display='none';
+    if(rgWrap) rgWrap.style.display='';
   } else if (tab === 'posts') {
-    if(pgWrap) pgWrap.style.display=''; if(pg) pg.style.display='';
-    if(rgWrap) rgWrap.style.display='none'; if(rg) rg.style.display='none';
+    if(pgWrap) pgWrap.style.display='';
+    if(rgWrap) rgWrap.style.display='none';
   } else {
-    if(pgWrap) pgWrap.style.display=''; if(pg) pg.style.display='';
-    if(rgWrap) rgWrap.style.display=''; if(rg) rg.style.display='';
+    if(pgWrap) pgWrap.style.display='';
+    if(rgWrap) rgWrap.style.display='';
   }
   slClearSelection();
 }
@@ -3017,14 +3015,20 @@ function _updateLeftPreview(name, imgSrc, isReel) {
   const noPost = document.getElementById('previewNoPost');
   const img = document.getElementById('previewPostImg');
   const nameEl = document.getElementById('previewPostName');
+  const reelBadge = document.getElementById('previewPostReelBadge');
   if(wrap) wrap.style.display = '';
   if(noPost) noPost.style.display = 'none';
-  if(img) img.src = imgSrc;
-  if(nameEl) nameEl.textContent = name;
+  if(img) img.src = imgSrc || '';
+  if(nameEl) nameEl.textContent = isReel ? '🎬 ' + name : name;
+  // Show/hide reel play overlay
+  if(reelBadge) reelBadge.style.display = isReel ? 'flex' : 'none';
   // Sync keyword to preview comment
   const kw = document.querySelector('#keywordsList .keyword-tag');
   const kwEl = document.getElementById('previewPostKw');
   if(kwEl && kw) kwEl.textContent = kw.textContent.replace('×','').trim();
+  // Update the "Selected Post" label in preview
+  const labelEl = wrap ? wrap.previousElementSibling : null;
+  if(labelEl && labelEl.style) labelEl.textContent = isReel ? 'Selected Reel' : 'Selected Post';
 }
 function _slShowBanner(name, imgSrc) {
   const b = document.getElementById('slSelectedBanner');
@@ -3061,46 +3065,57 @@ function arcSetMediaTab(btn, tab) {
   btn.classList.add('active');
   const pg = document.getElementById('arcPostGrid');
   const rg = document.getElementById('arcReelGrid');
-  if (tab === 'reels') { if(pg) pg.style.display='none'; if(rg) rg.style.display=''; }
-  else if (tab === 'posts') { if(pg) pg.style.display=''; if(rg) rg.style.display='none'; }
-  else { if(pg) pg.style.display=''; if(rg) rg.style.display=''; }
+  const pgWrap = pg ? pg.parentElement : null;
+  const rgWrap = rg ? rg.parentElement : null;
+  if (tab === 'reels') {
+    if(pgWrap && pgWrap !== pg) pgWrap.style.display='none'; else if(pg) pg.style.display='none';
+    if(rgWrap && rgWrap !== rg) rgWrap.style.display=''; else if(rg) rg.style.display='';
+    if(pg) pg.style.display='none'; if(rg) rg.style.display='';
+  } else if (tab === 'posts') {
+    if(pg) pg.style.display=''; if(rg) rg.style.display='none';
+  } else {
+    if(pg) pg.style.display=''; if(rg) rg.style.display='';
+  }
   arcClearSelection();
 }
 function arcSelectPost(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#arcPostGrid .post-grid-item, #arcReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   el.dataset.mediaId = mediaId || '';
-  _arcShowBanner(name, imgSrc);
+  _arcShowBanner(name, imgSrc, false);
   const info = document.getElementById('postSelectedInfo-arc');
   if(info) info.textContent = name + ' selected ✓';
-  _updateArcLeftPreview(name, imgSrc);
+  _updateArcLeftPreview(name, imgSrc, false);
 }
 function arcSelectReel(el, name, imgSrc, mediaId) {
   document.querySelectorAll('#arcPostGrid .post-grid-item, #arcReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   el.dataset.mediaId = mediaId || '';
-  _arcShowBanner(name, imgSrc);
+  _arcShowBanner(name, imgSrc, true);
   const info = document.getElementById('postSelectedInfo-arc');
-  if(info) info.textContent = name + ' selected ✓';
-  _updateArcLeftPreview(name, imgSrc);
+  if(info) info.textContent = '🎬 ' + name + ' selected ✓';
+  _updateArcLeftPreview(name, imgSrc, true);
 }
-function _updateArcLeftPreview(name, imgSrc) {
+function _updateArcLeftPreview(name, imgSrc, isReel) {
   // Update the ARC comment thread preview image
   const arcImgBox = document.querySelector('#preview-arc .arc-post-img');
   if(arcImgBox) {
     arcImgBox.style.background = 'none';
-    arcImgBox.innerHTML = '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="">';
+    const playOverlay = isReel ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;"><div style="background:rgba(0,0,0,.5);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></div></div>` : '';
+    arcImgBox.innerHTML = `<div style="position:relative;width:100%;height:100%;"><img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" alt="">${playOverlay}</div>`;
   }
   const arcTitle = document.querySelector('#preview-arc .arc-post-title');
   if(arcTitle) arcTitle.textContent = name;
 }
-function _arcShowBanner(name, imgSrc) {
+function _arcShowBanner(name, imgSrc, isReel) {
   const b = document.getElementById('arcSelectedBanner');
   const t = document.getElementById('arcSelectedThumb');
   const n = document.getElementById('arcSelectedName');
+  const sub = b ? b.querySelector('.selected-reel-sub') : null;
   if(b) b.classList.add('show');
   if(t && imgSrc) t.src = imgSrc;
-  if(n) n.textContent = name;
+  if(n) n.textContent = (isReel ? '🎬 ' : '') + name;
+  if(sub) sub.textContent = isReel ? 'Auto-reply applies to this reel' : 'Auto-reply applies to this post';
 }
 function arcClearSelection() {
   document.querySelectorAll('#arcPostGrid .post-grid-item, #arcReelGrid .reel-grid-item').forEach(d => d.classList.remove('selected'));
@@ -3420,16 +3435,16 @@ function pldSetMediaTab(btn, tab) {
   btn.closest('.media-tab-bar').querySelectorAll('.media-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const pg = document.getElementById('pldPostGrid');
-  const pgWrap = pg ? pg.closest('.post-grid-scroll') : null;
   const rgWrap = document.getElementById('pldReelGridWrap');
+  const pgScroll = pg ? pg.closest('.post-grid-scroll') : null;
   if (tab === 'reels') {
-    if(pgWrap) pgWrap.style.display='none';
+    if(pgScroll) pgScroll.style.display='none'; else if(pg) pg.style.display='none';
     if(rgWrap) rgWrap.style.display='';
   } else if (tab === 'posts') {
-    if(pgWrap) pgWrap.style.display='';
+    if(pgScroll) pgScroll.style.display=''; else if(pg) pg.style.display='';
     if(rgWrap) rgWrap.style.display='none';
   } else {
-    if(pgWrap) pgWrap.style.display='';
+    if(pgScroll) pgScroll.style.display=''; else if(pg) pg.style.display='';
     if(rgWrap) rgWrap.style.display='';
   }
   pldClearSelection();
