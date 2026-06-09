@@ -49,15 +49,19 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .builder-scroll::-webkit-scrollbar-thumb{background:#DDDDE5;border-radius:2px;}
 
 /* ── TWO-COLUMN LAYOUT ── */
-.builder-cols{display:grid;grid-template-columns:280px 1fr;min-height:100%;gap:0;}
+.builder-cols{display:grid;grid-template-columns:320px 1fr;min-height:100%;gap:0;}
 
 /* ── LEFT PREVIEW PANEL ── */
-.preview-col{background:#F0F0F6;border-right:1.5px solid #EBEBF0;padding:20px 16px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:calc(100vh - 112px);overflow-y:auto;flex-shrink:0;width:280px;min-width:280px;align-items:center;}
+.preview-col{background:#F0F0F6;border-right:1.5px solid #EBEBF0;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:0;height:calc(100vh - 112px);overflow-y:auto;flex-shrink:0;width:320px;min-width:320px;}
 .preview-col::-webkit-scrollbar{display:none;}
 .preview-label{font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.6px;}
+/* side-by-side inner layout */
+.preview-inner{display:flex;flex-direction:row;gap:10px;align-items:flex-start;flex:1;min-height:0;}
+.preview-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;}
+.preview-right{flex-shrink:0;}
 
 /* Selected post/reel preview card */
-.sel-card{background:#fff;border-radius:12px;border:1.5px solid #DDDDE5;overflow:hidden;flex-shrink:0;display:none;width:100%;}
+.sel-card{background:#fff;border-radius:10px;border:1.5px solid #DDDDE5;overflow:hidden;flex-shrink:0;display:none;width:100%;}
 .sel-card-empty{padding:20px;text-align:center;display:none!important;}
 .sel-card-empty svg{color:#C4C4D0;margin-bottom:8px;}
 .sel-card-empty-title{font-size:12px;font-weight:700;color:#9898A8;}
@@ -80,8 +84,8 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 .sel-card-comment-kw{opacity:.9;color:#FDE68A;}
 
 /* Phone mockup */
-.phone-wrap{flex-shrink:0;width:100%;display:flex;justify-content:center;}
-.phone{background:#0A0A0F;border-radius:26px;padding:9px;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;width:200px;flex-shrink:0;}
+.phone-wrap{flex-shrink:0;}
+.phone{background:#0A0A0F;border-radius:22px;padding:8px;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;width:148px;flex-shrink:0;}
 .phone-screen{background:#fff;border-radius:20px;overflow:hidden;}
 .phone-statusbar{background:#0A0A0F;display:flex;justify-content:space-between;align-items:center;padding:6px 14px 4px;color:#fff;font-size:9px;font-weight:700;}
 .phone-statusbar-time{font-size:10px;font-weight:800;}
@@ -263,29 +267,38 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
   .builder-scroll{overflow:visible;height:auto;}
   .builder-cols{display:flex!important;flex-direction:column!important;min-height:unset;height:auto;}
 
-  /* ── PREVIEW SECTION on mobile: stacks, phone centered ── */
+  /* ── PREVIEW: full width on mobile, row layout ── */
   .preview-col{
     position:static!important;height:auto!important;width:100%!important;flex-shrink:0;
     border-right:none;border-bottom:1.5px solid #EBEBF0;
-    padding:14px 16px;
+    padding:12px 14px;
     display:flex!important;flex-direction:column!important;
-    align-items:center;gap:10px;background:#F0F0F6;
+    gap:10px;background:#F0F0F6;
   }
   .preview-label{display:none;}
-  /* sel-card: full width, compact when shown */
-  .sel-card{width:100%!important;max-width:320px;border-radius:10px;}
-  .sel-card-media{max-height:120px!important;}
-  /* phone centered, compact */
-  .phone-wrap{width:100%;display:flex;justify-content:center;flex:none;}
-  .phone{width:190px;border-radius:22px;padding:8px;}
-  .phone-screen{border-radius:16px;}
-  .phone-dm-body{min-height:70px;padding:8px;}
-  .phone-bubble-in{font-size:9px;padding:5px 8px;}
-  .phone-bubble-out{font-size:9px;padding:5px 8px;}
-  .phone-link-card{padding:6px;}
-  .phone-link-icon{width:22px;height:22px;}
-  .phone-link-title{font-size:9px;}
-  .phone-link-url{font-size:8px;}
+  .preview-inner{flex-direction:row!important;gap:10px;align-items:flex-start;}
+  .preview-left{flex:1;min-width:0;}
+  .preview-right{flex-shrink:0;}
+  /* sel-card compact on mobile */
+  .sel-card{width:100%!important;border-radius:10px;}
+  .sel-card-media{max-height:110px!important;}
+  #selPlaceholder{padding:14px 10px;}
+  /* phone compact right side */
+  .phone-wrap{flex-shrink:0;}
+  .phone{width:130px!important;border-radius:18px;padding:7px;}
+  .phone-screen{border-radius:13px;}
+  .phone-statusbar{padding:4px 10px 3px;}
+  .phone-dm-header{padding:6px 8px;}
+  .phone-dm-avatar{width:20px;height:20px;font-size:9px;}
+  .phone-dm-name{font-size:9px;}
+  .phone-dm-online{font-size:8px;}
+  .phone-dm-body{min-height:60px;padding:7px;gap:5px;}
+  .phone-bubble-in{font-size:8px;padding:4px 7px;}
+  .phone-bubble-out{font-size:8px;padding:4px 7px;}
+  .phone-link-card{padding:5px;gap:5px;}
+  .phone-link-icon{width:18px;height:18px;}
+  .phone-link-title{font-size:8px;}
+  .phone-link-url{font-size:7px;}
 
   /* steps full width */
   .steps-col{padding:14px 14px 90px;width:100%;}
@@ -383,6 +396,14 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
         <!-- ════ LEFT: PREVIEW ════ -->
         <div class="preview-col">
           <div class="preview-label">Preview</div>
+          <div class="preview-inner">
+          <div class="preview-left">
+          <!-- placeholder shown when nothing selected -->
+          <div id="selPlaceholder" style="background:#fff;border-radius:10px;border:1.5px dashed #DDDDE5;padding:18px 12px;text-align:center;">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" style="display:block;margin:0 auto 8px;color:#C4C4D0;"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.3"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div style="font-size:11px;font-weight:700;color:#9898A8;">Select a post</div>
+            <div style="font-size:10px;color:#C4C4D0;margin-top:2px;">Preview appears here</div>
+          </div>
 
           <!-- Selected media card -->
           <div class="sel-card" id="selCard">
@@ -415,6 +436,8 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
             </div>
           </div>
 
+          </div><!-- /preview-left -->
+          <div class="preview-right">
           <!-- Phone mockup -->
           <div class="phone-wrap">
             <div class="phone">
@@ -449,6 +472,8 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
               </div>
             </div>
           </div>
+          </div><!-- /preview-right -->
+          </div><!-- /preview-inner -->
         </div>
 
         <!-- ════ RIGHT: STEPS ════ -->
@@ -714,7 +739,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateStep5Done();
 
   // Default suggestions
-  renderKwSuggestions([]);
+  renderKwSuggestions('');
 });
 
 /* ═══════════════════════════════════════
@@ -725,7 +750,7 @@ let _mediaCache = null;
 /* ── DEMO PLACEHOLDER MEDIA (shown when no IG account connected) ── */
 const DEMO_POSTS = [
   {id:'demo1',caption:'#trending #viral',media_url:'',media_type:'IMAGE',_demo:true},
-  {id:'demo2',caption:'Hi 😊',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo2',caption:'Hi',media_url:'',media_type:'IMAGE',_demo:true},
   {id:'demo3',caption:'#god',media_url:'',media_type:'IMAGE',_demo:true},
   {id:'demo4',caption:'New post',media_url:'',media_type:'IMAGE',_demo:true},
   {id:'demo5',caption:'Check this',media_url:'',media_type:'IMAGE',_demo:true},
@@ -920,6 +945,7 @@ function applyAll() {
 ═══════════════════════════════════════ */
 function showSelCard(name, imgSrc, isReel) {
   document.getElementById('selCard').style.display = 'block';
+  document.getElementById('selPlaceholder').style.display = 'none';
   document.getElementById('selEmpty').style.display = 'none';
   document.getElementById('selFilled').style.display = 'block';
   const thumb = document.getElementById('selThumb');
@@ -940,6 +966,7 @@ function showSelCard(name, imgSrc, isReel) {
 
 function hideSelCard() {
   document.getElementById('selCard').style.display = 'none';
+  document.getElementById('selPlaceholder').style.display = 'block';
   document.getElementById('selEmpty').style.display = 'none';
   document.getElementById('selFilled').style.display = 'none';
 }
@@ -1022,7 +1049,7 @@ const KW_MAP = {
 };
 
 function renderKwSuggestions(caption) {
-  const c = (caption || '').toLowerCase();
+  const c = (typeof caption === 'string' ? caption : '').toLowerCase();
   let keys = KW_MAP.default;
   if (/outfit|fashion|style|wear/.test(c)) keys = KW_MAP.fashion;
   else if (/recipe|food|eat|cook/.test(c)) keys = KW_MAP.food;
