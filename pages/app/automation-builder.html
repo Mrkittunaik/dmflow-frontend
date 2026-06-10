@@ -785,6 +785,13 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
       <div class="stat-sub">DMs not delivered</div>
     </div>
   </div>
+  <!-- Live activity log -->
+  <div id="statsActivityWrap" style="padding:0 16px 14px;">
+    <div style="font-size:11px;font-weight:700;color:#9898A8;letter-spacing:.04em;margin-bottom:6px;">RECENT ACTIVITY</div>
+    <div id="statsActivityLog" style="display:flex;flex-direction:column;gap:4px;">
+      <div style="font-size:12px;color:#ADADBC;font-style:italic;">Waiting for comments…</div>
+    </div>
+  </div>
 </div>
 
 <!-- PRO MODAL -->
@@ -1642,10 +1649,11 @@ async function fetchAndUpdateStats(automationId) {
   try {
     if (!window.API || !API.getToken()) return;
     const data = await API.get('/api/automations/' + automationId + '/stats', { noCache: true });
-    document.getElementById('statTriggered').textContent  = data.triggered   || 0;
-    document.getElementById('statDmsSent').textContent    = data.dmsSent     || 0;
+    document.getElementById('statTriggered').textContent   = data.triggered   || 0;
+    document.getElementById('statDmsSent').textContent     = data.dmsSent     || 0;
     document.getElementById('statRepliesSent').textContent = data.repliesSent || 0;
-    document.getElementById('statFailed').textContent     = data.failed || data.dmsFailed || 0;
+    document.getElementById('statFailed').textContent      = data.dmsFailed   || data.failed || 0;
+
     // Live dot
     const dot   = document.getElementById('statsDot');
     const label = document.getElementById('statsLiveLabel');
@@ -1658,7 +1666,36 @@ async function fetchAndUpdateStats(automationId) {
       label.textContent = 'Stopped';
       label.style.color = '#9898A8';
     }
+
+    // Activity log
+    const logEl = document.getElementById('statsActivityLog');
+    if (logEl) {
+      const entries = data.recentLog || [];
+      if (!entries.length) {
+        logEl.innerHTML = '<div style="font-size:12px;color:#ADADBC;font-style:italic;">Waiting for comments…</div>';
+      } else {
+        logEl.innerHTML = entries.map(e => {
+          const ago = _timeAgo(new Date(e.at));
+          const badge = e.live
+            ? '<span style="background:#7C3AED;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;margin-right:4px;">LIVE</span>'
+            : '<span style="background:#1a1a2e;color:#9898A8;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;margin-right:4px;">POST</span>';
+          const txt = (e.text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          return `<div style="display:flex;align-items:flex-start;gap:6px;padding:5px 8px;background:#F8F8FC;border-radius:7px;font-size:12px;">
+            <span style="flex-shrink:0;margin-top:1px;">${badge}</span>
+            <span style="color:#3a3a52;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${txt}">${txt || '(no text)'}</span>
+            <span style="color:#ADADBC;flex-shrink:0;font-size:10px;">${ago}</span>
+          </div>`;
+        }).join('');
+      }
+    }
   } catch(e) {}
+}
+
+function _timeAgo(date) {
+  const s = Math.floor((Date.now() - date) / 1000);
+  if (s < 60)  return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  return Math.floor(s/3600) + 'h ago';
 }
 
 /* ═══════════════════════════════════════
