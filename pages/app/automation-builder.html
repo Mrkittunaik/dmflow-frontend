@@ -960,7 +960,7 @@ function renderGrids({ posts, reels }, err, isDemo) {
       const cap  = el.dataset.cap  || '';
       const img  = el.dataset.img  || purl;
       const isR  = el.closest('#reelGrid') !== null || pIsReel;
-      doSelectMedia(el, cap, img, pid, isR);
+      doSelectMedia(el, cap, img, pid, isR, true); // _silent: don't auto-save on restore
       // Switch tab so selected item is visible
       const tabBtn = document.querySelector(isR ? '.media-tab[onclick*="reels"]' : '.media-tab[onclick*="posts"]');
       if (tabBtn) setMediaTab(isR ? 'reels' : 'posts', tabBtn, true);
@@ -995,16 +995,14 @@ const DEMO_GRADS = [
 let _demoGradIdx = 0;
 
 function mediaItem(m, isReel, isDemo) {
-  const cap = (m.caption || (isReel ? 'Reel' : 'Post')).substring(0, 22);
-  const fullCap = (m.caption || '').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-  const img = (m.thumbnail_url || m.media_url || '').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-  const id = (m.id || m._id || '').toString().replace(/'/g,'&#39;');
-  const capEsc = cap.replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-  const fn = isReel ? 'selectReel' : 'selectPost';
-  const grad = DEMO_GRADS[_demoGradIdx++ % DEMO_GRADS.length];
+  const cap     = (m.caption || (isReel ? 'Reel' : 'Post')).substring(0, 22);
+  const fullCap = (m.caption || '').replace(/"/g, '&quot;');
+  const img     = (m.thumbnail_url || m.media_url || '').replace(/"/g, '&quot;');
+  const id      = (m.id || m._id || '').toString();
+  const capEsc  = cap.replace(/"/g, '&quot;');
+  const grad    = DEMO_GRADS[_demoGradIdx++ % DEMO_GRADS.length];
   const bgStyle = isDemo ? `background:${grad};` : '';
 
-  // Badge: POST icon for posts, REEL film icon for reels
   const badge = isReel
     ? `<span class="media-badge" style="display:flex;align-items:center;gap:3px;">
         <svg width="9" height="9" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2" stroke="#fff" stroke-width="2"/><path d="M7 6V4M12 6V4M17 6V4M7 20v-2M12 20v-2M17 20v-2" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1013,16 +1011,17 @@ function mediaItem(m, isReel, isDemo) {
         <svg width="9" height="9" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#fff" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#fff"/><polyline points="21 15 16 10 5 21" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         POST</span>`;
 
-  // Play icon only on reels
   const playIcon = isReel
     ? `<div class="media-reel-play"><div class="media-reel-circle">
         <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21" fill="#fff"/></svg>
        </div></div>` : '';
 
-  return `<div class="media-item" data-id="${id}" data-img="${img}" data-cap="${fullCap}" onclick="${fn}(this,'${capEsc}','${img}','${id}')">
+  // All data via data-* attributes — no raw URL/text in onclick args
+  // Fixes posts/reels with special chars (&, ?, =) silently failing to select
+  return `<div class="media-item" data-id="${id}" data-img="${img}" data-cap="${fullCap}" data-isreel="${isReel ? '1' : '0'}" onclick="handleMediaClick(this)">
     ${img
       ? `<img src="${img}" alt="${capEsc}" onerror="this.style.display='none'">`
-      : `<div style="width:100%;height:100%;${bgStyle}${isDemo?'opacity:.7;':''}"></div>`}
+      : `<div style="width:100%;height:100%;${bgStyle}${isDemo ? 'opacity:.7;' : ''}"></div>`}
     ${badge}
     ${playIcon}
     <div class="media-caption">${capEsc}</div>
@@ -1032,6 +1031,14 @@ function mediaItem(m, isReel, isDemo) {
   </div>`;
 }
 
+// Single click handler — reads from data-* attributes safely
+function handleMediaClick(el) {
+  const id     = el.dataset.id;
+  const img    = el.dataset.img || '';
+  const cap    = el.dataset.cap || '';
+  const isReel = el.dataset.isreel === '1';
+  doSelectMedia(el, cap, img, id, isReel);
+}
 /* ═══════════════════════════════════════
    MEDIA TAB SWITCHING
 ═══════════════════════════════════════ */
@@ -1064,7 +1071,7 @@ function selectPost(el, name, imgSrc, mediaId) {
 function selectReel(el, name, imgSrc, mediaId) {
   doSelectMedia(el, name, imgSrc, mediaId, true);
 }
-function doSelectMedia(el, name, imgSrc, mediaId, isReel) {
+function doSelectMedia(el, name, imgSrc, mediaId, isReel, _silent) {
   // Deselect all
   document.querySelectorAll('.media-item').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
@@ -1089,7 +1096,8 @@ function doSelectMedia(el, name, imgSrc, mediaId, isReel) {
 
   // Smart keyword suggestions
   renderKwSuggestions(state.selectedMedia.caption);
-  scheduleAutoSave();
+  // _silent=true during restore so we don't auto-save on page load
+  if (!_silent) scheduleAutoSave();
 }
 
 function clearMediaSelection() {
@@ -1102,7 +1110,7 @@ function clearMediaSelection() {
   document.getElementById('step1sub').textContent = 'Choose which content triggers this automation';
 }
 
-function applyAll() {
+function applyAll(_silent) {
   clearMediaSelection();
   state.applyAll = true;
   const info = document.getElementById('selBannerText');
@@ -1110,10 +1118,10 @@ function applyAll() {
   document.getElementById('selBanner').classList.add('show');
   document.getElementById('selBannerThumb').src = '';
   document.getElementById('step1num').classList.add('done');
-  document.getElementById('step1sub').textContent = 'All content selected';
+  document.getElementById('step1sub').textContent = 'All posts & reels';
   // Show generic preview
   showSelCard('All content', '', false);
-  scheduleAutoSave();
+  if (!_silent) scheduleAutoSave();
 }
 
 /* ═══════════════════════════════════════
@@ -1568,10 +1576,7 @@ async function loadExistingAutomation(id) {
     // ── Media selection ────────────────────────────────────────────
     if (a.applyAll) {
       // "Apply to all content" mode — restore without picking a specific post
-      state.applyAll = true;
-      state.selectedMedia = null;
-      _updateSelBanner(null);
-      document.getElementById('step1sub').textContent = 'All posts & reels';
+      applyAll(true); // _silent: don't auto-save on restore
     } else if (a.mediaId) {
       // Specific post/reel — queue selection for after renderGrids() runs
       state._pendingSelectId  = a.mediaId;
