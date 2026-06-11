@@ -60,6 +60,9 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
 .btn-disconnect{flex-shrink:0;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #FECACA;background:#FFF1F1;color:var(--red);font-family:inherit;transition:all .2s;white-space:nowrap;}
 .btn-disconnect:hover{background:#FEE2E2;}
 .btn-disconnect:disabled{opacity:.5;cursor:not-allowed;}
+.btn-fix-webhook{flex-shrink:0;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #D1D5DB;background:#F9FAFB;color:#374151;font-family:inherit;transition:all .2s;white-space:nowrap;}
+.btn-fix-webhook:hover{background:#F3F4F6;border-color:#9CA3AF;}
+.btn-fix-webhook:disabled{opacity:.5;cursor:not-allowed;}
 
 .ig-not-inner{padding:24px 20px;text-align:center;}
 .ig-not-icon{width:52px;height:52px;border-radius:14px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
@@ -327,6 +330,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
               '<span class="ig-status-text">Connected</span>' +
             '</div>' +
           '</div>' +
+          '<button class="btn-fix-webhook" onclick="resubscribeWebhook()" id="btnFixWebhook">Fix Webhook</button>' +
           '<button class="btn-disconnect" onclick="showConfirm()">Disconnect</button>' +
         '</div>';
     } else {
@@ -389,6 +393,20 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
   // ── Disconnect confirm ──
   window.showConfirm  = () => document.getElementById('confirmOverlay').classList.add('show');
   window.closeConfirm = () => document.getElementById('confirmOverlay').classList.remove('show');
+
+  // ── Fix Webhook (resubscribe) ──
+  window.resubscribeWebhook = async function () {
+    const btn = document.getElementById('btnFixWebhook');
+    if (btn) { btn.textContent = 'Fixing…'; btn.disabled = true; }
+    try {
+      await API.resubscribeWebhook();
+      toast('Webhook resubscribed! DM automations should work now.');
+    } catch (e) {
+      toast('Could not resubscribe webhook. Try again.');
+    } finally {
+      if (btn) { btn.textContent = 'Fix Webhook'; btn.disabled = false; }
+    }
+  };
 
   window.doDisconnect = async function () {
     const btn = document.getElementById('confirmDisBtn');
