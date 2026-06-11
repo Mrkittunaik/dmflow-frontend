@@ -175,6 +175,9 @@ const API = (() => {
       _cacheInvalidate('/ig/');
       return req('DELETE', '/api/user/instagram');
     },
+    resubscribeWebhook: () => {
+      return req('POST', '/auth/instagram/resubscribe');
+    },
 
     // ── User ────────────────────────────────────────────────────
     getMe:         (noCache) => req('GET', '/api/user/me', null, { noCache: !!noCache }),
