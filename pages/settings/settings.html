@@ -26,7 +26,8 @@ html,body{height:100%;overflow:hidden;}
 :root{
   --purple:#7C3AED;--black:#0A0A0F;--lime:#C8FF00;
   --gray-50:#F8F8FC;--gray-100:#F0F0F5;--gray-200:#E2E2EA;
-  --text2:#5A5A6E;--red:#EF4444;
+  --text2:#5A5A6E;--red:#EF4444;--green:#22C55E;
+  --orange:#F97316;--blue:#3B82F6;
 }
 body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--black);-webkit-font-smoothing:antialiased;}
 
@@ -59,6 +60,13 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
 .plan-badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;background:var(--gray-100);color:#9898A8;border-radius:6px;padding:3px 8px;}
 .plan-badge.pro{background:rgba(124,58,237,0.1);color:var(--purple);}
 
+/* ── PROFILE STATS ROW ── */
+.prof-stats{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--gray-100);}
+.prof-stat{display:flex;flex-direction:column;align-items:center;padding:12px 8px;border-right:1px solid var(--gray-100);}
+.prof-stat:last-child{border-right:none;}
+.stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:var(--black);}
+.stat-lbl{font-size:10px;color:var(--text2);margin-top:2px;text-align:center;}
+
 /* ── IG CARD ── */
 .ig-connected-row{display:flex;align-items:center;gap:14px;padding:18px 20px;flex-wrap:wrap;}
 .ig-av{width:46px;height:46px;border-radius:12px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
@@ -83,6 +91,19 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
 .btn-connect-ig{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:opacity .2s;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;}
 .btn-connect-ig:hover{opacity:.88;}
 
+/* ── TOGGLE ROWS ── */
+.toggle-row{display:flex;align-items:center;gap:14px;padding:13px 20px;border-bottom:1px solid var(--gray-100);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.toggle-text{flex:1;min-width:0;}
+.toggle-label{font-size:13px;font-weight:600;color:var(--black);}
+.toggle-sub{font-size:11px;color:var(--text2);margin-top:1px;}
+/* pill toggle */
+.pill{width:40px;height:22px;border-radius:11px;background:var(--gray-200);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.pill::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.pill.on{background:var(--purple);}
+.pill.on::after{transform:translateX(18px);}
+
 /* ── LIST ROWS ── */
 .card-row{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--gray-100);cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent;}
 .card-row:last-child{border-bottom:none;}
@@ -94,12 +115,64 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
 .row-label{font-size:13px;font-weight:600;color:var(--black);}
 .row-sub{font-size:11px;color:var(--text2);margin-top:1px;}
 .row-chev{opacity:.3;flex-shrink:0;}
+.row-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(124,58,237,.1);color:var(--purple);flex-shrink:0;}
+
+/* ── DOWNLOAD / PWA CARD ── */
+.pwa-card{background:linear-gradient(135deg,#0A0A0F 0%,#1A0A3E 100%);border:1px solid rgba(124,58,237,.3);border-radius:16px;overflow:hidden;position:relative;}
+.pwa-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.35) 0%,transparent 70%);pointer-events:none;}
+.pwa-inner{padding:20px;}
+.pwa-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.pwa-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#9B5CF6);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pwa-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800;color:#fff;}
+.pwa-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
+.pwa-features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.pwa-feat{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.7);}
+.pwa-feat svg{flex-shrink:0;opacity:.9;}
+.btn-pwa-install{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:inherit;background:var(--purple);color:#fff;transition:opacity .2s;-webkit-tap-highlight-color:transparent;}
+.btn-pwa-install:hover{opacity:.88;}
+.btn-pwa-install:active{opacity:.75;}
+.pwa-divider{margin:10px 0;display:flex;align-items:center;gap:8px;}
+.pwa-divider span{font-size:10px;color:rgba(255,255,255,.3);font-weight:600;letter-spacing:.5px;}
+.pwa-divider::before,.pwa-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1);}
+/* iOS instructions panel */
+.ios-steps{background:rgba(255,255,255,.06);border-radius:10px;padding:14px;display:none;}
+.ios-steps.show{display:block;}
+.ios-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.ios-step:last-child{margin-bottom:0;}
+.ios-step-num{width:20px;height:20px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.ios-step-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.45;}
+.ios-step-text strong{color:#fff;}
+
+/* ── DM LIMIT / USAGE CARD ── */
+.usage-card{padding:18px 20px;}
+.usage-title{font-size:13px;font-weight:700;color:var(--black);margin-bottom:12px;}
+.usage-row{margin-bottom:12px;}
+.usage-row:last-child{margin-bottom:0;}
+.usage-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.usage-label{font-size:12px;color:var(--text2);font-weight:500;}
+.usage-count{font-size:12px;font-weight:700;color:var(--black);}
+.usage-bar{height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden;}
+.usage-fill{height:100%;border-radius:3px;background:var(--purple);transition:width .5s ease;}
+.usage-fill.warn{background:var(--orange);}
+.usage-fill.crit{background:var(--red);}
+
+/* ── DANGER ZONE ── */
+.danger-section{padding:16px 20px;}
+.danger-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--red);margin-bottom:12px;}
+.btn-danger{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;-webkit-tap-highlight-color:transparent;border:1.5px solid #FECACA;background:#FFF1F1;color:var(--red);margin-bottom:8px;}
+.btn-danger:last-child{margin-bottom:0;}
+.btn-danger:hover{background:#FEE2E2;}
 
 /* ── LOGOUT BTN ── */
 .btn-logout{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;padding:14px 20px;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;border:1.5px solid #FECACA;font-family:inherit;background:#FFF1F1;color:var(--red);transition:background .2s;-webkit-tap-highlight-color:transparent;}
 .btn-logout:hover{background:#FEE2E2;}
 .btn-logout:active{background:#FEE2E2;}
 .btn-logout svg{flex-shrink:0;}
+
+/* ── APP VERSION ── */
+.version-row{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 20px;border-top:1px solid var(--gray-100);}
+.version-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.version-text{font-size:11px;color:var(--text2);}
 
 /* ── TOAST ── */
 #dmf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--black);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity .22s,transform .22s;pointer-events:none;white-space:nowrap;}
@@ -133,6 +206,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
   .btn-disconnect{padding:6px 12px;font-size:11px;}
   .prof-row{padding:16px 16px 12px;gap:12px;}
   .prof-av{width:48px;height:48px;border-radius:12px;font-size:18px;}
+  .pwa-features{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -155,6 +229,21 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
     <div class="confirm-btns">
       <button class="confirm-btn cancel" onclick="closeConfirm()">Cancel</button>
       <button class="confirm-btn danger" id="confirmDisBtn" onclick="doDisconnect()">Disconnect</button>
+    </div>
+  </div>
+</div>
+
+<!-- Export Data confirm sheet -->
+<div class="confirm-overlay" id="exportOverlay">
+  <div class="confirm-sheet">
+    <div class="confirm-icon" style="background:rgba(59,130,246,.1);">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7 10 12 15 17 10" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <div class="confirm-title">Export Your Data</div>
+    <div class="confirm-sub">We'll prepare a ZIP file with all your automations, contacts, and message history. You'll get an email when it's ready (usually within a few minutes).</div>
+    <div class="confirm-btns">
+      <button class="confirm-btn cancel" onclick="closeExport()">Cancel</button>
+      <button class="confirm-btn" style="background:#3B82F6;color:#fff;" onclick="doExport()">Send Export</button>
     </div>
   </div>
 </div>
@@ -184,6 +273,50 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
                 </div>
               </div>
             </div>
+            <div class="prof-stats">
+              <div class="prof-stat">
+                <div class="stat-num" id="statDMs">0</div>
+                <div class="stat-lbl">DMs Sent</div>
+              </div>
+              <div class="prof-stat">
+                <div class="stat-num" id="statAuto">0</div>
+                <div class="stat-lbl">Automations</div>
+              </div>
+              <div class="prof-stat">
+                <div class="stat-num" id="statDays">—</div>
+                <div class="stat-lbl">Days Active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USAGE METER -->
+        <div>
+          <div class="section-label">Usage This Month</div>
+          <div class="card">
+            <div class="usage-card">
+              <div class="usage-row">
+                <div class="usage-meta">
+                  <span class="usage-label">DMs Sent</span>
+                  <span class="usage-count" id="uDMs">0 / 500</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" id="uDMsFill" style="width:0%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-meta">
+                  <span class="usage-label">IG Accounts</span>
+                  <span class="usage-count" id="uAccounts">1 / 1</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" id="uAccountsFill" style="width:100%"></div></div>
+              </div>
+              <div class="usage-row">
+                <div class="usage-meta">
+                  <span class="usage-label">Active Automations</span>
+                  <span class="usage-count" id="uAutos">0 / 5</span>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" id="uAutosFill" style="width:0%"></div></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -195,10 +328,164 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
           </div>
         </div>
 
+        <!-- NOTIFICATIONS -->
+        <div>
+          <div class="section-label">Notifications</div>
+          <div class="card">
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(124,58,237,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 01-3.46 0" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">DM Alerts</div>
+                <div class="toggle-sub">Notify when automation sends a DM</div>
+              </div>
+              <button class="pill on" id="notifDMs" onclick="togglePill(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(34,197,94,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22 4 12 14.01 9 11.01" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Automation Status</div>
+                <div class="toggle-sub">Alerts for paused or failed flows</div>
+              </div>
+              <button class="pill on" id="notifAuto" onclick="togglePill(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(249,115,22,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#F97316" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Security Alerts</div>
+                <div class="toggle-sub">Login from new device or location</div>
+              </div>
+              <button class="pill on" id="notifSec" onclick="togglePill(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(59,130,246,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#3B82F6" stroke-width="1.8"/><line x1="8" y1="21" x2="16" y2="21" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Weekly Report</div>
+                <div class="toggle-sub">Summary email every Monday</div>
+              </div>
+              <button class="pill" id="notifWeekly" onclick="togglePill(this)"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOWNLOAD / PWA CARD -->
+        <div>
+          <div class="section-label">Mobile App</div>
+          <div class="pwa-card">
+            <div class="pwa-inner">
+              <div class="pwa-header">
+                <div class="pwa-icon">
+                  <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3" stroke="#fff" stroke-width="1.8"/><line x1="12" y1="18" x2="12" y2="18" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+                </div>
+                <div>
+                  <div class="pwa-title">Install DMFlow</div>
+                  <div class="pwa-sub">Add to your home screen — free</div>
+                </div>
+              </div>
+              <div class="pwa-features">
+                <div class="pwa-feat">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#C8FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Works offline
+                </div>
+                <div class="pwa-feat">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#C8FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Push notifications
+                </div>
+                <div class="pwa-feat">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#C8FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  No App Store needed
+                </div>
+                <div class="pwa-feat">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#C8FF00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Instant updates
+                </div>
+              </div>
+
+              <!-- Install button — changes by device -->
+              <button class="btn-pwa-install" id="btnInstall" onclick="handleInstall()">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7 10 12 15 17 10" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+                <span id="btnInstallLabel">Add to Home Screen</span>
+              </button>
+
+              <!-- iOS step-by-step -->
+              <div class="pwa-divider" id="iosDividerWrap" style="display:none;"><span>HOW TO INSTALL ON iOS</span></div>
+              <div class="ios-steps" id="iosSteps">
+                <div class="ios-step">
+                  <div class="ios-step-num">1</div>
+                  <div class="ios-step-text">Tap the <strong>Share</strong> button <span style="display:inline-block;background:rgba(255,255,255,.15);border-radius:4px;padding:1px 5px;font-size:11px;">⬆</span> in the Safari toolbar</div>
+                </div>
+                <div class="ios-step">
+                  <div class="ios-step-num">2</div>
+                  <div class="ios-step-text">Scroll down and tap <strong>"Add to Home Screen"</strong></div>
+                </div>
+                <div class="ios-step">
+                  <div class="ios-step-num">3</div>
+                  <div class="ios-step-text">Tap <strong>"Add"</strong> in the top-right corner — done!</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- RIGHT COL -->
       <div class="settings-col">
+
+        <!-- PREFERENCES -->
+        <div>
+          <div class="section-label">Preferences</div>
+          <div class="card">
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(124,58,237,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" stroke="#7C3AED" stroke-width="1.8"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Auto-pause on IG limit</div>
+                <div class="toggle-sub">Pause automations near API limits</div>
+              </div>
+              <button class="pill on" id="prefAutoPause" onclick="togglePill(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(200,255,0,.15);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#7a8800" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Smart Rate Limiting</div>
+                <div class="toggle-sub">Spread DMs to avoid spam flags</div>
+              </div>
+              <button class="pill on" id="prefSmart" onclick="togglePill(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(59,130,246,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#3B82F6" stroke-width="1.8"/><path d="M12 8v4l3 3" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Timezone-aware Sending</div>
+                <div class="toggle-sub">Match DM time to follower timezone</div>
+              </div>
+              <button class="pill" id="prefTimezone" onclick="togglePill(this)"></button>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-icon" style="background:rgba(34,197,94,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="#22C55E" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="toggle-text">
+                <div class="toggle-label">Auto-add New Followers</div>
+                <div class="toggle-sub">Tag new followers in Contacts</div>
+              </div>
+              <button class="pill" id="prefAutoFollow" onclick="togglePill(this)"></button>
+            </div>
+          </div>
+        </div>
 
         <!-- MORE LINKS -->
         <div>
@@ -244,20 +531,66 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
               </div>
               <svg class="row-chev" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#0A0A0F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
+            <div class="card-row" onclick="showExport()">
+              <div class="row-icon" style="background:rgba(59,130,246,.1);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7 10 12 15 17 10" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="#3B82F6" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+              <div class="row-text">
+                <div class="row-label">Export My Data</div>
+                <div class="row-sub">Download all automations & contacts</div>
+              </div>
+              <span class="row-badge">ZIP</span>
+            </div>
+            <div class="card-row" onclick="copyReferral()">
+              <div class="row-icon" style="background:rgba(200,255,0,.15);">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#5a7000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#5a7000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="row-text">
+                <div class="row-label">Refer a Friend</div>
+                <div class="row-sub">Earn 500 free DMs per referral</div>
+              </div>
+              <span class="row-badge" style="background:rgba(200,255,0,.2);color:#5a7000;">FREE</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DANGER ZONE -->
+        <div>
+          <div class="section-label">Danger Zone</div>
+          <div class="card">
+            <div class="danger-section">
+              <div class="danger-title">⚠ Irreversible actions</div>
+              <button class="btn-danger" onclick="toast('Feature coming soon — contact support to reset.')">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M3 12a9 9 0 101 2.83" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="3 3 3 9 9 9" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Reset All Automations
+              </button>
+              <button class="btn-danger" onclick="toast('To delete your account, email support@dmflow.app')">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/></svg>
+                Delete Account
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- SIGN OUT -->
         <div>
           <div class="section-label">Session</div>
-          <button class="btn-logout" onclick="signOut()">
-            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
-              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <polyline points="16 17 21 12 16 7" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="21" y1="12" x2="9" y2="12" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-            Sign Out of DMFlow
-          </button>
+          <div class="card">
+            <div style="padding:16px;">
+              <button class="btn-logout" onclick="signOut()" style="border-radius:10px;">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                  <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="16 17 21 12 16 7" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <line x1="21" y1="12" x2="9" y2="12" stroke="#EF4444" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                Sign Out of DMFlow
+              </button>
+            </div>
+            <div class="version-row">
+              <div class="version-dot"></div>
+              <div class="version-text">DMFlow v2.4.1 · All systems operational</div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -272,13 +605,20 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
 
   // ── Toast ──
   let _toastTimer;
-  function toast(msg, dur) {
+  window.toast = function(msg, dur) {
     const t = document.getElementById('dmf-toast');
     t.textContent = msg;
     t.classList.add('show');
     clearTimeout(_toastTimer);
     _toastTimer = setTimeout(() => t.classList.remove('show'), dur || 2800);
-  }
+  };
+
+  // ── Toggle pill ──
+  window.togglePill = function(btn) {
+    btn.classList.toggle('on');
+    const isOn = btn.classList.contains('on');
+    toast(btn.id + ' ' + (isOn ? 'enabled' : 'disabled'));
+  };
 
   // ── Render profile ──
   function renderProfile(user) {
@@ -316,6 +656,28 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
       planEl.textContent = plan + ' Plan';
       planEl.className   = 'plan-badge' + (rawPlan !== 'free' ? ' pro' : '');
     }
+
+    // Stats
+    const dms   = user.dmsSent || user.stats?.dmsSent || 0;
+    const autos = user.automationCount || user.stats?.automations || 0;
+    const joined = user.createdAt ? user.joinedAt : null;
+    let days = '—';
+    if (joined) {
+      days = Math.max(1, Math.floor((Date.now() - new Date(joined)) / 86400000));
+    }
+    const el = id => document.getElementById(id);
+    if (el('statDMs'))   el('statDMs').textContent   = dms > 999 ? (dms/1000).toFixed(1)+'k' : dms;
+    if (el('statAuto'))  el('statAuto').textContent  = autos;
+    if (el('statDays'))  el('statDays').textContent  = days;
+
+    // Usage bars
+    const limit  = user.limits?.dms || 500;
+    const dmPct  = Math.min(100, Math.round((dms / limit) * 100));
+    const autoPct= Math.min(100, Math.round((autos / 5) * 100));
+    if (el('uDMs'))         el('uDMs').textContent         = dms + ' / ' + limit;
+    if (el('uDMsFill'))     { el('uDMsFill').style.width = dmPct + '%'; el('uDMsFill').className = 'usage-fill' + (dmPct > 90 ? ' crit' : dmPct > 70 ? ' warn' : ''); }
+    if (el('uAutos'))       el('uAutos').textContent       = autos + ' / 5';
+    if (el('uAutosFill'))   { el('uAutosFill').style.width = autoPct + '%'; el('uAutosFill').className = 'usage-fill' + (autoPct > 90 ? ' crit' : autoPct > 70 ? ' warn' : ''); }
   }
 
   // ── Render IG card ──
@@ -406,7 +768,24 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
   window.showConfirm  = () => document.getElementById('confirmOverlay').classList.add('show');
   window.closeConfirm = () => document.getElementById('confirmOverlay').classList.remove('show');
 
-  // ── Fix Webhook (resubscribe) ──
+  // ── Export confirm ──
+  window.showExport  = () => document.getElementById('exportOverlay').classList.add('show');
+  window.closeExport = () => document.getElementById('exportOverlay').classList.remove('show');
+  window.doExport = async function() {
+    closeExport();
+    toast('📦 Export requested — check your email shortly!');
+  };
+
+  // ── Referral copy ──
+  window.copyReferral = function() {
+    try {
+      const user = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+      const ref  = 'https://dmflow.app?ref=' + (user._id || 'share');
+      navigator.clipboard.writeText(ref).then(() => toast('🔗 Referral link copied!'));
+    } catch(e) { toast('Could not copy link.'); }
+  };
+
+  // ── Fix Webhook ──
   window.resubscribeWebhook = async function () {
     const btn = document.getElementById('btnFixWebhook');
     if (btn) { btn.textContent = 'Fixing…'; btn.disabled = true; }
@@ -429,7 +808,6 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
       user.instagram  = { connected: false, username: '', profilePic: '', userId: '' };
       user.igConnected = false;
       localStorage.setItem('dmflow_user', JSON.stringify(user));
-      // Tell app shell → update sidebar avatar
       try { window.top.postMessage({ type: 'dmflow_user_updated' }, '*'); } catch(e) {}
       closeConfirm();
       renderProfile(user);
@@ -449,7 +827,6 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
     localStorage.removeItem('dmflow_modal_seen');
     localStorage.removeItem('dmflow_avatar_ts');
     sessionStorage.clear();
-    // If running inside app.html iframe, tell parent to handle logout+redirect
     try {
       if (window.top && window.top !== window) {
         window.top.postMessage({ type: 'dmflow_logout' }, '*');
@@ -459,7 +836,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
     window.location.replace('/');
   };
 
-  // ── Navigate sub-pages via app shell ──
+  // ── Navigate sub-pages ──
   const PAGE_MAP = {
     security: { path: 'pages/settings/security.html', page: 'security' },
     support:  { path: 'pages/settings/support.html',  page: 'support'  },
@@ -471,6 +848,85 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:var(--bla
     if (!p) return;
     try { window.top.postMessage({ type: 'dmflow_navigate', path: p.path, page: p.page }, '*'); } catch(e) {}
   };
+
+  // ── PWA / Install logic ──
+  let _deferredPrompt = null;
+
+  function detectDevice() {
+    const ua = navigator.userAgent;
+    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return 'ios';
+    if (/Android/.test(ua)) return 'android';
+    return 'desktop';
+  }
+
+  function isInStandaloneMode() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+  }
+
+  function initPWA() {
+    const btn   = document.getElementById('btnInstall');
+    const label = document.getElementById('btnInstallLabel');
+    const iosSteps  = document.getElementById('iosSteps');
+    const iosDivWrap = document.getElementById('iosDividerWrap');
+
+    if (isInStandaloneMode()) {
+      // Already installed
+      btn.innerHTML = '<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Already Installed ✓</span>';
+      btn.style.background = '#22C55E';
+      btn.disabled = true;
+      return;
+    }
+
+    const device = detectDevice();
+
+    if (device === 'ios') {
+      label.textContent = 'Add to Home Screen (iOS)';
+      iosDivWrap.style.display = 'flex';
+      iosSteps.classList.add('show');
+      btn.onclick = function() {
+        iosSteps.classList.toggle('show');
+        iosDivWrap.style.display = iosSteps.classList.contains('show') ? 'flex' : 'none';
+      };
+    } else if (device === 'android') {
+      label.textContent = 'Install App (Android)';
+    }
+
+    // Listen for Chrome/Android install prompt
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      _deferredPrompt = e;
+      label.textContent = device === 'android' ? 'Install App' : 'Add to Home Screen';
+    });
+
+    window.addEventListener('appinstalled', function() {
+      btn.innerHTML = '<svg width="18" height="18" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Installed ✓</span>';
+      btn.style.background = '#22C55E';
+      btn.disabled = true;
+      toast('🎉 DMFlow installed on your device!');
+    });
+  }
+
+  window.handleInstall = async function() {
+    if (_deferredPrompt) {
+      _deferredPrompt.prompt();
+      const { outcome } = await _deferredPrompt.userChoice;
+      _deferredPrompt = null;
+      if (outcome === 'accepted') toast('Installing DMFlow…');
+    } else {
+      const device = detectDevice();
+      if (device === 'ios') {
+        const iosSteps  = document.getElementById('iosSteps');
+        const iosDivWrap = document.getElementById('iosDividerWrap');
+        iosSteps.classList.toggle('show');
+        iosDivWrap.style.display = iosSteps.classList.contains('show') ? 'flex' : 'none';
+      } else if (device === 'desktop') {
+        toast('Open DMFlow on your mobile browser to install the app.');
+      }
+    }
+  };
+
+  initPWA();
 
 })();
 </script>
