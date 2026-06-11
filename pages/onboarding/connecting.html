@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/apple-touch-icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png">
+  <link rel="manifest" href="/icons/site.webmanifest">
+  <meta name="msapplication-TileImage" content="/icons/mstile-150x150.png">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+  <meta name="msapplication-config" content="/icons/browserconfig.xml">
+  <meta name="theme-color" content="#0A0A0F">
+<meta name="dmflow-api" content="https://dmflow-backend-u9h8.onrender.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Connecting – DMFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<script src="../../assets/js/config.js"></script>
+</head>
+<body>
+<div style="position:fixed;top:16px;left:16px;z-index:9999;"><a href="javascript:void(0)" onclick="dmfBack()" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#5A5A6E;text-decoration:none;padding:6px 12px;border:1px solid #E2E2EA;border-radius:8px;background:#fff;cursor:pointer;transition:all .15s;" onmouseover="this.style.background='#F4F4F8'" onmouseout="this.style.background='#fff'"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</a></div>
+<div class="connecting-page">
+  <div class="step-progress">
+    <div class="prog-step done">
+      <div class="prog-dot done"><svg width="10" height="10" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      Account
+    </div>
+    <div class="prog-line" style="background:var(--lime);"></div>
+    <div class="prog-step done">
+      <div class="prog-dot done"><svg width="10" height="10" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      Instagram
+    </div>
+    <div class="prog-line"></div>
+    <div class="prog-step active">
+      <div class="prog-dot" style="border-color:var(--black);color:var(--black);">3</div>
+      Setup
+    </div>
+  </div>
+  <div class="connecting-spinner">
+    <div class="spinner-inner"></div>
+  </div>
+  <div class="connecting-title" id="connectTitle">Connecting Instagram...</div>
+  <div class="connecting-sub" id="connectSub">Please wait while we connect your Instagram account...</div>
+
+  <!-- Status steps -->
+  <div style="margin-top:32px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px;">
+    <div class="connect-status-step" id="cstep1">
+      <span class="cstep-icon" id="icon1"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#9898A8" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#9898A8" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="cstep-text">Verifying Instagram account</span>
+    </div>
+    <div class="connect-status-step" id="cstep2" style="opacity:0.4;">
+      <span class="cstep-icon" id="icon2"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#9898A8" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#9898A8" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="cstep-text">Connecting Meta API</span>
+    </div>
+    <div class="connect-status-step" id="cstep3" style="opacity:0.4;">
+      <span class="cstep-icon" id="icon3"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#9898A8" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#9898A8" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="cstep-text">Setting up automations</span>
+    </div>
+    <div class="connect-status-step" id="cstep4" style="opacity:0.4;">
+      <span class="cstep-icon" id="icon4"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#9898A8" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#9898A8" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="cstep-text">Ready!</span>
+    </div>
+  </div>
+</div>
+
+<style>
+.connect-status-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--gray-50);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text);
+  transition: all .4s;
+}
+.cstep-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cstep-text { font-weight: 500; }
+</style>
+
+<script>
+// Auth guard
+const _cuser = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+if (!_cuser) window.location.href = '../auth/login.html';
+
+const SVG_CHECK = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#0A0A0F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+const steps = [
+  { el: 'cstep1', icon: 'icon1', delay: 600 },
+  { el: 'cstep2', icon: 'icon2', delay: 1400 },
+  { el: 'cstep3', icon: 'icon3', delay: 2200 },
+  { el: 'cstep4', icon: 'icon4', delay: 2900 },
+];
+steps.forEach(({ el, icon, delay }) => {
+  setTimeout(() => {
+    const stepEl = document.getElementById(el);
+    const iconEl = document.getElementById(icon);
+    stepEl.style.opacity = '1';
+    stepEl.style.background = 'rgba(200,255,0,0.12)';
+    stepEl.style.border = '1.5px solid var(--lime)';
+    iconEl.innerHTML = SVG_CHECK;
+  }, delay);
+});
+setTimeout(() => {
+  document.getElementById('connectTitle').textContent = 'Instagram Connected!';
+  document.getElementById('connectSub').textContent = 'Redirecting to setup...';
+}, 3000);
+setTimeout(() => {
+  window.location.href = 'onboarding.html';
+}, 4000);
+</script>
+<script>function dmfBack(){if(document.referrer){history.back();}else{window.location.href="../auth/login.html";}}</script>
+</body>
+</html>
