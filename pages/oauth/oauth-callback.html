@@ -32,7 +32,6 @@ body{font-family:'Instrument Sans',sans-serif;background:#F8F8FC;display:flex;al
 .error-box h2{color:#ef4444;font-size:16px;margin-bottom:8px;}
 .error-box p{font-size:13px;color:#5A5A6E;margin-bottom:14px;}
 .error-box a{display:inline-block;padding:9px 20px;background:#0A0A0F;color:#fff;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;}
-
 </style>
 </head>
 <body>
@@ -49,78 +48,77 @@ body{font-family:'Instrument Sans',sans-serif;background:#F8F8FC;display:flex;al
 <script src="../../assets/js/api.js"></script>
 <script>
 (function() {
-  // Backend now redirects with ?code= (one-time token) instead of ?token= (JWT in URL)
   const urlParams = new URLSearchParams(window.location.search);
-  const code  = urlParams.get('code');
-  const error = urlParams.get('error');
+  const code     = urlParams.get('code');
+  const error    = urlParams.get('error');
+  const provider = urlParams.get('provider') || 'google'; // google | facebook
 
-  // Strip query params immediately — code must not sit in browser history
+  // Strip query params immediately
   window.history.replaceState({}, document.title, window.location.pathname);
 
-  if (error) {
+  function showError(msg) {
     document.getElementById('spinner').style.display = 'none';
     document.getElementById('msg').style.display = 'none';
     document.getElementById('errorBox').style.display = '';
-    document.getElementById('errorMsg').textContent = 'Google sign-in was cancelled or failed.';
+    document.getElementById('errorMsg').textContent = msg || 'Something went wrong. Please try again.';
+  }
+
+  if (error) {
+    const label = provider === 'facebook' ? 'Facebook' : 'Google';
+    showError(label + ' sign-in was cancelled or failed.');
     return;
   }
 
-  if (code) {
-    document.getElementById('msg').textContent = 'Completing sign in...';
-    // Exchange one-time code for JWT — code was never a real token so URL exposure is safe
-    fetch(API.BASE_URL + '/auth/google/token?code=' + encodeURIComponent(code))
-      .then(r => r.json())
-      .then(data => {
-        if (!data.token) throw new Error('No token');
-        API.setToken(data.token);
-        document.getElementById('msg').textContent = 'Getting your profile...';
-        return API.getMe();
-      })
-      .then(user => {
-        const ig = user.instagram || {};
-        localStorage.setItem('dmflow_user', JSON.stringify({
-          name:        user.name,
-          avatar:      user.avatar || (user.name || 'U')[0].toUpperCase(),
-          plan:        user.plan || 'free',
-          dmsSent:     user.dmsSent  || user.dmsSentMonth || 0,
-          dmsLimit:    user.dmsLimit || user.dmLimit      || 500,
-          igConnected: ig.connected  || false,
-          instagram: {
-            connected:  ig.connected  || false,
-            username:   ig.username   || '',
-            profilePic: ig.profilePic || '',
-            userId:     ig.userId     || '',
-            pageId:     ig.pageId     || '',
-          },
-        }));
-        document.getElementById('msg').textContent = 'Welcome ' + user.name + '! Redirecting...';
-        setTimeout(() => {
-          window.location.href = user.instagram?.connected ? '../../app.html' : '../onboarding/platform-select.html';
-        }, 800);
-      })
-      .catch(() => {
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('msg').style.display = 'none';
-        document.getElementById('errorBox').style.display = '';
-        document.getElementById('errorMsg').textContent = 'Could not load your profile. Try again.';
-      });
-  } else {
-    document.getElementById('spinner').style.display = 'none';
-    document.getElementById('msg').style.display = 'none';
-    document.getElementById('errorBox').style.display = '';
+  if (!code) {
+    showError('No sign-in code found. Please try again.');
+    return;
   }
+
+  // Exchange one-time code for JWT
+  // Both Google and Facebook use the same /auth/google/token endpoint pattern
+  // Facebook uses /auth/facebook/token
+  const tokenEndpoint = provider === 'facebook'
+    ? '/auth/facebook/token'
+    : '/auth/google/token';
+
+  document.getElementById('msg').textContent = 'Completing sign in...';
+
+  fetch(API.BASE_URL + tokenEndpoint + '?code=' + encodeURIComponent(code))
+    .then(r => r.json())
+    .then(data => {
+      if (!data.token) throw new Error('No token');
+      API.setToken(data.token);
+      document.getElementById('msg').textContent = 'Getting your profile...';
+      return API.getMe();
+    })
+    .then(user => {
+      const ig = user.instagram || {};
+      localStorage.setItem('dmflow_user', JSON.stringify({
+        name:        user.name,
+        avatar:      user.avatar || (user.name || 'U')[0].toUpperCase(),
+        plan:        user.plan || 'free',
+        dmsSent:     user.dmsSent  || user.dmsSentMonth || 0,
+        dmsLimit:    user.dmsLimit || user.dmLimit      || 500,
+        igConnected: ig.connected  || false,
+        instagram: {
+          connected:  ig.connected  || false,
+          username:   ig.username   || '',
+          profilePic: ig.profilePic || '',
+          userId:     ig.userId     || '',
+          pageId:     ig.pageId     || '',
+        },
+      }));
+      document.getElementById('msg').textContent = 'Welcome ' + user.name + '! Redirecting...';
+      setTimeout(() => {
+        window.location.href = user.instagram?.connected
+          ? '../../app.html'
+          : '../onboarding/platform-select.html';
+      }, 800);
+    })
+    .catch(() => {
+      showError('Could not load your profile. Please try again.');
+    });
 })();
-
-// ── Sidebar nav active on click ──
-document.querySelectorAll('.sb-nav .sb-link[href]').forEach(function(link){
-  link.addEventListener('click', function(){
-    document.querySelectorAll('.sb-nav .sb-link').forEach(function(l){ l.classList.remove('active'); });
-    link.classList.remove('active');
-    void link.offsetWidth; // force reflow so animation replays
-    link.classList.add('active');
-  });
-});
-
 </script>
 </body>
 </html>
