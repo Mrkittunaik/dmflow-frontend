@@ -746,30 +746,39 @@ async function loadMoreThreads(){
 /* ═══════════════════════════════════════════════════════
    DP / PROFILE LOADING via /api/ig-avatar & /api/ig-lookup
 ══════════════════════════════════════════════════════════ */
-const _dpCache = {};   // username → avatar url
-const _profileCache = {}; // username → full profile
+const _dpCache = {};   // key → avatar url
+const _profileCache = {}; // key → full profile
 
-async function loadThreadDP(tid, username){
-  if(_dpCache[username]){
-    _applyDP(tid, username, _dpCache[username]);
+function isNumericId(val){ return /^\d{6,}$/.test(String(val||'')); }
+
+async function loadThreadDP(tid, usernameOrId){
+  if(!usernameOrId) return;
+  const key = String(usernameOrId);
+  if(_dpCache[key]){
+    _applyDP(tid, key, _dpCache[key]);
     return;
   }
   try{
-    const url = `/api/ig-avatar/${encodeURIComponent(username)}`;
-    const res = await fetch(url);
-    if(!res.ok) return;
-    const blob = await res.blob();
-    const objUrl = URL.createObjectURL(blob);
-    _dpCache[username] = objUrl;
-    _applyDP(tid, username, objUrl);
-    // Also patch the thread data so it's available when panel opens
-    const t = (window._inboxThreads||[]).find(t=>t._id===tid) ||
-              DEMO_THREADS.find(t=>t._id===tid);
-    if(t) t.avatar = objUrl;
+    if(isNumericId(key)){
+      // Numeric IG user ID — must resolve via backend (has the token)
+      await loadThreadProfile(tid, key);
+    } else {
+      // Real @username — use CF proxy
+      const url = `/api/ig-avatar/${encodeURIComponent(key)}`;
+      const res = await fetch(url);
+      if(!res.ok) return;
+      const blob = await res.blob();
+      const objUrl = URL.createObjectURL(blob);
+      _dpCache[key] = objUrl;
+      _applyDP(tid, key, objUrl);
+      const t = (window._inboxThreads||[]).find(t=>t._id===tid) ||
+                DEMO_THREADS.find(t=>t._id===tid);
+      if(t) t.avatar = objUrl;
+    }
   } catch(e){}
 }
 
-function _applyDP(tid, username, avatarUrl){
+function _applyDP(tid, key, avatarUrl){
   // Thread list avatar
   const avEl = document.querySelector(`#ti-${tid} .t-av`);
   if(avEl && !avEl.querySelector('img')){
@@ -799,27 +808,61 @@ function _applyDP(tid, username, avatarUrl){
   }
 }
 
-async function loadThreadProfile(tid, username){
-  if(_profileCache[username]){
-    _applyProfileStats(tid, _profileCache[username]);
+async function loadThreadProfile(tid, usernameOrId){
+  if(!usernameOrId) return;
+  const key = String(usernameOrId);
+  if(_profileCache[key]){
+    _applyProfileStats(tid, _profileCache[key]);
     return;
   }
   try{
-    const res = await fetch(`/api/ig-lookup?username=${encodeURIComponent(username)}`);
-    if(!res.ok) return;
-    const data = await res.json();
-    if(!data.found) return;
-    _profileCache[username] = data;
+    let data;
+    if(isNumericId(key)){
+      // Numeric IG user ID → call our backend which has the page token
+      if(!window.API || !API.getToken()) return;
+      const BASE = document.querySelector('meta[name="dmflow-api"]')?.content || window.DMFLOW_API_URL || '';
+      const res = await fetch(`${BASE}/api/ig-profile/${encodeURIComponent(key)}`, {
+        headers: { 'Authorization': 'Bearer ' + API.getToken() }
+      });
+      if(!res.ok) return;
+      data = await res.json();
+      // Normalize to same shape as ig-lookup
+      data = {
+        found: true,
+        username:   data.username   || '',
+        fullName:   data.name       || data.fullName || '',
+        profilePic: data.profile_picture_url || data.profilePic || '',
+        followers:  data.followers  ?? null,
+        following:  data.following  ?? null,
+        posts:      data.posts      ?? null,
+        biography:  data.biography  || '',
+        isVerified: data.is_verified || false,
+      };
+    } else {
+      // Real @username → CF ig-lookup scraper
+      const res = await fetch(`/api/ig-lookup?username=${encodeURIComponent(key)}`);
+      if(!res.ok) return;
+      data = await res.json();
+      if(!data.found) return;
+    }
+    _profileCache[key] = data;
     // Update thread data
     const t = (window._inboxThreads||[]).find(t=>t._id===tid) ||
               DEMO_THREADS.find(t=>t._id===tid);
     if(t){
-      t.followers = data.followers;
-      t.following = data.following;
-      t.posts     = data.posts;
+      if(data.followers != null) t.followers = data.followers;
+      if(data.following != null) t.following = data.following;
+      if(data.posts     != null) t.posts     = data.posts;
       t.isVerified = data.isVerified;
-      t.biography  = data.biography;
-      if(data.profilePic){ t.avatar = data.profilePic; _dpCache[username] = data.profilePic; _applyDP(tid, username, data.profilePic); }
+      if(data.biography) t.biography = data.biography;
+      // Update display username if we resolved it from numeric ID
+      if(data.username && isNumericId(t.username)) t.igUsername = data.username;
+      if(data.fullName  && (!t.name || isNumericId(t.name))) t.name = data.fullName;
+      if(data.profilePic){
+        t.avatar = data.profilePic;
+        _dpCache[key] = data.profilePic;
+        _applyDP(tid, key, data.profilePic);
+      }
     }
     _applyProfileStats(tid, data);
   } catch(e){}
@@ -833,11 +876,30 @@ function _applyProfileStats(tid, data){
     const lbl = box.querySelector('.stat-lbl');
     const val = box.querySelector('.stat-val');
     if(!lbl||!val) return;
-    if(lbl.textContent==='Followers' && data.followers) val.textContent = data.followers.toLocaleString();
+    if(lbl.textContent==='Followers' && data.followers != null) val.textContent = Number(data.followers).toLocaleString();
+    if(lbl.textContent==='Following' && data.following != null) val.textContent = Number(data.following).toLocaleString();
+    if(lbl.textContent==='Posts'     && data.posts     != null) val.textContent = data.posts;
   });
-  // Update bio if shown
+  // Update bio
   const bioEl = document.getElementById('igBio');
-  if(bioEl && data.biography) bioEl.textContent = data.biography;
+  if(bioEl && data.biography){ bioEl.textContent = data.biography; bioEl.style.display = ''; }
+  // Update display name in info panel
+  if(data.fullName || data.name){
+    const nameEl = document.querySelector('#infoBody .info-name');
+    if(nameEl){ nameEl.childNodes[0].textContent = data.fullName || data.name; }
+  }
+  // Show real @username if we resolved it from numeric ID
+  if(data.username){
+    const handleEl = document.querySelector('#infoBody .info-username');
+    if(handleEl) handleEl.textContent = '@' + data.username;
+    const igLink = document.querySelector('#infoBody .info-ig-link');
+    if(igLink) igLink.href = 'https://instagram.com/' + data.username;
+  }
+  // Update chat header name
+  const chatName = document.getElementById('chatName');
+  if(chatName && (data.fullName || data.name)){
+    chatName.textContent = data.fullName || data.name;
+  }
   // Verified badge
   if(data.isVerified){
     const nameEl = document.querySelector('#infoBody .info-name');
@@ -996,7 +1058,7 @@ async function loadMessages(id, initial=false){
     if(chatAv && thread.avatar){
       chatAv.innerHTML += `<img src="${esc(thread.avatar)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.remove()"><div class="online-dot"></div>`;
     }
-    if(chatName) chatName.textContent = thread.name||('@'+(thread.username||'unknown'));
+    if(chatName) chatName.textContent = thread.name||('@'+(thread.igUsername||(!isNumericId(thread.username)?thread.username:null)||'unknown'));
   }
 
   if(!msgs.length && initial){
@@ -1199,8 +1261,9 @@ function closeMobileInfo(){ closeInfo(); }
 function renderInfoPanel(id){
   const thread = activeThreadData || DEMO_THREADS.find(t=>t._id===id)||{};
   const col    = stringColor(thread.username||id);
-  const name   = thread.name||('@'+(thread.username||'unknown'));
-  const initials=(thread.username||'?')[0].toUpperCase();
+  const name   = thread.name||('@'+(thread.igUsername||thread.username||'unknown'));
+  const initials=(thread.name||thread.igUsername||thread.username||'?')[0].toUpperCase();
+  const displayHandle = thread.igUsername || (!isNumericId(thread.username) ? thread.username : null);
   const labels  = getLabels(id);
   const notes   = getNotes(id);
 
@@ -1215,9 +1278,9 @@ function renderInfoPanel(id){
           ${thread.avatar?`<img src="${esc(thread.avatar)}" alt="" onerror="this.remove()">`:''} ${initials}
         </div>
         <div class="info-name">${esc(name)}</div>
-        ${thread.username?`<div class="info-username">@${esc(thread.username)}</div>`:''}
+        ${displayHandle?`<div class="info-username">@${esc(displayHandle)}</div>`:''}
         ${thread.biography?`<div id="igBio" style="font-size:11px;color:#9898A8;text-align:center;line-height:1.4;padding:0 8px;margin-top:4px;">${esc(thread.biography)}</div>`:`<div id="igBio" style="font-size:11px;color:#9898A8;text-align:center;display:none;"></div>`}
-        ${thread.username?`<a class="info-ig-link" href="https://instagram.com/${esc(thread.username)}" target="_blank">
+        ${displayHandle?`<a class="info-ig-link" href="https://instagram.com/${esc(displayHandle)}" target="_blank">
           View on Instagram <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         </a>`:''}
       </div>
