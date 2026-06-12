@@ -2111,6 +2111,382 @@ section.testimonials-section { background: #ffffff; }
   </div>
 </footer>
 
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DMFlow — Master Override Stylesheet
+   Micro dot-grid backgrounds + card colours + radius + mobile fix
+═══════════════════════════════════════════════════════════════ */
+
+/* ── DOT GRID PATTERNS ─────────────────────────────────────── */
+:root {
+  /* White dots on dark — 24px grid, 1.4px dot */
+  --dot-dark:   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.10)'/%3E%3C/svg%3E");
+  /* White dots on purple */
+  --dot-purple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.12)'/%3E%3C/svg%3E");
+  /* Dark dots on lime */
+  --dot-lime:   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(0,0,0,0.09)'/%3E%3C/svg%3E");
+}
+
+/* ── SECTION BACKGROUNDS ───────────────────────────────────── */
+
+/* S1 Hero — pure white */
+section.hero { background:#ffffff !important; background-image:none !important; }
+
+/* S2 Meta Showcase — near-black + dots */
+.meta-showcase-section {
+  background-color:#0A0A0F !important;
+  background-image:var(--dot-dark) !important;
+  background-size:24px 24px !important;
+}
+.meta-showcase-section::before,
+.meta-showcase-section::after { display:none !important; }
+
+/* S3 Stats / Proof — very dark navy + dots */
+section.stats-proof-section {
+  background-color:#0B0B14 !important;
+  background-image:var(--dot-dark) !important;
+  background-size:24px 24px !important;
+}
+
+/* S4 How It Works — white */
+section.section#features { background:#ffffff !important; background-image:none !important; }
+
+/* S5 Use Cases — deep purple + dots */
+section.section.usecases {
+  background-color:#2d0764 !important;
+  background-image:var(--dot-purple) !important;
+  background-size:24px 24px !important;
+}
+section.section.usecases::before,
+section.section.usecases::after { display:none !important; }
+
+/* S6 Pricing — lime + dots */
+section.section#pricing {
+  background-color:#C8FF00 !important;
+  background-image:var(--dot-lime) !important;
+  background-size:24px 24px !important;
+}
+section.section#pricing::before,
+section.section#pricing::after { display:none !important; }
+
+/* S7 FAQ — soft warm white */
+section.section.faq-section {
+  background:#f8f7f4 !important;
+  background-image:none !important;
+}
+section.section.faq-section::before { display:none !important; }
+
+/* Creators Wall — pure white */
+section.creators-wall-section { background:#ffffff !important; background-image:none !important; }
+
+/* Price Compare — dark + dots */
+.price-compare-section {
+  background-color:#0A0A0F !important;
+  background-image:var(--dot-dark) !important;
+  background-size:24px 24px !important;
+}
+.price-compare-section::before { display:none !important; }
+
+/* Shadowban Section — dark + dots */
+.shadowban-section {
+  background-color:#0A0A0F !important;
+  background-image:var(--dot-dark) !important;
+  background-size:24px 24px !important;
+}
+/* Fix text colours for dark bg */
+.shadowban-section .shadowban-title { color:#fff !important; }
+.shadowban-section .shadowban-safe-title { color:#fff !important; }
+.shadowban-section .shadowban-testimonial {
+  background:#141414 !important;
+  border-color:#222 !important;
+}
+.shadowban-section .shadowban-testimonial p { color:#bbb !important; }
+.shadowban-section .shadowban-author { border-top-color:#222 !important; }
+.shadowban-section .shadowban-aname { color:#fff !important; }
+
+/* Device Showcase — off-white */
+section.device-showcase-section {
+  background:#f4f5f7 !important;
+  background-image:none !important;
+}
+/* Fix text on light device section */
+section.device-showcase-section .section-title { color:#0A0A0F !important; }
+section.device-showcase-section .section-sub { color:#555 !important; }
+section.device-showcase-section .section-label { color:#7C3AED !important; }
+
+/* Testimonials — white */
+section.testimonials-section { background:#ffffff !important; background-image:none !important; }
+
+/* CTA — dark + dots */
+.cta-section {
+  background-color:#0A0A0F !important;
+  background-image:var(--dot-dark) !important;
+  background-size:24px 24px !important;
+}
+
+/* Contact — light grey */
+.contact-section { background:#f4f5f7 !important; background-image:none !important; }
+
+/* ── CARD COLOURS: BLACK or WHITE only ─────────────────────── */
+
+/* --- Cards on WHITE sections → dark (#0A0A0F) cards --- */
+
+/* Step cards (How It Works — white bg) */
+.step-card {
+  background:#0A0A0F !important;
+  border:1px solid #1e1e1e !important;
+  border-radius:10px !important;
+}
+.step-card h3 { color:#fff !important; }
+.step-card p { color:#888 !important; }
+.step-card .step-num { color:#C8FF00 !important; }
+.step-card .step-icon { color:#C8FF00 !important; }
+.step-card .step-icon svg { stroke:#C8FF00 !important; }
+.step-featured {
+  background:#111827 !important;
+  border-color:#C8FF00 !important;
+}
+
+/* Testimonial cards (white bg) — white cards with dark border */
+.twall-card {
+  background:#ffffff !important;
+  border:1.5px solid #e8e8e8 !important;
+  border-radius:10px !important;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06) !important;
+}
+.twall-featured {
+  background:#0A0A0F !important;
+  border-color:#0A0A0F !important;
+}
+.twall-featured .twall-stars { color:#C8FF00 !important; }
+.twall-featured .twall-quote { color:#e5e5e5 !important; }
+.twall-featured .twall-aname { color:#fff !important; }
+.twall-featured .twall-asub { color:#888 !important; }
+.twall-lime {
+  background:#C8FF00 !important;
+  border-color:#C8FF00 !important;
+  border-radius:10px !important;
+}
+
+/* Creator wall cards (white bg) — dark cards */
+.cwall-card {
+  background:#0A0A0F !important;
+  border:1px solid #1e1e1e !important;
+  border-radius:10px !important;
+}
+.cwall-name { color:#fff !important; }
+.cwall-followers { color:#aaa !important; }
+
+/* --- Cards on DARK sections → white cards --- */
+
+/* Meta badge cards (dark bg) — white cards */
+.msc-badge-card {
+  background:#ffffff !important;
+  border:1px solid #e8e8e8 !important;
+  border-radius:10px !important;
+}
+.msc-badge-name { color:#0A0A0F !important; }
+.msc-badge-desc { color:#666 !important; }
+.msc-badge-check { color:#22c55e !important; }
+
+/* Proof stat cards (dark bg) — styled per variant */
+.proof-stat-card {
+  border-radius:10px !important;
+}
+.proof-stat-lime {
+  background:#C8FF00 !important;
+  border:none !important;
+}
+.proof-stat-lime .proof-stat-num,
+.proof-stat-lime .proof-stat-label { color:#0A0A0F !important; }
+.proof-stat-featured {
+  background:#0A0A0F !important;
+  border:2px solid #C8FF00 !important;
+}
+.proof-stat-purple {
+  background:#2d0764 !important;
+  border:1px solid #4c1d95 !important;
+}
+
+/* PCC cards (dark bg) — keep dark but clean */
+.pcc-card {
+  background:#111111 !important;
+  border:1px solid #222 !important;
+  border-radius:10px !important;
+}
+.pcc-winner {
+  background:#111111 !important;
+  border:1.5px solid #C8FF00 !important;
+}
+
+/* Shadowban testimonial (now dark bg) — white card */
+.shadowban-testimonial {
+  border-radius:10px !important;
+}
+
+/* Shadowban safe cards (dark bg) — dark card with lime icon */
+.shadowban-safe-card {
+  background:#141414 !important;
+  border:1px solid #1e1e1e !important;
+  border-radius:10px !important;
+}
+
+/* Use case cards (purple bg) — white cards */
+.usecase-card {
+  background:#ffffff !important;
+  border:1px solid #e8e8e8 !important;
+  border-radius:10px !important;
+}
+.usecase-card h3 { color:#0A0A0F !important; }
+.usecase-card p { color:#555 !important; }
+.usecase-card .uc-icon {
+  background:#0A0A0F !important;
+  color:#C8FF00 !important;
+  border-radius:10px !important;
+}
+.usecase-card .uc-icon svg { stroke:#C8FF00 !important; }
+.usecase-card .uc-tag {
+  background:#0A0A0F !important;
+  color:#C8FF00 !important;
+  border:none !important;
+}
+.uc-featured {
+  background:#0A0A0F !important;
+  border:1.5px solid #C8FF00 !important;
+}
+.uc-featured h3 { color:#fff !important; }
+.uc-featured p { color:#aaa !important; }
+.uc-featured .uc-icon { background:#C8FF00 !important; }
+.uc-featured .uc-icon svg { stroke:#0A0A0F !important; }
+.uc-featured .uc-tag { background:#C8FF00 !important; color:#0A0A0F !important; }
+
+/* Pricing cards (lime bg) — white & dark alternating */
+.price-card {
+  background:#ffffff !important;
+  border:1.5px solid #d4e800 !important;
+  border-radius:10px !important;
+}
+.price-card .price-name { color:#0A0A0F !important; }
+.price-card .price-amount { color:#0A0A0F !important; }
+.price-card .price-desc { color:#555 !important; }
+.price-featured {
+  background:#0A0A0F !important;
+  border:2px solid #0A0A0F !important;
+}
+.price-featured .price-name { color:#C8FF00 !important; }
+.price-featured .price-amount { color:#ffffff !important; }
+.price-featured .price-desc { color:#888 !important; }
+.price-featured .price-list li { color:#ccc !important; }
+
+/* Device chips (light bg) — dark chips */
+.device-chip {
+  background:#0A0A0F !important;
+  color:#fff !important;
+  border:1px solid #1e1e1e !important;
+  border-radius:10px !important;
+}
+
+/* Laptop auto cards */
+.ldc-auto-card {
+  background:#0A0A0F !important;
+  border:1px solid #1e1e1e !important;
+  border-radius:10px !important;
+}
+
+/* Mobile stat card */
+.mobile-stat-card { border-radius:10px !important; }
+
+/* Contact form wrap & stats (light bg) — white card */
+.contact-form-wrap {
+  background:#ffffff !important;
+  border:1.5px solid #e5e5e5 !important;
+  border-radius:10px !important;
+}
+.contact-stats {
+  background:#ffffff !important;
+  border:1.5px solid #e5e5e5 !important;
+  border-radius:10px !important;
+}
+
+/* FAQ items */
+.faq-item {
+  border-radius:10px !important;
+  border:1.5px solid #e8e8e8 !important;
+  overflow:hidden;
+  margin-bottom:8px;
+}
+
+/* ── BUTTON RADIUS — 10px ───────────────────────────────────── */
+.btn-hero,
+.btn-hero-outline,
+.btn-primary,
+.btn-ghost,
+.btn-price,
+.btn-price-outline,
+.contact-submit,
+.meta-showcase-cta,
+.mob-cta,
+.announce-link {
+  border-radius:10px !important;
+}
+
+/* ── SVG ICON COLOURS ─────────────────────────────────────── */
+/* Step cards — lime icons on dark cards */
+.step-card .step-icon { background:rgba(200,255,0,0.1) !important; border-radius:10px !important; }
+/* Use case icons — already handled above */
+/* Meta connector */
+.msc-line { background:linear-gradient(to right,#e8e8e8,#ccc) !important; }
+.msc-verified-dot { background:#0A0A0F !important; border-color:#0A0A0F !important; }
+
+/* ── MOBILE — no cards touching screen edge ─────────────────── */
+@media (max-width: 768px) {
+
+  /* Global section padding */
+  .section-inner,
+  .meta-showcase-inner,
+  .contact-inner,
+  .cta-inner,
+  .price-compare-inner { padding-left:20px !important; padding-right:20px !important; }
+
+  /* Grid containers get side padding so cards don't touch edges */
+  .proof-stats-grid,
+  .steps-grid,
+  .usecases-grid,
+  .pricing-grid,
+  .twall-grid,
+  .shadowban-grid,
+  .device-feature-chips,
+  .faq-list { padding-left:4px !important; padding-right:4px !important; box-sizing:border-box; }
+
+  /* Ensure all cards are full-width with no overflow */
+  .step-card,
+  .usecase-card,
+  .price-card,
+  .proof-stat-card,
+  .twall-card,
+  .msc-badge-card,
+  .shadowban-safe-card,
+  .faq-item {
+    width:100% !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Contact cards */
+  .contact-form-wrap,
+  .contact-stats { width:100% !important; box-sizing:border-box !important; }
+
+  /* Hero */
+  .hero-content { padding-left:20px !important; padding-right:20px !important; box-sizing:border-box; }
+
+  /* Shadowban grid stacked */
+  .shadowban-grid { gap:24px !important; }
+
+  /* Device showcase */
+  .device-showcase-section .section-inner { padding-left:20px !important; padding-right:20px !important; }
+}
+</style>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
