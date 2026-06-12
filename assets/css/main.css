@@ -1086,13 +1086,17 @@ h1 .accent {
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background: var(--gray-50);
+  background-color: #fce7f3;
+  background-image: radial-gradient(circle, #f9a8d4 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 .sidebar {
   width: 240px;
   min-width: 240px;
-  background: #fff;
-  border-right: 1px solid var(--gray-200);
+  background-color: #e0f2fe;
+  background-image: radial-gradient(circle, #93c5fd 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-right: 1px solid #bae6fd;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -1497,8 +1501,7 @@ h1 .accent {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; min-height: auto; }
-  .hero-visual { display: none; }
-  h1 { font-size: 42px; }
+  .hero-visual { display: flex; justify-content: center; width: 100%; }
   .auth-page { grid-template-columns: 1fr; }
   .auth-left { display: none; }
   .steps-grid, .usecases-grid, .pricing-grid { grid-template-columns: 1fr; }
@@ -1921,9 +1924,7 @@ h1 .accent {
   .btn-hero, .btn-hero-outline { width: 100%; max-width: 360px; justify-content: center; text-align: center; padding: 15px 20px; font-size: 15px; }
   .hero-trust { justify-content: center; }
   .hero-badge { display: inline-flex; }
-  .hero-visual { display: none; }
-
-  /* LOGOS */
+  .hero-visual { display: flex; justify-content: center; width: 100%; overflow: visible; }
   .logos-strip { padding: 12px 16px; overflow: hidden; }
   .logos-inner { flex-direction: column; gap: 8px; align-items: center; }
   .logos-label { text-align: center; font-size: 10px; }
