@@ -1086,13 +1086,17 @@ h1 .accent {
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background: var(--gray-50);
+  background-color: #fce7f3;
+  background-image: radial-gradient(circle, #f9a8d4 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 .sidebar {
   width: 240px;
   min-width: 240px;
-  background: #fff;
-  border-right: 1px solid var(--gray-200);
+  background-color: #e0f2fe;
+  background-image: radial-gradient(circle, #93c5fd 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-right: 1px solid #bae6fd;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -1989,4 +1993,3 @@ h1 .accent {
   .pricing-toggle { flex-wrap: wrap; justify-content: center; }
   .faq-q { font-size: 14px; }
 }
-
