@@ -1449,10 +1449,28 @@ section.stats-proof-section .section-sub { color: #aaa; }
 /* How it works — clean white */
 section.section#features { background: #ffffff; }
 
-/* Use cases — deep purple (like image 5 reference) */
+/* Use cases — deep purple WITH diagonal stripe texture (like instantdm reference) */
 section.section.usecases {
-  background: linear-gradient(135deg, #5b21b6 0%, #4c1d95 40%, #3b0764 100%);
+  background-color: #4c1d95;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 6px,
+      rgba(255,255,255,0.04) 6px,
+      rgba(255,255,255,0.04) 7px
+    );
+  position: relative;
 }
+section.section.usecases::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(91,33,182,0.7) 0%, rgba(59,7,100,0.8) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+section.section.usecases > * { position: relative; z-index: 1; }
+section.section.usecases .section-inner { position: relative; z-index: 1; }
 section.section.usecases .section-label { color: rgba(200,255,0,0.9); }
 section.section.usecases .section-title { color: #fff; }
 section.section.usecases .usecase-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
@@ -1463,8 +1481,32 @@ section.section.usecases .uc-icon svg { stroke: #C8FF00; }
 section.section.usecases .uc-tag { background: rgba(200,255,0,0.15); color: #C8FF00; border-color: rgba(200,255,0,0.3); }
 section.section.usecases .uc-featured { background: rgba(255,255,255,0.15) !important; border-color: rgba(200,255,0,0.5) !important; }
 
-/* Pricing — white */
-section.section#pricing { background: #ffffff; }
+/* Pricing — #C8FF00 lime WITH same diagonal stripe texture */
+section.section#pricing {
+  background-color: #C8FF00;
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 6px,
+      rgba(0,0,0,0.06) 6px,
+      rgba(0,0,0,0.06) 7px
+    );
+  position: relative;
+}
+section.section#pricing::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(200,255,0,0.4) 0%, rgba(168,230,0,0.5) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+section.section#pricing > * { position: relative; z-index: 1; }
+section.section#pricing .section-inner { position: relative; z-index: 1; }
+/* Keep pricing text dark so it reads well on lime */
+section.section#pricing .section-label { color: #1a3300; opacity: 0.7; }
+section.section#pricing .section-title { color: #0A0A0F; }
+section.section#pricing .section-sub { color: #1a3300; }
 
 /* FAQ — soft blush/pink as in image 6 */
 section.section.faq-section {
