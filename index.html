@@ -1439,37 +1439,37 @@ section.stats-proof-section .section-sub { color: #aaa; }
 /* How it works — clean white */
 section.section#features { background: #ffffff; }
 
-/* Use cases — deep purple WITH diagonal stripe texture (like instantdm reference) */
+/* Use cases — green-yellow WITH diagonal stripe texture */
 section.section.usecases {
-  background-color: #4c1d95;
+  background-color: #C8FF00;
   background-image:
     repeating-linear-gradient(
       -45deg,
       transparent,
       transparent 6px,
-      rgba(255,255,255,0.04) 6px,
-      rgba(255,255,255,0.04) 7px
+      rgba(0,0,0,0.05) 6px,
+      rgba(0,0,0,0.05) 7px
     );
   position: relative;
 }
 section.section.usecases::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(91,33,182,0.7) 0%, rgba(59,7,100,0.8) 100%);
+  background: linear-gradient(135deg, rgba(200,255,0,0.35) 0%, rgba(168,230,0,0.45) 100%);
   pointer-events: none;
   z-index: 0;
 }
 section.section.usecases > * { position: relative; z-index: 1; }
 section.section.usecases .section-inner { position: relative; z-index: 1; }
-section.section.usecases .section-label { color: rgba(200,255,0,0.9); }
-section.section.usecases .section-title { color: #fff; }
+section.section.usecases .section-label { color: #1a3300; opacity: 0.75; }
+section.section.usecases .section-title { color: #0A0A0F; }
 section.section.usecases .usecase-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
-section.section.usecases .usecase-card h3 { color: #fff; }
-section.section.usecases .usecase-card p { color: rgba(255,255,255,0.75); }
-section.section.usecases .uc-icon { background: rgba(255,255,255,0.1); color: #fff; }
-section.section.usecases .uc-icon svg { stroke: #C8FF00; }
-section.section.usecases .uc-tag { background: rgba(200,255,0,0.15); color: #C8FF00; border-color: rgba(200,255,0,0.3); }
-section.section.usecases .uc-featured { background: rgba(255,255,255,0.15) !important; border-color: rgba(200,255,0,0.5) !important; }
+section.section.usecases .usecase-card h3 { color: #0A0A0F; }
+section.section.usecases .usecase-card p { color: #1a2200; }
+section.section.usecases .uc-icon { background: rgba(255,255,255,0.1); color: #0A0A0F; }
+section.section.usecases .uc-icon svg { stroke: #0A0A0F; }
+section.section.usecases .uc-tag { background: rgba(0,0,0,0.12); color: #0A0A0F; border-color: rgba(0,0,0,0.2); }
+section.section.usecases .uc-featured { background: rgba(0,0,0,0.08) !important; border-color: rgba(0,0,0,0.3) !important; }
 
 /* Pricing — #C8FF00 lime WITH same diagonal stripe texture */
 section.section#pricing {
@@ -2197,19 +2197,6 @@ section.section.faq-section::before { display:none !important; }
 section.section.faq-section .section-label { color:#0284c7 !important; }
 section.section.faq-section .section-title { color:#0c1a2e !important; }
 section.section.faq-section .section-sub { color:#334155 !important; }
-section.section.faq-section .faq-item {
-  background:#ffffff !important;
-  border:1px solid #bae6fd !important;
-  border-radius:10px !important;
-  box-shadow:0 2px 10px rgba(2,132,199,0.07) !important;
-}
-section.section.faq-section .faq-q { color:#0c1a2e !important; }
-section.section.faq-section .faq-q:hover { background:#f0f9ff !important; }
-section.section.faq-section .faq-a {
-  background:#f0f9ff !important;
-  color:#334155 !important;
-  border-color:#bae6fd !important;
-}
 
 /* Creators Wall — light yellow with dots */
 section.creators-wall-section { background-color:#fefce8 !important; background-image:radial-gradient(circle, #fde047 1px, transparent 1px) !important; background-size:24px 24px !important; }
@@ -2389,14 +2376,15 @@ section.testimonials-section { background-color:#fce7f3 !important; background-i
   border-radius:10px !important;
 }
 
-/* Use case cards (purple bg) — white cards */
+/* Use case cards (green-yellow bg) — white cards with dark icons */
 .usecase-card {
   background:#ffffff !important;
-  border:1px solid #e8e8e8 !important;
+  border:1px solid rgba(0,0,0,0.12) !important;
   border-radius:10px !important;
+  box-shadow:0 2px 12px rgba(0,0,0,0.08) !important;
 }
 .usecase-card h3 { color:#0A0A0F !important; }
-.usecase-card p { color:#555 !important; }
+.usecase-card p { color:#334155 !important; }
 .usecase-card .uc-icon {
   background:#0A0A0F !important;
   color:#C8FF00 !important;
@@ -2410,7 +2398,7 @@ section.testimonials-section { background-color:#fce7f3 !important; background-i
 }
 .uc-featured {
   background:#0A0A0F !important;
-  border:1.5px solid #C8FF00 !important;
+  border:1.5px solid #0A0A0F !important;
 }
 .uc-featured h3 { color:#fff !important; }
 .uc-featured p { color:#aaa !important; }
@@ -2472,6 +2460,40 @@ section.testimonials-section { background-color:#fce7f3 !important; background-i
   border:1.5px solid #e8e8e8 !important;
   overflow:hidden;
   margin-bottom:8px;
+}
+/* FAQ proper padding */
+section.section.faq-section .faq-item {
+  background:#ffffff !important;
+  border:1px solid #bae6fd !important;
+  border-radius:10px !important;
+  box-shadow:0 2px 10px rgba(2,132,199,0.07) !important;
+  overflow:hidden;
+}
+section.section.faq-section .faq-q {
+  color:#0c1a2e !important;
+  padding: 18px 20px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  line-height: 1.5;
+}
+section.section.faq-section .faq-q:hover { background:#f0f9ff !important; }
+section.section.faq-section .faq-a {
+  background:#f0f9ff !important;
+  color:#334155 !important;
+  border-color:#bae6fd !important;
+  padding: 16px 20px !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  border-top: 1px solid #bae6fd !important;
 }
 
 /* ── BUTTON RADIUS — 10px ───────────────────────────────────── */
