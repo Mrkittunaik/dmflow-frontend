@@ -2132,14 +2132,37 @@ section.testimonials-section { background: #ffffff; }
 /* S1 Hero — pure white */
 section.hero { background:#ffffff !important; background-image:none !important; }
 
-/* S2 Meta Showcase — near-black + dots */
+/* S2 Meta Showcase — light purple + square intersection dot grid */
+section.meta-showcase-section,
 .meta-showcase-section {
-  background-color:#0A0A0F !important;
-  background-image:var(--dot-dark) !important;
-  background-size:24px 24px !important;
+  background-color: #ede9fe !important;
+  background-image:
+    radial-gradient(circle, #a78bfa 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
 }
+section.meta-showcase-section::before,
+section.meta-showcase-section::after,
 .meta-showcase-section::before,
 .meta-showcase-section::after { display:none !important; }
+
+/* Fix text colours for light purple bg */
+.meta-showcase-section .meta-showcase-title { color:#1e1b4b !important; }
+.meta-showcase-section .meta-showcase-accent { color:#7C3AED !important; }
+.meta-showcase-section .meta-showcase-desc { color:#4c1d95 !important; }
+.meta-showcase-section .meta-showcase-eyebrow { color:#7C3AED !important; }
+.meta-showcase-section .meta-showcase-cta {
+  background:#0A0A0F !important;
+  color:#C8FF00 !important;
+}
+.meta-showcase-section .msc-logo span { color:#1e1b4b !important; }
+.meta-showcase-section .msc-badge-inner span { color:#1e1b4b !important; }
+.meta-showcase-section .msc-trust-badge { border-color:#7C3AED !important; }
+.meta-showcase-section .msc-line { background:linear-gradient(to right,#a78bfa,#7C3AED) !important; }
+.meta-showcase-section .msc-verified-dot {
+  background:#7C3AED !important;
+  border-color:#7C3AED !important;
+}
+.meta-showcase-section .msc-verified-dot svg { stroke:#fff !important; }
 
 /* S3 Stats / Proof — very dark navy + dots */
 section.stats-proof-section {
@@ -2279,15 +2302,16 @@ section.testimonials-section { background:#ffffff !important; background-image:n
 
 /* --- Cards on DARK sections → white cards --- */
 
-/* Meta badge cards (dark bg) — white cards */
+/* Meta badge cards (light purple bg) — white cards */
 .msc-badge-card {
   background:#ffffff !important;
-  border:1px solid #e8e8e8 !important;
+  border:1px solid #ddd6fe !important;
   border-radius:10px !important;
+  box-shadow:0 2px 12px rgba(124,58,237,0.08) !important;
 }
-.msc-badge-name { color:#0A0A0F !important; }
-.msc-badge-desc { color:#666 !important; }
-.msc-badge-check { color:#22c55e !important; }
+.msc-badge-name { color:#1e1b4b !important; }
+.msc-badge-desc { color:#6b7280 !important; }
+.msc-badge-check { color:#7C3AED !important; font-weight:700; }
 
 /* Proof stat cards (dark bg) — styled per variant */
 .proof-stat-card {
