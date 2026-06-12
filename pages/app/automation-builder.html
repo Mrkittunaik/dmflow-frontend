@@ -398,25 +398,10 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
         <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.8"/></svg>
         Product Link DM
       </button>
-      <button class="type-tab locked" onclick="openProModal('Comment Reply')">
-        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="10" x2="15" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="9" y1="14" x2="12" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        Comment Reply <span class="pro-chip">PRO</span>
-      </button>
-      <button class="type-tab locked" onclick="openProModal('Story DM')">
-        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
-        Story DM <span class="pro-chip">PRO</span>
-      </button>
-      <button class="type-tab locked" onclick="openProModal('Collect Email')">
-        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        Collect Email <span class="pro-chip">PRO</span>
-      </button>
-      <button class="type-tab locked" onclick="openProModal('Discount Code')">
-        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="1.8"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/></svg>
-        Discount Code <span class="pro-chip">PRO</span>
-      </button>
-      <button class="type-tab locked" onclick="openProModal('Live Reply AI')">
-        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Live Reply AI <span class="pro-chip">PRO</span>
+      <button class="type-tab" id="tab-flow-dm" onclick="switchType('flow-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="5" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="19" r="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 12h4l4-5M7 12h4l4 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Flow DM
+        <span style="font-size:9px;font-weight:800;background:#059669;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;line-height:1.4;">NEW</span>
       </button>
     </div>
   </div>
@@ -757,6 +742,198 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
           <div style="height:32px;"></div>
         </div>
         <!-- end steps-col -->
+
+        <!-- ════ FLOW DM PANEL ════ -->
+        <div class="steps-col" id="flowDmPanel" style="display:none;">
+
+          <!-- How it works banner -->
+          <div style="background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#059669" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:2px;">Flow DM — Interactive Button Conversations</div>
+              <div style="font-size:11px;color:#047857;line-height:1.5;">Send a DM with up to 5 reply buttons. When the user taps a button, DMFlow automatically sends the next message you set for that button.</div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 1: Select Reel -->
+          <div class="step-card open" id="fstep1">
+            <div class="step-head" onclick="toggleStep('fstep1')">
+              <div class="step-num" id="fstep1num"><span class="num-text">1</span></div>
+              <div>
+                <div class="step-title">Select a Reel or Post</div>
+                <div class="step-subtitle" id="fstep1sub">Choose which content triggers this flow</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div style="font-size:11px;color:#5A5A6E;margin-bottom:10px;line-height:1.5;">This flow will trigger when someone comments on the post or reel you select below.</div>
+              <div class="media-tabs">
+                <button class="media-tab active" id="fmtab-posts" onclick="setFlowMediaTab('posts',this)">Posts</button>
+                <button class="media-tab" id="fmtab-reels" onclick="setFlowMediaTab('reels',this)">Reels</button>
+              </div>
+              <div id="flowPostGrid" class="post-grid">
+                <div class="grid-loading"><div class="spin"></div>Loading posts…</div>
+              </div>
+              <div id="flowReelGrid" class="post-grid" style="display:none;">
+                <div class="grid-loading"><div class="spin"></div>Loading reels…</div>
+              </div>
+              <!-- Selected banner -->
+              <div class="sel-banner" id="flowSelBanner" style="display:none;">
+                <img class="sel-banner-thumb" id="flowSelBannerThumb" src="" alt="">
+                <div class="sel-banner-info">
+                  <div class="sel-banner-title" id="flowSelBannerTitle">—</div>
+                  <div class="sel-banner-kw" id="flowSelBannerType">—</div>
+                </div>
+                <button class="sel-banner-change" onclick="clearFlowMedia()">Change</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 2: Trigger Keyword -->
+          <div class="step-card" id="fstep2">
+            <div class="step-head" onclick="toggleStep('fstep2')">
+              <div class="step-num" id="fstep2num"><span class="num-text">2</span></div>
+              <div>
+                <div class="step-title">Trigger Keyword</div>
+                <div class="step-subtitle" id="fstep2sub">What comment starts this flow?</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div style="font-size:11px;color:#5A5A6E;margin-bottom:10px;line-height:1.5;">When someone comments this word/phrase, DMFlow sends them your first Flow DM automatically.</div>
+              <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Trigger mode</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;" id="flowTriggerModes">
+                <button class="trigger-mode active" onclick="setFlowTriggerMode('any',this)">Any comment</button>
+                <button class="trigger-mode" onclick="setFlowTriggerMode('keyword',this)">Specific keyword</button>
+              </div>
+              <div id="flowKwSection" style="display:none;">
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Keywords <span style="font-weight:500;color:#C4C4D0;">(press Enter to add)</span></div>
+                <div class="kw-input-row">
+                  <input class="kw-input" id="flowKwInput" placeholder="e.g. LINK, INFO, SHOP" onkeydown="if(event.key==='Enter')addFlowKeyword()">
+                  <button class="kw-add-btn" onclick="addFlowKeyword()">Add</button>
+                </div>
+                <div class="kw-chips" id="flowKwChips"></div>
+              </div>
+              <div style="background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:9px;padding:10px 12px;margin-top:6px;">
+                <div style="font-size:11px;font-weight:700;color:#0A0A0F;margin-bottom:3px;">💡 Tip</div>
+                <div style="font-size:11px;color:#5A5A6E;line-height:1.5;">Tell your followers in the caption: <em>"Comment LINK below and I'll DM you instantly!"</em></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 3: First DM Message + Buttons -->
+          <div class="step-card" id="fstep3">
+            <div class="step-head" onclick="toggleStep('fstep3')">
+              <div class="step-num" id="fstep3num"><span class="num-text">3</span></div>
+              <div>
+                <div class="step-title">First DM Message</div>
+                <div class="step-subtitle" id="fstep3sub">What do they receive first?</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <!-- Quick fill suggestions -->
+              <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Quick fill</div>
+              <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px;">
+                <button class="dm-sug" onclick="useFlowSug(this,'fdmText')">Hey {{name}}! Tap below to explore 👇</button>
+                <button class="dm-sug" onclick="useFlowSug(this,'fdmText')">Hi {{name}}! What would you like to know?</button>
+                <button class="dm-sug" onclick="useFlowSug(this,'fdmText')">Hey! Here's what you asked for — pick an option below:</button>
+              </div>
+              <textarea class="dm-textarea" id="fdmText" placeholder="Type your first DM here…" oninput="onFlowDmInput()" rows="3"></textarea>
+              <div class="char-count"><span id="fdmCharCount">0</span> / 500</div>
+              <div style="margin-top:8px;margin-bottom:14px;">
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Insert variable</div>
+                <div class="variable-chips">
+                  <button class="var-chip" onclick="insertFlowVar('{{name}}','fdmText')">{{name}}</button>
+                  <button class="var-chip" onclick="insertFlowVar('{{username}}','fdmText')">{{username}}</button>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class="step-divider"></div>
+
+              <!-- Reply Buttons section -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#0A0A0F;">Reply Buttons</div>
+                  <div style="font-size:11px;color:#5A5A6E;margin-top:2px;">Up to 5 buttons. Each sends a different follow-up DM when tapped.</div>
+                </div>
+                <span style="font-size:10px;color:#9898A8;" id="flowBtnCount">0 / 5</span>
+              </div>
+
+              <!-- Button cards container -->
+              <div id="flowButtonsContainer" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+
+              <!-- Add button CTA -->
+              <button id="flowAddBtn" onclick="addFlowButton()" style="width:100%;padding:9px;background:#F4F4F8;border:1.5px dashed #DDDDE5;border-radius:9px;font-size:12px;font-weight:700;color:#5A5A6E;cursor:pointer;transition:all .15s;font-family:inherit;" onmouseover="this.style.background='#EEEEF5';this.style.borderColor='#9898A8'" onmouseout="this.style.background='#F4F4F8';this.style.borderColor='#DDDDE5'">
+                + Add reply button
+              </button>
+
+              <!-- Info callout -->
+              <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:9px;padding:10px 12px;margin-top:10px;cursor:pointer;" onclick="this.querySelector('.flow-info-body').style.display=this.querySelector('.flow-info-body').style.display==='none'?'block':'none'">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#3B82F6" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"/></svg>
+                  <span style="font-size:11px;font-weight:700;color:#1E40AF;">How buttons work</span>
+                  <span style="font-size:10px;color:#93C5FD;margin-left:auto;">tap to expand</span>
+                </div>
+                <div class="flow-info-body" style="display:none;margin-top:6px;font-size:11px;color:#3B5BDB;line-height:1.6;">
+                  When your viewer taps a button like <strong>"Shop now"</strong>, Instagram sends the keyword <strong>SHOP_NOW</strong> back to you as a DM. DMFlow catches it and automatically sends the Reply DM you set for that button.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 4: Advanced Settings -->
+          <div class="step-card" id="fstep4">
+            <div class="step-head" onclick="toggleStep('fstep4')">
+              <div class="step-num" id="fstep4num"><span class="num-text">4</span></div>
+              <div style="flex:1;">
+                <div class="step-title">
+                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="9" stroke="#5A5A6E" stroke-width="1.8"/><path d="M12 6v6l4 2" stroke="#5A5A6E" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  Advanced Settings
+                </div>
+                <div class="step-subtitle" id="fstep4sub">Delay &amp; rate limit</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div style="margin-bottom:12px;">
+                <div class="section-label" style="margin-bottom:6px;">DM Delay after trigger</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;" id="flowDelayOptions">
+                  <button class="trigger-mode active" onclick="setFlowDelay(0,this)">Instant</button>
+                  <button class="trigger-mode" onclick="setFlowDelay(30,this)">30 sec</button>
+                  <button class="trigger-mode" onclick="setFlowDelay(60,this)">1 min</button>
+                  <button class="trigger-mode" onclick="setFlowDelay(300,this)">5 min</button>
+                </div>
+              </div>
+              <div class="step-divider"></div>
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div class="section-label">Max DMs per hour</div>
+                  <div style="font-size:13px;font-weight:800;color:#7C3AED;" id="flowRateLabel">100 / hr</div>
+                </div>
+                <input type="range" id="flowRateSlider" min="10" max="200" step="10" value="100"
+                  style="width:100%;accent-color:#7C3AED;cursor:pointer;"
+                  oninput="document.getElementById('flowRateLabel').textContent=this.value+' / hr'">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#9898A8;margin-top:4px;">
+                  <span>10/hr (safe)</span>
+                  <span style="color:#F59E0B;font-weight:600;">⚠ 200/hr (limit)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:32px;"></div>
+        </div>
+        <!-- end flow dm panel -->
 
       </div>
     </div>
@@ -1367,8 +1544,239 @@ function switchType(type, btn) {
   state.type = type;
   document.querySelectorAll('.type-tab:not(.locked)').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('builderTitle').textContent =
-    type === 'product-dm' ? 'Product Link DM Setup' : 'Auto DM Setup';
+  const titles = {'product-dm':'Product Link DM Setup','flow-dm':'Flow DM Setup','auto-dm':'Auto DM Setup'};
+  document.getElementById('builderTitle').textContent = titles[type] || 'Auto DM Setup';
+
+  // Show/hide panels
+  const stepsCol = document.querySelector('.steps-col:not(#flowDmPanel)');
+  const flowPanel = document.getElementById('flowDmPanel');
+  if (type === 'flow-dm') {
+    stepsCol.style.display = 'none';
+    flowPanel.style.display = 'block';
+    if (!flowState.mediaLoaded) initFlowMedia();
+  } else {
+    stepsCol.style.display = 'block';
+    flowPanel.style.display = 'none';
+  }
+}
+
+/* ═══════════════════════════════════════
+   FLOW DM STATE & LOGIC
+═══════════════════════════════════════ */
+const flowState = {
+  mediaTab: 'posts',
+  selectedMedia: null,
+  triggerMode: 'any',
+  keywords: [],
+  firstDmText: '',
+  buttons: [],
+  delay: 0,
+  maxDmsPerHour: 100,
+  mediaLoaded: false
+};
+
+function initFlowMedia() {
+  flowState.mediaLoaded = true;
+  // reuse existing posts/reels from the main grid if loaded
+  const existingPosts = document.getElementById('postGrid').innerHTML;
+  const existingReels = document.getElementById('reelGrid').innerHTML;
+  if (existingPosts && !existingPosts.includes('Loading')) {
+    document.getElementById('flowPostGrid').innerHTML = existingPosts;
+    document.getElementById('flowReelGrid').innerHTML = existingReels;
+    // re-wire click handlers
+    document.querySelectorAll('#flowPostGrid .post-item, #flowReelGrid .post-item').forEach(el => {
+      el.onclick = () => selectFlowMedia(el);
+    });
+  } else {
+    // trigger a load if not already loaded
+    loadMedia && loadMedia();
+    setTimeout(() => {
+      document.getElementById('flowPostGrid').innerHTML = document.getElementById('postGrid').innerHTML;
+      document.getElementById('flowReelGrid').innerHTML = document.getElementById('reelGrid').innerHTML;
+      document.querySelectorAll('#flowPostGrid .post-item, #flowReelGrid .post-item').forEach(el => {
+        el.onclick = () => selectFlowMedia(el);
+      });
+    }, 1500);
+  }
+}
+
+function setFlowMediaTab(tab, btn) {
+  flowState.mediaTab = tab;
+  document.querySelectorAll('#fstep1 .media-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('flowPostGrid').style.display = tab === 'posts' ? 'grid' : 'none';
+  document.getElementById('flowReelGrid').style.display = tab === 'reels' ? 'grid' : 'none';
+}
+
+function selectFlowMedia(el) {
+  document.querySelectorAll('#flowPostGrid .post-item, #flowReelGrid .post-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  const thumb = el.querySelector('img')?.src || '';
+  const title = el.dataset.caption || el.dataset.id || 'Selected content';
+  const type = el.dataset.type || 'POST';
+  flowState.selectedMedia = { thumb, title, type };
+  document.getElementById('flowSelBannerThumb').src = thumb;
+  document.getElementById('flowSelBannerTitle').textContent = title.slice(0,40);
+  document.getElementById('flowSelBannerType').textContent = type;
+  document.getElementById('flowSelBanner').style.display = 'flex';
+  document.getElementById('fstep1sub').textContent = title.slice(0,30) + '…';
+  markFlowStepDone('fstep1num');
+}
+
+function clearFlowMedia() {
+  flowState.selectedMedia = null;
+  document.getElementById('flowSelBanner').style.display = 'none';
+  document.getElementById('fstep1sub').textContent = 'Choose which content triggers this flow';
+  document.querySelectorAll('#flowPostGrid .post-item, #flowReelGrid .post-item').forEach(e => e.classList.remove('selected'));
+  document.getElementById('fstep1num').classList.remove('done');
+}
+
+function setFlowTriggerMode(mode, btn) {
+  flowState.triggerMode = mode;
+  document.querySelectorAll('#flowTriggerModes .trigger-mode').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('flowKwSection').style.display = mode === 'keyword' ? 'block' : 'none';
+  document.getElementById('fstep2sub').textContent = mode === 'any' ? 'Any comment triggers' : (flowState.keywords.length ? flowState.keywords.join(', ') : 'Add keywords below');
+}
+
+function addFlowKeyword() {
+  const input = document.getElementById('flowKwInput');
+  const val = input.value.trim().toUpperCase().replace(/\s+/g,'_');
+  if (!val || flowState.keywords.includes(val)) { input.value=''; return; }
+  flowState.keywords.push(val);
+  input.value = '';
+  renderFlowKeywords();
+  document.getElementById('fstep2sub').textContent = flowState.keywords.join(', ');
+  markFlowStepDone('fstep2num');
+}
+
+function removeFlowKeyword(kw) {
+  flowState.keywords = flowState.keywords.filter(k => k !== kw);
+  renderFlowKeywords();
+  if (!flowState.keywords.length) document.getElementById('fstep2num').classList.remove('done');
+}
+
+function renderFlowKeywords() {
+  const container = document.getElementById('flowKwChips');
+  container.innerHTML = flowState.keywords.map(k =>
+    `<span class="kw-chip">${k}<button class="kw-chip-del" onclick="removeFlowKeyword('${k}')">×</button></span>`
+  ).join('');
+}
+
+function onFlowDmInput() {
+  const val = document.getElementById('fdmText').value;
+  flowState.firstDmText = val;
+  document.getElementById('fdmCharCount').textContent = val.length;
+  if (val.trim()) {
+    markFlowStepDone('fstep3num');
+    document.getElementById('fstep3sub').textContent = val.slice(0,35) + (val.length>35?'…':'');
+  } else {
+    document.getElementById('fstep3num').classList.remove('done');
+    document.getElementById('fstep3sub').textContent = 'What do they receive first?';
+  }
+}
+
+function useFlowSug(btn, targetId) {
+  document.getElementById(targetId).value = btn.textContent;
+  onFlowDmInput();
+}
+
+function insertFlowVar(v, targetId) {
+  const ta = document.getElementById(targetId);
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.slice(0,s) + v + ta.value.slice(e);
+  ta.selectionStart = ta.selectionEnd = s + v.length;
+  ta.focus();
+  onFlowDmInput();
+}
+
+function addFlowButton() {
+  if (flowState.buttons.length >= 5) return;
+  const id = 'fbtn_' + Date.now();
+  flowState.buttons.push({ id, label: '', keyword: '', replyDm: '' });
+  renderFlowButtons();
+}
+
+function removeFlowButton(id) {
+  flowState.buttons = flowState.buttons.filter(b => b.id !== id);
+  renderFlowButtons();
+}
+
+function renderFlowButtons() {
+  const container = document.getElementById('flowButtonsContainer');
+  document.getElementById('flowBtnCount').textContent = flowState.buttons.length + ' / 5';
+  document.getElementById('flowAddBtn').style.display = flowState.buttons.length >= 5 ? 'none' : 'block';
+
+  container.innerHTML = flowState.buttons.map((btn, i) => `
+    <div style="background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:10px;padding:12px 13px;position:relative;" id="flowBtnCard_${btn.id}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+        <div style="font-size:11px;font-weight:700;color:#7C3AED;">Button ${i+1}</div>
+        <button onclick="removeFlowButton('${btn.id}')" style="background:none;border:none;cursor:pointer;color:#C4C4D0;font-size:16px;line-height:1;padding:0;" title="Remove">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">BUTTON LABEL</div>
+          <input class="link-input" style="margin-bottom:0;" placeholder="e.g. Shop now" value="${btn.label}"
+            oninput="updateFlowBtn('${btn.id}','label',this.value);autoKeyword('${btn.id}',this.value)">
+        </div>
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">TRIGGER KEYWORD</div>
+          <input class="link-input" style="margin-bottom:0;font-family:monospace;font-size:11px;" placeholder="SHOP_NOW" value="${btn.keyword}" id="flowKwField_${btn.id}"
+            oninput="updateFlowBtn('${btn.id}','keyword',this.value)">
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">REPLY DM WHEN TAPPED</div>
+        <textarea class="dm-textarea" style="min-height:56px;margin-bottom:0;font-size:12px;" rows="2" placeholder="What to send when user taps this button…"
+          oninput="updateFlowBtn('${btn.id}','replyDm',this.value)">${btn.replyDm}</textarea>
+      </div>
+      <!-- Preview chip -->
+      <div style="margin-top:8px;display:flex;gap:5px;align-items:center;">
+        <div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:#7C3AED;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="flowChipPreview_${btn.id}">
+          ${btn.label || 'Button label'}
+        </div>
+        <span style="font-size:10px;color:#C4C4D0;">→ triggers ${btn.keyword || '…'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateFlowBtn(id, field, value) {
+  const btn = flowState.buttons.find(b => b.id === id);
+  if (!btn) return;
+  btn[field] = value;
+  if (field === 'label') {
+    const chip = document.getElementById('flowChipPreview_' + id);
+    if (chip) chip.textContent = value || 'Button label';
+  }
+  if (field === 'keyword') {
+    const chip = document.getElementById('flowChipPreview_' + id);
+    if (chip) chip.nextElementSibling && (chip.nextElementSibling.textContent = '→ triggers ' + (value||'…'));
+  }
+}
+
+function autoKeyword(id, label) {
+  const kw = label.trim().toUpperCase().replace(/[^A-Z0-9]+/g,'_').replace(/^_|_$/g,'');
+  const kwField = document.getElementById('flowKwField_' + id);
+  const btn = flowState.buttons.find(b => b.id === id);
+  if (kwField && btn && (!btn.keyword || btn.keyword === btn._lastAutoKw)) {
+    kwField.value = kw;
+    btn.keyword = kw;
+    btn._lastAutoKw = kw;
+    // update chip
+    const chip = document.getElementById('flowChipPreview_' + id);
+    if (chip && chip.nextElementSibling) chip.nextElementSibling.textContent = '→ triggers ' + (kw||'…');
+  }
+}
+
+function setFlowDelay(sec, btn) {
+  flowState.delay = sec;
+  document.querySelectorAll('#flowDelayOptions .trigger-mode').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function markFlowStepDone(numId) {
+  document.getElementById(numId).classList.add('done');
 }
 
 /* ═══════════════════════════════════════
