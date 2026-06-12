@@ -2326,7 +2326,7 @@ section.testimonials-section { background-color:#fce7f3 !important; background-i
 .msc-badge-desc { color:#6b7280 !important; }
 .msc-badge-check { color:#7C3AED !important; font-weight:700; }
 
-/* Proof stat cards (dark bg) — styled per variant */
+/* Proof stat cards (dark bg) — all lime/green-yellow like card 1 */
 .proof-stat-card {
   border-radius:10px !important;
 }
@@ -2336,14 +2336,35 @@ section.testimonials-section { background-color:#fce7f3 !important; background-i
 }
 .proof-stat-lime .proof-stat-num,
 .proof-stat-lime .proof-stat-label { color:#0A0A0F !important; }
+.proof-stat-lime .proof-stat-x { color:#0A0A0F !important; }
+.proof-stat-lime .proof-check { color:#0A0A0F !important; }
+.proof-stat-lime .proof-cross { color:#333 !important; }
+.proof-stat-lime .proof-solution { background:#0A0A0F !important; color:#C8FF00 !important; border-color:#0A0A0F !important; }
+.proof-stat-lime .proof-stat-divider { background:#0A0A0F !important; opacity:0.2 !important; }
+/* Featured (60%) — also lime */
 .proof-stat-featured {
-  background:#0A0A0F !important;
-  border:2px solid #C8FF00 !important;
+  background:#C8FF00 !important;
+  border:none !important;
 }
+.proof-stat-featured .proof-stat-num,
+.proof-stat-featured .proof-stat-label { color:#0A0A0F !important; }
+.proof-stat-featured .proof-stat-pct { color:#0A0A0F !important; }
+.proof-stat-featured .proof-check { color:#0A0A0F !important; }
+.proof-stat-featured .proof-cross { color:#333 !important; }
+.proof-stat-featured .proof-solution { background:#0A0A0F !important; color:#C8FF00 !important; border-color:#0A0A0F !important; }
+.proof-stat-featured .proof-stat-divider { background:#0A0A0F !important; opacity:0.2 !important; }
+/* Purple (90%) — also lime */
 .proof-stat-purple {
-  background:#2d0764 !important;
-  border:1px solid #4c1d95 !important;
+  background:#C8FF00 !important;
+  border:none !important;
 }
+.proof-stat-purple .proof-stat-num,
+.proof-stat-purple .proof-stat-label { color:#0A0A0F !important; }
+.proof-stat-purple .proof-stat-pct { color:#0A0A0F !important; }
+.proof-stat-purple .proof-check { color:#0A0A0F !important; }
+.proof-stat-purple .proof-cross { color:#333 !important; }
+.proof-stat-purple .proof-solution { background:#0A0A0F !important; color:#C8FF00 !important; border-color:#0A0A0F !important; }
+.proof-stat-purple .proof-stat-divider { background:#0A0A0F !important; opacity:0.2 !important; }
 
 /* PCC cards (dark bg) — keep dark but clean */
 .pcc-card {
@@ -2475,7 +2496,67 @@ section.testimonials-section { background-color:#fce7f3 !important; background-i
 .msc-line { background:linear-gradient(to right,#e8e8e8,#ccc) !important; }
 .msc-verified-dot { background:#0A0A0F !important; border-color:#0A0A0F !important; }
 
-/* ── MOBILE — no cards touching screen edge ─────────────────── */
+/* ── MOBILE NAV — lime/greenish-yellow bg with white dots ───── */
+@media (max-width: 768px) {
+  nav.nav {
+    background-color: #C8FF00 !important;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px) !important;
+    background-size: 22px 22px !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10) !important;
+  }
+  nav.nav .logo { color: #0A0A0F !important; }
+  nav.nav .logo span { color: #0A0A0F !important; }
+  nav.nav .nav-hamburger span { background: #0A0A0F !important; }
+  nav.nav .btn-primary,
+  nav.nav .btn-ghost { color: #0A0A0F !important; }
+}
+
+/* ── JOIN 14,000 CREATORS button — space above + sides ─────── */
+section.creators-wall-section > div[style*="text-align:center"],
+section.creators-wall-section [style*="text-align:center;margin-top"] {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  padding-bottom: 8px !important;
+}
+@media (max-width: 768px) {
+  section.creators-wall-section > div[style*="text-align:center"] {
+    padding: 0 20px 12px !important;
+    margin-top: 28px !important;
+  }
+  section.creators-wall-section .btn-hero {
+    width: calc(100% - 0px) !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    text-align: center !important;
+  }
+}
+
+/* ── MADE IN INDIA — smaller ────────────────────────────────── */
+.made-in-india {
+  font-size: 10px !important;
+  gap: 4px !important;
+}
+.made-in-india svg { width: 14px !important; height: 10px !important; }
+.india-name { font-size: 10px !important; }
+
+/* ── MOBILE proof stat cards — proper inner spacing ─────────── */
+@media (max-width: 768px) {
+  .proof-stat-card {
+    padding: 20px 18px !important;
+  }
+  .proof-stats-grid {
+    gap: 12px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .proof-stat-solution,
+  .proof-stat-row.proof-solution {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+  }
+  .proof-stat-label { font-size: 10px !important; letter-spacing: 0.05em !important; }
+  .proof-stat-num { font-size: 52px !important; }
+}
 @media (max-width: 768px) {
 
   /* Global section padding */
