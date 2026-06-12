@@ -94,7 +94,7 @@
   <div class="hero-content">
     <div class="hero-badge">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="#1877F2" style="flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.5 6h-2v2h2v2h-2v4h-2v-4H7.5v-2h2V8c0-1.1.9-2 2-2h2v2z"/></svg>
-      Meta Business Partner · 14,000+ creators
+      Meta Business Partner · 10,000+ creators
     </div>
     <h1>Turn Comments<br>Into <span class="accent">Customers.</span></h1>
     <p class="hero-sub">Auto-reply to comments, send links in DMs, and capture leads. Every Instagram interaction handled — automatically.</p>
@@ -107,9 +107,12 @@
     </div>
     <div class="hero-trust">
       <div class="avatars">
-        <span>M</span><span>J</span><span>S</span><span>A</span>
+        <img src="https://i.pravatar.cc/32?img=47" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+        <img src="https://i.pravatar.cc/32?img=12" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+        <img src="https://i.pravatar.cc/32?img=35" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+        <img src="https://i.pravatar.cc/32?img=68" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
       </div>
-      <span>Join 14,000+ creators already automating</span>
+      <span>Join 10,000+ creators already automating</span>
     </div>
   </div>
   <div class="hero-visual">
@@ -135,7 +138,7 @@
 
       <!-- Chat header -->
       <div class="phone-header">
-        <div class="phone-avatar">M</div>
+        <div class="phone-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://i.pravatar.cc/40?img=47" alt="mia.styles" style="width:34px;height:34px;border-radius:50%;object-fit:cover;display:block"></div>
         <div>
           <div class="phone-name">mia.styles</div>
           <div class="phone-sub">Instagram Direct</div>
@@ -1427,8 +1430,136 @@
 .twall-lime-author{font-size:12px;color:#3a5200}
 
 /* ═══════════════════════════════════════
-   IPHONE DEVICE MOCKUP
+   SECTION-BY-SECTION BACKGROUND COLOURS
 ═══════════════════════════════════════ */
+
+/* Hero — clean white */
+section.hero { background: #ffffff; }
+
+/* Logos strip — stays as-is (light grey) */
+
+/* Meta showcase — stays dark (already set) */
+
+/* Stats/proof section — dark charcoal */
+section.stats-proof-section { background: #0A0A0F; }
+section.stats-proof-section .section-label { color: #C8FF00; }
+section.stats-proof-section .section-title { color: #fff; }
+section.stats-proof-section .section-sub { color: #aaa; }
+
+/* How it works — clean white */
+section.section#features { background: #ffffff; }
+
+/* Use cases — deep purple (like image 5 reference) */
+section.section.usecases {
+  background: linear-gradient(135deg, #5b21b6 0%, #4c1d95 40%, #3b0764 100%);
+}
+section.section.usecases .section-label { color: rgba(200,255,0,0.9); }
+section.section.usecases .section-title { color: #fff; }
+section.section.usecases .usecase-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+section.section.usecases .usecase-card h3 { color: #fff; }
+section.section.usecases .usecase-card p { color: rgba(255,255,255,0.75); }
+section.section.usecases .uc-icon { background: rgba(255,255,255,0.1); color: #fff; }
+section.section.usecases .uc-icon svg { stroke: #C8FF00; }
+section.section.usecases .uc-tag { background: rgba(200,255,0,0.15); color: #C8FF00; border-color: rgba(200,255,0,0.3); }
+section.section.usecases .uc-featured { background: rgba(255,255,255,0.15) !important; border-color: rgba(200,255,0,0.5) !important; }
+
+/* Pricing — white */
+section.section#pricing { background: #ffffff; }
+
+/* FAQ — soft blush/pink as in image 6 */
+section.section.faq-section {
+  background: #fdf4f5;
+  position: relative;
+}
+section.section.faq-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(251,113,133,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(196,181,253,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+section.section.faq-section .section-label { color: #be185d; }
+section.section.faq-section .faq-item { border-color: #f9d0d8; }
+section.section.faq-section .faq-q { color: #1a1a2e; }
+section.section.faq-section .faq-q:hover { background: #fce7f3; }
+section.section.faq-section .faq-a { background: #fff0f3; border-color: #fce7f3; color: #555; }
+
+/* Creators wall — white */
+section.creators-wall-section { background: #ffffff; }
+
+/* Price compare — stays dark */
+/* Shadowban — stays dark */
+
+/* Device showcase — light grey */
+section.device-showcase-section { background: #f7f8fa; }
+
+/* Testimonials — white */
+section.testimonials-section { background: #ffffff; }
+
+/* CTA — stays dark */
+/* Contact — stays light grey */
+
+/* ═══════════════════════════════════════
+   MOBILE HERO FIX — show iPhone on mobile
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column !important;
+    padding: 40px 20px 0 !important;
+    gap: 0 !important;
+    align-items: center !important;
+  }
+  .hero-content {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-btns { justify-content: center; flex-wrap: wrap; }
+  .hero-trust { justify-content: center; }
+  .hero-visual {
+    display: flex !important;
+    justify-content: center;
+    width: 100%;
+    margin-top: 32px;
+    overflow: visible;
+  }
+  .iphone-device { transform: scale(0.85); transform-origin: top center; }
+  .iphone-shell { width: 238px !important; min-height: 490px !important; }
+  .badge-top { right: -8px !important; top: 16px !important; font-size: 10px; padding: 5px 10px; }
+  .badge-bottom { left: -8px !important; bottom: 40px !important; font-size: 10px; padding: 5px 10px; }
+}
+
+/* ═══════════════════════════════════════
+   IPHONE BORDER UPGRADE — cleaner like image 4
+═══════════════════════════════════════ */
+.iphone-shell {
+  background: linear-gradient(160deg, #1c1c1e 0%, #111111 50%, #0a0a0a 100%) !important;
+  border-radius: 50px !important;
+  box-shadow:
+    0 0 0 1.5px #3a3a3c,
+    0 0 0 3px #1c1c1e,
+    0 0 0 5px #2c2c2e,
+    0 40px 100px rgba(0,0,0,0.6),
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+.iphone-screen {
+  border-radius: 38px !important;
+  background: #ffffff !important;
+  overflow: hidden;
+}
+.iphone-dynamic-island {
+  background: #000 !important;
+  border-radius: 24px !important;
+  width: 96px !important;
+  height: 30px !important;
+  margin-bottom: 8px !important;
+}
+/* end iphone override */
+
+<style>
 .iphone-device{position:relative;display:flex;align-items:center;justify-content:center}
 .iphone-shell{
   position:relative;
