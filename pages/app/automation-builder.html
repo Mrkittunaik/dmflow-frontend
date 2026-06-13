@@ -474,7 +474,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                     <div class="phone-dm-online">Active now</div>
                   </div>
                 </div>
-                <div class="phone-dm-body">
+                <div class="phone-dm-body" id="phoneDmBody">
                   <div class="phone-bubble-in" id="phoneInBubble">Need the LINK please!</div>
                   <div class="phone-bubble-out" id="phoneOutBubble">Hey! Here's the link you requested:</div>
                   <div class="phone-link-card" id="phoneLinkCard">
@@ -485,6 +485,12 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                       <div class="phone-link-title" id="phoneLinkTitle">Shop the look</div>
                       <div class="phone-link-url" id="phoneLinkUrl">yourstore.com/look</div>
                     </div>
+                  </div>
+                  <!-- Flow DM preview (hidden by default) -->
+                  <div id="flowPhonePreview" style="display:none;width:100%;">
+                    <div class="phone-bubble-in" style="margin-bottom:6px;">Comment triggered this flow 🔥</div>
+                    <div class="phone-bubble-out" id="flowPhoneBubble" style="margin-bottom:8px;">Hey! Tap below to explore 👇</div>
+                    <div id="flowPhoneButtons" style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;width:100%;"></div>
                   </div>
                 </div>
               </div>
@@ -625,7 +631,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
               </div>
               <textarea class="dm-textarea" id="dmTextarea" placeholder="Type your DM message here…" oninput="onDmInput()" rows="4"></textarea>
               <div class="char-count"><span id="charCount">0</span> / 500</div>
-              <div style="margin-top:8px;">
+              <div style="margin-top:8px;margin-bottom:14px;">
                 <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Insert variable</div>
                 <div class="variable-chips">
                   <button class="var-chip" onclick="insertVar('{{name}}')">{{name}}</button>
@@ -634,25 +640,38 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                 </div>
               </div>
 
-              <!-- Link card -->
+              <!-- Link button toggle -->
               <div class="step-divider"></div>
-              <div style="font-size:12px;font-weight:700;color:#0A0A0F;margin-bottom:8px;">Link card <span style="font-size:11px;font-weight:500;color:#9898A8;">(optional)</span></div>
-              <div class="link-card-preview" id="linkCardPreview">
-                <div class="link-card-icon">
-                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#0A0A0F;">Link Button</div>
+                  <div style="font-size:11px;color:#5A5A6E;margin-top:1px;">Add a tappable button with a link inside the DM</div>
                 </div>
-                <div class="link-card-text">
-                  <div class="link-card-title" id="lcTitlePreview">Shop the look</div>
-                  <div class="link-card-url" id="lcUrlPreview">yourstore.com/look</div>
+                <div id="linkToggle" onclick="toggleLinkCard()" style="width:36px;height:20px;background:#DDDDE5;border-radius:20px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+                  <div id="linkToggleKnob" style="position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
                 </div>
               </div>
-              <input class="link-input" id="lcTitle" placeholder="Link card title (e.g. Shop the look)" oninput="onLinkInput()" value="Shop the look">
-              <input class="link-input" id="lcUrl" placeholder="URL (e.g. https://yourstore.com)" oninput="onLinkInput()" value="yourstore.com/look">
+
+              <!-- Link card inputs (hidden by default) -->
+              <div id="linkCardSection" style="display:none;">
+                <!-- Live preview -->
+                <div class="link-card-preview" id="linkCardPreview" style="margin-bottom:10px;">
+                  <div class="link-card-icon">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="link-card-text">
+                    <div class="link-card-title" id="lcTitlePreview">Shop the look</div>
+                    <div class="link-card-url" id="lcUrlPreview">yourstore.com/look</div>
+                  </div>
+                </div>
+                <input class="link-input" id="lcTitle" placeholder="Button label (e.g. Shop the look)" oninput="onLinkInput()" value="Shop the look">
+                <input class="link-input" id="lcUrl" placeholder="URL (e.g. https://yourstore.com)" oninput="onLinkInput()" value="yourstore.com/look">
+              </div>
             </div>
           </div>
 
-          <!-- ── STEP 6: Advanced Settings ── -->
-          <div class="step-card" id="step6" onclick="toggleStep('step6')">
+          <!-- ── STEP 6: Advanced Settings (LOCKED) ── -->
+          <div class="step-card locked" id="step6" onclick="openProModal('Advanced Settings')">
             <div class="step-head">
               <div class="step-num" id="step6num"><span class="num-text">6</span></div>
               <div style="flex:1;">
@@ -662,6 +681,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                 </div>
                 <div class="step-subtitle" id="step6sub">Rate limit &amp; duplicate control</div>
               </div>
+              <span class="pro-chip" style="margin-left:auto;">PRO</span>
               <div class="step-right">
                 <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
@@ -1506,6 +1526,22 @@ function updateStep5Done() {
 /* ═══════════════════════════════════════
    LINK CARD
 ═══════════════════════════════════════ */
+function toggleLinkCard() {
+  const section = document.getElementById('linkCardSection');
+  const toggle = document.getElementById('linkToggle');
+  const knob = document.getElementById('linkToggleKnob');
+  const isOn = section.style.display !== 'none';
+  if (isOn) {
+    section.style.display = 'none';
+    toggle.style.background = '#DDDDE5';
+    knob.style.left = '3px';
+  } else {
+    section.style.display = 'block';
+    toggle.style.background = '#7C3AED';
+    knob.style.left = '19px';
+  }
+}
+
 function onLinkInput() {
   state.lcTitle = document.getElementById('lcTitle').value;
   state.lcUrl = document.getElementById('lcUrl').value;
@@ -1554,9 +1590,11 @@ function switchType(type, btn) {
     stepsCol.style.display = 'none';
     flowPanel.style.display = 'block';
     if (!flowState.mediaLoaded) initFlowMedia();
+    updateFlowPhonePreview();
   } else {
     stepsCol.style.display = 'block';
     flowPanel.style.display = 'none';
+    updateFlowPhonePreview();
   }
 }
 
@@ -1674,6 +1712,7 @@ function onFlowDmInput() {
     document.getElementById('fstep3num').classList.remove('done');
     document.getElementById('fstep3sub').textContent = 'What do they receive first?';
   }
+  updateFlowPhonePreview();
 }
 
 function useFlowSug(btn, targetId) {
@@ -1739,6 +1778,38 @@ function renderFlowButtons() {
       </div>
     </div>
   `).join('');
+  updateFlowPhonePreview();
+}
+
+function updateFlowPhonePreview() {
+  const isFlow = state.type === 'flow-dm';
+  const normalBubbles = document.getElementById('phoneInBubble');
+  const normalLink = document.getElementById('phoneLinkCard');
+  const normalOut = document.getElementById('phoneOutBubble');
+  const flowPreview = document.getElementById('flowPhonePreview');
+  if (!flowPreview) return;
+
+  if (isFlow) {
+    if (normalBubbles) normalBubbles.style.display = 'none';
+    if (normalLink) normalLink.style.display = 'none';
+    if (normalOut) normalOut.style.display = 'none';
+    flowPreview.style.display = 'block';
+    const bubble = document.getElementById('flowPhoneBubble');
+    if (bubble) bubble.textContent = flowState.firstDmText || 'Hey! Tap below to explore 👇';
+    const btnsEl = document.getElementById('flowPhoneButtons');
+    if (btnsEl) {
+      btnsEl.innerHTML = flowState.buttons.length
+        ? flowState.buttons.map(b =>
+            `<div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:20px;padding:4px 11px;font-size:9px;font-weight:600;color:#7C3AED;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;">${b.label || 'Button'}</div>`
+          ).join('')
+        : '<div style="font-size:9px;color:#C4C4D0;font-style:italic;">Add buttons to see preview</div>';
+    }
+  } else {
+    if (normalBubbles) normalBubbles.style.display = '';
+    if (normalLink) normalLink.style.display = '';
+    if (normalOut) normalOut.style.display = '';
+    flowPreview.style.display = 'none';
+  }
 }
 
 function updateFlowBtn(id, field, value) {
