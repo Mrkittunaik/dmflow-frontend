@@ -1245,7 +1245,9 @@ function handleMediaClick(el) {
   const img    = el.dataset.img || '';
   const cap    = el.dataset.cap || '';
   const isReel = el.dataset.isreel === '1';
-  doSelectMedia(el, cap, img, id, isReel);
+  // Use caption for display; if empty fall back to "Post" / "Reel" (never show raw numeric ID)
+  const displayName = cap.trim() ? cap.trim().substring(0, 40) : (isReel ? 'Reel' : 'Post');
+  doSelectMedia(el, displayName, img, id, isReel);
 }
 /* ═══════════════════════════════════════
    MEDIA TAB SWITCHING
@@ -1661,17 +1663,20 @@ function setFlowMediaTab(tab, btn) {
 }
 
 function selectFlowMedia(el) {
-  document.querySelectorAll('#flowPostGrid .post-item, #flowReelGrid .post-item').forEach(e => e.classList.remove('selected'));
+  document.querySelectorAll('#flowPostGrid .media-item, #flowReelGrid .media-item').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
-  const thumb = el.querySelector('img')?.src || '';
-  const title = el.dataset.caption || el.dataset.id || 'Selected content';
-  const type = el.dataset.type || 'POST';
+  const thumb = el.dataset.img || el.querySelector('img')?.src || '';
+  const isReel = el.dataset.isreel === '1';
+  // Use data-cap (matches mediaItem() attribute); never show raw numeric ID
+  const rawCap = el.dataset.cap || '';
+  const title = rawCap.trim() ? rawCap.trim().substring(0, 40) : (isReel ? 'Reel' : 'Post');
+  const type = isReel ? 'REEL' : 'POST';
   flowState.selectedMedia = { thumb, title, type };
   document.getElementById('flowSelBannerThumb').src = thumb;
-  document.getElementById('flowSelBannerTitle').textContent = title.slice(0,40);
+  document.getElementById('flowSelBannerTitle').textContent = title;
   document.getElementById('flowSelBannerType').textContent = type;
   document.getElementById('flowSelBanner').style.display = 'flex';
-  document.getElementById('fstep1sub').textContent = title.slice(0,30) + '…';
+  document.getElementById('fstep1sub').textContent = title.length > 30 ? title.slice(0,30) + '…' : title;
   markFlowStepDone('fstep1num');
 }
 
@@ -1679,7 +1684,7 @@ function clearFlowMedia() {
   flowState.selectedMedia = null;
   document.getElementById('flowSelBanner').style.display = 'none';
   document.getElementById('fstep1sub').textContent = 'Choose which content triggers this flow';
-  document.querySelectorAll('#flowPostGrid .post-item, #flowReelGrid .post-item').forEach(e => e.classList.remove('selected'));
+  document.querySelectorAll('#flowPostGrid .media-item, #flowReelGrid .media-item').forEach(e => e.classList.remove('selected'));
   document.getElementById('fstep1num').classList.remove('done');
 }
 
