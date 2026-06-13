@@ -2494,6 +2494,18 @@ section.section.faq-section .faq-a {
   font-size: 14px !important;
   line-height: 1.7 !important;
   border-top: 1px solid #bae6fd !important;
+  display: none;
+  overflow: hidden;
+}
+section.section.faq-section .faq-item.open .faq-a {
+  display: block;
+}
+section.section.faq-section .faq-item.open .faq-arrow {
+  transform: rotate(180deg);
+}
+.faq-arrow {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 /* ── BUTTON RADIUS — 10px ───────────────────────────────────── */
@@ -2694,6 +2706,16 @@ function handleContactForm(e) {
     }
   } catch(e) {}
 })();
+</script>
+<script>
+function toggleFaq(btn) {
+  var item = btn.closest('.faq-item');
+  var isOpen = item.classList.contains('open');
+  // close all
+  document.querySelectorAll('.faq-item.open').forEach(function(el){ el.classList.remove('open'); });
+  // open this one if it was closed
+  if (!isOpen) item.classList.add('open');
+}
 </script>
 </body>
 </html>
