@@ -2069,7 +2069,7 @@ function buildPayload(active) {
         text: document.getElementById('crTextarea').value.trim(),
       },
       dm: {
-        message:   document.getElementById('dmTextarea').value.trim(),
+        text:   document.getElementById('dmTextarea').value.trim(),
         linkTitle: linkOn ? state.lcTitle : '',
         linkUrl:   linkOn ? state.lcUrl   : '',
       },
@@ -2172,7 +2172,7 @@ async function loadExistingAutomation(id) {
     }
 
     // ── DM message + link card ─────────────────────────────────────
-    state.dmText   = a.actions?.dm?.message   || a.dmText   || '';
+    state.dmText   = a.actions?.dm?.text   || a.dmText   || '';
     state.lcTitle  = a.actions?.dm?.linkTitle  || 'Shop the look';
     state.lcUrl    = a.actions?.dm?.linkUrl    || 'yourstore.com/look';
     document.getElementById('dmTextarea').value = state.dmText;
