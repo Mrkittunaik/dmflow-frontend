@@ -477,7 +477,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                 <div class="phone-dm-body" id="phoneDmBody">
                   <div class="phone-bubble-in" id="phoneInBubble">Need the LINK please!</div>
                   <div class="phone-bubble-out" id="phoneOutBubble">Hey! Here's the link you requested:</div>
-                  <div class="phone-link-card" id="phoneLinkCard">
+                  <div class="phone-link-card" id="phoneLinkCard" style="display:none;">
                     <div class="phone-link-icon">
                       <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
@@ -488,7 +488,7 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
                   </div>
                   <!-- Flow DM preview (hidden by default) -->
                   <div id="flowPhonePreview" style="display:none;width:100%;">
-                    <div class="phone-bubble-in" style="margin-bottom:6px;">Comment triggered this flow 🔥</div>
+                    <div class="phone-bubble-in" id="flowPhoneInBubble" style="margin-bottom:6px;">LINK 👇</div>
                     <div class="phone-bubble-out" id="flowPhoneBubble" style="margin-bottom:8px;">Hey! Tap below to explore 👇</div>
                     <div id="flowPhoneButtons" style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;width:100%;"></div>
                   </div>
@@ -1540,6 +1540,7 @@ function toggleLinkCard() {
     toggle.style.background = '#7C3AED';
     knob.style.left = '19px';
   }
+  updatePhonePreview();
 }
 
 function onLinkInput() {
@@ -1555,13 +1556,22 @@ function onLinkInput() {
    PHONE PREVIEW
 ═══════════════════════════════════════ */
 function updatePhonePreview() {
+  if (state.type === 'flow-dm') { updateFlowPhonePreview(); return; }
   const kw = state.keywords[0] || (state.triggerMode === 'all' ? 'Nice post!' : 'LINK');
-  document.getElementById('phoneInBubble').textContent = 'Need the ' + kw + ' please!';
-  const dm = state.dmText || 'Hey! Here\'s the link you requested:';
-  document.getElementById('phoneOutBubble').textContent = dm.replace('{{name}}','friend').replace('{{username}}','user').replace('{{post}}','your post');
-  document.getElementById('phoneLinkTitle').textContent = state.lcTitle || 'Shop the look';
-  document.getElementById('phoneLinkUrl').textContent = state.lcUrl || 'yourstore.com/look';
-  document.getElementById('phoneLinkCard').style.display = state.lcUrl ? 'flex' : 'none';
+  const inBubble = document.getElementById('phoneInBubble');
+  if (inBubble) inBubble.textContent = state.triggerMode === 'all' ? 'Nice post! 🔥' : (kw ? kw + ' 👇' : 'Comment here…');
+  const dm = state.dmText || 'Hey! Here''s the link you requested:';
+  const outBubble = document.getElementById('phoneOutBubble');
+  if (outBubble) outBubble.textContent = dm.replace(/{{name}}/g,'friend').replace(/{{username}}/g,'user').replace(/{{post}}/g,'your post');
+  const linkCardOn = document.getElementById('linkCardSection')?.style.display !== 'none';
+  const linkCard = document.getElementById('phoneLinkCard');
+  if (linkCard) {
+    if (linkCardOn && state.lcUrl) {
+      linkCard.style.display = 'flex';
+      document.getElementById('phoneLinkTitle').textContent = state.lcTitle || 'Link';
+      document.getElementById('phoneLinkUrl').textContent = state.lcUrl;
+    } else { linkCard.style.display = 'none'; }
+  }
 }
 
 /* ═══════════════════════════════════════
@@ -1675,6 +1685,7 @@ function setFlowTriggerMode(mode, btn) {
   btn.classList.add('active');
   document.getElementById('flowKwSection').style.display = mode === 'keyword' ? 'block' : 'none';
   document.getElementById('fstep2sub').textContent = mode === 'any' ? 'Any comment triggers' : (flowState.keywords.length ? flowState.keywords.join(', ') : 'Add keywords below');
+  updateFlowPhonePreview();
 }
 
 function addFlowKeyword() {
@@ -1699,6 +1710,7 @@ function renderFlowKeywords() {
   container.innerHTML = flowState.keywords.map(k =>
     `<span class="kw-chip">${k}<button class="kw-chip-del" onclick="removeFlowKeyword('${k}')">×</button></span>`
   ).join('');
+  updateFlowPhonePreview();
 }
 
 function onFlowDmInput() {
@@ -1788,21 +1800,21 @@ function updateFlowPhonePreview() {
   const normalOut = document.getElementById('phoneOutBubble');
   const flowPreview = document.getElementById('flowPhonePreview');
   if (!flowPreview) return;
-
   if (isFlow) {
     if (normalBubbles) normalBubbles.style.display = 'none';
     if (normalLink) normalLink.style.display = 'none';
     if (normalOut) normalOut.style.display = 'none';
     flowPreview.style.display = 'block';
+    const kw = flowState.keywords[0] || (flowState.triggerMode === 'any' ? 'Nice post!' : 'LINK');
+    const inBubble = document.getElementById('flowPhoneInBubble');
+    if (inBubble) inBubble.textContent = flowState.triggerMode === 'any' ? 'Nice post! 🔥' : kw + ' 👇';
     const bubble = document.getElementById('flowPhoneBubble');
-    if (bubble) bubble.textContent = flowState.firstDmText || 'Hey! Tap below to explore 👇';
+    if (bubble) bubble.textContent = (flowState.firstDmText || 'Hey! Tap below to explore 👇').replace(/{{name}}/g,'friend').replace(/{{username}}/g,'user');
     const btnsEl = document.getElementById('flowPhoneButtons');
     if (btnsEl) {
       btnsEl.innerHTML = flowState.buttons.length
-        ? flowState.buttons.map(b =>
-            `<div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:20px;padding:4px 11px;font-size:9px;font-weight:600;color:#7C3AED;white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis;">${b.label || 'Button'}</div>`
-          ).join('')
-        : '<div style="font-size:9px;color:#C4C4D0;font-style:italic;">Add buttons to see preview</div>';
+        ? flowState.buttons.map(b => '<div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:20px;padding:5px 12px;font-size:9px;font-weight:600;color:#7C3AED;white-space:nowrap;max-width:95%;overflow:hidden;text-overflow:ellipsis;text-align:center;">' + (b.label || 'Button') + '</div>').join('')
+        : '<div style="font-size:9px;color:#C4C4D0;font-style:italic;text-align:center;">Add buttons above to preview</div>';
     }
   } else {
     if (normalBubbles) normalBubbles.style.display = '';
@@ -1819,10 +1831,12 @@ function updateFlowBtn(id, field, value) {
   if (field === 'label') {
     const chip = document.getElementById('flowChipPreview_' + id);
     if (chip) chip.textContent = value || 'Button label';
+    updateFlowPhonePreview();
   }
   if (field === 'keyword') {
     const chip = document.getElementById('flowChipPreview_' + id);
-    if (chip) chip.nextElementSibling && (chip.nextElementSibling.textContent = '→ triggers ' + (value||'…'));
+    if (chip && chip.nextElementSibling) chip.nextElementSibling.textContent = '→ triggers ' + (value||'…');
+    updateFlowPhonePreview();
   }
 }
 
@@ -1929,10 +1943,44 @@ function _restoreStep6(settings) {
    BUILD PAYLOAD
 ═══════════════════════════════════════ */
 function buildPayload(active) {
-  // Map UI type to backend type that webhook.js will match on comment events
   let backendType = 'keyword_dm';
-  if (state.type === 'product-dm')  backendType = 'product_link_dm';
-  if (state.type === 'auto-dm')     backendType = 'keyword_dm';
+  if (state.type === 'product-dm') backendType = 'product_link_dm';
+  if (state.type === 'flow-dm')    backendType = 'flow_dm';
+
+  // Flow DM payload
+  if (state.type === 'flow-dm') {
+    return {
+      name: document.getElementById('builderTitle').textContent.replace(' Setup',''),
+      active: !!active,
+      type: backendType,
+      mediaId:   flowState.selectedMedia?.id     || '',
+      mediaUrl:  flowState.selectedMedia?.thumb  || '',
+      mediaType: flowState.selectedMedia?.type   || '',
+      trigger: {
+        anyComment:  flowState.triggerMode === 'any',
+        allComments: flowState.triggerMode === 'any',
+        onComment:   true,
+        keywords:    flowState.keywords,
+      },
+      actions: {
+        flow: {
+          firstMessage: flowState.firstDmText,
+          buttons: flowState.buttons.map(b => ({
+            label:    b.label,
+            keyword:  b.keyword,
+            replyDm:  b.replyDm,
+          })),
+        },
+      },
+      settings: {
+        dmDelay:       flowState.delay,
+        maxDmsPerHour: parseInt(document.getElementById('flowRateSlider')?.value || 100),
+      },
+    };
+  }
+
+  // Auto DM / Product DM payload
+  const linkOn = document.getElementById('linkCardSection')?.style.display !== 'none';
   return {
     name: document.getElementById('builderTitle').textContent.replace(' Setup',''),
     active: !!active,
@@ -1943,7 +1991,7 @@ function buildPayload(active) {
     applyAll: state.applyAll,
     trigger: {
       allComments:  state.triggerMode === 'all',
-      anyComment:   state.triggerMode === 'all',   // backwards compat
+      anyComment:   state.triggerMode === 'all',
       onComment:    true,
       keywords:     state.keywords,
     },
@@ -1954,11 +2002,10 @@ function buildPayload(active) {
       },
       dm: {
         message:   document.getElementById('dmTextarea').value.trim(),
-        linkTitle: state.lcTitle,
-        linkUrl:   state.lcUrl,
+        linkTitle: linkOn ? state.lcTitle : '',
+        linkUrl:   linkOn ? state.lcUrl   : '',
       },
     },
-    // Step 6 — Advanced Settings (enforced by backend queue)
     settings: {
       dmDelay:              state.dmDelay,
       maxDmsPerHour:        state.maxDmsPerHour,
