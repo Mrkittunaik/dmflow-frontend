@@ -1744,7 +1744,8 @@ function insertFlowVar(v, targetId) {
 function addFlowButton() {
   if (flowState.buttons.length >= 5) return;
   const id = 'fbtn_' + Date.now();
-  flowState.buttons.push({ id, label: '', keyword: '', replyDm: '' });
+  // type: 'reply' = sends a DM back, 'link' = opens a URL directly
+  flowState.buttons.push({ id, label: '', keyword: '', replyDm: '', type: 'reply', linkUrl: '' });
   renderFlowButtons();
 }
 
@@ -1753,43 +1754,92 @@ function removeFlowButton(id) {
   renderFlowButtons();
 }
 
+function toggleFlowBtnType(id, type) {
+  const btn = flowState.buttons.find(b => b.id === id);
+  if (!btn) return;
+  btn.type = type;
+  renderFlowButtons();
+}
+
 function renderFlowButtons() {
   const container = document.getElementById('flowButtonsContainer');
   document.getElementById('flowBtnCount').textContent = flowState.buttons.length + ' / 5';
   document.getElementById('flowAddBtn').style.display = flowState.buttons.length >= 5 ? 'none' : 'block';
 
-  container.innerHTML = flowState.buttons.map((btn, i) => `
-    <div style="background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:10px;padding:12px 13px;position:relative;" id="flowBtnCard_${btn.id}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+  container.innerHTML = flowState.buttons.map((btn, i) => {
+    const isLink = btn.type === 'link';
+    const chipColor = isLink ? '#059669' : '#7C3AED';
+    const chipBorder = isLink ? '#6EE7B7' : '#C4B5FD';
+    const chipIcon = isLink
+      ? '<svg width="9" height="9" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'
+      : '<svg width="9" height="9" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+
+    return `
+    <div style="background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:12px;padding:13px 13px 10px;position:relative;" id="flowBtnCard_${btn.id}">
+
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
         <div style="font-size:11px;font-weight:700;color:#7C3AED;">Button ${i+1}</div>
-        <button onclick="removeFlowButton('${btn.id}')" style="background:none;border:none;cursor:pointer;color:#C4C4D0;font-size:16px;line-height:1;padding:0;" title="Remove">×</button>
+        <button onclick="removeFlowButton('${btn.id}')" style="background:none;border:none;cursor:pointer;color:#C4C4D0;font-size:18px;line-height:1;padding:0;" title="Remove">×</button>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;">
-        <div>
-          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">BUTTON LABEL</div>
-          <input class="link-input" style="margin-bottom:0;" placeholder="e.g. Shop now" value="${btn.label}"
-            oninput="updateFlowBtn('${btn.id}','label',this.value);autoKeyword('${btn.id}',this.value)">
+
+      <!-- Button label -->
+      <div style="margin-bottom:8px;">
+        <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">BUTTON LABEL</div>
+        <input class="link-input" style="margin-bottom:0;" placeholder="e.g. Shop now" value="${btn.label}"
+          oninput="updateFlowBtn('${btn.id}','label',this.value);autoKeyword('${btn.id}',this.value)">
+      </div>
+
+      <!-- Type toggle: Reply DM vs Direct Link -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:5px;">WHEN TAPPED, DO THIS</div>
+        <div style="display:flex;gap:5px;">
+          <button onclick="toggleFlowBtnType('${btn.id}','reply')"
+            style="flex:1;padding:7px 6px;border-radius:8px;border:1.5px solid ${!isLink?'#7C3AED':'#DDDDE5'};background:${!isLink?'#F3F0FF':'#fff'};font-size:11px;font-weight:700;color:${!isLink?'#7C3AED':'#9898A8'};cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:inherit;transition:all .15s;">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Send Reply DM
+          </button>
+          <button onclick="toggleFlowBtnType('${btn.id}','link')"
+            style="flex:1;padding:7px 6px;border-radius:8px;border:1.5px solid ${isLink?'#059669':'#DDDDE5'};background:${isLink?'#ECFDF5':'#fff'};font-size:11px;font-weight:700;color:${isLink?'#059669':'#9898A8'};cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:inherit;transition:all .15s;">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Open Link
+          </button>
         </div>
+      </div>
+
+      <!-- Conditional content -->
+      ${!isLink ? `
         <div>
-          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">TRIGGER KEYWORD</div>
+          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">REPLY MESSAGE</div>
+          <textarea class="dm-textarea" style="min-height:60px;margin-bottom:6px;font-size:12px;" rows="2"
+            placeholder="What DM to send when they tap this…"
+            oninput="updateFlowBtn('${btn.id}','replyDm',this.value)">${btn.replyDm}</textarea>
+          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;margin-top:2px;">TRIGGER KEYWORD <span style="font-weight:400;color:#C4C4D0;">(auto-generated)</span></div>
           <input class="link-input" style="margin-bottom:0;font-family:monospace;font-size:11px;" placeholder="SHOP_NOW" value="${btn.keyword}" id="flowKwField_${btn.id}"
             oninput="updateFlowBtn('${btn.id}','keyword',this.value)">
         </div>
-      </div>
-      <div>
-        <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">REPLY DM WHEN TAPPED</div>
-        <textarea class="dm-textarea" style="min-height:56px;margin-bottom:0;font-size:12px;" rows="2" placeholder="What to send when user taps this button…"
-          oninput="updateFlowBtn('${btn.id}','replyDm',this.value)">${btn.replyDm}</textarea>
-      </div>
-      <!-- Preview chip -->
-      <div style="margin-top:8px;display:flex;gap:5px;align-items:center;">
-        <div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:#7C3AED;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="flowChipPreview_${btn.id}">
-          ${btn.label || 'Button label'}
+      ` : `
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#059669;margin-bottom:3px;">WEBSITE URL</div>
+          <input class="link-input" style="margin-bottom:0;border-color:#6EE7B7;" placeholder="https://yourstore.com/shop"
+            value="${btn.linkUrl}" oninput="updateFlowBtn('${btn.id}','linkUrl',this.value)">
+          <div style="margin-top:6px;background:#ECFDF5;border-radius:7px;padding:7px 9px;font-size:11px;color:#059669;line-height:1.4;">
+            <strong>↗ Opens directly</strong> — When tapped, Instagram opens this URL in the browser. No DM is sent.
+          </div>
         </div>
-        <span style="font-size:10px;color:#C4C4D0;">→ triggers ${btn.keyword || '…'}</span>
+      `}
+
+      <!-- Live chip preview -->
+      <div style="margin-top:10px;padding-top:8px;border-top:1px solid #EBEBF0;display:flex;align-items:center;gap:6px;">
+        <span style="font-size:10px;color:#9898A8;">Preview:</span>
+        <div style="background:#fff;border:1.5px solid ${chipBorder};border-radius:20px;padding:4px 11px;font-size:11px;font-weight:600;color:${chipColor};display:flex;align-items:center;gap:4px;max-width:160px;overflow:hidden;" id="flowChipPreview_${btn.id}">
+          ${chipIcon}
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${btn.label || 'Button label'}</span>
+        </div>
+        <span style="font-size:10px;color:#C4C4D0;">${isLink ? '↗ opens URL' : ('→ triggers ' + (btn.keyword || '…'))}</span>
       </div>
     </div>
-  `).join('');
+  `}).join('');
   updateFlowPhonePreview();
 }
 
@@ -1813,7 +1863,13 @@ function updateFlowPhonePreview() {
     const btnsEl = document.getElementById('flowPhoneButtons');
     if (btnsEl) {
       btnsEl.innerHTML = flowState.buttons.length
-        ? flowState.buttons.map(b => '<div style="background:#fff;border:1.5px solid #C4B5FD;border-radius:20px;padding:5px 12px;font-size:9px;font-weight:600;color:#7C3AED;white-space:nowrap;max-width:95%;overflow:hidden;text-overflow:ellipsis;text-align:center;">' + (b.label || 'Button') + '</div>').join('')
+        ? flowState.buttons.map(b => {
+            const isLink = b.type === 'link';
+            const color = isLink ? '#059669' : '#7C3AED';
+            const border = isLink ? '#6EE7B7' : '#C4B5FD';
+            const icon = isLink ? '↗ ' : '';
+            return '<div style="background:#fff;border:1.5px solid '+border+';border-radius:20px;padding:5px 12px;font-size:9px;font-weight:700;color:'+color+';white-space:nowrap;max-width:95%;overflow:hidden;text-overflow:ellipsis;text-align:center;">' + icon + (b.label || 'Button') + '</div>';
+          }).join('')
         : '<div style="font-size:9px;color:#C4C4D0;font-style:italic;text-align:center;">Add buttons above to preview</div>';
     }
   } else {
@@ -1828,16 +1884,17 @@ function updateFlowBtn(id, field, value) {
   const btn = flowState.buttons.find(b => b.id === id);
   if (!btn) return;
   btn[field] = value;
-  if (field === 'label') {
-    const chip = document.getElementById('flowChipPreview_' + id);
-    if (chip) chip.textContent = value || 'Button label';
-    updateFlowPhonePreview();
+  // update chip label span
+  const chip = document.getElementById('flowChipPreview_' + id);
+  if (chip) {
+    const span = chip.querySelector('span');
+    if (span && field === 'label') span.textContent = value || 'Button label';
+    if (chip.nextElementSibling) {
+      if (field === 'keyword') chip.nextElementSibling.textContent = '→ triggers ' + (value||'…');
+      if (field === 'linkUrl') chip.nextElementSibling.textContent = value ? '↗ opens URL' : '↗ opens URL';
+    }
   }
-  if (field === 'keyword') {
-    const chip = document.getElementById('flowChipPreview_' + id);
-    if (chip && chip.nextElementSibling) chip.nextElementSibling.textContent = '→ triggers ' + (value||'…');
-    updateFlowPhonePreview();
-  }
+  if (field === 'label' || field === 'keyword' || field === 'linkUrl') updateFlowPhonePreview();
 }
 
 function autoKeyword(id, label) {
@@ -1967,8 +2024,10 @@ function buildPayload(active) {
           firstMessage: flowState.firstDmText,
           buttons: flowState.buttons.map(b => ({
             label:    b.label,
-            keyword:  b.keyword,
-            replyDm:  b.replyDm,
+            type:     b.type || 'reply',          // 'reply' | 'link'
+            keyword:  b.type === 'link' ? '' : b.keyword,
+            replyDm:  b.type === 'link' ? '' : b.replyDm,
+            linkUrl:  b.type === 'link' ? b.linkUrl : '',
           })),
         },
       },
