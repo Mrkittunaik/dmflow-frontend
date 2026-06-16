@@ -2208,24 +2208,33 @@ section.creators-wall-section { background-color:#fefce8 !important; background-
   background-size:24px 24px !important;
 }
 .price-compare-section::before { display:none !important; }
-
-/* Shadowban Section — dark + dots */
-.shadowban-section {
-  background-color:#0A0A0F !important;
-  background-image:var(--dot-dark) !important;
+/* Shadowbox Section - white */
+.shadowbox-section {
+  background-color:#ffffff !important;
+  background-image:radial-gradient(circle, #e5e5e5 1px, transparent 1px) !important;
   background-size:24px 24px !important;
 }
-/* Fix text colours for dark bg */
-.shadowban-section .shadowban-title { color:#fff !important; }
-.shadowban-section .shadowban-safe-title { color:#fff !important; }
-.shadowban-section .shadowban-testimonial {
-  background:#141414 !important;
-  border-color:#222 !important;
+/* Fix text colours for white bg */
+.shadowbox-section .shadowbox-title { color:#0A0A0F !important; }
+.shadowbox-section .shadowbox-safe-title { color:#0A0A0F !important; }
+.shadowbox-section .shadowbox-testimonial {
+  background:#fafafa !important;
+  border-color:#e5e5e5 !important;
 }
-.shadowban-section .shadowban-testimonial p { color:#bbb !important; }
-.shadowban-section .shadowban-author { border-top-color:#222 !important; }
-.shadowban-section .shadowban-aname { color:#fff !important; }
-
+.shadowbox-section .shadowbox-testimonial p { color:#444 !important; }
+.shadowbox-section .shadowbox-author { border-top-color:#e5e5e5 !important; }
+.shadowbox-section .shadowbox-aname { color:#0A0A0F !important; }
+.shadowbox-section .shadowbox-safe-card {
+  background:#f8f8f8 !important;
+  border-color:#e5e5e5 !important;
+}
+.shadowbox-section .shadowbox-safe-h { color:#0A0A0F !important; }
+.shadowbox-section .shadowbox-safe-p { color:#666 !important; }
+.shadowbox-section .shadowbox-badge {
+  background:#fef3c7 !important;
+  border-color:#f59e0b !important;
+  color:#92400e !important;
+}
 /* Device Showcase — light lavender with dots */
 section.device-showcase-section {
   background-color:#f3e8ff !important;
