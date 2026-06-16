@@ -1431,10 +1431,17 @@
 /* Meta showcase — stays dark (already set) */
 
 /* Stats/proof section — dark charcoal */
-section.stats-proof-section { background: #ffffff; }
-section.stats-proof-section .section-label { color: #C8FF00; }
-section.stats-proof-section .section-title { color: #fff; }
-section.stats-proof-section .section-sub { color: #aaa; }
+/* Stats/proof section — light yellow with dots */
+section.stats-proof-section { 
+  background-color: #fefce8;
+  background-image: radial-gradient(circle, #fde047 1px, transparent 1px);
+  background-size: 24px 24px;
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+}
+section.stats-proof-section .section-label { color: #0A0A0F; }
+section.stats-proof-section .section-title { color: #0A0A0F; }
+section.stats-proof-section .section-sub { color: #555; }
 
 /* How it works — clean white */
 section.section#features { background: #ffffff; }
