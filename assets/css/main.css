@@ -1716,7 +1716,7 @@ h1 .accent {
 /* ===== SOCIAL PROOF STATS SECTION ===== */
 .stats-proof-section {
   padding: 80px 40px;
-  background: var(--gray-50);
+  background: #ffffff;  /* ← WHITE background */
   border-top: 1px solid var(--gray-200);
   border-bottom: 1px solid var(--gray-200);
 }
