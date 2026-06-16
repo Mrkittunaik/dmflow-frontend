@@ -1439,38 +1439,56 @@ section.stats-proof-section .section-sub { color: #aaa; }
 /* How it works — clean white */
 section.section#features { background: #ffffff; }
 
-/* Use cases — green-yellow WITH diagonal stripe texture */
+/* Use cases — light purple with dots */
 section.section.usecases {
-  background-color: #C8FF00;
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 6px,
-      rgba(0,0,0,0.05) 6px,
-      rgba(0,0,0,0.05) 7px
-    );
+  background-color: #f5f3ff;
+  background-image: radial-gradient(circle, #c4b5fd 1px, transparent 1px);
+  background-size: 24px 24px;
   position: relative;
 }
 section.section.usecases::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(200,255,0,0.35) 0%, rgba(168,230,0,0.45) 100%);
+  background: transparent;
   pointer-events: none;
   z-index: 0;
 }
 section.section.usecases > * { position: relative; z-index: 1; }
 section.section.usecases .section-inner { position: relative; z-index: 1; }
-section.section.usecases .section-label { color: #1a3300; opacity: 0.75; }
+section.section.usecases .section-label { color: #5b21b6; opacity: 0.7; }
 section.section.usecases .section-title { color: #0A0A0F; }
-section.section.usecases .usecase-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
+section.section.usecases .usecase-card { 
+  background: #ffffff;
+  border-color: #e5e5e5;
+}
 section.section.usecases .usecase-card h3 { color: #0A0A0F; }
-section.section.usecases .usecase-card p { color: #1a2200; }
-section.section.usecases .uc-icon { background: rgba(255,255,255,0.1); color: #0A0A0F; }
-section.section.usecases .uc-icon svg { stroke: #0A0A0F; }
-section.section.usecases .uc-tag { background: rgba(0,0,0,0.12); color: #0A0A0F; border-color: rgba(0,0,0,0.2); }
-section.section.usecases .uc-featured { background: rgba(0,0,0,0.08) !important; border-color: rgba(0,0,0,0.3) !important; }
-
+section.section.usecases .usecase-card p { color: #555; }
+section.section.usecases .uc-icon { 
+  background: #ede9fe;
+  color: #7C3AED;
+}
+section.section.usecases .uc-icon svg { stroke: #7C3AED; }
+section.section.usecases .uc-tag { 
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: #ddd6fe;
+}
+section.section.usecases .uc-featured { 
+  background: #7C3AED !important;
+  border-color: #7C3AED !important;
+}
+section.section.usecases .uc-featured h3 { color: #fff !important; }
+section.section.usecases .uc-featured p { color: rgba(255,255,255,0.8) !important; }
+section.section.usecases .uc-featured .uc-icon { 
+  background: rgba(255,255,255,0.2) !important;
+  color: #fff !important;
+}
+section.section.usecases .uc-featured .uc-icon svg { stroke: #fff !important; }
+section.section.usecases .uc-featured .uc-tag { 
+  background: rgba(255,255,255,0.2) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.3) !important;
+}
 /* Pricing — #C8FF00 lime WITH same diagonal stripe texture */
 section.section#pricing {
   background-color: #C8FF00;
