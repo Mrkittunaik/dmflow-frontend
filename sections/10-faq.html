@@ -1,0 +1,152 @@
+<!-- ============================================================
+     FAQ SECTION - Self Contained (HTML + FULL CSS + JS)
+     CSS extracted from main.css + index.html
+     ============================================================ -->
+
+<!-- ===== HTML ===== -->
+<section class="section faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Instagram DM Automation FAQ</h2>
+      <p class="section-sub">Common questions about DMFlow, pricing, and how it works.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What is DMFlow and how does it work?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">DMFlow connects to your Instagram via Meta's official API. When someone comments a keyword on your post, DMFlow automatically sends them a DM with your message, link, or resource — instantly, 24/7.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is DMFlow safe for my Instagram account?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Yes. DMFlow is a certified Meta Tech Provider using Instagram's official Graph API. No bots, no third-party scraping. Your account is fully protected by Meta's official permissions system.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need a business or creator Instagram account?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Yes — Instagram's API requires a Creator or Business account. Personal accounts cannot be connected. Switching is free and takes about 30 seconds in your Instagram settings.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I collect emails through Instagram DMs?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Absolutely. On Pro and Agency plans, you can ask users to drop their email in DMs before receiving a link or resource. All emails are stored in your Contacts dashboard and can be exported.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What's the difference between DMFlow and ManyChat?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">DMFlow is built specifically for Instagram creators and brands. It's simpler, faster to set up, and more affordable. ManyChat covers multiple platforms with a steeper learning curve. If Instagram is your main channel, DMFlow wins.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FULL CSS ===== -->
+<style>
+  :root {
+    --black: #0A0A0F;
+    --text2: #5A5A6E;
+  }
+
+  .faq-section {
+    background-color: #e0f2fe !important;
+    background-image: radial-gradient(circle, #7dd3fc 1px, transparent 1px) !important;
+    background-size: 24px 24px !important;
+  }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-head { margin-bottom: 52px; }
+  .section-head.center { text-align: center; }
+  .section-head.center .section-sub { margin: 0 auto; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #0284c7;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: #0c1a2e;
+    letter-spacing: -1.2px;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: #334155;
+    max-width: 500px;
+    line-height: 1.65;
+  }
+
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .faq-item {
+    background: #ffffff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(2,132,199,0.07);
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0c1a2e;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    line-height: 1.5;
+  }
+  .faq-q:hover { background: #f0f9ff; }
+  .faq-arrow {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    color: var(--text2);
+  }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); }
+  .faq-a {
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.7;
+    padding: 0 20px 16px;
+    display: none;
+    border-top: 1px solid #bae6fd;
+    background: #f0f9ff;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  @media (max-width: 768px) {
+    .section-title { font-size: 26px; }
+    .faq-q { font-size: 14px; padding: 16px 18px; }
+  }
+</style>
+
+<!-- ===== JS ===== -->
+<script>
+  function toggleFaq(btn) {
+    var item = btn.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(el){ el.classList.remove('open'); });
+    if (!isOpen) item.classList.add('open');
+  }
+</script>

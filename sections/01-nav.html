@@ -1,0 +1,285 @@
+<!-- ============================================================
+     NAV SECTION - Self Contained (HTML + FULL CSS + JS)
+     CSS extracted from main.css + index.html
+     ============================================================ -->
+
+<!-- ===== HTML ===== -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="28" rx="7" fill="#0A0A0F"/>
+        <path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#C8FF00"/>
+      </svg>
+      DM<span>Flow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#templates">Templates</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="careers.html">Careers</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="pages/auth/login.html" class="btn-ghost" id="navLoginBtn">Log in</a>
+      <a href="pages/auth/register.html" class="btn-primary" id="navRegisterBtn">Start free →</a>
+      <a href="app.html" class="btn-primary" id="navAppBtn" style="display:none;gap:6px;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Open App</a>
+      <div id="navUserAvatar" style="display:none;width:32px;height:32px;border-radius:50%;background:#7C3AED;color:#fff;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0" title="Go to app" onclick="window.location.href='app.html'"></div>
+      <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav drawer -->
+<div class="nav-mobile-drawer" id="mobileDrawer">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;">DM<span style="color:#7C3AED;">Flow</span></span>
+    <button onclick="closeMobileNav()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#0A0A0F;padding:4px 8px;">✕</button>
+  </div>
+  <div class="mob-divider"></div>
+  <a href="#features" onclick="closeMobileNav()">Features</a>
+  <a href="#templates" onclick="closeMobileNav()">Templates</a>
+  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
+  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+  <a href="careers.html" onclick="closeMobileNav()">Careers</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+  <div class="mob-divider"></div>
+  <a href="pages/auth/login.html" id="mobLoginLink">Log in</a>
+  <a href="pages/auth/register.html" class="mob-cta" id="mobRegisterLink">Start free →</a>
+  <a href="app.html" class="mob-cta" id="mobAppLink" style="display:none;background:#7C3AED">Open App →</a>
+</div>
+<div class="mob-overlay" id="mobOverlay" onclick="closeMobileNav()"></div>
+
+<!-- ===== FULL CSS (Extracted from main.css + index.html) ===== -->
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0A0A0F;
+    --white: #FFFFFF;
+    --lime: #C8FF00;
+    --lime-dark: #A8D900;
+    --purple: #7C3AED;
+    --gray-50: #F8F8FC;
+    --gray-100: #F0F0F5;
+    --gray-200: #E2E2EA;
+    --gray-400: #9898A8;
+    --gray-600: #5A5A6E;
+    --gray-800: #2A2A3A;
+    --text: #0A0A0F;
+    --text2: #5A5A6E;
+    --radius: 14px;
+    --radius-lg: 20px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+  }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  html { overflow-x: hidden; }
+
+  /* ===== NAV STYLES ===== */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--black);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .logo span { color: var(--purple); }
+  .logo-icon { width: 22px; height: 22px; vertical-align: middle; }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 14px;
+    color: var(--text2);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--black); }
+  .nav-right { display: flex; gap: 10px; align-items: center; }
+
+  .btn-ghost {
+    padding: 8px 18px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    font-weight: 500;
+    transition: all .2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--black); color: var(--black); }
+
+  .btn-primary {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    background: var(--black);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: inherit;
+    font-weight: 600;
+    transition: all .2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gray-800); transform: translateY(-1px); }
+
+  /* ===== MOBILE NAV ===== */
+  .nav-hamburger { display: none; }
+  .nav-mobile-drawer {
+    position: fixed;
+    top: 0; right: -100%; bottom: 0;
+    width: 80%; max-width: 300px;
+    background: #fff; z-index: 1001;
+    padding: 24px 20px;
+    display: flex; flex-direction: column; gap: 4px;
+    overflow-y: auto; transition: right .3s ease;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+  }
+  .nav-mobile-drawer.open { right: 0; }
+  .nav-mobile-drawer a {
+    display: block;
+    padding: 14px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background .15s;
+  }
+  .nav-mobile-drawer a:hover { background: var(--gray-50); }
+  .nav-mobile-drawer .mob-divider { height: 1px; background: var(--gray-200); margin: 8px 0; }
+  .nav-mobile-drawer .mob-cta {
+    display: block;
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--black);
+    color: #fff !important;
+    text-align: center;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .mob-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+  }
+  .mob-overlay.show { display: block; }
+
+  @media (max-width: 768px) {
+    .nav-inner { padding: 0 16px; height: 56px; }
+    .nav-links { display: none; }
+    .nav-right .btn-ghost { display: none; }
+    .btn-primary { padding: 9px 16px; font-size: 13px; }
+    .nav-hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+      margin-left: auto;
+      margin-right: 8px;
+    }
+    .nav-hamburger span { width: 22px; height: 2px; background: var(--black); border-radius: 2px; display: block; }
+    .nav-right .btn-primary#navRegisterBtn {
+      display: inline-flex !important;
+      align-items: center !important;
+      font-size: 13px !important;
+      padding: 6px 12px !important;
+      white-space: nowrap !important;
+      background: #ffffff !important;
+      color: #0A0A0F !important;
+      border: none !important;
+    }
+  }
+</style>
+
+<!-- ===== JS ===== -->
+<script>
+  function toggleMobileNav() {
+    document.getElementById('mobileDrawer').classList.toggle('open');
+    document.getElementById('mobOverlay').classList.toggle('show');
+  }
+  function closeMobileNav() {
+    document.getElementById('mobileDrawer').classList.remove('open');
+    document.getElementById('mobOverlay').classList.remove('show');
+  }
+
+  // Auth-aware nav
+  (function() {
+    try {
+      const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+      const token = localStorage.getItem('dmflow_token');
+      if (!user || !token) return;
+
+      const loginBtn = document.getElementById('navLoginBtn');
+      const registerBtn = document.getElementById('navRegisterBtn');
+      const appBtn = document.getElementById('navAppBtn');
+      const avatar = document.getElementById('navUserAvatar');
+      const mobLogin = document.getElementById('mobLoginLink');
+      const mobRegister = document.getElementById('mobRegisterLink');
+      const mobApp = document.getElementById('mobAppLink');
+
+      if (loginBtn) loginBtn.style.display = 'none';
+      if (registerBtn) registerBtn.style.display = 'none';
+      if (appBtn) { appBtn.style.display = 'inline-flex'; }
+      if (mobLogin) mobLogin.style.display = 'none';
+      if (mobRegister) mobRegister.style.display = 'none';
+      if (mobApp) mobApp.style.display = 'block';
+
+      if (avatar) {
+        const name = user.name || user.displayName || '';
+        const initial = name.charAt(0).toUpperCase() || '?';
+        if (user.profilePic || user.picture) {
+          avatar.innerHTML = '<img src="' + (user.profilePic || user.picture) + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover" onerror="this.parentElement.textContent=\'' + initial + '\'">';
+        } else {
+          avatar.textContent = initial;
+        }
+        avatar.style.display = 'flex';
+      }
+    } catch(e) {}
+  })();
+</script>
