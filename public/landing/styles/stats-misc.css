@@ -1,0 +1,36 @@
+/* ============================================================
+   STATS (legacy/unused .stat-card block — kept for safety, not referenced by current markup)
+   ============================================================ */
+
+/* ===== STATS ===== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.stat-card-label { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+.stat-card-val {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -1px;
+}
+.stat-card-change { font-size: 12px; color: #22c55e; margin-top: 4px; }
+
+
+@media (max-width: 900px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+
+@media (max-width: 768px) {
+  .stats-row { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-card { padding: 16px; }
+  .stat-card-val { font-size: 28px; }
+}
+@media (max-width: 480px) { .stats-row { grid-template-columns: 1fr; } }
