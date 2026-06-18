@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/apple-touch-icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png">
+  <link rel="manifest" href="/icons/site.webmanifest">
+  <meta name="msapplication-TileImage" content="/icons/mstile-150x150.png">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+  <meta name="msapplication-config" content="/icons/browserconfig.xml">
+  <meta name="theme-color" content="#0A0A0F">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Auto DM – DMFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-webkit-font-smoothing:antialiased;}
+
+/* ── SHELL ── */
+.app{display:flex;height:100vh;overflow:hidden;}
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0;}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:56px;background:#fff;border-bottom:1.5px solid #EBEBF0;
+  flex-shrink:0;gap:12px;position:relative;z-index:200;
+}
+.topbar-help{display:flex;align-items:center;gap:5px;font-size:12px;color:#9898A8;cursor:pointer;}
+.topbar-help:hover{color:#0A0A0F;}
+.topbar-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.btn-draft{padding:8px 16px;background:#fff;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;color:#0A0A0F;transition:border-color .15s;}
+.btn-draft:hover{border-color:#0A0A0F;}
+.btn-start{display:flex;align-items:center;gap:6px;padding:8px 18px;background:#0A0A0F;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;}
+.btn-start:hover:not(:disabled){background:#2A2A3A;}
+.btn-start:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── TYPE BAR ── */
+.type-bar{padding:10px 24px;background:#FAFAFA;border-bottom:1.5px solid #EBEBF0;flex-shrink:0;position:relative;z-index:199;}
+.type-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.type-tab{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#fff;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;transition:all .15s;white-space:nowrap;}
+.type-tab.active{background:#0A0A0F;color:#fff;border-color:#0A0A0F;}
+.type-tab:hover:not(.active):not(.locked){background:#F4F4F8;border-color:#9898A8;}
+.type-tab .pro-chip{font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;line-height:1.4;}
+.type-tab.locked{opacity:.7;border-style:dashed;}
+
+/* ── BODY ── */
+.builder-body{flex:1;overflow:hidden;display:flex;position:relative;z-index:1;}
+.builder-scroll{flex:1;overflow-y:auto;overflow-x:hidden;}
+.builder-scroll::-webkit-scrollbar{width:4px;}
+.builder-scroll::-webkit-scrollbar-thumb{background:#DDDDE5;border-radius:2px;}
+
+/* ── TWO-COLUMN LAYOUT ── */
+.builder-cols{display:grid;grid-template-columns:320px 1fr;min-height:100%;gap:0;}
+
+/* ── LEFT PREVIEW PANEL ── */
+.preview-col{background:#F0F0F6;border-right:1.5px solid #EBEBF0;padding:16px;display:flex;flex-direction:column;gap:12px;position:sticky;top:0;height:calc(100vh - 112px);overflow-y:auto;flex-shrink:0;width:320px;min-width:320px;}
+.preview-col::-webkit-scrollbar{display:none;}
+.preview-label{font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.6px;}
+/* side-by-side inner layout */
+.preview-inner{display:flex;flex-direction:row;gap:10px;align-items:flex-start;flex:1;min-height:0;}
+.preview-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;}
+.preview-right{flex-shrink:0;}
+
+/* Selected post/reel preview card */
+.sel-card{background:#fff;border-radius:10px;border:1.5px solid #DDDDE5;overflow:hidden;flex-shrink:0;display:none;width:100%;}
+.sel-card-empty{padding:20px;text-align:center;display:none!important;}
+.sel-card-empty svg{color:#C4C4D0;margin-bottom:8px;}
+.sel-card-empty-title{font-size:12px;font-weight:700;color:#9898A8;}
+.sel-card-empty-sub{font-size:11px;color:#C4C4D0;margin-top:2px;}
+.sel-card-media{position:relative;aspect-ratio:1;background:#F4F4F8;max-height:140px;overflow:hidden;}
+.sel-card-media img{width:100%;height:100%;object-fit:cover;display:block;}
+.sel-card-media-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.sel-card-type-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:5px;letter-spacing:.03em;}
+.sel-card-reel-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.sel-card-reel-circle{background:rgba(0,0,0,.45);border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;}
+.sel-card-info{padding:10px 12px 8px;}
+.sel-card-name{font-size:12px;font-weight:700;color:#0A0A0F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sel-card-kw{font-size:11px;color:#7C3AED;font-weight:600;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* Comment bubble overlay */
+.sel-card-comment{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 100%);padding:22px 8px 8px;}
+.sel-card-comment-row{display:flex;align-items:center;gap:5px;}
+.sel-card-comment-avatar{width:16px;height:16px;background:#E2E2EA;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:#5A5A6E;}
+.sel-card-comment-text{font-size:10px;color:#fff;font-weight:600;}
+.sel-card-comment-kw{opacity:.9;color:#FDE68A;}
+
+/* Phone mockup */
+.phone-wrap{flex-shrink:0;}
+.phone{background:#0A0A0F;border-radius:22px;padding:8px;box-shadow:0 8px 32px rgba(0,0,0,.18);position:relative;width:148px;flex-shrink:0;}
+.phone-screen{background:#fff;border-radius:20px;overflow:hidden;}
+.phone-statusbar{background:#0A0A0F;display:flex;justify-content:space-between;align-items:center;padding:6px 14px 4px;color:#fff;font-size:9px;font-weight:700;}
+.phone-statusbar-time{font-size:10px;font-weight:800;}
+.phone-statusbar-icons{display:flex;gap:3px;align-items:center;}
+.phone-dm-header{background:#fff;padding:8px 10px;border-bottom:1px solid #F4F4F8;display:flex;align-items:center;gap:7px;}
+.phone-dm-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#F97316,#EF4444);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.phone-dm-name{font-size:11px;font-weight:700;color:#0A0A0F;}
+.phone-dm-online{font-size:9px;color:#22C55E;font-weight:600;}
+.phone-dm-body{padding:10px;background:#F8F8FC;min-height:100px;display:flex;flex-direction:column;gap:7px;}
+.phone-bubble-in{background:#fff;border:1px solid #EBEBF0;border-radius:12px 12px 12px 3px;padding:7px 10px;font-size:10px;font-weight:500;color:#0A0A0F;max-width:80%;box-shadow:0 1px 3px rgba(0,0,0,.05);align-self:flex-start;}
+.phone-bubble-out{background:#0A0A0F;border-radius:12px 12px 3px 12px;padding:7px 10px;font-size:10px;font-weight:500;color:#fff;max-width:85%;align-self:flex-end;}
+.phone-link-card{background:#fff;border:1.5px solid #EBEBF0;border-radius:10px;padding:8px;display:flex;align-items:center;gap:7px;max-width:85%;align-self:flex-end;}
+.phone-link-icon{width:28px;height:28px;background:#F4F4F8;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.phone-link-title{font-size:10px;font-weight:700;color:#0A0A0F;line-height:1.3;}
+.phone-link-url{font-size:9px;color:#9898A8;margin-top:1px;}
+
+/* ── RIGHT STEPS COLUMN ── */
+.steps-col{padding:20px 24px;flex:1;min-width:0;overflow-x:hidden;}
+
+/* Step card */
+.step-card{background:#fff;border-radius:14px;border:1.5px solid #EBEBF0;margin-bottom:10px;overflow:hidden;transition:border-color .15s;}
+.step-card.open{border-color:#C4B5FD;}
+.step-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none;}
+.step-head:hover .step-num{background:#7C3AED;color:#fff;}
+.step-num{width:26px;height:26px;background:#F4F4F8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#5A5A6E;flex-shrink:0;transition:all .15s;}
+.step-num.done{background:#84CC16;color:#fff;}
+.step-num.done::after{content:'✓';}
+.step-num.done .num-text{display:none;}
+.step-title{font-size:13px;font-weight:700;color:#0A0A0F;flex:1;}
+.step-subtitle{font-size:11px;color:#9898A8;margin-top:1px;}
+.step-right{display:flex;align-items:center;gap:8px;}
+.step-chevron{color:#9898A8;transition:transform .2s;flex-shrink:0;}
+.step-card.open .step-chevron{transform:rotate(180deg);}
+.step-body{display:none;padding:0 16px 16px;}
+.step-card.open .step-body{display:block;}
+
+/* Toggle switch */
+.toggle-wrap{display:flex;align-items:center;gap:8px;}
+.tog{width:38px;height:22px;background:#DDDDE5;border-radius:11px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.tog.on{background:#7C3AED;}
+.tog.on::after{transform:translateX(16px);}
+
+/* Pro badge on step */
+.pro-badge{font-size:10px;font-weight:700;background:#F4EEFF;color:#7C3AED;border-radius:5px;padding:2px 7px;}
+
+/* Lock step */
+.step-card.locked .step-head{cursor:default;}
+.step-card.locked .step-head:hover .step-num{background:#F4F4F8;color:#5A5A6E;}
+
+/* ── MEDIA TABS + GRID ── */
+.media-tabs{display:flex;gap:6px;margin-bottom:12px;}
+.media-tab{padding:5px 14px;background:#fff;border:1.5px solid #DDDDE5;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;transition:all .15s;}
+.media-tab.active{background:#0A0A0F;color:#fff;border-color:#0A0A0F;}
+
+.post-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px;width:100%;}
+.media-item{position:relative;width:100%;aspect-ratio:1/1;height:auto;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;background:#F4F4F8;transition:all .15s;}
+.media-item:hover{border-color:#C4B5FD;transform:scale(1.02);}
+.media-item.selected{border-color:#7C3AED;box-shadow:0 0 0 3px rgba(124,58,237,.18);}
+.media-item img{width:100%;height:100%;object-fit:cover;display:block;}
+.media-item-no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#9898A8;text-align:center;padding:4px;}
+.media-badge{position:absolute;top:5px;left:5px;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);color:#fff;font-size:8.5px;font-weight:800;padding:2px 6px;border-radius:4px;}
+.media-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);padding:14px 5px 4px;font-size:8.5px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.media-reel-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;}
+.media-reel-circle{background:rgba(0,0,0,.4);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
+.media-check{position:absolute;top:5px;right:5px;display:none;}
+.media-item.selected .media-check{display:block;}
+.media-empty-msg{grid-column:1/-1;padding:24px;text-align:center;font-size:12px;color:#9898A8;}
+
+.apply-all-btn{width:100%;padding:10px;background:#FAFAFA;border:1.5px dashed #C4B5FD;border-radius:9px;font-size:12px;font-weight:700;color:#7C3AED;cursor:pointer;font-family:inherit;transition:background .15s;margin-top:4px;}
+.apply-all-btn:hover{background:#F4EEFF;}
+
+/* Selected banner */
+.sel-banner{background:#F4EEFF;border-radius:9px;padding:8px 12px;display:none;align-items:center;gap:8px;margin-top:8px;}
+.sel-banner.show{display:flex;}
+.sel-banner-thumb{width:34px;height:34px;border-radius:6px;object-fit:cover;flex-shrink:0;background:#E4E4EC;}
+.sel-banner-text{font-size:12px;font-weight:700;color:#7C3AED;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+
+/* ── KEYWORD SECTION ── */
+.section-label{font-size:11px;font-weight:700;color:#0A0A0F;margin-bottom:8px;}
+.section-sub{font-size:11px;color:#5A5A6E;margin-bottom:10px;line-height:1.5;}
+.trigger-modes{display:flex;gap:6px;margin-bottom:12px;}
+.trigger-mode{padding:7px 14px;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;background:#fff;transition:all .15s;}
+.trigger-mode.active{background:#0A0A0F;color:#fff;border-color:#0A0A0F;}
+.kw-input-row{display:flex;gap:6px;margin-bottom:10px;}
+.kw-input{flex:1;padding:9px 12px;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-family:inherit;outline:none;background:#fff;transition:border-color .15s;}
+.kw-input:focus{border-color:#7C3AED;}
+.kw-add-btn{padding:9px 16px;background:#0A0A0F;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s;}
+.kw-add-btn:hover{background:#2A2A3A;}
+.kw-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;min-height:0;}
+.kw-tag{display:inline-flex;align-items:center;gap:4px;background:#F4EEFF;border:1.5px solid #C4B5FD;border-radius:7px;padding:4px 8px;font-size:12px;font-weight:700;color:#7C3AED;}
+.kw-tag-del{background:none;border:none;cursor:pointer;color:#9898A8;padding:0;line-height:1;font-size:13px;}
+.kw-tag-del:hover{color:#EF4444;}
+.kw-suggestions{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.kw-sug{padding:4px 10px;background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:7px;font-size:11px;font-weight:600;color:#5A5A6E;cursor:pointer;font-family:inherit;transition:all .15s;}
+.kw-sug:hover{background:#F4EEFF;border-color:#C4B5FD;color:#7C3AED;}
+
+/* ── DM MESSAGE ── */
+.dm-textarea{width:100%;min-height:80px;padding:10px 12px;border:1.5px solid #DDDDE5;border-radius:9px;font-size:12.5px;font-family:inherit;resize:vertical;outline:none;line-height:1.5;transition:border-color .15s;}
+.dm-textarea:focus{border-color:#7C3AED;}
+.dm-suggestions{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+.dm-sug{padding:7px 10px;background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:8px;font-size:11px;font-weight:500;color:#5A5A6E;cursor:pointer;font-family:inherit;text-align:left;transition:all .15s;}
+.dm-sug:hover{background:#F4EEFF;border-color:#C4B5FD;color:#7C3AED;}
+.char-count{font-size:10px;color:#9898A8;text-align:right;margin-top:4px;}
+.variable-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.var-chip{padding:3px 9px;background:#F0F4FF;border:1.5px solid #BFCFFF;border-radius:6px;font-size:11px;font-weight:700;color:#3B5BDB;cursor:pointer;font-family:inherit;transition:all .15s;}
+.var-chip:hover{background:#E8EEFF;}
+
+/* ── LINK CARD ── */
+.link-card-preview{background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.link-card-icon{width:36px;height:36px;background:#EBEBF0;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.link-card-text{flex:1;min-width:0;}
+.link-card-title{font-size:12px;font-weight:700;color:#0A0A0F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.link-card-url{font-size:11px;color:#9898A8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.link-input{width:100%;padding:9px 12px;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-family:inherit;outline:none;transition:border-color .15s;margin-bottom:6px;background:#fff;}
+.link-input:focus{border-color:#7C3AED;}
+
+/* ── COMMENT REPLY ── */
+.cr-section{margin-top:10px;}
+.cr-textarea{width:100%;min-height:60px;padding:9px 12px;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-family:inherit;resize:none;outline:none;transition:border-color .15s;}
+.cr-textarea:focus{border-color:#7C3AED;}
+
+/* ── DIVIDER ── */
+.step-divider{height:1.5px;background:#F4F4F8;margin:10px 0;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0A0A0F;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{background:#16A34A;}
+.toast.error{background:#DC2626;}
+
+/* ── PRO UPGRADE MODAL ── */
+#proModal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(10,10,15,.5);backdrop-filter:blur(5px);}
+#proModal.open{display:flex;}
+.pro-card{background:#fff;border-radius:20px;padding:32px 28px;max-width:390px;width:92%;box-shadow:0 24px 60px rgba(0,0,0,.18);text-align:center;animation:popIn .22s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+.pro-card-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:800;margin-bottom:14px;}
+.pro-card-title{font-family:'Bricolage Grotesque',sans-serif;font-size:21px;font-weight:800;color:#0A0A0F;margin-bottom:6px;}
+.pro-card-sub{font-size:13px;color:#5A5A6E;margin-bottom:18px;line-height:1.5;}
+.pro-card-feats{background:#F8F8FC;border-radius:11px;padding:12px 14px;margin-bottom:18px;text-align:left;}
+.pro-card-feat{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#0A0A0F;padding:3px 0;}
+.pro-card-feat svg{color:#7C3AED;flex-shrink:0;}
+.pro-card-btn{width:100%;padding:12px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:#fff;border:none;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:opacity .15s;}
+.pro-card-btn:hover{opacity:.9;}
+.pro-card-skip{font-size:12px;color:#9898A8;cursor:pointer;background:none;border:none;font-family:inherit;}
+
+/* ── SAVE INDICATOR ── */
+.autosave-dot{width:7px;height:7px;border-radius:50%;background:#DDDDE5;display:inline-block;transition:background .3s;}
+.autosave-dot.saved{background:#22C55E;}
+.autosave-dot.saving{background:#F59E0B;animation:pulse-dot 1s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── LOADING SPINNER ── */
+.spin{display:inline-block;width:16px;height:16px;border:2px solid #DDDDE5;border-top-color:#7C3AED;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.grid-loading{grid-column:1/-1;padding:24px;text-align:center;color:#9898A8;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  html,body{overflow-x:hidden;overflow-y:auto;height:auto;}
+  .app{flex-direction:column;height:auto;min-height:100vh;}
+  .main{flex:none;height:auto;overflow:visible;}
+
+  /* topbar sticky */
+  .topbar{padding:0 14px;height:52px;position:sticky;top:0;z-index:100;background:#fff;box-shadow:0 1px 0 #EBEBF0;}
+  .topbar-help{display:none;}
+  .topbar-title{font-size:13px;}
+  .btn-draft{padding:6px 12px;font-size:11px;border-radius:7px;}
+  .btn-start{padding:6px 12px;font-size:11px;gap:4px;border-radius:7px;}
+
+  /* type bar sticky scrollable */
+  .type-bar{padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:52px;z-index:99;background:#FAFAFA;border-bottom:1.5px solid #EBEBF0;}
+  .type-bar::-webkit-scrollbar{display:none;}
+  .type-tabs{flex-wrap:nowrap;width:max-content;gap:5px;}
+  .type-tab{padding:5px 11px;font-size:11px;}
+
+  /* builder fully scrollable */
+  .builder-body{flex-direction:column;overflow:visible;height:auto;}
+  .builder-scroll{overflow:visible;height:auto;}
+  .builder-cols{display:flex!important;flex-direction:column!important;min-height:unset;height:auto;}
+
+  /* ── PREVIEW: full width on mobile, row layout ── */
+  .preview-col{
+    position:static!important;height:auto!important;width:100%!important;flex-shrink:0;
+    border-right:none;border-bottom:1.5px solid #EBEBF0;
+    padding:12px 14px;
+    display:flex!important;flex-direction:column!important;
+    gap:10px;background:#F0F0F6;
+  }
+  .preview-label{display:none;}
+  .preview-inner{flex-direction:row!important;gap:10px;align-items:flex-start;}
+  .preview-left{flex:1;min-width:0;}
+  .preview-right{flex-shrink:0;}
+  /* sel-card compact on mobile */
+  .sel-card{width:100%!important;border-radius:10px;}
+  .sel-card-media{max-height:110px!important;}
+  #selPlaceholder{padding:14px 10px;}
+  /* phone compact right side */
+  .phone-wrap{flex-shrink:0;}
+  .phone{width:130px!important;border-radius:18px;padding:7px;}
+  .phone-screen{border-radius:13px;}
+  .phone-statusbar{padding:4px 10px 3px;}
+  .phone-dm-header{padding:6px 8px;}
+  .phone-dm-avatar{width:20px;height:20px;font-size:9px;}
+  .phone-dm-name{font-size:9px;}
+  .phone-dm-online{font-size:8px;}
+  .phone-dm-body{min-height:60px;padding:7px;gap:5px;}
+  .phone-bubble-in{font-size:8px;padding:4px 7px;}
+  .phone-bubble-out{font-size:8px;padding:4px 7px;}
+  .phone-link-card{padding:5px;gap:5px;}
+  .phone-link-icon{width:18px;height:18px;}
+  .phone-link-title{font-size:8px;}
+  .phone-link-url{font-size:7px;}
+
+  /* steps full width */
+  .steps-col{padding:14px 14px 90px;width:100%;}
+
+  /* ── POST GRID: 4 cols on mobile ── */
+  .post-grid{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important;width:100%!important;}
+  .media-item{width:100%!important;height:auto!important;aspect-ratio:1/1!important;border-radius:8px;}
+  .media-badge{font-size:7.5px;padding:2px 5px;}
+  .media-caption{font-size:7.5px;}
+
+  /* media tabs */
+  .media-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;gap:5px;margin-bottom:10px;}
+  .media-tabs::-webkit-scrollbar{display:none;}
+  .media-tab{white-space:nowrap;font-size:11px;padding:5px 12px;}
+
+  /* step cards */
+  .step-card{border-radius:12px;margin-bottom:8px;}
+  .step-head{padding:12px 14px;gap:10px;}
+  .step-body{padding:0 14px 14px;}
+  .step-title{font-size:12.5px;}
+  .step-subtitle{font-size:10.5px;}
+  .step-num{width:24px;height:24px;font-size:10px;}
+
+  /* inputs */
+  .kw-input{font-size:13px;}
+  .dm-textarea{font-size:13px;}
+  .apply-all-btn{font-size:12px;padding:9px;}
+  .sel-banner{margin-top:6px;}
+
+  .toast{bottom:80px;font-size:12px;padding:9px 18px;}
+  .pro-card{padding:24px 18px;margin:12px;}
+}
+
+/* ── LIVE STATS PANEL ── */
+.stats-panel{background:#fff;border-radius:14px;border:1.5px solid #EBEBF0;margin-bottom:10px;overflow:hidden;}
+.stats-panel-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:#F8F8FC;}
+.stats-panel-title{font-size:13px;font-weight:700;color:#0A0A0F;flex:1;}
+.stats-live-dot{width:8px;height:8px;border-radius:50%;background:#DDDDE5;flex-shrink:0;}
+.stats-live-dot.live{background:#22C55E;animation:pulse-dot 1.5s infinite;}
+.stats-live-label{font-size:11px;font-weight:600;color:#9898A8;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:14px 16px 16px;}
+.stat-box{text-align:center;padding:8px 4px;border-right:1px solid #F4F4F8;}
+.stat-box:last-child{border-right:none;}
+.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#0A0A0F;line-height:1;}
+.stat-val.green{color:#16A34A;}
+.stat-val.red{color:#DC2626;}
+.stat-val.purple{color:#7C3AED;}
+.stat-lbl{font-size:10px;font-weight:600;color:#9898A8;margin-top:4px;text-transform:uppercase;letter-spacing:.4px;}
+.stat-sub{font-size:10px;color:#C4C4D0;margin-top:2px;}
+@media(max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:12px;}
+  .stat-box{border-right:none;border:1.5px solid #F4F4F8;border-radius:8px;padding:10px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-help" onclick="window.open('https://help.dmflow.in','_blank')">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1"/></svg>
+      Need help?
+    </div>
+    <div class="topbar-title" id="builderTitle">Auto DM Setup</div>
+    <div class="topbar-actions">
+      <span id="autosaveDot" class="autosave-dot" title="Auto-saved"></span>
+      <button class="btn-draft" onclick="saveDraft()">Save draft</button>
+      <button class="btn-start" id="btnStart" onclick="startAutomation()">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
+        Start automation
+      </button>
+    </div>
+  </div>
+
+  <!-- TYPE BAR -->
+  <div class="type-bar">
+    <div class="type-tabs">
+      <button class="type-tab active" id="tab-auto-dm" onclick="switchType('auto-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Auto DM
+      </button>
+      <button class="type-tab" id="tab-product-dm" onclick="switchType('product-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.8"/></svg>
+        Product Link DM
+      </button>
+      <button class="type-tab" id="tab-flow-dm" onclick="switchType('flow-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="5" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="19" r="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 12h4l4-5M7 12h4l4 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Flow DM
+        <span style="font-size:9px;font-weight:800;background:#059669;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;line-height:1.4;">NEW</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- BUILDER BODY -->
+  <div class="builder-body">
+    <div class="builder-scroll">
+      <div class="builder-cols">
+
+        <!-- ════ LEFT: PREVIEW ════ -->
+        <div class="preview-col">
+          <div class="preview-label">Preview</div>
+          <div class="preview-inner">
+          <div class="preview-left">
+          <!-- placeholder shown when nothing selected -->
+          <div id="selPlaceholder" style="background:#fff;border-radius:10px;border:1.5px dashed #DDDDE5;padding:18px 12px;text-align:center;">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" style="display:block;margin:0 auto 8px;color:#C4C4D0;"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.3"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div style="font-size:11px;font-weight:700;color:#9898A8;">Select a post</div>
+            <div style="font-size:10px;color:#C4C4D0;margin-top:2px;">Preview appears here</div>
+          </div>
+
+          <!-- Selected media card -->
+          <div class="sel-card" id="selCard">
+            <div class="sel-card-empty" id="selEmpty">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" style="display:block;margin:0 auto 8px;"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.3"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="sel-card-empty-title">Select a post to preview</div>
+              <div class="sel-card-empty-sub">Choose from the grid on the right</div>
+            </div>
+            <div id="selFilled" style="display:none;">
+              <div class="sel-card-media">
+                <img id="selThumb" src="" alt="" onerror="this.style.display='none'">
+                <div class="sel-card-media-empty" id="selNoThumb" style="display:none;">
+                  <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#C4C4D0" stroke-width="1.5"/><circle cx="8.5" cy="8.5" r="1.5" stroke="#C4C4D0" stroke-width="1.3"/><polyline points="21 15 16 10 5 21" stroke="#C4C4D0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="sel-card-type-badge" id="selTypeBadge">POST</span>
+                <div class="sel-card-reel-icon" id="selReelIcon" style="display:none;">
+                  <div class="sel-card-reel-circle"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="#fff"/></svg></div>
+                </div>
+                <div class="sel-card-comment">
+                  <div class="sel-card-comment-row">
+                    <div class="sel-card-comment-avatar">U</div>
+                    <div class="sel-card-comment-text">user123: <span class="sel-card-comment-kw" id="selCommentKw">LINK</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="sel-card-info">
+                <div class="sel-card-name" id="selName">Post name</div>
+                <div class="sel-card-kw" id="selKwLine">Triggers on any comment</div>
+              </div>
+            </div>
+          </div>
+
+          </div><!-- /preview-left -->
+          <div class="preview-right">
+          <!-- Phone mockup -->
+          <div class="phone-wrap">
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="phone-statusbar">
+                  <span class="phone-statusbar-time">9:41</span>
+                  <div class="phone-statusbar-icons">
+                    <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M1.51 8.32A13 13 0 0122.49 8.32" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M5 12.55a8 8 0 0114.08 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M8.53 16.11a4 4 0 016.95 0" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+                    <span style="font-size:9px;">●●●</span>
+                  </div>
+                </div>
+                <div class="phone-dm-header">
+                  <div class="phone-dm-avatar" id="phoneAvatar">K</div>
+                  <div>
+                    <div class="phone-dm-name" id="phoneName">kittunaik.7</div>
+                    <div class="phone-dm-online">Active now</div>
+                  </div>
+                </div>
+                <div class="phone-dm-body" id="phoneDmBody">
+                  <div class="phone-bubble-in" id="phoneInBubble">Need the LINK please!</div>
+                  <div class="phone-bubble-out" id="phoneOutBubble">Hey! Here's the link you requested:</div>
+                  <div class="phone-link-card" id="phoneLinkCard" style="display:none;">
+                    <div class="phone-link-icon">
+                      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <div>
+                      <div class="phone-link-title" id="phoneLinkTitle">Shop the look</div>
+                      <div class="phone-link-url" id="phoneLinkUrl">yourstore.com/look</div>
+                    </div>
+                  </div>
+                  <!-- Flow DM preview (hidden by default) -->
+                  <div id="flowPhonePreview" style="display:none;width:100%;">
+                    <div class="phone-bubble-in" id="flowPhoneInBubble" style="margin-bottom:6px;">LINK 👇</div>
+                    <div class="phone-bubble-out" id="flowPhoneBubble" style="margin-bottom:8px;">Hey! Tap below to explore 👇</div>
+                    <div id="flowPhoneButtons" style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;width:100%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div><!-- /preview-right -->
+          </div><!-- /preview-inner -->
+        </div>
+
+        <!-- ════ RIGHT: STEPS ════ -->
+        <div class="steps-col">
+
+          <!-- ── STEP 1: Select Post or Reel ── -->
+          <div class="step-card open" id="step1">
+            <div class="step-head" onclick="toggleStep('step1')">
+              <div class="step-num" id="step1num"><span class="num-text">1</span></div>
+              <div>
+                <div class="step-title">Select Post or Reel</div>
+                <div class="step-subtitle" id="step1sub">Choose which content triggers this automation</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="media-tabs">
+                <button class="media-tab active" id="mtab-posts" onclick="setMediaTab('posts',this)">Posts</button>
+                <button class="media-tab" id="mtab-reels" onclick="setMediaTab('reels',this)">Reels</button>
+                <button class="media-tab" id="mtab-all" onclick="setMediaTab('all',this)">All content</button>
+              </div>
+              <!-- Post grid -->
+              <div id="postGrid" class="post-grid">
+                <div class="grid-loading"><div class="spin"></div>Loading posts…</div>
+              </div>
+              <!-- Reel grid -->
+              <div id="reelGrid" class="post-grid" style="display:none;">
+                <div class="grid-loading"><div class="spin"></div>Loading reels…</div>
+              </div>
+              <!-- Apply all -->
+              <button class="apply-all-btn" onclick="applyAll()">✦ Apply to ALL content</button>
+              <!-- Selected banner -->
+              <div class="sel-banner" id="selBanner">
+                <img class="sel-banner-thumb" id="selBannerThumb" src="" alt="">
+                <div class="sel-banner-text" id="selBannerText">Post selected ✓</div>
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="#7C3AED" stroke-width="2.2" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 2: Trigger and Keywords ── -->
+          <div class="step-card" id="step2">
+            <div class="step-head" onclick="toggleStep('step2')">
+              <div class="step-num done" id="step2num"><span class="num-text">2</span></div>
+              <div>
+                <div class="step-title">Trigger and Keywords</div>
+                <div class="step-subtitle" id="step2sub">What comment triggers the DM?</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="section-sub">When someone leaves a comment containing these words, they'll receive your DM automatically.</div>
+              <div class="trigger-modes">
+                <button class="trigger-mode" id="modeKeywords" onclick="setTriggerMode('keywords')">Specific keywords</button>
+                <button class="trigger-mode active" id="modeAll" onclick="setTriggerMode('all')">Any comment</button>
+              </div>
+              <div id="kwSection" style="display:none;">
+                <div class="kw-input-row">
+                  <input class="kw-input" id="kwInput" placeholder="e.g. LINK, INFO, PRICE…" onkeydown="if(event.key==='Enter')addKeyword()">
+                  <button class="kw-add-btn" onclick="addKeyword()">Add</button>
+                </div>
+                <div class="kw-tags" id="kwTags"></div>
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Suggested</div>
+                <div class="kw-suggestions" id="kwSuggestions"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 3: Comment Auto-reply ── -->
+          <div class="step-card" id="step3">
+            <div class="step-head" onclick="toggleStep('step3')">
+              <div class="step-num" id="step3num"><span class="num-text">3</span></div>
+              <div style="flex:1;">
+                <div class="step-title">Comment Auto-reply</div>
+                <div class="step-subtitle">Reply publicly to the comment too</div>
+              </div>
+              <div class="step-right">
+                <div class="tog" id="crToggle" onclick="event.stopPropagation();toggleCr()"></div>
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="section-sub">This comment will appear publicly on your post when someone triggers the automation.</div>
+              <div class="cr-section" id="crSection" style="display:none;">
+                <textarea class="cr-textarea" id="crTextarea" placeholder="e.g. Sent you a DM! Check your inbox 📩" oninput="scheduleAutoSave()"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 4: Follower Gate ── -->
+          <div class="step-card locked" id="step4" onclick="openProModal('Follower Gate')">
+            <div class="step-head">
+              <div class="step-num" id="step4num"><span class="num-text">4</span></div>
+              <div style="flex:1;">
+                <div class="step-title">
+                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#9898A8" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#9898A8" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  Follower Gate
+                </div>
+                <div class="step-subtitle">Only send DM if they follow you</div>
+              </div>
+              <div class="step-right">
+                <span class="pro-badge">PRO</span>
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 5: DM Message ── -->
+          <div class="step-card" id="step5">
+            <div class="step-head" onclick="toggleStep('step5')">
+              <div class="step-num done" id="step5num"><span class="num-text">5</span></div>
+              <div>
+                <div class="step-title">DM Message</div>
+                <div class="step-subtitle" id="step5sub">Craft the message they'll receive</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <!-- Quick suggestions -->
+              <div class="dm-suggestions" id="dmSuggestions">
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">Quick fill</div>
+                <button class="dm-sug" onclick="useDmSug(this)">Hey {{name}}! Here's the link you asked about 👇</button>
+                <button class="dm-sug" onclick="useDmSug(this)">Hey! Here's the link you requested:</button>
+                <button class="dm-sug" onclick="useDmSug(this)">Hey {{name}}, thanks for your interest! Here's what you were looking for:</button>
+              </div>
+              <textarea class="dm-textarea" id="dmTextarea" placeholder="Type your DM message here…" oninput="onDmInput()" rows="4"></textarea>
+              <div class="char-count"><span id="charCount">0</span> / 500</div>
+              <div style="margin-top:8px;margin-bottom:14px;">
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Insert variable</div>
+                <div class="variable-chips">
+                  <button class="var-chip" onclick="insertVar('{{name}}')">{{name}}</button>
+                  <button class="var-chip" onclick="insertVar('{{username}}')">{{username}}</button>
+                  <button class="var-chip" onclick="insertVar('{{post}}')">{{post}}</button>
+                </div>
+              </div>
+
+              <!-- Link button toggle -->
+              <div class="step-divider"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#0A0A0F;">Link Button</div>
+                  <div style="font-size:11px;color:#5A5A6E;margin-top:1px;">Add a tappable button with a link inside the DM</div>
+                </div>
+                <div id="linkToggle" onclick="toggleLinkCard()" style="width:36px;height:20px;background:#DDDDE5;border-radius:20px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;">
+                  <div id="linkToggleKnob" style="position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></div>
+                </div>
+              </div>
+
+              <!-- Link card inputs (hidden by default) -->
+              <div id="linkCardSection" style="display:none;">
+                <!-- Live preview -->
+                <div class="link-card-preview" id="linkCardPreview" style="margin-bottom:10px;">
+                  <div class="link-card-icon">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="link-card-text">
+                    <div class="link-card-title" id="lcTitlePreview">Shop the look</div>
+                    <div class="link-card-url" id="lcUrlPreview">yourstore.com/look</div>
+                  </div>
+                </div>
+                <input class="link-input" id="lcTitle" placeholder="Button label (e.g. Shop the look)" oninput="onLinkInput()" value="Shop the look">
+                <input class="link-input" id="lcUrl" placeholder="URL (e.g. https://yourstore.com)" oninput="onLinkInput()" value="yourstore.com/look">
+              </div>
+            </div>
+          </div>
+
+          <!-- ── STEP 6: Advanced Settings (LOCKED) ── -->
+          <div class="step-card locked" id="step6" onclick="openProModal('Advanced Settings')">
+            <div class="step-head">
+              <div class="step-num" id="step6num"><span class="num-text">6</span></div>
+              <div style="flex:1;">
+                <div class="step-title">
+                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="9" stroke="#5A5A6E" stroke-width="1.8"/><path d="M12 6v6l4 2" stroke="#5A5A6E" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  Advanced Settings
+                </div>
+                <div class="step-subtitle" id="step6sub">Rate limit &amp; duplicate control</div>
+              </div>
+              <span class="pro-chip" style="margin-left:auto;">PRO</span>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+
+              <!-- Instagram Rate Limit Info Banner -->
+              <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:9px;padding:10px 12px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10" stroke="#3B82F6" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"/></svg>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:#1E40AF;margin-bottom:2px;">Instagram DM Rules</div>
+                  <div style="font-size:11px;color:#3B5BDB;line-height:1.5;">Instagram allows max <strong>200 automated DMs/hour</strong> per account. We default to 100/hr to keep your account safe. DMs are queued and spaced automatically — no spam risk.</div>
+                </div>
+              </div>
+
+              <!-- DM Delay -->
+              <div style="margin-bottom:14px;">
+                <div class="section-label" style="margin-bottom:6px;">DM Delay after trigger</div>
+                <div class="section-sub" style="margin-bottom:8px;">Wait before sending the DM. Looks more natural.</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;" id="delayOptions">
+                  <button class="trigger-mode active" id="delay0"   onclick="setDelay(0,   this)">Instant</button>
+                  <button class="trigger-mode"        id="delay30"  onclick="setDelay(30,  this)">30 sec</button>
+                  <button class="trigger-mode"        id="delay60"  onclick="setDelay(60,  this)">1 min</button>
+                  <button class="trigger-mode"        id="delay300" onclick="setDelay(300, this)">5 min</button>
+                  <button class="trigger-mode"        id="delay600" onclick="setDelay(600, this)">10 min</button>
+                </div>
+              </div>
+
+              <div class="step-divider"></div>
+
+              <!-- Max DMs per hour -->
+              <div style="margin-bottom:14px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div class="section-label">Max DMs per hour</div>
+                  <div style="font-size:13px;font-weight:800;color:#7C3AED;" id="rateLabel">100 / hr</div>
+                </div>
+                <div class="section-sub" style="margin-bottom:10px;">Instagram hard cap is 200/hr. Keep at 100 or below for account safety.</div>
+                <input type="range" id="rateSlider" min="10" max="200" step="10" value="100"
+                  style="width:100%;accent-color:#7C3AED;cursor:pointer;"
+                  oninput="onRateChange(this.value)">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#9898A8;margin-top:4px;">
+                  <span>10/hr (safe)</span>
+                  <span style="color:#F59E0B;font-weight:600;">⚠ 200/hr (Instagram limit)</span>
+                </div>
+              </div>
+
+              <div class="step-divider"></div>
+
+              <!-- Skip Duplicates -->
+              <div style="margin-bottom:14px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div>
+                    <div class="section-label">Skip duplicate DMs</div>
+                    <div style="font-size:11px;color:#5A5A6E;margin-top:2px;">Don't DM the same person twice in the window below</div>
+                  </div>
+                  <div class="tog on" id="dupToggle" onclick="toggleDuplicate()" style="flex-shrink:0;"></div>
+                </div>
+
+                <!-- Duplicate window (only visible when toggle is on) -->
+                <div id="dupWindowRow" style="margin-top:8px;">
+                  <div style="font-size:11px;font-weight:700;color:#0A0A0F;margin-bottom:6px;">Re-send after</div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;" id="dupWindowOptions">
+                    <button class="trigger-mode active" id="dup24"  onclick="setDupWindow(24,  this)">24 hours</button>
+                    <button class="trigger-mode"        id="dup48"  onclick="setDupWindow(48,  this)">48 hours</button>
+                    <button class="trigger-mode"        id="dup168" onclick="setDupWindow(168, this)">7 days</button>
+                    <button class="trigger-mode"        id="dup0"   onclick="setDupWindow(0,   this)">Never</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- LIVE STATS PANEL anchor point -->
+          <div id="statsPanelAnchor"></div>
+
+          <div style="height:32px;"></div>
+        </div>
+        <!-- end steps-col -->
+
+        <!-- ════ FLOW DM PANEL ════ -->
+        <div class="steps-col" id="flowDmPanel" style="display:none;">
+
+          <!-- How it works banner -->
+          <div style="background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:1px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#059669" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#065F46;margin-bottom:2px;">Flow DM — Interactive Button Conversations</div>
+              <div style="font-size:11px;color:#047857;line-height:1.5;">Send a DM with up to 5 reply buttons. When the user taps a button, DMFlow automatically sends the next message you set for that button.</div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 1: Select Reel -->
+          <div class="step-card open" id="fstep1">
+            <div class="step-head" onclick="toggleStep('fstep1')">
+              <div class="step-num" id="fstep1num"><span class="num-text">1</span></div>
+              <div>
+                <div class="step-title">Select a Reel or Post</div>
+                <div class="step-subtitle" id="fstep1sub">Choose which content triggers this flow</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div style="font-size:11px;color:#5A5A6E;margin-bottom:10px;line-height:1.5;">This flow will trigger when someone comments on the post or reel you select below.</div>
+              <div class="media-tabs">
+                <button class="media-tab active" id="fmtab-posts" onclick="setFlowMediaTab('posts',this)">Posts</button>
+                <button class="media-tab" id="fmtab-reels" onclick="setFlowMediaTab('reels',this)">Reels</button>
+              </div>
+              <div id="flowPostGrid" class="post-grid">
+                <div class="grid-loading"><div class="spin"></div>Loading posts…</div>
+              </div>
+              <div id="flowReelGrid" class="post-grid" style="display:none;">
+                <div class="grid-loading"><div class="spin"></div>Loading reels…</div>
+              </div>
+              <!-- Selected banner -->
+              <div class="sel-banner" id="flowSelBanner" style="display:none;">
+                <img class="sel-banner-thumb" id="flowSelBannerThumb" src="" alt="">
+                <div class="sel-banner-info">
+                  <div class="sel-banner-title" id="flowSelBannerTitle">—</div>
+                  <div class="sel-banner-kw" id="flowSelBannerType">—</div>
+                </div>
+                <button class="sel-banner-change" onclick="clearFlowMedia()">Change</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 2: Trigger Keyword -->
+          <div class="step-card" id="fstep2">
+            <div class="step-head" onclick="toggleStep('fstep2')">
+              <div class="step-num" id="fstep2num"><span class="num-text">2</span></div>
+              <div>
+                <div class="step-title">Trigger Keyword</div>
+                <div class="step-subtitle" id="fstep2sub">What comment starts this flow?</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div style="font-size:11px;color:#5A5A6E;margin-bottom:10px;line-height:1.5;">When someone comments this word/phrase, DMFlow sends them your first Flow DM automatically.</div>
+              <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Trigger mode</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;" id="flowTriggerModes">
+                <button class="trigger-mode active" onclick="setFlowTriggerMode('any',this)">Any comment</button>
+                <button class="trigger-mode" onclick="setFlowTriggerMode('keyword',this)">Specific keyword</button>
+              </div>
+              <div id="flowKwSection" style="display:none;">
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">Keywords <span style="font-weight:500;color:#C4C4D0;">(press Enter to add)</span></div>
+                <div class="kw-input-row">
+                  <input class="kw-input" id="flowKwInput" placeholder="e.g. LINK, INFO, SHOP" onkeydown="if(event.key==='Enter')addFlowKeyword()">
+                  <button class="kw-add-btn" onclick="addFlowKeyword()">Add</button>
+                </div>
+                <div class="kw-chips" id="flowKwChips"></div>
+              </div>
+              <div style="background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:9px;padding:10px 12px;margin-top:6px;">
+                <div style="font-size:11px;font-weight:700;color:#0A0A0F;margin-bottom:3px;">💡 Tip</div>
+                <div style="font-size:11px;color:#5A5A6E;line-height:1.5;">Tell your followers in the caption: <em>"Comment LINK below and I'll DM you instantly!"</em></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 3: First DM Message + Buttons -->
+          <div class="step-card" id="fstep3">
+            <div class="step-head" onclick="toggleStep('fstep3')">
+              <div class="step-num" id="fstep3num"><span class="num-text">3</span></div>
+              <div>
+                <div class="step-title">First DM Message</div>
+                <div class="step-subtitle" id="fstep3sub">What do they receive first?</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <!-- Quick fill suggestions -->
+              <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Quick fill</div>
+              <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px;">
+                <button class="dm-sug" onclick="useFlowSug(this,'fdmText')">Hey {{name}}! Tap below to explore 👇</button>
+                <button class="dm-sug" onclick="useFlowSug(this,'fdmText')">Hi {{name}}! What would you like to know?</button>
+                <button class="dm-sug" onclick="useFlowSug(this,'fdmText')">Hey! Here's what you asked for — pick an option below:</button>
+              </div>
+              <textarea class="dm-textarea" id="fdmText" placeholder="Type your first DM here…" oninput="onFlowDmInput()" rows="3"></textarea>
+              <div class="char-count"><span id="fdmCharCount">0</span> / 500</div>
+              <div style="margin-top:8px;margin-bottom:14px;">
+                <div style="font-size:10px;font-weight:700;color:#9898A8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">Insert variable</div>
+                <div class="variable-chips">
+                  <button class="var-chip" onclick="insertFlowVar('{{name}}','fdmText')">{{name}}</button>
+                  <button class="var-chip" onclick="insertFlowVar('{{username}}','fdmText')">{{username}}</button>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div class="step-divider"></div>
+
+              <!-- Reply Buttons section -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div>
+                  <div style="font-size:12px;font-weight:700;color:#0A0A0F;">Reply Buttons</div>
+                  <div style="font-size:11px;color:#5A5A6E;margin-top:2px;">Up to 5 buttons. Each sends a different follow-up DM when tapped.</div>
+                </div>
+                <span style="font-size:10px;color:#9898A8;" id="flowBtnCount">0 / 5</span>
+              </div>
+
+              <!-- Button cards container -->
+              <div id="flowButtonsContainer" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+
+              <!-- Add button CTA -->
+              <button id="flowAddBtn" onclick="addFlowButton()" style="width:100%;padding:9px;background:#F4F4F8;border:1.5px dashed #DDDDE5;border-radius:9px;font-size:12px;font-weight:700;color:#5A5A6E;cursor:pointer;transition:all .15s;font-family:inherit;" onmouseover="this.style.background='#EEEEF5';this.style.borderColor='#9898A8'" onmouseout="this.style.background='#F4F4F8';this.style.borderColor='#DDDDE5'">
+                + Add reply button
+              </button>
+
+              <!-- Info callout -->
+              <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:9px;padding:10px 12px;margin-top:10px;cursor:pointer;" onclick="this.querySelector('.flow-info-body').style.display=this.querySelector('.flow-info-body').style.display==='none'?'block':'none'">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#3B82F6" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"/></svg>
+                  <span style="font-size:11px;font-weight:700;color:#1E40AF;">How buttons work</span>
+                  <span style="font-size:10px;color:#93C5FD;margin-left:auto;">tap to expand</span>
+                </div>
+                <div class="flow-info-body" style="display:none;margin-top:6px;font-size:11px;color:#3B5BDB;line-height:1.6;">
+                  When your viewer taps a button like <strong>"Shop now"</strong>, Instagram sends the keyword <strong>SHOP_NOW</strong> back to you as a DM. DMFlow catches it and automatically sends the Reply DM you set for that button.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLOW STEP 4: Advanced Settings -->
+          <div class="step-card" id="fstep4">
+            <div class="step-head" onclick="toggleStep('fstep4')">
+              <div class="step-num" id="fstep4num"><span class="num-text">4</span></div>
+              <div style="flex:1;">
+                <div class="step-title">
+                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:3px;"><circle cx="12" cy="12" r="9" stroke="#5A5A6E" stroke-width="1.8"/><path d="M12 6v6l4 2" stroke="#5A5A6E" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  Advanced Settings
+                </div>
+                <div class="step-subtitle" id="fstep4sub">Delay &amp; rate limit</div>
+              </div>
+              <div class="step-right">
+                <svg class="step-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="step-body">
+              <div style="margin-bottom:12px;">
+                <div class="section-label" style="margin-bottom:6px;">DM Delay after trigger</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;" id="flowDelayOptions">
+                  <button class="trigger-mode active" onclick="setFlowDelay(0,this)">Instant</button>
+                  <button class="trigger-mode" onclick="setFlowDelay(30,this)">30 sec</button>
+                  <button class="trigger-mode" onclick="setFlowDelay(60,this)">1 min</button>
+                  <button class="trigger-mode" onclick="setFlowDelay(300,this)">5 min</button>
+                </div>
+              </div>
+              <div class="step-divider"></div>
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div class="section-label">Max DMs per hour</div>
+                  <div style="font-size:13px;font-weight:800;color:#7C3AED;" id="flowRateLabel">100 / hr</div>
+                </div>
+                <input type="range" id="flowRateSlider" min="10" max="200" step="10" value="100"
+                  style="width:100%;accent-color:#7C3AED;cursor:pointer;"
+                  oninput="document.getElementById('flowRateLabel').textContent=this.value+' / hr'">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:#9898A8;margin-top:4px;">
+                  <span>10/hr (safe)</span>
+                  <span style="color:#F59E0B;font-weight:600;">⚠ 200/hr (limit)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height:32px;"></div>
+        </div>
+        <!-- end flow dm panel -->
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+<!-- LIVE STATS PANEL (shown after automation is started) -->
+<div id="statsPanel" class="stats-panel" style="display:none;">
+  <div class="stats-panel-head">
+    <div>
+      <div class="stats-panel-title">Live Automation Stats</div>
+    </div>
+    <div class="stats-live-dot" id="statsDot"></div>
+    <div class="stats-live-label" id="statsLiveLabel">Stopped</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-val purple" id="statTriggered">0</div>
+      <div class="stat-lbl">Triggered</div>
+      <div class="stat-sub">Comments matched</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val green" id="statDmsSent">0</div>
+      <div class="stat-lbl">DMs Sent</div>
+      <div class="stat-sub">Successfully delivered</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val" id="statRepliesSent">0</div>
+      <div class="stat-lbl">Comment Replies</div>
+      <div class="stat-sub">Public replies posted</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val red" id="statFailed">0</div>
+      <div class="stat-lbl">Failed</div>
+      <div class="stat-sub">DMs not delivered</div>
+    </div>
+  </div>
+  <!-- Live activity log -->
+  <div id="statsActivityWrap" style="padding:0 16px 14px;">
+    <div style="font-size:11px;font-weight:700;color:#9898A8;letter-spacing:.04em;margin-bottom:6px;">RECENT ACTIVITY</div>
+    <div id="statsActivityLog" style="display:flex;flex-direction:column;gap:4px;">
+      <div style="font-size:12px;color:#ADADBC;font-style:italic;">Waiting for comments…</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRO MODAL -->
+<div id="proModal" onclick="if(event.target===this)closeProModal()">
+  <div class="pro-card">
+    <div class="pro-card-badge">
+      <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      PRO Feature
+    </div>
+    <div class="pro-card-title" id="proModalTitle">Unlock This Feature</div>
+    <div class="pro-card-sub" id="proModalSub">Upgrade to DMFlow Pro to access this and all advanced automation features.</div>
+    <div class="pro-card-feats">
+      <div class="pro-card-feat"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Comment Auto-reply DM</div>
+      <div class="pro-card-feat"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Story Reaction DM</div>
+      <div class="pro-card-feat"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email Collection &amp; Lead Capture</div>
+      <div class="pro-card-feat"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Follower Gate &amp; Advanced Settings</div>
+      <div class="pro-card-feat"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited DMs per month</div>
+    </div>
+    <button class="pro-card-btn" onclick="doUpgrade()">✦ Upgrade to Pro</button>
+    <button class="pro-card-skip" onclick="closeProModal()">Maybe later</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/js/api.js"></script>
+<script>
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+const state = {
+  type: 'auto-dm',         // 'auto-dm' | 'product-dm'
+  mediaTab: 'posts',
+  selectedMedia: null,     // { id, name, imgSrc, isReel, caption }
+  applyAll: false,
+  triggerMode: 'all',      // 'keywords' | 'all'
+  keywords: [],
+  crEnabled: false,
+  crText: '',
+  dmText: '',
+  lcTitle: 'Shop the look',
+  lcUrl: 'yourstore.com/look',
+  editId: null,
+  // Step 6 — Advanced Settings
+  dmDelay: 0,              // seconds: 0, 30, 60, 300, 600
+  maxDmsPerHour: 100,      // 10–200 (Instagram hard cap 200)
+  skipDuplicate: true,     // block duplicate DMs to same person
+  duplicateWindowHours: 24, // 24, 48, 168 (7d), or 0 = never re-send
+};
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', async () => {
+  // Load user name for phone preview
+  try {
+    const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+    const igName = u.instagram?.username || u.username || u.name || 'you';
+    const firstChar = igName.charAt(0).toUpperCase();
+    document.getElementById('phoneName').textContent = igName;
+    document.getElementById('phoneAvatar').textContent = firstChar;
+  } catch(e) {}
+
+  // Check for edit param
+  const params = new URLSearchParams(window.location.search);
+  const editId = params.get('edit');
+  if (editId) {
+    state.editId = editId;
+    await loadExistingAutomation(editId);
+  }
+
+  // Load media
+  await loadMedia();
+
+  // Restore DM text
+  document.getElementById('dmTextarea').value = state.dmText;
+  document.getElementById('lcTitle').value = state.lcTitle;
+  document.getElementById('lcUrl').value = state.lcUrl;
+  updatePhonePreview();
+  updateStep2Done();
+  updateStep5Done();
+
+  // Default suggestions
+  renderKwSuggestions('');
+});
+
+/* ═══════════════════════════════════════
+   MEDIA LOADING
+═══════════════════════════════════════ */
+let _mediaCache = null;
+
+/* ── DEMO PLACEHOLDER MEDIA (shown when no IG account connected) ── */
+const DEMO_POSTS = [
+  {id:'demo1',caption:'#trending #viral',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo2',caption:'Hi',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo3',caption:'#god',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo4',caption:'New post',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo5',caption:'Check this',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo6',caption:'My life',media_url:'',media_type:'IMAGE',_demo:true},
+];
+const DEMO_REELS = [
+  {id:'demoreel1',caption:'Reel 1',media_url:'',media_type:'REEL',_demo:true},
+  {id:'demoreel2',caption:'Reel 2',media_url:'',media_type:'REEL',_demo:true},
+  {id:'demoreel3',caption:'Reel 3',media_url:'',media_type:'REEL',_demo:true},
+];
+
+async function loadMedia() {
+  if (_mediaCache) { renderGrids(_mediaCache); return; }
+  // Always render demo first — replaces static HTML spinners in both grids
+  _demoGradIdx = 0;
+  renderGrids({ posts: DEMO_POSTS, reels: DEMO_REELS }, null, true);
+  if (!window.API || !API.getToken()) return; // stay on demo
+  try {
+    const res = await API.getIgMedia('all');
+    const all = Array.isArray(res) ? res : (res.media || res.data || []);
+    const isReelMedia = m => ['VIDEO','REELS','REEL'].includes((m.media_type||m.type||'').toUpperCase());
+    const posts = all.filter(m => !isReelMedia(m));
+    const reels = all.filter(m => isReelMedia(m));
+    _mediaCache = { posts, reels };
+    renderGrids(_mediaCache);
+  } catch(e) {
+    // keep demo visible; show reconnect banner if token expired
+    const msg = e.message || '';
+    if (msg.includes('expired') || msg.includes('401')) {
+      const banner = `<div style="background:#FEF3C7;border-radius:8px;padding:8px 12px;font-size:11px;color:#92400E;margin-bottom:8px;grid-column:1/-1;">
+          ⚠️ Instagram session expired.
+          <a href="#" onclick="event.preventDefault();window.top&&window.top.navigate&&window.top.navigate('pages/onboarding/connect.html','connect')" style="color:#7C3AED;font-weight:700;">Reconnect →</a>
+        </div>`;
+      document.getElementById('postGrid').insertAdjacentHTML('afterbegin', banner);
+      document.getElementById('reelGrid').insertAdjacentHTML('afterbegin', banner);
+    }
+  }
+}
+
+function setGridLoading(on) {} // no-op, demo shows instantly now
+
+function renderGrids({ posts, reels }, err, isDemo) {
+  const demoNotice = isDemo
+    ? `<div style="grid-column:1/-1;background:#F0F4FF;border-radius:8px;padding:7px 10px;font-size:11px;color:#3B5BDB;margin-bottom:6px;font-weight:600;display:flex;align-items:center;gap:7px;">
+<svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="7" r="1" fill="currentColor"/></svg>
+        Connect Instagram to see your real posts
+       </div>` : '';
+
+  document.getElementById('postGrid').innerHTML = demoNotice + (posts.length
+    ? posts.map(m => mediaItem(m, false, isDemo)).join('')
+    : `<div class="media-empty-msg">No posts found</div>`);
+
+  document.getElementById('reelGrid').innerHTML = demoNotice + (reels.length
+    ? reels.map(m => mediaItem(m, true, isDemo)).join('')
+    : `<div class="media-empty-msg">No reels found</div>`);
+
+  // ── Restore saved media selection after grid is populated ──────────────
+  if (state._pendingSelectId) {
+    const pid = state._pendingSelectId;
+    const purl = state._pendingSelectUrl || '';
+    const pIsReel = !!state._pendingSelectIsReel;
+    state._pendingSelectId = null;
+    state._pendingSelectUrl = null;
+    state._pendingSelectIsReel = null;
+
+    // Try to find the item in the rendered grid by data-id
+    const el = document.querySelector(`.media-item[data-id="${pid}"]`);
+    if (el) {
+      const cap  = el.dataset.cap  || '';
+      const img  = el.dataset.img  || purl;
+      const isR  = el.closest('#reelGrid') !== null || pIsReel;
+      doSelectMedia(el, cap, img, pid, isR, true); // _silent: don't auto-save on restore
+      // Switch tab so selected item is visible
+      const tabBtn = document.querySelector(isR ? '.media-tab[onclick*="reels"]' : '.media-tab[onclick*="posts"]');
+      if (tabBtn) setMediaTab(isR ? 'reels' : 'posts', tabBtn, true);
+    } else {
+      // Media not in grid (expired/deleted) — restore state from saved data
+      state.selectedMedia = { id: pid, name: 'Saved post', imgSrc: purl, isReel: pIsReel };
+      state.applyAll = false;
+      // Show banner manually
+      const banner = document.getElementById('selBanner');
+      const bannerThumb = document.getElementById('selBannerThumb');
+      const bannerText  = document.getElementById('selBannerText');
+      if (banner) {
+        if (purl && bannerThumb) bannerThumb.src = purl;
+        if (bannerText) bannerText.textContent = (pIsReel ? 'Reel' : 'Post') + ' selected ✓';
+        banner.classList.add('show');
+      }
+      const n = document.getElementById('step1num');
+      if (n) n.classList.add('done');
+      document.getElementById('step1sub').textContent = pIsReel ? 'Reel selected' : 'Post selected';
+    }
+  }
+}
+
+const DEMO_GRADS = [
+  'linear-gradient(135deg,#F97316,#EF4444)',
+  'linear-gradient(135deg,#8B5CF6,#3B82F6)',
+  'linear-gradient(135deg,#10B981,#06B6D4)',
+  'linear-gradient(135deg,#F59E0B,#EF4444)',
+  'linear-gradient(135deg,#EC4899,#8B5CF6)',
+  'linear-gradient(135deg,#14B8A6,#22C55E)',
+];
+let _demoGradIdx = 0;
+
+function mediaItem(m, isReel, isDemo) {
+  const cap     = (m.caption || (isReel ? 'Reel' : 'Post')).substring(0, 22);
+  const fullCap = (m.caption || '').replace(/"/g, '&quot;');
+  const img     = (m.thumbnail_url || m.media_url || '').replace(/"/g, '&quot;');
+  const id      = (m.id || m._id || '').toString();
+  const capEsc  = cap.replace(/"/g, '&quot;');
+  const grad    = DEMO_GRADS[_demoGradIdx++ % DEMO_GRADS.length];
+  const bgStyle = isDemo ? `background:${grad};` : '';
+
+  const badge = isReel
+    ? `<span class="media-badge" style="display:flex;align-items:center;gap:3px;">
+        <svg width="9" height="9" fill="none" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2" stroke="#fff" stroke-width="2"/><path d="M7 6V4M12 6V4M17 6V4M7 20v-2M12 20v-2M17 20v-2" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        REEL</span>`
+    : `<span class="media-badge" style="display:flex;align-items:center;gap:3px;">
+        <svg width="9" height="9" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#fff" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#fff"/><polyline points="21 15 16 10 5 21" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        POST</span>`;
+
+  const playIcon = isReel
+    ? `<div class="media-reel-play"><div class="media-reel-circle">
+        <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="6,3 20,12 6,21" fill="#fff"/></svg>
+       </div></div>` : '';
+
+  // All data via data-* attributes — no raw URL/text in onclick args
+  // Fixes posts/reels with special chars (&, ?, =) silently failing to select
+  return `<div class="media-item" data-id="${id}" data-img="${img}" data-cap="${fullCap}" data-isreel="${isReel ? '1' : '0'}" onclick="handleMediaClick(this)">
+    ${img
+      ? `<img src="${img}" alt="${capEsc}" onerror="this.style.display='none'">`
+      : `<div style="width:100%;height:100%;${bgStyle}${isDemo ? 'opacity:.7;' : ''}"></div>`}
+    ${badge}
+    ${playIcon}
+    <div class="media-caption">${capEsc}</div>
+    <div class="media-check">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#7C3AED"/><path d="M7 12l4 4 6-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>`;
+}
+
+// Single click handler — reads from data-* attributes safely
+function handleMediaClick(el) {
+  const id     = el.dataset.id;
+  const img    = el.dataset.img || '';
+  const cap    = el.dataset.cap || '';
+  const isReel = el.dataset.isreel === '1';
+  // Use caption for display; if empty fall back to "Post" / "Reel" (never show raw numeric ID)
+  const displayName = cap.trim() ? cap.trim().substring(0, 40) : (isReel ? 'Reel' : 'Post');
+  doSelectMedia(el, displayName, img, id, isReel);
+}
+/* ═══════════════════════════════════════
+   MEDIA TAB SWITCHING
+═══════════════════════════════════════ */
+function setMediaTab(tab, btn, _keepSelection) {
+  state.mediaTab = tab;
+  document.querySelectorAll('#step1 .media-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const pg = document.getElementById('postGrid');
+  const rg = document.getElementById('reelGrid');
+  if (tab === 'posts') {
+    pg.style.display = 'grid';
+    rg.style.display = 'none';
+  } else if (tab === 'reels') {
+    pg.style.display = 'none';
+    rg.style.display = 'grid';
+  } else {
+    pg.style.display = 'grid';
+    rg.style.display = 'grid';
+  }
+  // Only wipe selection when user manually clicks a tab, not during restore
+  if (!_keepSelection) clearMediaSelection();
+}
+
+/* ═══════════════════════════════════════
+   MEDIA SELECTION
+═══════════════════════════════════════ */
+function selectPost(el, name, imgSrc, mediaId) {
+  doSelectMedia(el, name, imgSrc, mediaId, false);
+}
+function selectReel(el, name, imgSrc, mediaId) {
+  doSelectMedia(el, name, imgSrc, mediaId, true);
+}
+function doSelectMedia(el, name, imgSrc, mediaId, isReel, _silent) {
+  // Deselect all
+  document.querySelectorAll('.media-item').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedMedia = { id: mediaId, name, imgSrc, isReel, caption: el.dataset.cap || name };
+  state.applyAll = false;
+
+  // Update left preview card
+  showSelCard(name, imgSrc, isReel);
+
+  // Show banner
+  const banner = document.getElementById('selBanner');
+  const bannerThumb = document.getElementById('selBannerThumb');
+  const bannerText = document.getElementById('selBannerText');
+  if (imgSrc) bannerThumb.src = imgSrc;
+  bannerText.textContent = name + (isReel ? ' (Reel) ✓' : ' (Post) ✓');
+  banner.classList.add('show');
+
+  // Update step1 done state
+  const n = document.getElementById('step1num');
+  n.classList.add('done');
+  document.getElementById('step1sub').textContent = name;
+
+  // Smart keyword suggestions
+  renderKwSuggestions(state.selectedMedia.caption);
+  // _silent=true during restore so we don't auto-save on page load
+  if (!_silent) scheduleAutoSave();
+}
+
+function clearMediaSelection() {
+  document.querySelectorAll('.media-item').forEach(d => d.classList.remove('selected'));
+  document.getElementById('selBanner').classList.remove('show');
+  state.selectedMedia = null;
+  state.applyAll = false;
+  hideSelCard();
+  document.getElementById('step1num').classList.remove('done');
+  document.getElementById('step1sub').textContent = 'Choose which content triggers this automation';
+}
+
+function applyAll(_silent) {
+  clearMediaSelection();
+  state.applyAll = true;
+  const info = document.getElementById('selBannerText');
+  info.textContent = '✓ Applies to ALL your content';
+  document.getElementById('selBanner').classList.add('show');
+  document.getElementById('selBannerThumb').src = '';
+  document.getElementById('step1num').classList.add('done');
+  document.getElementById('step1sub').textContent = 'All posts & reels';
+  // Show generic preview
+  showSelCard('All content', '', false);
+  if (!_silent) scheduleAutoSave();
+}
+
+/* ═══════════════════════════════════════
+   LEFT PREVIEW CARD
+═══════════════════════════════════════ */
+function showSelCard(name, imgSrc, isReel) {
+  document.getElementById('selCard').style.display = 'block';
+  document.getElementById('selPlaceholder').style.display = 'none';
+  document.getElementById('selEmpty').style.display = 'none';
+  document.getElementById('selFilled').style.display = 'block';
+  const thumb = document.getElementById('selThumb');
+  const noThumb = document.getElementById('selNoThumb');
+  if (imgSrc) {
+    thumb.src = imgSrc;
+    thumb.style.display = 'block';
+    noThumb.style.display = 'none';
+  } else {
+    thumb.style.display = 'none';
+    noThumb.style.display = 'flex';
+  }
+  document.getElementById('selTypeBadge').textContent = isReel ? 'REEL' : 'POST';
+  document.getElementById('selReelIcon').style.display = isReel ? 'flex' : 'none';
+  document.getElementById('selName').textContent = name;
+  updateSelKwLine();
+}
+
+function hideSelCard() {
+  document.getElementById('selCard').style.display = 'none';
+  document.getElementById('selPlaceholder').style.display = 'block';
+  document.getElementById('selEmpty').style.display = 'none';
+  document.getElementById('selFilled').style.display = 'none';
+}
+
+function updateSelKwLine() {
+  const el = document.getElementById('selKwLine');
+  if (!el) return;
+  if (state.triggerMode === 'all') {
+    el.textContent = 'Triggers on any comment';
+  } else {
+    el.textContent = state.keywords.length
+      ? 'Keywords: ' + state.keywords.slice(0,3).join(', ') + (state.keywords.length > 3 ? '…' : '')
+      : 'No keywords set';
+  }
+  // Update comment kw bubble
+  const kwBubble = document.getElementById('selCommentKw');
+  if (kwBubble) {
+    kwBubble.textContent = state.keywords[0] || (state.triggerMode === 'all' ? 'Nice!' : 'LINK');
+  }
+}
+
+/* ═══════════════════════════════════════
+   TRIGGER MODE
+═══════════════════════════════════════ */
+function setTriggerMode(mode) {
+  state.triggerMode = mode;
+  document.getElementById('modeKeywords').classList.toggle('active', mode === 'keywords');
+  document.getElementById('modeAll').classList.toggle('active', mode === 'all');
+  document.getElementById('kwSection').style.display = mode === 'keywords' ? 'block' : 'none';
+  updateStep2Done();
+  updateSelKwLine();
+  scheduleAutoSave();
+}
+
+function updateStep2Done() {
+  const done = state.triggerMode === 'all' || state.keywords.length > 0;
+  document.getElementById('step2num').classList.toggle('done', done);
+  document.getElementById('step2sub').textContent = state.triggerMode === 'all'
+    ? 'Any comment triggers the DM'
+    : (state.keywords.length > 0 ? state.keywords.join(', ') : 'Add keywords to trigger');
+}
+
+/* ═══════════════════════════════════════
+   KEYWORDS
+═══════════════════════════════════════ */
+function addKeyword() {
+  const inp = document.getElementById('kwInput');
+  const val = inp.value.trim().toUpperCase();
+  if (!val || state.keywords.includes(val)) { inp.value = ''; return; }
+  state.keywords.push(val);
+  inp.value = '';
+  renderKwTags();
+  updateStep2Done();
+  updateSelKwLine();
+  scheduleAutoSave();
+}
+
+function removeKeyword(kw) {
+  state.keywords = state.keywords.filter(k => k !== kw);
+  renderKwTags();
+  updateStep2Done();
+  updateSelKwLine();
+  scheduleAutoSave();
+}
+
+function renderKwTags() {
+  const c = document.getElementById('kwTags');
+  c.innerHTML = state.keywords.map(k =>
+    `<div class="kw-tag">${k}<button class="kw-tag-del" onclick="removeKeyword('${k}')">×</button></div>`
+  ).join('');
+}
+
+const KW_MAP = {
+  fashion: ['SHOP','OUTFIT','STYLE','LINK','PRICE','BRAND'],
+  food:    ['RECIPE','LINK','HOW','MAKE','VIDEO','INGREDIENTS'],
+  travel:  ['INFO','LINK','HOTEL','BOOK','WHERE','DETAILS'],
+  fitness: ['PLAN','LINK','WORKOUT','JOIN','YES','HOW'],
+  beauty:  ['LINK','SHOP','CODE','DISCOUNT','PRODUCT','BRAND'],
+  default: ['LINK','PRICE','INFO','CODE','YES','SHOP','BOOK'],
+};
+
+function renderKwSuggestions(caption) {
+  const c = (typeof caption === 'string' ? caption : '').toLowerCase();
+  let keys = KW_MAP.default;
+  if (/outfit|fashion|style|wear/.test(c)) keys = KW_MAP.fashion;
+  else if (/recipe|food|eat|cook/.test(c)) keys = KW_MAP.food;
+  else if (/travel|hotel|trip/.test(c)) keys = KW_MAP.travel;
+  else if (/workout|fitness|gym/.test(c)) keys = KW_MAP.fitness;
+  else if (/beauty|makeup|skin|hair/.test(c)) keys = KW_MAP.beauty;
+  const sug = document.getElementById('kwSuggestions');
+  sug.innerHTML = keys.filter(k => !state.keywords.includes(k)).slice(0,6).map(k =>
+    `<button class="kw-sug" onclick="addKwFromSug('${k}')">${k}</button>`
+  ).join('');
+}
+
+function addKwFromSug(kw) {
+  if (!state.keywords.includes(kw)) {
+    state.keywords.push(kw);
+    renderKwTags();
+    updateStep2Done();
+    updateSelKwLine();
+    // switch mode to keywords
+    setTriggerMode('keywords');
+    renderKwSuggestions(state.selectedMedia?.caption || '');
+    scheduleAutoSave();
+  }
+}
+
+/* ═══════════════════════════════════════
+   COMMENT AUTO-REPLY
+═══════════════════════════════════════ */
+function toggleCr() {
+  state.crEnabled = !state.crEnabled;
+  document.getElementById('crToggle').classList.toggle('on', state.crEnabled);
+  document.getElementById('crSection').style.display = state.crEnabled ? 'block' : 'none';
+  scheduleAutoSave();
+}
+
+/* ═══════════════════════════════════════
+   DM MESSAGE
+═══════════════════════════════════════ */
+function onDmInput() {
+  const val = document.getElementById('dmTextarea').value;
+  state.dmText = val;
+  document.getElementById('charCount').textContent = val.length;
+  // Hide quick-fill suggestions once user starts typing
+  if (val.length > 0) {
+    document.getElementById('dmSuggestions').style.display = 'none';
+  }
+  updatePhonePreview();
+  updateStep5Done();
+  scheduleAutoSave();
+}
+
+function useDmSug(btn) {
+  const val = btn.textContent.trim();
+  document.getElementById('dmTextarea').value = val;
+  state.dmText = val;
+  document.getElementById('charCount').textContent = val.length;
+  document.getElementById('dmSuggestions').style.display = 'none';
+  updatePhonePreview();
+  updateStep5Done();
+  scheduleAutoSave();
+}
+
+function insertVar(v) {
+  const ta = document.getElementById('dmTextarea');
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  const cur = ta.value;
+  ta.value = cur.slice(0, start) + v + cur.slice(end);
+  ta.selectionStart = ta.selectionEnd = start + v.length;
+  ta.focus();
+  onDmInput();
+}
+
+function updateStep5Done() {
+  const done = state.dmText.trim().length > 0;
+  document.getElementById('step5num').classList.toggle('done', done);
+  document.getElementById('step5sub').textContent = done
+    ? state.dmText.slice(0,40) + (state.dmText.length > 40 ? '…' : '')
+    : 'Craft the message they\'ll receive';
+}
+
+/* ═══════════════════════════════════════
+   LINK CARD
+═══════════════════════════════════════ */
+function toggleLinkCard() {
+  const section = document.getElementById('linkCardSection');
+  const toggle = document.getElementById('linkToggle');
+  const knob = document.getElementById('linkToggleKnob');
+  const isOn = section.style.display !== 'none';
+  if (isOn) {
+    section.style.display = 'none';
+    toggle.style.background = '#DDDDE5';
+    knob.style.left = '3px';
+  } else {
+    section.style.display = 'block';
+    toggle.style.background = '#7C3AED';
+    knob.style.left = '19px';
+  }
+  updatePhonePreview();
+}
+
+function onLinkInput() {
+  state.lcTitle = document.getElementById('lcTitle').value;
+  state.lcUrl = document.getElementById('lcUrl').value;
+  document.getElementById('lcTitlePreview').textContent = state.lcTitle || 'Link title';
+  document.getElementById('lcUrlPreview').textContent = state.lcUrl || 'your-url.com';
+  updatePhonePreview();
+  scheduleAutoSave();
+}
+
+/* ═══════════════════════════════════════
+   PHONE PREVIEW
+═══════════════════════════════════════ */
+function updatePhonePreview() {
+  if (state.type === 'flow-dm') { updateFlowPhonePreview(); return; }
+  const kw = state.keywords[0] || (state.triggerMode === 'all' ? 'Nice post!' : 'LINK');
+  const inBubble = document.getElementById('phoneInBubble');
+  if (inBubble) inBubble.textContent = state.triggerMode === 'all' ? 'Nice post! 🔥' : (kw ? kw + ' 👇' : 'Comment here…');
+  const dm = state.dmText || "Hey! Here's the link you requested:";
+  const outBubble = document.getElementById('phoneOutBubble');
+  if (outBubble) outBubble.textContent = dm.replace(/{{name}}/g,'friend').replace(/{{username}}/g,'user').replace(/{{post}}/g,'your post');
+  const linkCardOn = document.getElementById('linkCardSection')?.style.display !== 'none';
+  const linkCard = document.getElementById('phoneLinkCard');
+  if (linkCard) {
+    if (linkCardOn && state.lcUrl) {
+      linkCard.style.display = 'flex';
+      document.getElementById('phoneLinkTitle').textContent = state.lcTitle || 'Link';
+      document.getElementById('phoneLinkUrl').textContent = state.lcUrl;
+    } else { linkCard.style.display = 'none'; }
+  }
+}
+
+/* ═══════════════════════════════════════
+   STEP COLLAPSE/EXPAND
+═══════════════════════════════════════ */
+function toggleStep(id) {
+  const card = document.getElementById(id);
+  if (card.classList.contains('locked')) return;
+  card.classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════
+   TYPE SWITCHING
+═══════════════════════════════════════ */
+function switchType(type, btn) {
+  state.type = type;
+  document.querySelectorAll('.type-tab:not(.locked)').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const titles = {'product-dm':'Product Link DM Setup','flow-dm':'Flow DM Setup','auto-dm':'Auto DM Setup'};
+  document.getElementById('builderTitle').textContent = titles[type] || 'Auto DM Setup';
+
+  // Show/hide panels
+  const stepsCol = document.querySelector('.steps-col:not(#flowDmPanel)');
+  const flowPanel = document.getElementById('flowDmPanel');
+  if (type === 'flow-dm') {
+    stepsCol.style.display = 'none';
+    flowPanel.style.display = 'block';
+    if (!flowState.mediaLoaded) initFlowMedia();
+    updateFlowPhonePreview();
+  } else {
+    stepsCol.style.display = 'block';
+    flowPanel.style.display = 'none';
+    updateFlowPhonePreview();
+  }
+}
+
+/* ═══════════════════════════════════════
+   FLOW DM STATE & LOGIC
+═══════════════════════════════════════ */
+const flowState = {
+  mediaTab: 'posts',
+  selectedMedia: null,
+  triggerMode: 'any',
+  keywords: [],
+  firstDmText: '',
+  buttons: [],
+  delay: 0,
+  maxDmsPerHour: 100,
+  mediaLoaded: false
+};
+
+function initFlowMedia() {
+  flowState.mediaLoaded = true;
+  // reuse existing posts/reels from the main grid if loaded
+  const existingPosts = document.getElementById('postGrid').innerHTML;
+  const existingReels = document.getElementById('reelGrid').innerHTML;
+  function rewireFlowClicks() {
+    document.querySelectorAll('#flowPostGrid .media-item, #flowReelGrid .media-item').forEach(el => {
+      el.onclick = function() { selectFlowMedia(this); };
+    });
+  }
+  if (existingPosts && !existingPosts.includes('grid-loading')) {
+    document.getElementById('flowPostGrid').innerHTML = existingPosts;
+    document.getElementById('flowReelGrid').innerHTML = existingReels;
+    rewireFlowClicks();
+  } else {
+    // trigger a load if not already loaded, then copy after load
+    loadMedia().then(() => {
+      document.getElementById('flowPostGrid').innerHTML = document.getElementById('postGrid').innerHTML;
+      document.getElementById('flowReelGrid').innerHTML = document.getElementById('reelGrid').innerHTML;
+      rewireFlowClicks();
+    }).catch(() => {
+      setTimeout(() => {
+        document.getElementById('flowPostGrid').innerHTML = document.getElementById('postGrid').innerHTML;
+        document.getElementById('flowReelGrid').innerHTML = document.getElementById('reelGrid').innerHTML;
+        rewireFlowClicks();
+      }, 1500);
+    });
+  }
+}
+
+function setFlowMediaTab(tab, btn) {
+  flowState.mediaTab = tab;
+  document.querySelectorAll('#fstep1 .media-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('flowPostGrid').style.display = tab === 'posts' ? 'grid' : 'none';
+  document.getElementById('flowReelGrid').style.display = tab === 'reels' ? 'grid' : 'none';
+}
+
+function selectFlowMedia(el) {
+  document.querySelectorAll('#flowPostGrid .media-item, #flowReelGrid .media-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  const thumb = el.dataset.img || el.querySelector('img')?.src || '';
+  const isReel = el.dataset.isreel === '1';
+  // Use data-cap (matches mediaItem() attribute); never show raw numeric ID
+  const rawCap = el.dataset.cap || '';
+  const title = rawCap.trim() ? rawCap.trim().substring(0, 40) : (isReel ? 'Reel' : 'Post');
+  const type = isReel ? 'REEL' : 'POST';
+  flowState.selectedMedia = { thumb, title, type };
+  document.getElementById('flowSelBannerThumb').src = thumb;
+  document.getElementById('flowSelBannerTitle').textContent = title;
+  document.getElementById('flowSelBannerType').textContent = type;
+  document.getElementById('flowSelBanner').style.display = 'flex';
+  document.getElementById('fstep1sub').textContent = title.length > 30 ? title.slice(0,30) + '…' : title;
+  markFlowStepDone('fstep1num');
+}
+
+function clearFlowMedia() {
+  flowState.selectedMedia = null;
+  document.getElementById('flowSelBanner').style.display = 'none';
+  document.getElementById('fstep1sub').textContent = 'Choose which content triggers this flow';
+  document.querySelectorAll('#flowPostGrid .media-item, #flowReelGrid .media-item').forEach(e => e.classList.remove('selected'));
+  document.getElementById('fstep1num').classList.remove('done');
+}
+
+function setFlowTriggerMode(mode, btn) {
+  flowState.triggerMode = mode;
+  document.querySelectorAll('#flowTriggerModes .trigger-mode').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('flowKwSection').style.display = mode === 'keyword' ? 'block' : 'none';
+  document.getElementById('fstep2sub').textContent = mode === 'any' ? 'Any comment triggers' : (flowState.keywords.length ? flowState.keywords.join(', ') : 'Add keywords below');
+  updateFlowPhonePreview();
+}
+
+function addFlowKeyword() {
+  const input = document.getElementById('flowKwInput');
+  const val = input.value.trim().toUpperCase().replace(/\s+/g,'_');
+  if (!val || flowState.keywords.includes(val)) { input.value=''; return; }
+  flowState.keywords.push(val);
+  input.value = '';
+  renderFlowKeywords();
+  document.getElementById('fstep2sub').textContent = flowState.keywords.join(', ');
+  markFlowStepDone('fstep2num');
+}
+
+function removeFlowKeyword(kw) {
+  flowState.keywords = flowState.keywords.filter(k => k !== kw);
+  renderFlowKeywords();
+  if (!flowState.keywords.length) document.getElementById('fstep2num').classList.remove('done');
+}
+
+function renderFlowKeywords() {
+  const container = document.getElementById('flowKwChips');
+  container.innerHTML = flowState.keywords.map(k =>
+    `<span class="kw-chip">${k}<button class="kw-chip-del" onclick="removeFlowKeyword('${k}')">×</button></span>`
+  ).join('');
+  updateFlowPhonePreview();
+}
+
+function onFlowDmInput() {
+  const val = document.getElementById('fdmText').value;
+  flowState.firstDmText = val;
+  document.getElementById('fdmCharCount').textContent = val.length;
+  if (val.trim()) {
+    markFlowStepDone('fstep3num');
+    document.getElementById('fstep3sub').textContent = val.slice(0,35) + (val.length>35?'…':'');
+  } else {
+    document.getElementById('fstep3num').classList.remove('done');
+    document.getElementById('fstep3sub').textContent = 'What do they receive first?';
+  }
+  updateFlowPhonePreview();
+}
+
+function useFlowSug(btn, targetId) {
+  document.getElementById(targetId).value = btn.textContent;
+  onFlowDmInput();
+}
+
+function insertFlowVar(v, targetId) {
+  const ta = document.getElementById(targetId);
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.slice(0,s) + v + ta.value.slice(e);
+  ta.selectionStart = ta.selectionEnd = s + v.length;
+  ta.focus();
+  onFlowDmInput();
+}
+
+function addFlowButton() {
+  if (flowState.buttons.length >= 5) return;
+  const id = 'fbtn_' + Date.now();
+  // type: 'reply' = sends a DM back, 'link' = opens a URL directly
+  flowState.buttons.push({ id, label: '', keyword: '', replyDm: '', type: 'reply', linkUrl: '' });
+  renderFlowButtons();
+}
+
+function removeFlowButton(id) {
+  flowState.buttons = flowState.buttons.filter(b => b.id !== id);
+  renderFlowButtons();
+}
+
+function toggleFlowBtnType(id, type) {
+  const btn = flowState.buttons.find(b => b.id === id);
+  if (!btn) return;
+  btn.type = type;
+  renderFlowButtons();
+}
+
+function renderFlowButtons() {
+  const container = document.getElementById('flowButtonsContainer');
+  document.getElementById('flowBtnCount').textContent = flowState.buttons.length + ' / 5';
+  document.getElementById('flowAddBtn').style.display = flowState.buttons.length >= 5 ? 'none' : 'block';
+
+  container.innerHTML = flowState.buttons.map((btn, i) => {
+    const isLink = btn.type === 'link';
+    const chipColor = isLink ? '#059669' : '#7C3AED';
+    const chipBorder = isLink ? '#6EE7B7' : '#C4B5FD';
+    const chipIcon = isLink
+      ? '<svg width="9" height="9" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'
+      : '<svg width="9" height="9" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+
+    return `
+    <div style="background:#F8F8FC;border:1.5px solid #EBEBF0;border-radius:12px;padding:13px 13px 10px;position:relative;" id="flowBtnCard_${btn.id}">
+
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:11px;font-weight:700;color:#7C3AED;">Button ${i+1}</div>
+        <button onclick="removeFlowButton('${btn.id}')" style="background:none;border:none;cursor:pointer;color:#C4C4D0;font-size:18px;line-height:1;padding:0;" title="Remove">×</button>
+      </div>
+
+      <!-- Button label -->
+      <div style="margin-bottom:8px;">
+        <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">BUTTON LABEL</div>
+        <input class="link-input" style="margin-bottom:0;" placeholder="e.g. Shop now" value="${btn.label}"
+          oninput="updateFlowBtn('${btn.id}','label',this.value);autoKeyword('${btn.id}',this.value)">
+      </div>
+
+      <!-- Type toggle: Reply DM vs Direct Link -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:5px;">WHEN TAPPED, DO THIS</div>
+        <div style="display:flex;gap:5px;">
+          <button onclick="toggleFlowBtnType('${btn.id}','reply')"
+            style="flex:1;padding:7px 6px;border-radius:8px;border:1.5px solid ${!isLink?'#7C3AED':'#DDDDE5'};background:${!isLink?'#F3F0FF':'#fff'};font-size:11px;font-weight:700;color:${!isLink?'#7C3AED':'#9898A8'};cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:inherit;transition:all .15s;">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Send Reply DM
+          </button>
+          <button onclick="toggleFlowBtnType('${btn.id}','link')"
+            style="flex:1;padding:7px 6px;border-radius:8px;border:1.5px solid ${isLink?'#059669':'#DDDDE5'};background:${isLink?'#ECFDF5':'#fff'};font-size:11px;font-weight:700;color:${isLink?'#059669':'#9898A8'};cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:inherit;transition:all .15s;">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Open Link
+          </button>
+        </div>
+      </div>
+
+      <!-- Conditional content -->
+      ${!isLink ? `
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;">REPLY MESSAGE</div>
+          <textarea class="dm-textarea" style="min-height:60px;margin-bottom:6px;font-size:12px;" rows="2"
+            placeholder="What DM to send when they tap this…"
+            oninput="updateFlowBtn('${btn.id}','replyDm',this.value)">${btn.replyDm}</textarea>
+          <div style="font-size:10px;font-weight:700;color:#9898A8;margin-bottom:3px;margin-top:2px;">TRIGGER KEYWORD <span style="font-weight:400;color:#C4C4D0;">(auto-generated)</span></div>
+          <input class="link-input" style="margin-bottom:0;font-family:monospace;font-size:11px;" placeholder="SHOP_NOW" value="${btn.keyword}" id="flowKwField_${btn.id}"
+            oninput="updateFlowBtn('${btn.id}','keyword',this.value)">
+        </div>
+      ` : `
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#059669;margin-bottom:3px;">WEBSITE URL</div>
+          <input class="link-input" style="margin-bottom:0;border-color:#6EE7B7;" placeholder="https://yourstore.com/shop"
+            value="${btn.linkUrl}" oninput="updateFlowBtn('${btn.id}','linkUrl',this.value)">
+          <div style="margin-top:6px;background:#ECFDF5;border-radius:7px;padding:7px 9px;font-size:11px;color:#059669;line-height:1.4;">
+            <strong>↗ Opens directly</strong> — When tapped, Instagram opens this URL in the browser. No DM is sent.
+          </div>
+        </div>
+      `}
+
+      <!-- Live chip preview -->
+      <div style="margin-top:10px;padding-top:8px;border-top:1px solid #EBEBF0;display:flex;align-items:center;gap:6px;">
+        <span style="font-size:10px;color:#9898A8;">Preview:</span>
+        <div style="background:#fff;border:1.5px solid ${chipBorder};border-radius:20px;padding:4px 11px;font-size:11px;font-weight:600;color:${chipColor};display:flex;align-items:center;gap:4px;max-width:160px;overflow:hidden;" id="flowChipPreview_${btn.id}">
+          ${chipIcon}
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${btn.label || 'Button label'}</span>
+        </div>
+        <span style="font-size:10px;color:#C4C4D0;">${isLink ? '↗ opens URL' : ('→ triggers ' + (btn.keyword || '…'))}</span>
+      </div>
+    </div>
+  `}).join('');
+  updateFlowPhonePreview();
+}
+
+function updateFlowPhonePreview() {
+  const isFlow = state.type === 'flow-dm';
+  const normalBubbles = document.getElementById('phoneInBubble');
+  const normalLink = document.getElementById('phoneLinkCard');
+  const normalOut = document.getElementById('phoneOutBubble');
+  const flowPreview = document.getElementById('flowPhonePreview');
+  if (!flowPreview) return;
+  if (isFlow) {
+    if (normalBubbles) normalBubbles.style.display = 'none';
+    if (normalLink) normalLink.style.display = 'none';
+    if (normalOut) normalOut.style.display = 'none';
+    flowPreview.style.display = 'block';
+    const kw = flowState.keywords[0] || (flowState.triggerMode === 'any' ? 'Nice post!' : 'LINK');
+    const inBubble = document.getElementById('flowPhoneInBubble');
+    if (inBubble) inBubble.textContent = flowState.triggerMode === 'any' ? 'Nice post! 🔥' : kw + ' 👇';
+    const bubble = document.getElementById('flowPhoneBubble');
+    if (bubble) bubble.textContent = (flowState.firstDmText || 'Hey! Tap below to explore 👇').replace(/{{name}}/g,'friend').replace(/{{username}}/g,'user');
+    const btnsEl = document.getElementById('flowPhoneButtons');
+    if (btnsEl) {
+      btnsEl.innerHTML = flowState.buttons.length
+        ? flowState.buttons.map(b => {
+            const isLink = b.type === 'link';
+            const color = isLink ? '#059669' : '#7C3AED';
+            const border = isLink ? '#6EE7B7' : '#C4B5FD';
+            const icon = isLink ? '↗ ' : '';
+            return '<div style="background:#fff;border:1.5px solid '+border+';border-radius:20px;padding:5px 12px;font-size:9px;font-weight:700;color:'+color+';white-space:nowrap;max-width:95%;overflow:hidden;text-overflow:ellipsis;text-align:center;">' + icon + (b.label || 'Button') + '</div>';
+          }).join('')
+        : '<div style="font-size:9px;color:#C4C4D0;font-style:italic;text-align:center;">Add buttons above to preview</div>';
+    }
+  } else {
+    if (normalBubbles) normalBubbles.style.display = '';
+    if (normalLink) normalLink.style.display = '';
+    if (normalOut) normalOut.style.display = '';
+    flowPreview.style.display = 'none';
+  }
+}
+
+function updateFlowBtn(id, field, value) {
+  const btn = flowState.buttons.find(b => b.id === id);
+  if (!btn) return;
+  btn[field] = value;
+  // update chip label span
+  const chip = document.getElementById('flowChipPreview_' + id);
+  if (chip) {
+    const span = chip.querySelector('span');
+    if (span && field === 'label') span.textContent = value || 'Button label';
+    if (chip.nextElementSibling) {
+      if (field === 'keyword') chip.nextElementSibling.textContent = '→ triggers ' + (value||'…');
+      if (field === 'linkUrl') chip.nextElementSibling.textContent = value ? '↗ opens URL' : '↗ opens URL';
+    }
+  }
+  if (field === 'label' || field === 'keyword' || field === 'linkUrl') updateFlowPhonePreview();
+}
+
+function autoKeyword(id, label) {
+  const kw = label.trim().toUpperCase().replace(/[^A-Z0-9]+/g,'_').replace(/^_|_$/g,'');
+  const kwField = document.getElementById('flowKwField_' + id);
+  const btn = flowState.buttons.find(b => b.id === id);
+  if (kwField && btn && (!btn.keyword || btn.keyword === btn._lastAutoKw)) {
+    kwField.value = kw;
+    btn.keyword = kw;
+    btn._lastAutoKw = kw;
+    // update chip
+    const chip = document.getElementById('flowChipPreview_' + id);
+    if (chip && chip.nextElementSibling) chip.nextElementSibling.textContent = '→ triggers ' + (kw||'…');
+  }
+}
+
+function setFlowDelay(sec, btn) {
+  flowState.delay = sec;
+  document.querySelectorAll('#flowDelayOptions .trigger-mode').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function markFlowStepDone(numId) {
+  document.getElementById(numId).classList.add('done');
+}
+
+/* ═══════════════════════════════════════
+   STEP 6 — ADVANCED SETTINGS
+═══════════════════════════════════════ */
+function setDelay(seconds, btn) {
+  state.dmDelay = seconds;
+  document.querySelectorAll('#delayOptions .trigger-mode').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateStep6Sub();
+  scheduleAutoSave();
+}
+
+function onRateChange(val) {
+  state.maxDmsPerHour = parseInt(val);
+  const lbl = document.getElementById('rateLabel');
+  lbl.textContent = val + ' / hr';
+  lbl.style.color = val >= 150 ? '#F59E0B' : '#7C3AED';
+  updateStep6Sub();
+  scheduleAutoSave();
+}
+
+function toggleDuplicate() {
+  state.skipDuplicate = !state.skipDuplicate;
+  document.getElementById('dupToggle').classList.toggle('on', state.skipDuplicate);
+  document.getElementById('dupWindowRow').style.display = state.skipDuplicate ? 'block' : 'none';
+  updateStep6Sub();
+  scheduleAutoSave();
+}
+
+function setDupWindow(hours, btn) {
+  state.duplicateWindowHours = hours;
+  document.querySelectorAll('#dupWindowOptions .trigger-mode').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  scheduleAutoSave();
+}
+
+function updateStep6Sub() {
+  const delayMap = {0:'Instant',30:'30s delay',60:'1min delay',300:'5min delay',600:'10min delay'};
+  const delay = delayMap[state.dmDelay] || (state.dmDelay + 's delay');
+  document.getElementById('step6sub').textContent =
+    `${delay} · ${state.maxDmsPerHour}/hr limit · ${state.skipDuplicate ? 'No duplicates' : 'Allow duplicates'}`;
+}
+
+function _restoreStep6(settings) {
+  if (!settings) return;
+  // DM Delay
+  if (settings.dmDelay !== undefined) {
+    state.dmDelay = settings.dmDelay;
+    const delayIds = {0:'delay0',30:'delay30',60:'delay60',300:'delay300',600:'delay600'};
+    document.querySelectorAll('#delayOptions .trigger-mode').forEach(b => b.classList.remove('active'));
+    const delBtn = document.getElementById(delayIds[settings.dmDelay] || 'delay0');
+    if (delBtn) delBtn.classList.add('active');
+  }
+  // Max per hour
+  if (settings.maxDmsPerHour !== undefined) {
+    state.maxDmsPerHour = settings.maxDmsPerHour;
+    document.getElementById('rateSlider').value = settings.maxDmsPerHour;
+    onRateChange(settings.maxDmsPerHour);
+  }
+  // Skip duplicate
+  if (settings.skipDuplicate !== undefined) {
+    state.skipDuplicate = settings.skipDuplicate;
+    document.getElementById('dupToggle').classList.toggle('on', state.skipDuplicate);
+    document.getElementById('dupWindowRow').style.display = state.skipDuplicate ? 'block' : 'none';
+  }
+  // Duplicate window
+  if (settings.duplicateWindowHours !== undefined) {
+    state.duplicateWindowHours = settings.duplicateWindowHours;
+    const winIds = {24:'dup24',48:'dup48',168:'dup168',0:'dup0'};
+    document.querySelectorAll('#dupWindowOptions .trigger-mode').forEach(b => b.classList.remove('active'));
+    const winBtn = document.getElementById(winIds[settings.duplicateWindowHours] || 'dup24');
+    if (winBtn) winBtn.classList.add('active');
+  }
+  updateStep6Sub();
+}
+
+/* ═══════════════════════════════════════
+   BUILD PAYLOAD
+═══════════════════════════════════════ */
+function buildPayload(active) {
+  let backendType = 'keyword_dm';
+  if (state.type === 'product-dm') backendType = 'product_link_dm';
+  if (state.type === 'flow-dm')    backendType = 'flow_dm';
+
+  // Flow DM payload
+  if (state.type === 'flow-dm') {
+    return {
+      name: document.getElementById('builderTitle').textContent.replace(' Setup',''),
+      active: !!active,
+      type: backendType,
+      mediaId:   flowState.selectedMedia?.id     || '',
+      mediaUrl:  flowState.selectedMedia?.thumb  || '',
+      mediaType: flowState.selectedMedia?.type   || '',
+      trigger: {
+        anyComment:  flowState.triggerMode === 'any',
+        allComments: flowState.triggerMode === 'any',
+        onComment:   true,
+        keywords:    flowState.keywords,
+      },
+      actions: {
+        flow: {
+          firstMessage: flowState.firstDmText,
+          buttons: flowState.buttons.map(b => ({
+            label:    b.label,
+            type:     b.type || 'reply',          // 'reply' | 'link'
+            keyword:  b.type === 'link' ? '' : b.keyword,
+            replyDm:  b.type === 'link' ? '' : b.replyDm,
+            linkUrl:  b.type === 'link' ? b.linkUrl : '',
+          })),
+        },
+      },
+      settings: {
+        dmDelay:       flowState.delay,
+        maxDmsPerHour: parseInt(document.getElementById('flowRateSlider')?.value || 100),
+      },
+    };
+  }
+
+  // Auto DM / Product DM payload
+  const linkOn = document.getElementById('linkCardSection')?.style.display !== 'none';
+  return {
+    name: document.getElementById('builderTitle').textContent.replace(' Setup',''),
+    active: !!active,
+    type: backendType,
+    mediaId:   state.selectedMedia?.id      || '',
+    mediaUrl:  state.selectedMedia?.imgSrc  || '',
+    mediaType: state.selectedMedia?.isReel  ? 'REEL' : (state.selectedMedia ? 'IMAGE' : ''),
+    applyAll: state.applyAll,
+    trigger: {
+      allComments:  state.triggerMode === 'all',
+      anyComment:   state.triggerMode === 'all',
+      onComment:    true,
+      keywords:     state.keywords,
+    },
+    actions: {
+      commentReply: {
+        enabled: state.crEnabled,
+        text: document.getElementById('crTextarea').value.trim(),
+      },
+      dm: {
+        text:   document.getElementById('dmTextarea').value.trim(),
+        linkTitle: linkOn ? state.lcTitle : '',
+        linkUrl:   linkOn ? state.lcUrl   : '',
+      },
+    },
+    settings: {
+      dmDelay:              state.dmDelay,
+      maxDmsPerHour:        state.maxDmsPerHour,
+      skipDuplicate:        state.skipDuplicate,
+      duplicateWindowHours: state.duplicateWindowHours,
+    },
+  };
+}
+
+/* ═══════════════════════════════════════
+   SAVE DRAFT
+═══════════════════════════════════════ */
+async function saveDraft() {
+  if (!window.API || !API.getToken()) { toast('Please log in first.', 'error'); return; }
+  const btn = document.querySelector('.btn-draft');
+  btn.textContent = 'Saving…';
+  try {
+    const payload = buildPayload(false);
+    if (state.editId) {
+      await API.updateAutomation(state.editId, payload);
+    } else {
+      const res = await API.createAutomation(payload);
+      if (res && res._id) state.editId = res._id;
+    }
+    btn.textContent = 'Saved ✓';
+    markSaved();
+    setTimeout(() => { btn.textContent = 'Save draft'; }, 2000);
+  } catch(e) {
+    toast('Failed to save: ' + (e.message || 'Error'), 'error');
+    btn.textContent = 'Save draft';
+  }
+}
+
+/* ═══════════════════════════════════════
+   AUTO-SAVE
+═══════════════════════════════════════ */
+let _saveTimer = null;
+function scheduleAutoSave() {
+  markSaving();
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(async () => {
+    if (!window.API || !API.getToken()) { markSaved(); return; }
+    try {
+      const payload = buildPayload(false);
+      if (state.editId) {
+        await API.updateAutomation(state.editId, payload);
+      } else {
+        const res = await API.createAutomation(payload);
+        if (res && res._id) state.editId = res._id;
+      }
+      markSaved();
+    } catch(e) { markSaved(); }
+  }, 2000);
+}
+function markSaving() {
+  const d = document.getElementById('autosaveDot');
+  if (d) { d.classList.remove('saved'); d.classList.add('saving'); d.title = 'Saving…'; }
+}
+function markSaved() {
+  const d = document.getElementById('autosaveDot');
+  if (d) { d.classList.remove('saving'); d.classList.add('saved'); d.title = 'Auto-saved'; }
+}
+
+function openStep(id) {
+  document.getElementById(id).classList.add('open');
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ═══════════════════════════════════════
+   LOAD EXISTING AUTOMATION
+═══════════════════════════════════════ */
+async function loadExistingAutomation(id) {
+  try {
+    const autos = await API.getAutomations();
+    const a = (autos || []).find(x => x._id === id);
+    if (!a) return;
+
+    // ── Name ──────────────────────────────────────────────────────
+    document.getElementById('builderTitle').textContent = a.name || 'Auto DM Setup';
+
+    // ── Trigger: keywords or all-comments ─────────────────────────
+    state.triggerMode = (a.trigger?.allComments || a.trigger?.anyComment || a.allComments) ? 'all' : 'keywords';
+    state.keywords    = a.trigger?.keywords || a.keywords || [];
+    setTriggerMode(state.triggerMode);
+    renderKwTags();
+
+    // ── Comment reply toggle ───────────────────────────────────────
+    state.crEnabled = a.actions?.commentReply?.enabled || false;
+    if (state.crEnabled) {
+      document.getElementById('crToggle').classList.add('on');
+      document.getElementById('crSection').style.display = 'block';
+      document.getElementById('crTextarea').value = a.actions?.commentReply?.text || '';
+    } else {
+      document.getElementById('crToggle').classList.remove('on');
+      document.getElementById('crSection').style.display = 'none';
+    }
+
+    // ── DM message + link card ─────────────────────────────────────
+    state.dmText   = a.actions?.dm?.text   || a.dmText   || '';
+    state.lcTitle  = a.actions?.dm?.linkTitle  || 'Shop the look';
+    state.lcUrl    = a.actions?.dm?.linkUrl    || 'yourstore.com/look';
+    document.getElementById('dmTextarea').value = state.dmText;
+    document.getElementById('lcTitle').value    = state.lcTitle;
+    document.getElementById('lcUrl').value      = state.lcUrl;
+
+    // ── Media selection ────────────────────────────────────────────
+    if (a.applyAll) {
+      // "Apply to all content" mode — restore without picking a specific post
+      applyAll(true); // _silent: don't auto-save on restore
+    } else if (a.mediaId) {
+      // Specific post/reel — queue selection for after renderGrids() runs
+      state._pendingSelectId  = a.mediaId;
+      state._pendingSelectUrl = a.mediaUrl || '';
+      state._pendingSelectIsReel = (a.mediaType || '').toUpperCase() === 'REEL';
+    }
+
+    // ── Step 6 Advanced Settings ───────────────────────────────────
+    _restoreStep6(a.settings);
+
+    // ── Update step subtitles ──────────────────────────────────────
+    updateStep2Done();
+    updateStep5Done();
+    updateStep6Sub();
+  } catch(e) { /* silent */ }
+}
+
+/* ═══════════════════════════════════════
+   PRO MODAL
+═══════════════════════════════════════ */
+function openProModal(feature) {
+  document.getElementById('proModalTitle').textContent = 'Unlock ' + feature;
+  document.getElementById('proModalSub').textContent = 'Upgrade to DMFlow Pro to access ' + feature + ' and all advanced automation types.';
+  document.getElementById('proModal').classList.add('open');
+}
+function closeProModal() {
+  document.getElementById('proModal').classList.remove('open');
+}
+function doUpgrade() {
+  closeProModal();
+  if (window.parent && window.parent !== window) {
+    try { window.parent.openUpgradeModal(); return; } catch(e) {}
+    window.parent.postMessage({ type: 'dmflow_upgrade' }, '*');
+  } else {
+    window.location.href = '../../app.html?upgrade=1';
+  }
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+let _toastT = null;
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+/* init phone preview */
+updatePhonePreview();
+
+/* ═══════════════════════════════════════
+   API HELPER: STATS
+═══════════════════════════════════════ */
+let _statsInterval = null;
+
+async function startStatsPolling(automationId) {
+  if (!automationId) return;
+  // Show panel in the steps column
+  const panel = document.getElementById('statsPanel');
+  const anchor = document.getElementById('statsPanelAnchor');
+  if (panel && anchor) {
+    anchor.appendChild(panel);
+    panel.style.display = 'block';
+  }
+  // Immediate fetch then every 8 seconds
+  await fetchAndUpdateStats(automationId);
+  clearInterval(_statsInterval);
+  _statsInterval = setInterval(() => fetchAndUpdateStats(automationId), 8000);
+}
+
+async function fetchAndUpdateStats(automationId) {
+  try {
+    if (!window.API || !API.getToken()) return;
+    const data = await API.get('/api/automations/' + automationId + '/stats', { noCache: true });
+    document.getElementById('statTriggered').textContent   = data.triggered   || 0;
+    document.getElementById('statDmsSent').textContent     = data.dmsSent     || 0;
+    document.getElementById('statRepliesSent').textContent = data.repliesSent || 0;
+    document.getElementById('statFailed').textContent      = data.dmsFailed   || data.failed || 0;
+
+    // Live dot
+    const dot   = document.getElementById('statsDot');
+    const label = document.getElementById('statsLiveLabel');
+    if (data.active) {
+      dot.classList.add('live');
+      label.textContent = 'Live';
+      label.style.color = '#16A34A';
+    } else {
+      dot.classList.remove('live');
+      label.textContent = 'Stopped';
+      label.style.color = '#9898A8';
+    }
+
+    // Activity log
+    const logEl = document.getElementById('statsActivityLog');
+    if (logEl) {
+      const entries = data.recentLog || [];
+      if (!entries.length) {
+        logEl.innerHTML = '<div style="font-size:12px;color:#ADADBC;font-style:italic;">Waiting for comments…</div>';
+      } else {
+        logEl.innerHTML = entries.map(e => {
+          const ago = _timeAgo(new Date(e.at));
+          const badge = e.live
+            ? '<span style="background:#7C3AED;color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;margin-right:4px;">LIVE</span>'
+            : '<span style="background:#1a1a2e;color:#9898A8;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;margin-right:4px;">POST</span>';
+          const txt = (e.text || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          return `<div style="display:flex;align-items:flex-start;gap:6px;padding:5px 8px;background:#F8F8FC;border-radius:7px;font-size:12px;">
+            <span style="flex-shrink:0;margin-top:1px;">${badge}</span>
+            <span style="color:#3a3a52;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${txt}">${txt || '(no text)'}</span>
+            <span style="color:#ADADBC;flex-shrink:0;font-size:10px;">${ago}</span>
+          </div>`;
+        }).join('');
+      }
+    }
+  } catch(e) {}
+}
+
+function _timeAgo(date) {
+  const s = Math.floor((Date.now() - date) / 1000);
+  if (s < 60)  return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  return Math.floor(s/3600) + 'h ago';
+}
+
+/* ═══════════════════════════════════════
+   OVERRIDE: START AUTOMATION
+═══════════════════════════════════════ */
+async function startAutomation() {
+  // Validate
+  if (!state.selectedMedia && !state.applyAll) {
+    toast('Select a post or reel first.', 'error'); openStep('step1'); return;
+  }
+  if (state.triggerMode === 'keywords' && state.keywords.length === 0) {
+    toast('Add at least one keyword.', 'error'); openStep('step2'); return;
+  }
+  if (!document.getElementById('dmTextarea').value.trim()) {
+    toast('Add a DM message.', 'error'); openStep('step5'); return;
+  }
+  if (!window.API || !API.getToken()) { toast('Please log in first.', 'error'); return; }
+  if (!confirm('Start this automation? It will go live immediately.')) return;
+
+  const btn = document.getElementById('btnStart');
+  btn.innerHTML = '<div class="spin" style="border-top-color:#fff;width:12px;height:12px;border-width:2px;"></div> Starting…';
+  btn.disabled = true;
+  try {
+    const payload = buildPayload(true);
+    let savedId = state.editId;
+    if (state.editId) {
+      await API.updateAutomation(state.editId, payload);
+    } else {
+      const res = await API.createAutomation(payload);
+      if (res && res._id) { state.editId = res._id; savedId = res._id; }
+    }
+    toast('Automation is live! 🚀', 'success');
+    btn.innerHTML = '● Live';
+    btn.style.background = '#16A34A';
+    // Start polling stats
+    if (savedId) await startStatsPolling(savedId);
+    // Update URL so refresh keeps edit mode
+    if (savedId && !window.location.search.includes('edit=')) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('edit', savedId);
+      window.history.replaceState({}, '', url);
+    }
+  } catch(e) {
+    toast('Error: ' + (e.message || 'Failed to start'), 'error');
+    btn.innerHTML = '<svg width="12" height="12" fill="none" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg> Start automation';
+    btn.disabled = false;
+  }
+}
+
+/* ═══════════════════════════════════════
+   AUTO-START STATS IF ALREADY LIVE
+═══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', async () => {
+  // After loadExistingAutomation runs, check if it's active and start polling
+  setTimeout(async () => {
+    if (state.editId) {
+      try {
+        if (!window.API || !API.getToken()) return;
+        const data = await API.get('/api/automations/' + state.editId + '/stats', { noCache: true });
+        if (data.active || data.triggered > 0) {
+          await startStatsPolling(state.editId);
+          if (data.active) {
+            const btn = document.getElementById('btnStart');
+            btn.innerHTML = '● Live';
+            btn.style.background = '#16A34A';
+          }
+        }
+      } catch(e) {}
+    }
+  }, 1500);
+});
+
+</script>
+</body>
+</html>
