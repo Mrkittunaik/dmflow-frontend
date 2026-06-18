@@ -1,0 +1,89 @@
+/* ============================================================
+   SHADOWBAN / TRUST SECTION
+   ============================================================ */
+
+.shadowban-section{padding:90px 0;background:#fff;position:relative}
+
+.shadowban-badge{display:inline-flex;align-items:center;gap:8px;background:#fef3c7;border:1px solid #f59e0b;color:#92400e;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;border-radius:8px;margin-bottom:24px}
+
+.shadowban-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(22px,4vw,40px);font-weight:900;color:#0A0A0F;line-height:1.15;margin-bottom:48px;text-transform:uppercase;letter-spacing:-0.5px}
+
+.shadowban-hl-yellow{background:#fde047;color:#0A0A0F;padding:2px 12px;border-radius:4px;font-style:italic}
+
+.shadowban-hl-green{background:#4ade80;color:#052e16;padding:2px 12px;border-radius:4px}
+
+.shadowban-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+
+@media(max-width:768px){.shadowban-grid{grid-template-columns:1fr}}
+
+.shadowban-testimonial{background:#fafafa;border:1px solid #f0f0f0;border-radius:20px;padding:32px;position:relative}
+
+.shadowban-quote{font-size:60px;line-height:0.8;color:#e5e7eb;font-family:Georgia,serif;position:absolute;top:20px;left:24px}
+
+.shadowban-testimonial p{font-size:15px;line-height:1.7;color:#444;margin-bottom:16px;padding-left:8px}
+
+.shadowban-testimonial p:first-of-type{margin-top:24px}
+
+.shadowban-author{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #eee}
+
+.shadowban-avatar{width:40px;height:40px;border-radius:50%;background:#7C3AED;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+
+.shadowban-aname{font-weight:700;color:#0A0A0F;font-size:14px}
+
+.shadowban-asub{font-size:12px;color:#888;margin-top:2px}
+
+.shadowban-safe-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#0A0A0F;margin-bottom:20px}
+
+.shadowban-safe-card{display:flex;gap:14px;align-items:flex-start;padding:18px;background:#0A0A0F;border-radius:14px;margin-bottom:12px}
+
+.shadowban-safe-icon{width:40px;height:40px;border-radius:10px;background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+.shadowban-safe-h{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+
+.shadowban-safe-p{font-size:12px;color:#666;line-height:1.5}
+
+.shadowbox-section {
+  background-color:#ffffff !important;
+  background-image:radial-gradient(circle, #e5e5e5 1px, transparent 1px) !important;
+  background-size:24px 24px !important;
+}
+
+.shadowbox-section .shadowbox-title { color:#0A0A0F !important; }
+
+.shadowbox-section .shadowbox-safe-title { color:#0A0A0F !important; }
+
+.shadowbox-section .shadowbox-testimonial {
+  background:#fafafa !important;
+  border-color:#e5e5e5 !important;
+}
+
+.shadowbox-section .shadowbox-testimonial p { color:#444 !important; }
+
+.shadowbox-section .shadowbox-author { border-top-color:#e5e5e5 !important; }
+
+.shadowbox-section .shadowbox-aname { color:#0A0A0F !important; }
+
+.shadowbox-section .shadowbox-safe-card {
+  background:#f8f8f8 !important;
+  border-color:#e5e5e5 !important;
+}
+
+.shadowbox-section .shadowbox-safe-h { color:#0A0A0F !important; }
+
+.shadowbox-section .shadowbox-safe-p { color:#666 !important; }
+
+.shadowbox-section .shadowbox-badge {
+  background:#fef3c7 !important;
+  border-color:#f59e0b !important;
+  color:#92400e !important;
+}
+
+.shadowban-testimonial {
+  border-radius:10px !important;
+}
+
+.shadowban-safe-card {
+  background:#141414 !important;
+  border:1px solid #1e1e1e !important;
+  border-radius:10px !important;
+}

@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/public/assets/icons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/public/assets/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/public/assets/icons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/public/assets/icons/apple-touch-icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/public/assets/icons/apple-touch-icon-120x120.png">
+  <link rel="manifest" href="/public/assets/icons/site.webmanifest">
+  <meta name="msapplication-TileImage" content="/public/assets/icons/mstile-150x150.png">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+  <meta name="msapplication-config" content="/public/assets/icons/browserconfig.xml">
+  <meta name="theme-color" content="#0A0A0F">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DMFlow – Instagram DM Automation for Creators & Brands</title>
+<meta name="description" content="Auto-reply to Instagram comments, send DMs with links, and capture leads. Join 14,000+ creators using DMFlow. Trusted Meta Tech Provider.">
+<meta property="og:title" content="DMFlow – Instagram DM Automation">
+<meta property="og:description" content="Turn comments into customers automatically. Trusted by 14,000+ Instagram creators.">
+<meta property="og:image" content="https://dmflowapp.in/public/assets/icons/android-chrome-512x512.png">
+<meta property="og:url" content="https://dmflowapp.in/">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://dmflowapp.in/">
+<!-- API config: change content to your backend URL for production -->
+
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/public/assets/styles/main.css">
+<link rel="stylesheet" href="/public/landing/styles/shared.css">
+<link rel="stylesheet" href="/public/landing/styles/nav.css">
+<link rel="stylesheet" href="/public/landing/styles/announce-bar.css">
+<link rel="stylesheet" href="/public/landing/styles/hero.css">
+<link rel="stylesheet" href="/public/landing/styles/logos-strip.css">
+<link rel="stylesheet" href="/public/landing/styles/meta-showcase.css">
+<link rel="stylesheet" href="/public/landing/styles/stats-proof.css">
+<link rel="stylesheet" href="/public/landing/styles/how-it-works.css">
+<link rel="stylesheet" href="/public/landing/styles/usecases.css">
+<link rel="stylesheet" href="/public/landing/styles/pricing.css">
+<link rel="stylesheet" href="/public/landing/styles/faq.css">
+<link rel="stylesheet" href="/public/landing/styles/creators-wall.css">
+<link rel="stylesheet" href="/public/landing/styles/price-compare.css">
+<link rel="stylesheet" href="/public/landing/styles/shadowban.css">
+<link rel="stylesheet" href="/public/landing/styles/device-showcase.css">
+<link rel="stylesheet" href="/public/landing/styles/testimonials.css">
+<link rel="stylesheet" href="/public/landing/styles/cta.css">
+<link rel="stylesheet" href="/public/landing/styles/contact.css">
+<link rel="stylesheet" href="/public/landing/styles/footer.css">
+<link rel="stylesheet" href="/public/landing/styles/stats-misc.css">
+</head>
+<!-- ============================================================
+     NAV
+     CSS: landing/styles/nav.css
+     ============================================================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="28" rx="7" fill="#0A0A0F"/>
+        <path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#C8FF00"/>
+      </svg>
+      DM<span>Flow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#templates">Templates</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="/app/marketing/careers.html">Careers</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/app/auth/login.html" class="btn-ghost" id="navLoginBtn">Log in</a>
+      <a href="/app/auth/register.html" class="btn-primary" id="navRegisterBtn">Start free →</a>
+      <a href="/app/platforms/instagram/dashboard.html" class="btn-primary" id="navAppBtn" style="display:none;gap:6px;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Open App</a>
+      <div id="navUserAvatar" style="display:none;width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0" title="Go to app" onclick="window.location.href='/app/platforms/instagram/dashboard.html'"></div>
+      <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- Mobile nav drawer — OUTSIDE nav so no clipping -->
+<div class="nav-mobile-drawer" id="mobileDrawer">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;">DM<span style="color:#7C3AED;">Flow</span></span>
+    <button onclick="closeMobileNav()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#0A0A0F;padding:4px 8px;">✕</button>
+  </div>
+  <div class="mob-divider"></div>
+  <a href="#features" onclick="closeMobileNav()">Features</a>
+  <a href="#templates" onclick="closeMobileNav()">Templates</a>
+  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
+  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+  <a href="/app/marketing/careers.html" onclick="closeMobileNav()">Careers</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+  <div class="mob-divider"></div>
+  <a href="/app/auth/login.html" id="mobLoginLink">Log in</a>
+  <a href="/app/auth/register.html" class="mob-cta" id="mobRegisterLink">Start free →</a>
+  <a href="/app/platforms/instagram/dashboard.html" class="mob-cta" id="mobAppLink" style="display:none;background:var(--purple)">Open App →</a>
+</div>
+<div class="mob-overlay" id="mobOverlay" onclick="closeMobileNav()"></div>
+<!-- ============================================================
+     ANNOUNCEMENT BAR
+     CSS: landing/styles/announce-bar.css
+     ============================================================ -->
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar">
+  <span class="announce-dot"></span>
+  <span>Spring Sale: <strong>32% OFF</strong> yearly plans — limited time</span>
+  <a href="/app/auth/register.html" class="announce-link">Grab deal →</a>
+</div>
+<!-- ============================================================
+     HERO + IPHONE MOCKUP
+     CSS: landing/styles/hero.css
+     ============================================================ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="#1877F2" style="flex-shrink:0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.5 6h-2v2h2v2h-2v4h-2v-4H7.5v-2h2V8c0-1.1.9-2 2-2h2v2z"/></svg>
+      Meta Business Partner · 10,000+ creators
+    </div>
+    <h1>Turn Comments<br>Into <span class="accent">Customers.</span></h1>
+    <p class="hero-sub">Auto-reply to comments, send links in DMs, and capture leads. Every Instagram interaction handled — automatically.</p>
+    <div class="hero-btns">
+      <a href="/app/auth/register.html" class="btn-hero">Connect Instagram Free</a>
+      <a href="#features" class="btn-hero-outline">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="10" cy="10" r="8"/><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"/></svg>
+        See how it works
+      </a>
+    </div>
+    <div class="hero-trust">
+      <div class="avatars">
+        <img src="https://i.pravatar.cc/32?img=47" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+        <img src="https://i.pravatar.cc/32?img=12" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+        <img src="https://i.pravatar.cc/32?img=35" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+        <img src="https://i.pravatar.cc/32?img=68" alt="Creator" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;margin-left:-6px">
+      </div>
+      <span>Join 10,000+ creators already automating</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <!-- Apple iPhone 15 Pro style mockup -->
+    <div class="iphone-device">
+      <!-- Phone outer shell with titanium frame -->
+      <div class="iphone-shell">
+        <!-- Dynamic Island -->
+        <div class="iphone-dynamic-island">
+          <div class="iphone-camera"></div>
+        </div>
+        <!-- Screen content -->
+        <div class="iphone-screen">
+          <!-- Status bar -->
+          <div class="iphone-statusbar">
+            <span class="iphone-time">9:41</span>
+            <div class="iphone-status-icons">
+              <svg width="13" height="9" viewBox="0 0 14 10" fill="#0A0A0F"><rect x="0" y="4" width="2" height="6" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/><rect x="12" y="2" width="2" height="8" rx="1"/></svg>
+              <svg width="13" height="9" viewBox="0 0 24 24" fill="#0A0A0F"><path d="M1.5 8.5C5.5 4.5 11 3 15.5 4.5L13 7c-2.5-.8-5.5-.2-7.5 1.5L1.5 8.5zm0 0"/><path d="M5 12c2.5-2.5 6-3 9-1.5L11.5 13c-1.5-.8-3.5-.5-4.5.5L5 12zm6.5 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z" fill="#0A0A0F"/></svg>
+              <svg width="22" height="9" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#0A0A0F" stroke-opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#0A0A0F"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z" fill="#0A0A0F" fill-opacity="0.4"/></svg>
+            </div>
+          </div>
+
+      <!-- Chat header -->
+      <div class="phone-header">
+        <div class="phone-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://i.pravatar.cc/40?img=47" alt="mia.styles" style="width:34px;height:34px;border-radius:50%;object-fit:cover;display:block"></div>
+        <div>
+          <div class="phone-name">mia.styles</div>
+          <div class="phone-sub">Instagram Direct</div>
+        </div>
+      </div>
+      <div class="phone-chat">
+        <div class="msg-in">
+          <div class="bubble-in">Need the LINK please!
+            <svg class="inline-fire" viewBox="0 0 24 24" fill="#ff6b35" width="13" height="13"><path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5 0.67z"/></svg>
+          </div>
+          <div class="msg-time">just now</div>
+        </div>
+        <div class="msg-out">
+          <div class="bubble-out">Hey! Here's the link you requested:</div>
+          <div class="link-card">
+            <div class="link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <div>
+              <div class="link-title">Shop the look</div>
+              <div class="link-url">yourstore.com/look</div>
+            </div>
+          </div>
+          <div class="msg-time right">automated · instant</div>
+        </div>
+        <div class="msg-in" style="margin-top:8px">
+          <div class="bubble-in">omg thank you!!
+            <svg viewBox="0 0 24 24" fill="#ff6b9d" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+        </div>
+      </div>
+
+        </div><!-- end iphone-screen -->
+
+        <!-- Side buttons -->
+        <div class="iphone-btn-right"></div>
+        <div class="iphone-btn-left-1"></div>
+        <div class="iphone-btn-left-2"></div>
+        <div class="iphone-btn-left-3"></div>
+
+        <!-- Home indicator -->
+        <div class="iphone-home-indicator"></div>
+      </div><!-- end iphone-shell -->
+
+    </div><!-- end iphone-device -->
+  </div>
+</section>
+<!-- ============================================================
+     LOGOS STRIP
+     CSS: landing/styles/logos-strip.css
+     ============================================================ -->
+<!-- LOGOS STRIP -->
+<div class="logos-strip">
+  <div class="logos-inner">
+    <span class="logos-label">Trusted by creators across niches</span>
+    <div class="logos-row">
+      <span>Fashion</span><span>Fitness</span><span>E-commerce</span><span>Coaches</span><span>Real Estate</span><span>Agencies</span>
+    </div>
+  </div>
+</div>
+<!-- ============================================================
+     META PARTNERSHIP SHOWCASE SECTION
+     CSS: landing/styles/meta-showcase.css
+     ============================================================ -->
+<section class="meta-showcase-section">
+  <div class="meta-showcase-inner">
+    <!-- Left: Headline -->
+    <div class="meta-showcase-left">
+      <div class="meta-showcase-eyebrow">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="#C8FF00"><circle cx="5" cy="5" r="5"/></svg>
+        Official Certifications
+      </div>
+      <h2 class="meta-showcase-title">Built on<br><span class="meta-showcase-accent">Meta's Official</span><br>Infrastructure.</h2>
+      <p class="meta-showcase-desc">DMFlow is the only Indian Instagram automation platform with full Meta Business Partner certification. Your account is protected by the same infrastructure Meta uses — not third-party bots.</p>
+      <a href="/app/auth/register.html" class="meta-showcase-cta">Connect Securely →</a>
+    </div>
+
+    <!-- Center: Logos connection visual -->
+    <div class="meta-showcase-center">
+      <div class="meta-logos-connector">
+        <!-- DMFlow logo -->
+        <div class="msc-logo msc-dmflow">
+          <svg width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="7" fill="#0A0A0F"/>
+            <path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#C8FF00"/>
+          </svg>
+          <span>DMFlow</span>
+        </div>
+        <!-- Connection line -->
+        <div class="msc-connector">
+          <div class="msc-line"></div>
+          <div class="msc-verified-dot">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="msc-line"></div>
+        </div>
+        <!-- Meta logo -->
+        <div class="msc-logo msc-meta">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="#1877F2"/>
+            <path d="M19.5 8H17.5V10H19.5V12H17.5V18H15.5V12H13V10H15.5V8C15.5 6.9 16.4 6 17.5 6H19.5V8Z" fill="white"/>
+          </svg>
+          <span>Meta</span>
+        </div>
+      </div>
+
+      <!-- Badge ring -->
+      <div class="msc-trust-badge">
+        <div class="msc-badge-inner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <span>Trusted<br>Partner</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Badge cards -->
+    <div class="meta-showcase-right">
+      <div class="msc-badge-card">
+        <div class="msc-badge-icon" style="background:#1877F220">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#1877F2"/><path d="M15.5 8H13.5V10H15.5V12H13.5V16H11.5V12H9.5V10H11.5V8C11.5 6.9 12.4 6 13.5 6H15.5V8z" fill="white"/></svg>
+        </div>
+        <div class="msc-badge-info">
+          <div class="msc-badge-name">Meta Business Partner</div>
+          <div class="msc-badge-desc">Official Meta ecosystem member</div>
+        </div>
+        <div class="msc-badge-check">✓</div>
+      </div>
+
+      <div class="msc-badge-card">
+        <div class="msc-badge-icon" style="background:#0082FB20">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#0082FB"/><path d="M10 10L14 12L10 14V10Z" fill="white"/></svg>
+        </div>
+        <div class="msc-badge-info">
+          <div class="msc-badge-name">Meta Tech Provider</div>
+          <div class="msc-badge-desc">Certified technology provider</div>
+        </div>
+        <div class="msc-badge-check">✓</div>
+      </div>
+
+      <div class="msc-badge-card">
+        <div class="msc-badge-icon" style="background:linear-gradient(135deg,#FFDC8020,#C1358420)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <defs><linearGradient id="ig2" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFDC80"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs>
+            <rect width="24" height="24" rx="6" fill="url(#ig2)"/>
+            <rect x="6" y="6" width="12" height="12" rx="3" stroke="white" stroke-width="1.5" fill="none"/>
+            <circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/>
+            <circle cx="15.5" cy="8.5" r="0.8" fill="white"/>
+          </svg>
+        </div>
+        <div class="msc-badge-info">
+          <div class="msc-badge-name">Official Instagram API</div>
+          <div class="msc-badge-desc">Graph API v18+ compliant</div>
+        </div>
+        <div class="msc-badge-check">✓</div>
+      </div>
+
+      <div class="msc-badge-card">
+        <div class="msc-badge-icon" style="background:#22c55e20">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div class="msc-badge-info">
+          <div class="msc-badge-name">SSL + Bank-grade Encryption</div>
+          <div class="msc-badge-desc">256-bit AES encrypted tokens</div>
+        </div>
+        <div class="msc-badge-check">✓</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     SOCIAL PROOF STATS SECTION
+     CSS: landing/styles/stats-proof.css
+     ============================================================ -->
+<section class="stats-proof-section">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">The Data</div>
+      <h2 class="section-title">Your Instagram is a <span style="background:#C8FF00;color:#0A0A0F;padding:2px 10px;border-radius:6px;">Goldmine</span>.<br>Stop letting it <span style="background:#ef4444;color:#fff;padding:2px 10px;border-radius:6px;">Leak Revenue</span>.</h2>
+      <p class="section-sub">Most creators think they have a traffic problem. The truth? You have a conversion gap. See why manual DMs are costing you more than just your time.</p>
+    </div>
+    <div class="proof-stats-grid">
+      <div class="proof-stat-card proof-stat-lime">
+        <div class="proof-stat-num">21<span class="proof-stat-x">×</span></div>
+        <div class="proof-stat-label">THE 5-MINUTE GOLD STANDARD</div>
+        <div class="proof-stat-divider"></div>
+        <div class="proof-stat-data">
+          <div class="proof-stat-row proof-check">You are 21× more likely to qualify a lead if you respond within 5 minutes.</div>
+          <div class="proof-stat-row proof-cross">After just 30 minutes of silence, your lead has already moved on to a competitor or scrolled past your offer.</div>
+          <div class="proof-stat-row proof-solution">DMFlow cuts your response time from "whenever I check my phone" to 0.5 seconds. Every time.</div>
+        </div>
+      </div>
+      <div class="proof-stat-card proof-stat-featured">
+        <div class="proof-stat-num">60<span class="proof-stat-pct">%</span></div>
+        <div class="proof-stat-label">KILL THE "LINK-IN-BIO" FRICTION</div>
+        <div class="proof-stat-divider"></div>
+        <div class="proof-stat-data">
+          <div class="proof-stat-row proof-check">60% of customers abandon a purchase when there are too many steps in the process.</div>
+          <div class="proof-stat-row proof-cross">Asking a follower to "Go to Profile → Click Link → Find Product" is a sales suicide mission.</div>
+          <div class="proof-stat-row proof-solution">Deliver the exact product link directly to their DM from a comment. Zero friction, maximum conversion.</div>
+        </div>
+      </div>
+      <div class="proof-stat-card proof-stat-purple">
+        <div class="proof-stat-num">90<span class="proof-stat-pct">%</span></div>
+        <div class="proof-stat-label">CLOSE THE INSIGHT GAP</div>
+        <div class="proof-stat-divider"></div>
+        <div class="proof-stat-data">
+          <div class="proof-stat-row proof-check">90% of brands have zero data on why their followers don't buy.</div>
+          <div class="proof-stat-row proof-cross">Without automated surveys, you're flying blind — guessing at price, product fit, or timing.</div>
+          <div class="proof-stat-row proof-solution">DMFlow automated micro-surveys qualify leads and gather market research while you sleep. Stop guessing, start knowing.</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <a href="/app/auth/register.html" class="btn-hero" style="background:#0A0A0F;display:inline-block;">Stop Losing Sales — Get DMFlow Today →</a>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     HOW IT WORKS (STEPS)
+     CSS: landing/styles/how-it-works.css
+     ============================================================ -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">Set it up in 2 minutes.<br>Run it forever.</h2>
+      <p class="section-sub">Three steps from comment to customer.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="14" r="4"/><line x1="12" y1="6" x2="12.01" y2="6" stroke-width="3"/></svg>
+        </div>
+        <h3>Connect Instagram</h3>
+        <p>Link your Creator or Business account via Meta's official OAuth. Secure, no passwords stored.</p>
+      </div>
+      <div class="step-card step-featured">
+        <div class="step-num">02</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h7v7h-7z" opacity="0.5"/></svg>
+        </div>
+        <h3>Pick a template</h3>
+        <p>Choose from 20+ pre-built automations — send links, capture emails, give discount codes.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>
+        </div>
+        <h3>Go live instantly</h3>
+        <p>Preview your automation, hit Start, and every matching comment triggers an instant DM.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     USE CASES
+     CSS: landing/styles/usecases.css
+     ============================================================ -->
+<section class="section usecases" id="templates">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-label">Use cases</div>
+      <h2 class="section-title">Every way you sell,<br>automated.</h2>
+    </div>
+    <div class="usecases-grid">
+      <div class="usecase-card">
+        <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        <h3>Affiliate & product links</h3>
+        <p>Someone comments "LINK" → they get your affiliate URL instantly in DMs.</p>
+        <div class="uc-tag">For creators</div>
+      </div>
+      <div class="usecase-card uc-featured">
+        <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+        <h3>Email list building</h3>
+        <p>Comment "GUIDE" → ask for email → deliver your free resource. Every post grows your list.</p>
+        <div class="uc-tag">For coaches</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Story & comment replies</h3>
+        <p>Story reaction → instant DM with your offer, booking link, or discount code.</p>
+        <div class="uc-tag">For e-commerce</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg></div>
+        <h3>Discount codes</h3>
+        <p>Comment "CODE" → get an exclusive discount sent privately in DMs instantly.</p>
+        <div class="uc-tag">For brands</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <h3>Book clients</h3>
+        <p>Comment "BOOK" → get your Calendly link. Turn every post into a booking machine.</p>
+        <div class="uc-tag">For consultants</div>
+      </div>
+      <div class="usecase-card">
+        <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3>Grow followers</h3>
+        <p>Require a follow before sending the link. Every interaction = a new follower.</p>
+        <div class="uc-tag">For everyone</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     PRICING
+     CSS: landing/styles/pricing.css
+     ============================================================ -->
+<section class="section" id="pricing">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Start free.<br>Scale when ready.</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Free</div>
+        <div class="price-amount">&#8377;0<span>/mo</span></div>
+        <div class="price-desc">Perfect to test the waters</div>
+        <ul class="price-list">
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> 500 DMs / month</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> 1 Instagram account</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> All basic templates</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Comment triggers</li>
+          <li class="no"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Email collection</li>
+          <li class="no"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg> Advanced analytics</li>
+        </ul>
+        <a href="/app/auth/register.html" class="btn-price-outline">Get started free →</a>
+      </div>
+      <div class="price-card price-featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">&#8377;1,599<span>/mo</span></div>
+        <div class="price-desc">For serious creators</div>
+        <ul class="price-list">
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#C8FF00" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Unlimited DMs</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#C8FF00" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> 3 Instagram accounts</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#C8FF00" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> All templates</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#C8FF00" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Email collection</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#C8FF00" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Advanced analytics</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#C8FF00" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Priority support</li>
+        </ul>
+        <a href="/app/auth/register.html" class="btn-price">Start 14-day free trial</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Agency</div>
+        <div class="price-amount">&#8377;3,999<span>/mo</span></div>
+        <div class="price-desc">For teams & agencies</div>
+        <ul class="price-list">
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Unlimited DMs</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> 10 Instagram accounts</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> White-label options</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Team management</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> API access</li>
+          <li class="yes"><svg viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2.5" width="14" height="14"><polyline points="2 8 6 12 14 4"/></svg> Dedicated support</li>
+        </ul>
+        <a href="/app/auth/register.html" class="btn-price-outline">Contact sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     FAQ
+     CSS: landing/styles/faq.css
+     ============================================================ -->
+<section class="section faq-section" id="faq">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Instagram DM Automation FAQ</h2>
+      <p class="section-sub">Common questions about DMFlow, pricing, and how it works.</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What is DMFlow and how does it work?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">DMFlow connects to your Instagram via Meta's official API. When someone comments a keyword on your post, DMFlow automatically sends them a DM with your message, link, or resource — instantly, 24/7.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is DMFlow safe for my Instagram account?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Yes. DMFlow is a certified Meta Tech Provider using Instagram's official Graph API. No bots, no third-party scraping. Your account is fully protected by Meta's official permissions system.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need a business or creator Instagram account?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Yes — Instagram's API requires a Creator or Business account. Personal accounts cannot be connected. Switching is free and takes about 30 seconds in your Instagram settings.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I collect emails through Instagram DMs?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Absolutely. On Pro and Agency plans, you can ask users to drop their email in DMs before receiving a link or resource. All emails are stored in your Contacts dashboard and can be exported.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What's the difference between DMFlow and ManyChat?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">DMFlow is built specifically for Instagram creators and brands. It's simpler, faster to set up, and more affordable. ManyChat covers multiple platforms with a steeper learning curve. If Instagram is your main channel, DMFlow wins.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     CREATORS WALL (marquee)
+     CSS: landing/styles/creators-wall.css
+     ============================================================ -->
+<section class="creators-wall-section">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">Creator Community</div>
+      <h2 class="section-title">Trusted by <span class="accent">14,000+</span> Creators &amp; Brands</h2>
+      <p class="section-sub">Big or small. 300 followers or 3 million. Creators, brands, and agencies trust DMFlow to turn every comment into revenue.</p>
+    </div>
+  </div>
+
+  <!-- Scrolling row 1 — left to right -->
+  <div class="cwall-track-wrap">
+    <div class="cwall-track cwall-ltr">
+      <!-- Creator cards group 1 (duplicated for seamless scroll) -->
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+          <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=200&h=200&fit=crop&auto=format" alt="@techwithtim" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Tech &amp; Gadgets</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">@techwithtim</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            2.1M Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#2d1b69,#11998e)">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=200&h=200&fit=crop&auto=format" alt="Mumbai Fitness" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Fitness</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Mumbai Fitness</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            700K+ Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#ff6b6b,#feca57)">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&h=200&fit=crop&auto=format" alt="The Food Lab" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Food &amp; Kitchen</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">The Food Lab</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            300K+ Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop&auto=format" alt="StyleHouse India" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Fashion</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">StyleHouse India</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            500K+ Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#11998e,#38ef7d)">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&h=200&fit=crop&auto=format" alt="CodeWithAI" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#AI &amp; Coding</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">CodeWithAI</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            1.5M+ Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#FC466B,#3F5EFB)">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&auto=format" alt="@bolt_officiall" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Influencer</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">@bolt_officiall</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            500K+ Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#f7971e,#ffd200)">
+          <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=200&h=200&fit=crop&auto=format" alt="Delhi Eats" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Events &amp; Party</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Delhi Eats</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            400K+ Followers
+          </div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)">
+          <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=200&h=200&fit=crop&auto=format" alt="TechFactsRafee" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Tech Facts</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">@techfactsrafee</div>
+          <div class="cwall-followers">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            400K+ Followers
+          </div>
+        </div>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+          <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=200&h=200&fit=crop&auto=format" alt="@techwithtim" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Tech &amp; Gadgets</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">@techwithtim</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>2.1M Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#2d1b69,#11998e)">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=200&h=200&fit=crop&auto=format" alt="Mumbai Fitness" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Fitness</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Mumbai Fitness</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>700K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#11998e,#38ef7d)">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=200&h=200&fit=crop&auto=format" alt="CodeWithAI" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#AI &amp; Coding</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">CodeWithAI</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>1.5M+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop&auto=format" alt="StyleHouse India" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Fashion</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">StyleHouse India</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>500K+ Followers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scrolling row 2 — right to left (different creators) -->
+  <div class="cwall-track-wrap" style="margin-top:16px">
+    <div class="cwall-track cwall-rtl">
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#c94b4b,#4b134f)">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop&auto=format" alt="Businesskul" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Business</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Businesskul</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>200K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#134e5e,#71b280)">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200&h=200&fit=crop&auto=format" alt="Namma College" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Education</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Namma College</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>200K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#4776e6,#8e54e9)">
+          <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=200&h=200&fit=crop&auto=format" alt="Travel Creator" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Travel Creator</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Harsh Kharole</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>700K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#f7797d,#FBD786,#C6FFDD)">
+          <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?w=200&h=200&fit=crop&auto=format" alt="Yellow Zebra Safaris" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Tours &amp; Travels</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Yellow Zebra Safaris</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>20K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#1f4037,#99f2c8)">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=200&fit=crop&auto=format" alt="Bangalore Flats" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Real Estate</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Bangalore Flats</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>30K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#2b5876,#4e4376)">
+          <img src="https://images.unsplash.com/photo-1564415315949-7a0c4ad43071?w=200&h=200&fit=crop&auto=format" alt="HCL GUVI" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Institution</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">HCL GUVI</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>280K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#c94b4b,#4b134f)">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&h=200&fit=crop&auto=format" alt="Made In Mumbai" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Events &amp; Party</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Made In Mumbai</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>200K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#FC466B,#3F5EFB)">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&auto=format" alt="@harley.digital" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Influencer</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">@harley.digital</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>400K+ Followers</div>
+        </div>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#c94b4b,#4b134f)">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=200&h=200&fit=crop&auto=format" alt="Businesskul" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Business</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Businesskul</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>200K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#4776e6,#8e54e9)">
+          <img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=200&h=200&fit=crop&auto=format" alt="Travel Creator" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Travel Creator</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">Harsh Kharole</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>700K+ Followers</div>
+        </div>
+      </div>
+      <div class="cwall-card">
+        <div class="cwall-thumb" style="background:linear-gradient(135deg,#2b5876,#4e4376)">
+          <img src="https://images.unsplash.com/photo-1564415315949-7a0c4ad43071?w=200&h=200&fit=crop&auto=format" alt="HCL GUVI" loading="lazy" onerror="this.style.display='none'">
+          <div class="cwall-overlay"></div>
+          <div class="cwall-niche">#Institution</div>
+        </div>
+        <div class="cwall-info">
+          <div class="cwall-name">HCL GUVI</div>
+          <div class="cwall-followers"><svg width="10" height="10" viewBox="0 0 24 24" fill="#C8FF00"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>280K+ Followers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:36px;">
+    <a href="/app/auth/register.html" class="btn-hero" style="display:inline-block;">Join 14,000+ Creators →</a>
+  </div>
+</section>
+<!-- ============================================================
+     PRICE COMPARISON
+     CSS: landing/styles/price-compare.css
+     ============================================================ -->
+<section class="price-compare-section">
+  <div class="section-inner">
+    <div class="price-compare-head">
+      <div class="section-label" style="color:#C8FF00">The Real Cost</div>
+      <h2 class="price-compare-title">THREE <span class="pct-highlight-green">WILDLY DIFFERENT</span> PRICE TAGS.</h2>
+      <p class="price-compare-sub">To handle 300,000 comments — same exact task, three very different bills.</p>
+    </div>
+
+    <div class="price-compare-grid">
+      <!-- Left: viral reel mockup -->
+      <div class="price-reel-mockup">
+        <div class="price-reel-phone">
+          <div class="price-reel-vid">
+            <div class="price-reel-stats">
+              <div class="price-reel-stat"><div class="price-reel-num">46.2M</div><div class="price-reel-lbl">VIEWS</div></div>
+              <div class="price-reel-divider"></div>
+              <div class="price-reel-stat"><div class="price-reel-num">322K</div><div class="price-reel-lbl">COMMENTS</div></div>
+            </div>
+            <div class="price-reel-play">
+              <svg viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="price-reel-label">Your viral reel</div>
+          </div>
+          <div class="price-reel-meta">
+            <div class="price-reel-avatar">V</div>
+            <div class="price-reel-creator">
+              <div class="price-reel-cname">Your Brand</div>
+              <div class="price-reel-csub">When it goes viral 🚀</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: price cards -->
+      <div class="price-compare-cards">
+        <div class="pcc-label">THE COST TO HANDLE 300K COMMENTS:</div>
+        <div class="pcc-card pcc-winner">
+          <div class="pcc-brand">
+            <div class="pcc-logo dmflow">
+              <svg width="16" height="16" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#C8FF00"/><path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#0A0A0F"/></svg>
+            </div>
+            <div>
+              <div class="pcc-name">DMFLOW</div>
+              <div class="pcc-pricing-type">FLAT-RATE · UNLIMITED</div>
+            </div>
+          </div>
+          <div class="pcc-price pcc-green">₹1,599<span>/mo</span></div>
+        </div>
+        <div class="pcc-card">
+          <div class="pcc-brand">
+            <div class="pcc-logo manychat">M</div>
+            <div>
+              <div class="pcc-name">MANYCHAT</div>
+              <div class="pcc-pricing-type">PER CONTACT</div>
+            </div>
+          </div>
+          <div class="pcc-price pcc-red">$1,635<span>/mo</span></div>
+        </div>
+        <div class="pcc-card">
+          <div class="pcc-brand">
+            <div class="pcc-logo linkdm">L</div>
+            <div>
+              <div class="pcc-name">LINKDM</div>
+              <div class="pcc-pricing-type">PER MESSAGE</div>
+            </div>
+          </div>
+          <div class="pcc-price pcc-yellow">$200<span>/mo</span></div>
+        </div>
+        <div class="pcc-saving">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#C8FF00"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Save up to <strong>₹1,20,000/year</strong> vs ManyChat. DMFlow = always flat-rate.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     SHADOWBAN / TRUST SECTION
+     CSS: landing/styles/shadowban.css
+     ============================================================ -->
+<section class="shadowban-section">
+  <div class="section-inner">
+    <div class="shadowban-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2L1 21h22L12 2zm0 3.5l8.5 15.5H3.5L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+      THE HIDDEN COST
+    </div>
+    <h2 class="shadowban-title">IT'S NOT JUST ABOUT <span class="shadowban-hl-yellow">PRICING</span>.<br>IT'S ABOUT <span class="shadowban-hl-green">STAYING SAFE</span> FROM SHADOWBANS.</h2>
+
+    <div class="shadowban-grid">
+      <!-- Testimonial card -->
+      <div class="shadowban-testimonial">
+        <div class="shadowban-quote">"</div>
+        <p>I used ManyChat when one of my reels went viral, and suddenly I was looking at paying thousands of dollars. Honestly, <strong>the money wasn't even the biggest issue.</strong></p>
+        <p>The real problem was that after using ManyChat, <strong>my next few videos just wouldn't take off.</strong> It felt like I was shadowbanned or something.</p>
+        <p>With DMFlow, though, <strong>my reels keep going viral consistently</strong>, even while automations are running. That's what surprised me the most. I'm genuinely curious what you guys are doing differently behind the scenes.</p>
+        <div class="shadowban-author">
+          <div class="shadowban-avatar">R</div>
+          <div>
+            <div class="shadowban-aname">Rahul K.</div>
+            <div class="shadowban-asub">Content Creator · 2.1M Followers</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why DMFlow is safe cards -->
+      <div class="shadowban-safe-cards">
+        <div class="shadowban-safe-title">Why DMFlow keeps you safe</div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Official Meta API Only</div>
+            <div class="shadowban-safe-p">Zero bots, zero scraping. Every DM goes through Instagram's own infrastructure — exactly how Meta wants it.</div>
+          </div>
+        </div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Smart Rate Limiting</div>
+            <div class="shadowban-safe-p">Built-in compliance engine caps hourly & daily sends. Never triggers spam filters, never gets your account flagged.</div>
+          </div>
+        </div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Duplicate Message Blocking</div>
+            <div class="shadowban-safe-p">Never sends the same DM twice to the same user. Keeps your engagement authentic and your account healthy.</div>
+          </div>
+        </div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9a9 9 0 0 1-9-9 9 9 0 0 1 9-9c1.21 0 2.37.24 3.42.67"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Monthly Cap Enforcement</div>
+            <div class="shadowban-safe-p">Auto-pauses if monthly limits approach. Your reach and virality stay fully intact — always.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     DEVICE SHOWCASE
+     CSS: landing/styles/device-showcase.css
+     ============================================================ -->
+<section class="device-showcase-section">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">Full Platform</div>
+      <h2 class="section-title">Manage everything.<br><span class="accent">Anywhere.</span></h2>
+      <p class="section-sub">From setting up automations on desktop to monitoring live DM performance on mobile — DMFlow works flawlessly across every screen.</p>
+    </div>
+
+    <div class="device-showcase-wrap">
+      <!-- Laptop mockup -->
+      <div class="device-laptop">
+        <div class="laptop-screen">
+          <div class="laptop-chrome">
+            <div class="laptop-dots"><span></span><span></span><span></span></div>
+            <div class="laptop-url">app.dmflowapp.in · Dashboard</div>
+          </div>
+          <div class="laptop-content">
+            <!-- Mini dashboard inside laptop -->
+            <div class="ldc-sidebar">
+              <div class="ldc-logo">⚡ DM</div>
+              <div class="ldc-nav-item ldc-active">Dashboard</div>
+              <div class="ldc-nav-item">Automations</div>
+              <div class="ldc-nav-item">Analytics</div>
+              <div class="ldc-nav-item">Contacts</div>
+            </div>
+            <div class="ldc-main">
+              <div class="ldc-header">Good morning, Creator 👋</div>
+              <div class="ldc-stats-row">
+                <div class="ldc-stat"><div class="ldc-stat-num" style="color:#C8FF00">1,247</div><div class="ldc-stat-lbl">DMs Today</div></div>
+                <div class="ldc-stat"><div class="ldc-stat-num" style="color:#7C3AED">98.2%</div><div class="ldc-stat-lbl">Delivery Rate</div></div>
+                <div class="ldc-stat"><div class="ldc-stat-num" style="color:#22c55e">₹0</div><div class="ldc-stat-lbl">Extra Cost</div></div>
+              </div>
+              <div class="ldc-chart-area">
+                <div class="ldc-chart-label">DMs sent — last 7 days</div>
+                <div class="ldc-bars">
+                  <div class="ldc-bar" style="height:40%"><div class="ldc-bar-fill" style="background:#C8FF00;opacity:0.5"></div></div>
+                  <div class="ldc-bar" style="height:65%"><div class="ldc-bar-fill" style="background:#C8FF00;opacity:0.6"></div></div>
+                  <div class="ldc-bar" style="height:50%"><div class="ldc-bar-fill" style="background:#C8FF00;opacity:0.5"></div></div>
+                  <div class="ldc-bar" style="height:80%"><div class="ldc-bar-fill" style="background:#C8FF00;opacity:0.7"></div></div>
+                  <div class="ldc-bar" style="height:70%"><div class="ldc-bar-fill" style="background:#C8FF00;opacity:0.6"></div></div>
+                  <div class="ldc-bar" style="height:90%"><div class="ldc-bar-fill" style="background:#C8FF00;opacity:0.9"></div></div>
+                  <div class="ldc-bar ldc-bar-today" style="height:100%"><div class="ldc-bar-fill" style="background:#C8FF00"></div></div>
+                </div>
+                <div class="ldc-bar-today-lbl">Today 🔥</div>
+              </div>
+              <div class="ldc-auto-row">
+                <div class="ldc-auto-card">
+                  <div class="ldc-auto-status"></div>
+                  <div class="ldc-auto-name">Comment → Link DM</div>
+                  <div class="ldc-auto-count">847 triggered</div>
+                </div>
+                <div class="ldc-auto-card">
+                  <div class="ldc-auto-status"></div>
+                  <div class="ldc-auto-name">Story Reply → Offer</div>
+                  <div class="ldc-auto-count">234 triggered</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"><div class="laptop-stand"></div></div>
+      </div>
+
+      <!-- Mobile mockup -->
+      <div class="device-mobile">
+        <div class="mobile-screen">
+          <div class="mobile-status-bar">
+            <span>9:41</span>
+            <div style="display:flex;gap:3px;align-items:center">
+              <svg width="12" height="8" viewBox="0 0 14 10" fill="#0A0A0F"><rect x="0" y="4" width="2" height="6" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/><rect x="12" y="2" width="2" height="8" rx="1"/></svg>
+            </div>
+          </div>
+          <div class="mobile-app-header">
+            <svg width="14" height="14" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#0A0A0F"/><path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#C8FF00"/></svg>
+            DMFlow
+          </div>
+          <div class="mobile-notif">
+            <div class="mobile-notif-icon">⚡</div>
+            <div>
+              <div class="mobile-notif-title">340 DMs sent</div>
+              <div class="mobile-notif-sub">Automation running · just now</div>
+            </div>
+          </div>
+          <div class="mobile-stat-cards">
+            <div class="mobile-stat-card" style="background:#C8FF00;color:#0A0A0F">
+              <div class="mobile-stat-num">1.2K</div>
+              <div class="mobile-stat-lbl">DMs Today</div>
+            </div>
+            <div class="mobile-stat-card" style="background:#1a1a2e">
+              <div class="mobile-stat-num" style="color:#7C3AED">5</div>
+              <div class="mobile-stat-lbl" style="color:#888">Live Flows</div>
+            </div>
+          </div>
+          <div class="mobile-recent-label">Recent Activity</div>
+          <div class="mobile-activity">
+            <div class="mobile-act-item">
+              <div class="mobile-act-dot" style="background:#22c55e"></div>
+              <div class="mobile-act-text"><strong>@priya_k</strong> commented "LINK" · DM sent</div>
+            </div>
+            <div class="mobile-act-item">
+              <div class="mobile-act-dot" style="background:#22c55e"></div>
+              <div class="mobile-act-text"><strong>@rahul_m</strong> replied to story · offer sent</div>
+            </div>
+            <div class="mobile-act-item">
+              <div class="mobile-act-dot" style="background:#C8FF00"></div>
+              <div class="mobile-act-text"><strong>@anjali_s</strong> subscribed via DM flow</div>
+            </div>
+            <div class="mobile-act-item">
+              <div class="mobile-act-dot" style="background:#22c55e"></div>
+              <div class="mobile-act-text"><strong>@tech_guy99</strong> commented "CODE" · DM sent</div>
+            </div>
+          </div>
+        </div>
+        <div class="mobile-home-bar"></div>
+      </div>
+    </div>
+
+    <!-- Feature chips -->
+    <div class="device-feature-chips">
+      <div class="device-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="14" height="14"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="14" r="4"/></svg>
+        Mobile-first design
+      </div>
+      <div class="device-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="14" height="14"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Full desktop dashboard
+      </div>
+      <div class="device-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="14" height="14"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Real-time analytics
+      </div>
+      <div class="device-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="14" height="14"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+        Live DM notifications
+      </div>
+      <div class="device-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        24/7 automation
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     TESTIMONIALS WALL
+     CSS: landing/styles/testimonials.css
+     ============================================================ -->
+<section class="testimonials-section">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">Real Results</div>
+      <h2 class="section-title">Creators love<br><span class="accent">DMFlow.</span></h2>
+    </div>
+    <div class="twall-grid">
+      <div class="twall-card twall-featured">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"Set it up in literally 2 minutes. By the time I posted my reel and went to get chai, my DM inbox had 47 auto-replies sitting there. Mind blown."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:linear-gradient(135deg,#7C3AED,#C8FF00);color:#0A0A0F">P</div>
+          <div>
+            <div class="twall-aname">Priya Mehta</div>
+            <div class="twall-asub">Fashion Creator · Mumbai · 450K followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"My affiliate link clicks went up 3x in the first week. Comments → DMs → clicks. It's a machine."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#C8FF00;color:#0A0A0F">A</div>
+          <div>
+            <div class="twall-aname">Arjun V.</div>
+            <div class="twall-asub">Tech Reviewer · Bangalore · 1.2M followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"Switched from ManyChat — saved ₹80,000 last year and my account is healthier than ever. Zero shadowban issues."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#7C3AED;color:#fff">S</div>
+          <div>
+            <div class="twall-aname">Sneha R.</div>
+            <div class="twall-asub">Business Coach · Delhi · 280K followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"Manage 12 Instagram accounts for clients. DMFlow's agency plan saved our entire ops team 15 hours a week."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#1f4037;color:#C8FF00">K</div>
+          <div>
+            <div class="twall-aname">Karan Shah</div>
+            <div class="twall-asub">Social Media Agency · Hyderabad</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"I sell handmade jewelry. Every time I post a reel with the word 'SHOP', DMFlow sends the product link. I wake up to orders. Actual magic."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#c94b4b;color:#fff">N</div>
+          <div>
+            <div class="twall-aname">Nisha Kapoor</div>
+            <div class="twall-asub">E-commerce · Jaipur · 85K followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card twall-lime">
+        <div class="twall-lime-stat">₹3.2L</div>
+        <div class="twall-lime-label">Revenue attributed to DMFlow automations in 90 days</div>
+        <div class="twall-lime-author">Fitness Brand · Chennai</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     CTA SECTION
+     CSS: landing/styles/cta.css
+     ============================================================ -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2>Ready to automate your DMs?</h2>
+    <p>Connect your Instagram in 60 seconds. No credit card required.</p>
+    <a href="/app/auth/register.html" class="btn-hero">Get started free →</a>
+  </div>
+</section>
+<!-- ============================================================
+     CONTACT SECTION
+     CSS: landing/styles/contact.css
+     ============================================================ -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <!-- Left: Info panel -->
+    <div class="contact-info">
+      <div class="contact-eyebrow">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="#C8FF00"><circle cx="5" cy="5" r="5"/></svg>
+        Get in Touch
+      </div>
+      <h2 class="contact-title">We're here to<br><span class="contact-accent">help you grow.</span></h2>
+      <p class="contact-desc">Have a question about automations, pricing, or your Instagram account? Our team replies within 24 hours — usually much faster.</p>
+
+      <div class="contact-channels">
+        <div class="contact-channel">
+          <div class="contact-channel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="18" height="18"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <div>
+            <div class="contact-channel-label">Email Support</div>
+            <a href="mailto:support@dmflowapp.in" class="contact-channel-value">support@dmflowapp.in</a>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="contact-channel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="3"/></svg>
+          </div>
+          <div>
+            <div class="contact-channel-label">Instagram DMs</div>
+            <a href="https://instagram.com/dmflowapp" target="_blank" class="contact-channel-value">@dmflowapp</a>
+          </div>
+        </div>
+        <div class="contact-channel">
+          <div class="contact-channel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div>
+            <div class="contact-channel-label">Response Time</div>
+            <span class="contact-channel-value">Within 24 hours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust mini-stats -->
+      <div class="contact-stats">
+        <div class="contact-stat">
+          <div class="contact-stat-num">14K+</div>
+          <div class="contact-stat-lbl">Creators Helped</div>
+        </div>
+        <div class="contact-stat-divider"></div>
+        <div class="contact-stat">
+          <div class="contact-stat-num">4.9★</div>
+          <div class="contact-stat-lbl">Support Rating</div>
+        </div>
+        <div class="contact-stat-divider"></div>
+        <div class="contact-stat">
+          <div class="contact-stat-num">&lt;4hr</div>
+          <div class="contact-stat-lbl">Avg. Reply Time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Contact form -->
+    <div class="contact-form-wrap">
+      <form class="contact-form" onsubmit="handleContactForm(event)">
+        <div class="contact-form-row">
+          <div class="contact-form-group">
+            <label class="contact-label">Your Name</label>
+            <input type="text" class="contact-input" placeholder="e.g. Priya Sharma" required>
+          </div>
+          <div class="contact-form-group">
+            <label class="contact-label">Email Address</label>
+            <input type="email" class="contact-input" placeholder="you@example.com" required>
+          </div>
+        </div>
+        <div class="contact-form-group">
+          <label class="contact-label">Topic</label>
+          <select class="contact-input contact-select">
+            <option value="">Select a topic...</option>
+            <option>Getting Started</option>
+            <option>Automation Setup</option>
+            <option>Pricing & Plans</option>
+            <option>Meta App Review</option>
+            <option>Technical Issue</option>
+            <option>Partnership</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="contact-form-group">
+          <label class="contact-label">Message</label>
+          <textarea class="contact-input contact-textarea" placeholder="Tell us how we can help..." rows="4" required></textarea>
+        </div>
+        <button type="submit" class="contact-submit" id="contactSubmitBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send Message
+        </button>
+        <div class="contact-form-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" width="12" height="12"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          Your message is encrypted and private. We never share your data.
+        </div>
+      </form>
+      <div class="contact-success" id="contactSuccess" style="display:none">
+        <div class="contact-success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2.5" width="32" height="32"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Message sent!</h3>
+        <p>We'll get back to you within 24 hours. Keep crushing it! ⚡</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     FOOTER
+     CSS: landing/styles/footer.css
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo footer-logo">
+        <svg class="logo-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="7" fill="#C8FF00"/>
+          <path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#0A0A0F"/>
+        </svg>
+        DM<span>Flow</span>
+      </div>
+      <p>Instagram DM Automation for<br>Creators, Brands &amp; Agencies</p>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" title="Instagram" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="3"/></svg>
+        </a>
+        <a href="https://youtube.com" target="_blank" title="YouTube" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" title="LinkedIn" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <div class="footer-col-title">Solutions</div>
+        <a href="#features">Content Creators</a>
+        <a href="#features">Affiliate Creators</a>
+        <a href="#features">Coaches &amp; Educators</a>
+        <a href="#features">Service Businesses</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Use Cases</div>
+        <a href="#features">Auto-Reply Comments</a>
+        <a href="#features">Send Links in DMs</a>
+        <a href="#templates">Collect Emails</a>
+        <a href="#templates">Grow Followers</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Company</div>
+        <a href="#features">About</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">Blog</a>
+        <a href="/app/marketing/careers.html">Careers</a>
+        <a href="/app/marketing/hr.html" style="color:rgba(200,255,0,0.7)">HR Portal</a>
+        <a href="mailto:support@dmflow.app">Contact</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Compare</div>
+        <a href="#faq">vs ManyChat</a>
+        <a href="#faq">vs LinkDM</a>
+        <a href="#faq">vs MobileMonkey</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 DMFlow. All rights reserved. · Meta Tech Provider</span>
+    <div class="made-in-india">
+      <svg viewBox="0 0 20 14" width="18" height="13" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="4.67" fill="#FF9933"/><rect y="4.67" width="20" height="4.67" fill="white"/><rect y="9.33" width="20" height="4.67" fill="#138808"/><circle cx="10" cy="7" r="1.8" fill="none" stroke="#000080" stroke-width="0.6"/><circle cx="10" cy="7" r="0.35" fill="#000080"/></svg>
+      <span class="india-name">INDIA</span>
+      <span>Made with love</span>
+    </div>
+    <div class="footer-links">
+      <a href="/app/settings/privacy.html">Privacy</a>
+      <a href="/app/settings/terms.html">Terms</a>
+      <a href="/app/settings/security.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+
+<script src="/public/assets/scripts/config.js"></script>
+<script src="/public/assets/scripts/api.js"></script>
+<script src="/public/assets/scripts/main.js"></script>
+<script src="/public/landing/scripts/landing.js"></script>
+</body>
+</html>
