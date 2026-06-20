@@ -24,8 +24,6 @@
 <meta property="og:url" content="https://dmflowapp.in/">
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://dmflowapp.in/">
-<!-- API config: change content to your backend URL for production -->
-
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,7 +59,7 @@
     </div>
   </div>
 </nav>
-<!-- Mobile nav drawer — OUTSIDE nav so no clipping -->
+<!-- Mobile nav drawer -->
 <div class="nav-mobile-drawer" id="mobileDrawer">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
     <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;">DM<span style="color:#7C3AED;">Flow</span></span>
@@ -88,7 +86,9 @@
   <a href="pages/auth/register.html" class="announce-link">Grab deal →</a>
 </div>
 
-<!-- HERO -->
+<!-- ============================================================ -->
+<!-- 1. HERO -->
+<!-- ============================================================ -->
 <section class="hero">
   <div class="hero-content">
     <div class="hero-badge">
@@ -115,17 +115,12 @@
     </div>
   </div>
   <div class="hero-visual">
-    <!-- Apple iPhone 15 Pro style mockup -->
     <div class="iphone-device">
-      <!-- Phone outer shell with titanium frame -->
       <div class="iphone-shell">
-        <!-- Dynamic Island -->
         <div class="iphone-dynamic-island">
           <div class="iphone-camera"></div>
         </div>
-        <!-- Screen content -->
         <div class="iphone-screen">
-          <!-- Status bar -->
           <div class="iphone-statusbar">
             <span class="iphone-time">9:41</span>
             <div class="iphone-status-icons">
@@ -134,55 +129,47 @@
               <svg width="22" height="9" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#0A0A0F" stroke-opacity="0.35"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#0A0A0F"/><path d="M23 4.5v3a1.5 1.5 0 0 0 0-3z" fill="#0A0A0F" fill-opacity="0.4"/></svg>
             </div>
           </div>
-
-      <!-- Chat header -->
-      <div class="phone-header">
-        <div class="phone-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://i.pravatar.cc/40?img=47" alt="mia.styles" style="width:34px;height:34px;border-radius:50%;object-fit:cover;display:block"></div>
-        <div>
-          <div class="phone-name">mia.styles</div>
-          <div class="phone-sub">Instagram Direct</div>
-        </div>
-      </div>
-      <div class="phone-chat">
-        <div class="msg-in">
-          <div class="bubble-in">Need the LINK please!
-            <svg class="inline-fire" viewBox="0 0 24 24" fill="#ff6b35" width="13" height="13"><path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5 0.67z"/></svg>
-          </div>
-          <div class="msg-time">just now</div>
-        </div>
-        <div class="msg-out">
-          <div class="bubble-out">Hey! Here's the link you requested:</div>
-          <div class="link-card">
-            <div class="link-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </div>
+          <div class="phone-header">
+            <div class="phone-avatar" style="background:none;padding:0;overflow:hidden"><img src="https://i.pravatar.cc/40?img=47" alt="mia.styles" style="width:34px;height:34px;border-radius:50%;object-fit:cover;display:block"></div>
             <div>
-              <div class="link-title">Shop the look</div>
-              <div class="link-url">yourstore.com/look</div>
+              <div class="phone-name">mia.styles</div>
+              <div class="phone-sub">Instagram Direct</div>
             </div>
           </div>
-          <div class="msg-time right">automated · instant</div>
-        </div>
-        <div class="msg-in" style="margin-top:8px">
-          <div class="bubble-in">omg thank you!!
-            <svg viewBox="0 0 24 24" fill="#ff6b9d" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <div class="phone-chat">
+            <div class="msg-in">
+              <div class="bubble-in">Need the LINK please!
+                <svg class="inline-fire" viewBox="0 0 24 24" fill="#ff6b35" width="13" height="13"><path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5 0.67z"/></svg>
+              </div>
+              <div class="msg-time">just now</div>
+            </div>
+            <div class="msg-out">
+              <div class="bubble-out">Hey! Here's the link you requested:</div>
+              <div class="link-card">
+                <div class="link-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                </div>
+                <div>
+                  <div class="link-title">Shop the look</div>
+                  <div class="link-url">yourstore.com/look</div>
+                </div>
+              </div>
+              <div class="msg-time right">automated · instant</div>
+            </div>
+            <div class="msg-in" style="margin-top:8px">
+              <div class="bubble-in">omg thank you!!
+                <svg viewBox="0 0 24 24" fill="#ff6b9d" width="13" height="13"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-        </div><!-- end iphone-screen -->
-
-        <!-- Side buttons -->
         <div class="iphone-btn-right"></div>
         <div class="iphone-btn-left-1"></div>
         <div class="iphone-btn-left-2"></div>
         <div class="iphone-btn-left-3"></div>
-
-        <!-- Home indicator -->
         <div class="iphone-home-indicator"></div>
-      </div><!-- end iphone-shell -->
-
-    </div><!-- end iphone-device -->
+      </div>
+    </div>
   </div>
 </section>
 
@@ -196,10 +183,9 @@
   </div>
 </div>
 
-<!-- META PARTNERSHIP SHOWCASE SECTION -->
+<!-- META SHOWCASE -->
 <section class="meta-showcase-section">
   <div class="meta-showcase-inner">
-    <!-- Left: Headline -->
     <div class="meta-showcase-left">
       <div class="meta-showcase-eyebrow">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="#C8FF00"><circle cx="5" cy="5" r="5"/></svg>
@@ -209,11 +195,8 @@
       <p class="meta-showcase-desc">DMFlow is the only Indian Instagram automation platform with full Meta Business Partner certification. Your account is protected by the same infrastructure Meta uses — not third-party bots.</p>
       <a href="pages/auth/register.html" class="meta-showcase-cta">Connect Securely →</a>
     </div>
-
-    <!-- Center: Logos connection visual -->
     <div class="meta-showcase-center">
       <div class="meta-logos-connector">
-        <!-- DMFlow logo -->
         <div class="msc-logo msc-dmflow">
           <svg width="32" height="32" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="28" height="28" rx="7" fill="#0A0A0F"/>
@@ -221,7 +204,6 @@
           </svg>
           <span>DMFlow</span>
         </div>
-        <!-- Connection line -->
         <div class="msc-connector">
           <div class="msc-line"></div>
           <div class="msc-verified-dot">
@@ -229,7 +211,6 @@
           </div>
           <div class="msc-line"></div>
         </div>
-        <!-- Meta logo -->
         <div class="msc-logo msc-meta">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="32" height="32" rx="8" fill="#1877F2"/>
@@ -238,8 +219,6 @@
           <span>Meta</span>
         </div>
       </div>
-
-      <!-- Badge ring -->
       <div class="msc-trust-badge">
         <div class="msc-badge-inner">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
@@ -247,8 +226,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Right: Badge cards -->
     <div class="meta-showcase-right">
       <div class="msc-badge-card">
         <div class="msc-badge-icon" style="background:#1877F220">
@@ -260,7 +237,6 @@
         </div>
         <div class="msc-badge-check">✓</div>
       </div>
-
       <div class="msc-badge-card">
         <div class="msc-badge-icon" style="background:#0082FB20">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#0082FB"/><path d="M10 10L14 12L10 14V10Z" fill="white"/></svg>
@@ -271,7 +247,6 @@
         </div>
         <div class="msc-badge-check">✓</div>
       </div>
-
       <div class="msc-badge-card">
         <div class="msc-badge-icon" style="background:linear-gradient(135deg,#FFDC8020,#C1358420)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -288,7 +263,6 @@
         </div>
         <div class="msc-badge-check">✓</div>
       </div>
-
       <div class="msc-badge-card">
         <div class="msc-badge-icon" style="background:#22c55e20">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
@@ -303,7 +277,9 @@
   </div>
 </section>
 
-<!-- SOCIAL PROOF STATS (Your Instagram is a Goldmine style) -->
+<!-- ============================================================ -->
+<!-- STATS / PROOF – LIGHT BLUE WITH DOTS -->
+<!-- ============================================================ -->
 <section class="stats-proof-section">
   <div class="section-inner">
     <div class="section-head center">
@@ -386,7 +362,9 @@
   </div>
 </section>
 
-<!-- USE CASES -->
+<!-- ============================================================ -->
+<!-- USE CASES – LIGHT BLUE WITH DOTS -->
+<!-- ============================================================ -->
 <section class="section usecases" id="templates">
   <div class="section-inner">
     <div class="section-head">
@@ -434,8 +412,9 @@
   </div>
 </section>
 
+<!-- ============================================================ -->
 <!-- PRICING -->
-<!-- PRICING -->
+<!-- ============================================================ -->
 <section class="section" id="pricing">
   <div class="section-inner">
     <div class="section-head">
@@ -490,57 +469,158 @@
   </div>
 </section>
 
-<!-- FAQ -->
-<section class="section faq-section" id="faq">
+<!-- ============================================================ -->
+<!-- PRICE COMPARISON (MOVED UP) -->
+<!-- ============================================================ -->
+<section class="price-compare-section">
   <div class="section-inner">
-    <div class="section-head center">
-      <div class="section-label">FAQ</div>
-      <h2 class="section-title">Instagram DM Automation FAQ</h2>
-      <p class="section-sub">Common questions about DMFlow, pricing, and how it works.</p>
+    <div class="price-compare-head">
+      <div class="section-label" style="color:#C8FF00">The Real Cost</div>
+      <h2 class="price-compare-title">THREE <span class="pct-highlight-green">WILDLY DIFFERENT</span> PRICE TAGS.</h2>
+      <p class="price-compare-sub">To handle 300,000 comments — same exact task, three very different bills.</p>
     </div>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What is DMFlow and how does it work?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a">DMFlow connects to your Instagram via Meta's official API. When someone comments a keyword on your post, DMFlow automatically sends them a DM with your message, link, or resource — instantly, 24/7.</div>
+
+    <div class="price-compare-grid">
+      <!-- Left: viral reel mockup -->
+      <div class="price-reel-mockup">
+        <div class="price-reel-phone">
+          <div class="price-reel-vid">
+            <div class="price-reel-stats">
+              <div class="price-reel-stat"><div class="price-reel-num">46.2M</div><div class="price-reel-lbl">VIEWS</div></div>
+              <div class="price-reel-divider"></div>
+              <div class="price-reel-stat"><div class="price-reel-num">322K</div><div class="price-reel-lbl">COMMENTS</div></div>
+            </div>
+            <div class="price-reel-play">▶</div>
+            <div class="price-reel-label">Your viral reel</div>
+          </div>
+          <div class="price-reel-meta">
+            <div class="price-reel-avatar">V</div>
+            <div class="price-reel-creator">
+              <div class="price-reel-cname">Your Brand</div>
+              <div class="price-reel-csub">When it goes viral 🚀</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Is DMFlow safe for my Instagram account?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a">Yes. DMFlow is a certified Meta Tech Provider using Instagram's official Graph API. No bots, no third-party scraping. Your account is fully protected by Meta's official permissions system.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Do I need a business or creator Instagram account?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a">Yes — Instagram's API requires a Creator or Business account. Personal accounts cannot be connected. Switching is free and takes about 30 seconds in your Instagram settings.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Can I collect emails through Instagram DMs?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a">Absolutely. On Pro and Agency plans, you can ask users to drop their email in DMs before receiving a link or resource. All emails are stored in your Contacts dashboard and can be exported.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What's the difference between DMFlow and ManyChat?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="faq-a">DMFlow is built specifically for Instagram creators and brands. It's simpler, faster to set up, and more affordable. ManyChat covers multiple platforms with a steeper learning curve. If Instagram is your main channel, DMFlow wins.</div>
+
+      <!-- Right: price cards -->
+      <div class="price-compare-cards">
+        <div class="pcc-label">THE COST TO HANDLE 300K COMMENTS:</div>
+        <div class="pcc-card pcc-winner">
+          <div class="pcc-brand">
+            <div class="pcc-logo dmflow">⚡</div>
+            <div>
+              <div class="pcc-name">DMFLOW</div>
+              <div class="pcc-pricing-type">FLAT-RATE · UNLIMITED</div>
+            </div>
+          </div>
+          <div class="pcc-price pcc-green">₹199<span>/mo</span></div>
+        </div>
+        <div class="pcc-card">
+          <div class="pcc-brand">
+            <div class="pcc-logo manychat">M</div>
+            <div>
+              <div class="pcc-name">MANYCHAT</div>
+              <div class="pcc-pricing-type">PER CONTACT</div>
+            </div>
+          </div>
+          <div class="pcc-price pcc-red">₹2600<span>/mo</span></div>
+        </div>
+        <div class="pcc-card">
+          <div class="pcc-brand">
+            <div class="pcc-logo linkdm">L</div>
+            <div>
+              <div class="pcc-name">LINKDM</div>
+              <div class="pcc-pricing-type">PER MESSAGE</div>
+            </div>
+          </div>
+          <div class="pcc-price pcc-yellow">₹1400<span>/mo</span></div>
+        </div>
+        <div class="pcc-saving">
+          ★ Save up to <strong>₹1,20,000/year</strong> vs ManyChat. DMFlow = always flat-rate.
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════
-     TRUSTED CREATORS WALL
-═══════════════════════════════════════════════════════════ -->
+<!-- ============================================================ -->
+<!-- TESTIMONIALS (MOVED UP) -->
+<!-- ============================================================ -->
+<section class="testimonials-section">
+  <div class="section-inner">
+    <div class="section-head center">
+      <div class="section-label">Real Results</div>
+      <h2 class="section-title">Creators love<br><span class="accent">DMFlow.</span></h2>
+    </div>
+    <div class="twall-grid">
+      <div class="twall-card twall-featured">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"Set it up in literally 2 minutes. By the time I posted my reel and went to get chai, my DM inbox had 47 auto-replies sitting there. Mind blown."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:linear-gradient(135deg,#7C3AED,#C8FF00);color:#0A0A0F">P</div>
+          <div>
+            <div class="twall-aname">Priya Mehta</div>
+            <div class="twall-asub">Fashion Creator · Mumbai · 450K followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"My affiliate link clicks went up 3x in the first week. Comments → DMs → clicks. It's a machine."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#C8FF00;color:#0A0A0F">A</div>
+          <div>
+            <div class="twall-aname">Arjun V.</div>
+            <div class="twall-asub">Tech Reviewer · Bangalore · 1.2M followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"Switched from ManyChat — saved ₹80,000 last year and my account is healthier than ever. Zero shadowban issues."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#7C3AED;color:#fff">S</div>
+          <div>
+            <div class="twall-aname">Sneha R.</div>
+            <div class="twall-asub">Business Coach · Delhi · 280K followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"Manage 12 Instagram accounts for clients. DMFlow's agency plan saved our entire ops team 15 hours a week."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#1f4037;color:#C8FF00">K</div>
+          <div>
+            <div class="twall-aname">Karan Shah</div>
+            <div class="twall-asub">Social Media Agency · Hyderabad</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card">
+        <div class="twall-stars">★★★★★</div>
+        <p class="twall-quote">"I sell handmade jewelry. Every time I post a reel with the word 'SHOP', DMFlow sends the product link. I wake up to orders. Actual magic."</p>
+        <div class="twall-author">
+          <div class="twall-avatar" style="background:#c94b4b;color:#fff">N</div>
+          <div>
+            <div class="twall-aname">Nisha Kapoor</div>
+            <div class="twall-asub">E-commerce · Jaipur · 85K followers</div>
+          </div>
+        </div>
+      </div>
+      <div class="twall-card twall-lime">
+        <div class="twall-lime-stat">₹3.2L</div>
+        <div class="twall-lime-label">Revenue attributed to DMFlow automations in 90 days</div>
+        <div class="twall-lime-author">Fitness Brand · Chennai</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- CREATORS WALL (MOVED UP) – FULL UNEDITED CONTENT -->
+<!-- ============================================================ -->
 <section class="creators-wall-section">
   <div class="section-inner">
     <div class="section-head center">
@@ -847,161 +927,13 @@
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════════════════════════
-     PRICE COMPARISON — THREE WILDLY DIFFERENT PRICE TAGS
-═══════════════════════════════════════════════════════════ -->
-<!-- PRICE COMPARISON — THREE WILDLY DIFFERENT PRICE TAGS -->
-<section class="price-compare-section">
-  <div class="section-inner">
-    <div class="price-compare-head">
-      <div class="section-label" style="color:#C8FF00">The Real Cost</div>
-      <h2 class="price-compare-title">THREE <span class="pct-highlight-green">WILDLY DIFFERENT</span> PRICE TAGS.</h2>
-      <p class="price-compare-sub">To handle 300,000 comments — same exact task, three very different bills.</p>
-    </div>
-
-    <div class="price-compare-grid">
-      <!-- Left: viral reel mockup -->
-      <div class="price-reel-mockup">
-        <div class="price-reel-phone">
-          <div class="price-reel-vid">
-            <div class="price-reel-stats">
-              <div class="price-reel-stat"><div class="price-reel-num">46.2M</div><div class="price-reel-lbl">VIEWS</div></div>
-              <div class="price-reel-divider"></div>
-              <div class="price-reel-stat"><div class="price-reel-num">322K</div><div class="price-reel-lbl">COMMENTS</div></div>
-            </div>
-            <div class="price-reel-play">▶</div>
-            <div class="price-reel-label">Your viral reel</div>
-          </div>
-          <div class="price-reel-meta">
-            <div class="price-reel-avatar">V</div>
-            <div class="price-reel-creator">
-              <div class="price-reel-cname">Your Brand</div>
-              <div class="price-reel-csub">When it goes viral 🚀</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: price cards -->
-      <div class="price-compare-cards">
-        <div class="pcc-label">THE COST TO HANDLE 300K COMMENTS:</div>
-        <div class="pcc-card pcc-winner">
-          <div class="pcc-brand">
-            <div class="pcc-logo dmflow">⚡</div>
-            <div>
-              <div class="pcc-name">DMFLOW</div>
-              <div class="pcc-pricing-type">FLAT-RATE · UNLIMITED</div>
-            </div>
-          </div>
-          <div class="pcc-price pcc-green">₹199<span>/mo</span></div>
-        </div>
-        <div class="pcc-card">
-          <div class="pcc-brand">
-            <div class="pcc-logo manychat">M</div>
-            <div>
-              <div class="pcc-name">MANYCHAT</div>
-              <div class="pcc-pricing-type">PER CONTACT</div>
-            </div>
-          </div>
-          <div class="pcc-price pcc-red">₹2600<span>/mo</span></div>
-        </div>
-        <div class="pcc-card">
-          <div class="pcc-brand">
-            <div class="pcc-logo linkdm">L</div>
-            <div>
-              <div class="pcc-name">LINKDM</div>
-              <div class="pcc-pricing-type">PER MESSAGE</div>
-            </div>
-          </div>
-          <div class="pcc-price pcc-yellow">₹1400<span>/mo</span></div>
-        </div>
-        <div class="pcc-saving">
-          ★ Save up to <strong>₹1,20,000/year</strong> vs ManyChat. DMFlow = always flat-rate.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════════════════
-     HIDDEN COST / SHADOWBAN SAFETY SECTION
-═══════════════════════════════════════════════════════════ -->
-<section class="shadowban-section">
-  <div class="section-inner">
-    <div class="shadowban-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2L1 21h22L12 2zm0 3.5l8.5 15.5H3.5L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
-      THE HIDDEN COST
-    </div>
-    <h2 class="shadowban-title">IT'S NOT JUST ABOUT <span class="shadowban-hl-yellow">PRICING</span>.<br>IT'S ABOUT <span class="shadowban-hl-green">STAYING SAFE</span> FROM SHADOWBANS.</h2>
-
-    <div class="shadowban-grid">
-      <!-- Testimonial card -->
-      <div class="shadowban-testimonial">
-        <div class="shadowban-quote">"</div>
-        <p>I used ManyChat when one of my reels went viral, and suddenly I was looking at paying thousands of dollars. Honestly, <strong>the money wasn't even the biggest issue.</strong></p>
-        <p>The real problem was that after using ManyChat, <strong>my next few videos just wouldn't take off.</strong> It felt like I was shadowbanned or something.</p>
-        <p>With DMFlow, though, <strong>my reels keep going viral consistently</strong>, even while automations are running. That's what surprised me the most. I'm genuinely curious what you guys are doing differently behind the scenes.</p>
-        <div class="shadowban-author">
-          <div class="shadowban-avatar">R</div>
-          <div>
-            <div class="shadowban-aname">Rahul K.</div>
-            <div class="shadowban-asub">Content Creator · 2.1M Followers</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Why DMFlow is safe cards -->
-      <div class="shadowban-safe-cards">
-        <div class="shadowban-safe-title">Why DMFlow keeps you safe</div>
-        <div class="shadowban-safe-card">
-          <div class="shadowban-safe-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-          </div>
-          <div>
-            <div class="shadowban-safe-h">Official Meta API Only</div>
-            <div class="shadowban-safe-p">Zero bots, zero scraping. Every DM goes through Instagram's own infrastructure — exactly how Meta wants it.</div>
-          </div>
-        </div>
-        <div class="shadowban-safe-card">
-          <div class="shadowban-safe-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div>
-            <div class="shadowban-safe-h">Smart Rate Limiting</div>
-            <div class="shadowban-safe-p">Built-in compliance engine caps hourly & daily sends. Never triggers spam filters, never gets your account flagged.</div>
-          </div>
-        </div>
-        <div class="shadowban-safe-card">
-          <div class="shadowban-safe-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-          </div>
-          <div>
-            <div class="shadowban-safe-h">Duplicate Message Blocking</div>
-            <div class="shadowban-safe-p">Never sends the same DM twice to the same user. Keeps your engagement authentic and your account healthy.</div>
-          </div>
-        </div>
-        <div class="shadowban-safe-card">
-          <div class="shadowban-safe-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9a9 9 0 0 1-9-9 9 9 0 0 1 9-9c1.21 0 2.37.24 3.42.67"/><path d="M22 4L12 14.01l-3-3"/></svg>
-          </div>
-          <div>
-            <div class="shadowban-safe-h">Monthly Cap Enforcement</div>
-            <div class="shadowban-safe-p">Auto-pauses if monthly limits approach. Your reach and virality stay fully intact — always.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════════════════════
-     DEVICE SHOWCASE — WORKS ON ANY SCREEN
-═══════════════════════════════════════════════════════════ -->
+<!-- ============================================================ -->
+<!-- DEVICE SHOWCASE (MOVED UP, WITH 3D BACKGROUND) -->
+<!-- ============================================================ -->
 <section class="device-showcase-section">
-  <div class="section-inner">
+  <!-- 3D Background image of people working on laptops -->
+  <div class="device-bg-overlay"></div>
+  <div class="section-inner" style="position:relative;z-index:2;">
     <div class="section-head center">
       <div class="section-label">Full Platform</div>
       <h2 class="section-title">Manage everything.<br><span class="accent">Anywhere.</span></h2>
@@ -1017,7 +949,6 @@
             <div class="laptop-url">app.dmflowapp.in · Dashboard</div>
           </div>
           <div class="laptop-content">
-            <!-- Mini dashboard inside laptop -->
             <div class="ldc-sidebar">
               <div class="ldc-logo">⚡ DM</div>
               <div class="ldc-nav-item ldc-active">Dashboard</div>
@@ -1143,776 +1074,130 @@
   </div>
 </section>
 
-
-<!-- ═══════════════════════════════════════════════════════════
-     TESTIMONIALS WALL
-═══════════════════════════════════════════════════════════ -->
-<section class="testimonials-section">
+<!-- ============================================================ -->
+<!-- FAQ (MOVED DOWN) -->
+<!-- ============================================================ -->
+<section class="section faq-section" id="faq">
   <div class="section-inner">
     <div class="section-head center">
-      <div class="section-label">Real Results</div>
-      <h2 class="section-title">Creators love<br><span class="accent">DMFlow.</span></h2>
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Instagram DM Automation FAQ</h2>
+      <p class="section-sub">Common questions about DMFlow, pricing, and how it works.</p>
     </div>
-    <div class="twall-grid">
-      <div class="twall-card twall-featured">
-        <div class="twall-stars">★★★★★</div>
-        <p class="twall-quote">"Set it up in literally 2 minutes. By the time I posted my reel and went to get chai, my DM inbox had 47 auto-replies sitting there. Mind blown."</p>
-        <div class="twall-author">
-          <div class="twall-avatar" style="background:linear-gradient(135deg,#7C3AED,#C8FF00);color:#0A0A0F">P</div>
-          <div>
-            <div class="twall-aname">Priya Mehta</div>
-            <div class="twall-asub">Fashion Creator · Mumbai · 450K followers</div>
-          </div>
-        </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What is DMFlow and how does it work?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">DMFlow connects to your Instagram via Meta's official API. When someone comments a keyword on your post, DMFlow automatically sends them a DM with your message, link, or resource — instantly, 24/7.</div>
       </div>
-      <div class="twall-card">
-        <div class="twall-stars">★★★★★</div>
-        <p class="twall-quote">"My affiliate link clicks went up 3x in the first week. Comments → DMs → clicks. It's a machine."</p>
-        <div class="twall-author">
-          <div class="twall-avatar" style="background:#C8FF00;color:#0A0A0F">A</div>
-          <div>
-            <div class="twall-aname">Arjun V.</div>
-            <div class="twall-asub">Tech Reviewer · Bangalore · 1.2M followers</div>
-          </div>
-        </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is DMFlow safe for my Instagram account?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Yes. DMFlow is a certified Meta Tech Provider using Instagram's official Graph API. No bots, no third-party scraping. Your account is fully protected by Meta's official permissions system.</div>
       </div>
-      <div class="twall-card">
-        <div class="twall-stars">★★★★★</div>
-        <p class="twall-quote">"Switched from ManyChat — saved ₹80,000 last year and my account is healthier than ever. Zero shadowban issues."</p>
-        <div class="twall-author">
-          <div class="twall-avatar" style="background:#7C3AED;color:#fff">S</div>
-          <div>
-            <div class="twall-aname">Sneha R.</div>
-            <div class="twall-asub">Business Coach · Delhi · 280K followers</div>
-          </div>
-        </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do I need a business or creator Instagram account?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Yes — Instagram's API requires a Creator or Business account. Personal accounts cannot be connected. Switching is free and takes about 30 seconds in your Instagram settings.</div>
       </div>
-      <div class="twall-card">
-        <div class="twall-stars">★★★★★</div>
-        <p class="twall-quote">"Manage 12 Instagram accounts for clients. DMFlow's agency plan saved our entire ops team 15 hours a week."</p>
-        <div class="twall-author">
-          <div class="twall-avatar" style="background:#1f4037;color:#C8FF00">K</div>
-          <div>
-            <div class="twall-aname">Karan Shah</div>
-            <div class="twall-asub">Social Media Agency · Hyderabad</div>
-          </div>
-        </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Can I collect emails through Instagram DMs?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">Absolutely. On Pro and Agency plans, you can ask users to drop their email in DMs before receiving a link or resource. All emails are stored in your Contacts dashboard and can be exported.</div>
       </div>
-      <div class="twall-card">
-        <div class="twall-stars">★★★★★</div>
-        <p class="twall-quote">"I sell handmade jewelry. Every time I post a reel with the word 'SHOP', DMFlow sends the product link. I wake up to orders. Actual magic."</p>
-        <div class="twall-author">
-          <div class="twall-avatar" style="background:#c94b4b;color:#fff">N</div>
-          <div>
-            <div class="twall-aname">Nisha Kapoor</div>
-            <div class="twall-asub">E-commerce · Jaipur · 85K followers</div>
-          </div>
-        </div>
-      </div>
-      <div class="twall-card twall-lime">
-        <div class="twall-lime-stat">₹3.2L</div>
-        <div class="twall-lime-label">Revenue attributed to DMFlow automations in 90 days</div>
-        <div class="twall-lime-author">Fitness Brand · Chennai</div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What's the difference between DMFlow and ManyChat?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a">DMFlow is built specifically for Instagram creators and brands. It's simpler, faster to set up, and more affordable. ManyChat covers multiple platforms with a steeper learning curve. If Instagram is your main channel, DMFlow wins.</div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ============================================================ -->
+<!-- SHADOWBAN – LIGHT BLUE WITH DOTS -->
+<!-- ============================================================ -->
+<section class="shadowban-section">
+  <div class="section-inner">
+    <div class="shadowban-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2L1 21h22L12 2zm0 3.5l8.5 15.5H3.5L12 5.5zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+      THE HIDDEN COST
+    </div>
+    <h2 class="shadowban-title">IT'S NOT JUST ABOUT <span class="shadowban-hl-yellow">PRICING</span>.<br>IT'S ABOUT <span class="shadowban-hl-green">STAYING SAFE</span> FROM SHADOWBANS.</h2>
 
-<!-- STYLES for all new sections -->
-<style>
-/* ──────────────────────────────────────────────────────────
-   CREATORS WALL
-────────────────────────────────────────────────────────── */
-.creators-wall-section{padding:80px 0 60px;background:#fff;overflow:hidden}
-.creators-wall-section .section-head{margin-bottom:48px}
-.cwall-track-wrap{width:100%;overflow:hidden;mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%)}
-.cwall-track{display:flex;gap:16px;width:max-content}
-.cwall-ltr{animation:scroll-ltr 40s linear infinite}
-.cwall-rtl{animation:scroll-rtl 38s linear infinite}
-@keyframes scroll-ltr{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes scroll-rtl{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
-.cwall-card{flex-shrink:0;width:180px;border-radius:16px;overflow:hidden;background:#f8f8f8;border:1px solid #eee;transition:transform .3s;cursor:default}
-.cwall-card:hover{transform:translateY(-4px)}
-.cwall-thumb{position:relative;width:100%;height:160px;overflow:hidden}
-.cwall-thumb img{width:100%;height:100%;object-fit:cover}
-.cwall-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.7))}
-.cwall-niche{position:absolute;bottom:8px;left:8px;font-size:10px;font-weight:700;color:#fff;background:rgba(0,0,0,0.5);padding:2px 8px;border-radius:20px;letter-spacing:.5px}
-.cwall-info{padding:10px 12px 12px}
-.cwall-name{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:#0A0A0F;margin-bottom:4px}
-.cwall-followers{display:flex;align-items:center;gap:4px;font-size:11px;color:#666;font-weight:600}
-@media(max-width:768px){.cwall-card{width:150px}.cwall-thumb{height:130px}}
+    <div class="shadowban-grid">
+      <!-- Testimonial card -->
+      <div class="shadowban-testimonial">
+        <div class="shadowban-quote">"</div>
+        <p>I used ManyChat when one of my reels went viral, and suddenly I was looking at paying thousands of dollars. Honestly, <strong>the money wasn't even the biggest issue.</strong></p>
+        <p>The real problem was that after using ManyChat, <strong>my next few videos just wouldn't take off.</strong> It felt like I was shadowbanned or something.</p>
+        <p>With DMFlow, though, <strong>my reels keep going viral consistently</strong>, even while automations are running. That's what surprised me the most. I'm genuinely curious what you guys are doing differently behind the scenes.</p>
+        <div class="shadowban-author">
+          <div class="shadowban-avatar">R</div>
+          <div>
+            <div class="shadowban-aname">Rahul K.</div>
+            <div class="shadowban-asub">Content Creator · 2.1M Followers</div>
+          </div>
+        </div>
+      </div>
 
-/* ──────────────────────────────────────────────────────────
-   PRICE COMPARISON
-────────────────────────────────────────────────────────── */
-.price-compare-section{padding:90px 0;background:#0A0A0F;position:relative;overflow:hidden}
-.price-compare-section::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(200,255,0,0.06) 0%,transparent 70%);pointer-events:none}
-.price-compare-head{text-align:center;margin-bottom:56px}
-.price-compare-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:900;color:#fff;line-height:1.1;margin:12px 0 16px;text-transform:uppercase;letter-spacing:-1px}
-.pct-highlight-green{background:#C8FF00;color:#0A0A0F;padding:4px 16px;border-radius:6px;display:inline-block}
-.price-compare-sub{color:#888;font-size:16px;max-width:480px;margin:0 auto}
-.price-compare-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:center;max-width:960px;margin:0 auto}
-@media(max-width:768px){.price-compare-grid{grid-template-columns:1fr;gap:32px}}
-/* Reel mockup */
-.price-reel-mockup{display:flex;justify-content:center}
-.price-reel-phone{width:240px;background:#111;border-radius:20px;padding:16px;box-shadow:0 0 60px rgba(200,255,0,0.15),0 40px 80px rgba(0,0,0,0.6)}
-.price-reel-vid{background:linear-gradient(160deg,#1a1a1a,#0d0d0d);border-radius:12px;padding:16px;margin-bottom:12px;position:relative;min-height:160px;display:flex;flex-direction:column;justify-content:space-between}
-.price-reel-stats{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,0.05);border-radius:8px;padding:10px 14px}
-.price-reel-stat{text-align:center}
-.price-reel-num{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:900;color:#fff}
-.price-reel-lbl{font-size:9px;color:#888;letter-spacing:1px;text-transform:uppercase}
-.price-reel-divider{width:1px;height:30px;background:#333}
-.price-reel-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.price-reel-label{font-size:11px;color:#666;text-align:center;padding-top:8px}
-.price-reel-meta{display:flex;align-items:center;gap:10px}
-.price-reel-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#C8FF00);color:#0A0A0F;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.price-reel-cname{font-size:13px;font-weight:700;color:#fff}
-.price-reel-csub{font-size:11px;color:#666}
-/* Price cards */
-.price-compare-cards{display:flex;flex-direction:column;gap:16px}
-.pcc-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#555;font-weight:700;margin-bottom:4px}
-.pcc-card{background:#111;border:1px solid #1e1e1e;border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:border-color .3s}
-.pcc-winner{border-color:#C8FF00;background:linear-gradient(135deg,#111,#141a00)}
-.pcc-brand{display:flex;align-items:center;gap:12px}
-.pcc-logo{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex-shrink:0}
-.pcc-logo.dmflow{background:#C8FF00}
-.pcc-logo.manychat{background:#ff6b9d;color:#fff}
-.pcc-logo.linkdm{background:#f59e0b;color:#fff}
-.pcc-name{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:800;color:#fff;letter-spacing:.5px}
-.pcc-pricing-type{font-size:10px;color:#555;letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-.pcc-price{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:900;white-space:nowrap}
-.pcc-price span{font-size:13px;font-weight:500;opacity:0.7}
-.pcc-green{color:#C8FF00}
-.pcc-red{color:#ff6b6b}
-.pcc-yellow{color:#f59e0b}
-.pcc-saving{background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.2);border-radius:10px;padding:12px 16px;font-size:13px;color:#aaa;display:flex;align-items:center;gap:8px}
-.pcc-saving strong{color:#C8FF00}
+      <!-- Why DMFlow is safe cards -->
+      <div class="shadowban-safe-cards">
+        <div class="shadowban-safe-title">Why DMFlow keeps you safe</div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Official Meta API Only</div>
+            <div class="shadowban-safe-p">Zero bots, zero scraping. Every DM goes through Instagram's own infrastructure — exactly how Meta wants it.</div>
+          </div>
+        </div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Smart Rate Limiting</div>
+            <div class="shadowban-safe-p">Built-in compliance engine caps hourly & daily sends. Never triggers spam filters, never gets your account flagged.</div>
+          </div>
+        </div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Duplicate Message Blocking</div>
+            <div class="shadowban-safe-p">Never sends the same DM twice to the same user. Keeps your engagement authentic and your account healthy.</div>
+          </div>
+        </div>
+        <div class="shadowban-safe-card">
+          <div class="shadowban-safe-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C8FF00" stroke-width="2" width="20" height="20"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9a9 9 0 0 1-9-9 9 9 0 0 1 9-9c1.21 0 2.37.24 3.42.67"/><path d="M22 4L12 14.01l-3-3"/></svg>
+          </div>
+          <div>
+            <div class="shadowban-safe-h">Monthly Cap Enforcement</div>
+            <div class="shadowban-safe-p">Auto-pauses if monthly limits approach. Your reach and virality stay fully intact — always.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-/* ──────────────────────────────────────────────────────────
-   SHADOWBAN SECTION
-────────────────────────────────────────────────────────── */
-.shadowban-section{padding:90px 0;background:#fff;position:relative}
-.shadowban-badge{display:inline-flex;align-items:center;gap:8px;background:#fef3c7;border:1px solid #f59e0b;color:#92400e;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:8px 16px;border-radius:8px;margin-bottom:24px}
-.shadowban-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(22px,4vw,40px);font-weight:900;color:#0A0A0F;line-height:1.15;margin-bottom:48px;text-transform:uppercase;letter-spacing:-0.5px}
-.shadowban-hl-yellow{background:#fde047;color:#0A0A0F;padding:2px 12px;border-radius:4px;font-style:italic}
-.shadowban-hl-green{background:#4ade80;color:#052e16;padding:2px 12px;border-radius:4px}
-.shadowban-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-@media(max-width:768px){.shadowban-grid{grid-template-columns:1fr}}
-.shadowban-testimonial{background:#fafafa;border:1px solid #f0f0f0;border-radius:20px;padding:32px;position:relative}
-.shadowban-quote{font-size:60px;line-height:0.8;color:#e5e7eb;font-family:Georgia,serif;position:absolute;top:20px;left:24px}
-.shadowban-testimonial p{font-size:15px;line-height:1.7;color:#444;margin-bottom:16px;padding-left:8px}
-.shadowban-testimonial p:first-of-type{margin-top:24px}
-.shadowban-author{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid #eee}
-.shadowban-avatar{width:40px;height:40px;border-radius:50%;background:#7C3AED;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.shadowban-aname{font-weight:700;color:#0A0A0F;font-size:14px}
-.shadowban-asub{font-size:12px;color:#888;margin-top:2px}
-.shadowban-safe-title{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800;color:#0A0A0F;margin-bottom:20px}
-.shadowban-safe-card{display:flex;gap:14px;align-items:flex-start;padding:18px;background:#0A0A0F;border-radius:14px;margin-bottom:12px}
-.shadowban-safe-icon{width:40px;height:40px;border-radius:10px;background:rgba(200,255,0,0.1);border:1px solid rgba(200,255,0,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.shadowban-safe-h{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
-.shadowban-safe-p{font-size:12px;color:#666;line-height:1.5}
-
-/* ──────────────────────────────────────────────────────────
-   DEVICE SHOWCASE
-────────────────────────────────────────────────────────── */
-.device-showcase-section{padding:90px 0;background:#0A0A0F;overflow:hidden;position:relative}
-.device-showcase-section::before{content:'';position:absolute;bottom:-150px;left:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);pointer-events:none}
-.device-showcase-wrap{display:flex;align-items:flex-end;justify-content:center;gap:32px;margin:56px 0 48px;position:relative}
-@media(max-width:900px){.device-showcase-wrap{flex-direction:column;align-items:center}}
-/* Laptop */
-.device-laptop{position:relative;z-index:2}
-.laptop-screen{width:560px;background:#111;border-radius:16px 16px 0 0;padding:0;overflow:hidden;box-shadow:0 0 0 1px #222,0 40px 80px rgba(0,0,0,0.8),0 0 60px rgba(200,255,0,0.08)}
-@media(max-width:640px){.laptop-screen{width:320px}}
-.laptop-chrome{background:#1a1a1a;padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #222}
-.laptop-dots{display:flex;gap:5px}
-.laptop-dots span{width:9px;height:9px;border-radius:50%;background:#333}
-.laptop-dots span:nth-child(1){background:#ff5f57}
-.laptop-dots span:nth-child(2){background:#febc2e}
-.laptop-dots span:nth-child(3){background:#28c840}
-.laptop-url{font-size:10px;color:#555;flex:1;text-align:center}
-.laptop-content{display:flex;height:280px}
-@media(max-width:640px){.laptop-content{height:200px}}
-.ldc-sidebar{width:100px;background:#0d0d0d;border-right:1px solid #1e1e1e;padding:16px 10px;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
-@media(max-width:640px){.ldc-sidebar{width:70px;padding:10px 6px}}
-.ldc-logo{font-size:12px;font-weight:900;color:#C8FF00;margin-bottom:12px;letter-spacing:1px}
-@media(max-width:640px){.ldc-logo{font-size:10px}}
-.ldc-nav-item{font-size:10px;color:#555;padding:6px 8px;border-radius:6px;cursor:default;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:640px){.ldc-nav-item{font-size:8px;padding:4px 4px}}
-.ldc-active{background:rgba(200,255,0,0.1);color:#C8FF00}
-.ldc-main{flex:1;padding:16px;overflow:hidden;background:#111}
-@media(max-width:640px){.ldc-main{padding:10px}}
-.ldc-header{font-size:13px;font-weight:700;color:#fff;margin-bottom:14px}
-@media(max-width:640px){.ldc-header{font-size:11px;margin-bottom:8px}}
-.ldc-stats-row{display:flex;gap:10px;margin-bottom:14px}
-.ldc-stat{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:8px 12px;flex:1}
-.ldc-stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:800}
-@media(max-width:640px){.ldc-stat-num{font-size:12px}}
-.ldc-stat-lbl{font-size:9px;color:#555;margin-top:2px}
-.ldc-chart-area{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:10px;margin-bottom:10px}
-.ldc-chart-label{font-size:9px;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
-.ldc-bars{display:flex;gap:4px;align-items:flex-end;height:50px}
-@media(max-width:640px){.ldc-bars{height:35px}}
-.ldc-bar{flex:1;background:#1e1e1e;border-radius:3px 3px 0 0;display:flex;align-items:flex-end}
-.ldc-bar-fill{width:100%;border-radius:3px 3px 0 0;transition:height .3s}
-.ldc-bar-today .ldc-bar-fill{box-shadow:0 0 8px rgba(200,255,0,0.6)}
-.ldc-bar-today-lbl{font-size:8px;color:#C8FF00;text-align:right;margin-top:4px}
-.ldc-auto-row{display:flex;gap:8px}
-.ldc-auto-card{flex:1;background:#0d0d0d;border:1px solid #1e1e1e;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:6px;overflow:hidden}
-.ldc-auto-status{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;box-shadow:0 0 6px #22c55e}
-.ldc-auto-name{font-size:9px;color:#aaa;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ldc-auto-count{font-size:9px;color:#555;flex-shrink:0;white-space:nowrap}
-@media(max-width:640px){.ldc-auto-row{display:none}}
-.laptop-base{background:#1a1a1a;height:14px;border-radius:0 0 4px 4px;position:relative;margin:0 20px}
-.laptop-stand{width:100px;height:6px;background:#222;border-radius:0 0 8px 8px;margin:0 auto}
-/* Mobile */
-.device-mobile{position:relative;z-index:3;margin-bottom:20px}
-.mobile-screen{width:200px;background:#f5f5f5;border-radius:36px;padding:14px 14px 20px;box-shadow:0 0 0 8px #1a1a1a,0 0 0 10px #222,0 40px 60px rgba(0,0,0,0.7)}
-@media(max-width:900px){.mobile-screen{width:240px}}
-.mobile-status-bar{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#333;font-weight:600;margin-bottom:8px;padding:0 2px}
-.mobile-app-header{font-family:'Bricolage Grotesque',sans-serif;font-size:14px;font-weight:800;color:#0A0A0F;display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.mobile-notif{background:#0A0A0F;border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.mobile-notif-icon{width:28px;height:28px;background:#C8FF00;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.mobile-notif-title{font-size:11px;font-weight:700;color:#fff}
-.mobile-notif-sub{font-size:9px;color:#666;margin-top:1px}
-.mobile-stat-cards{display:flex;gap:8px;margin-bottom:10px}
-.mobile-stat-card{flex:1;border-radius:10px;padding:10px 8px;text-align:center}
-.mobile-stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:900}
-.mobile-stat-lbl{font-size:9px;margin-top:2px;opacity:0.7}
-.mobile-recent-label{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px}
-.mobile-activity{display:flex;flex-direction:column;gap:6px}
-.mobile-act-item{display:flex;align-items:flex-start;gap:6px;font-size:9px;color:#444;line-height:1.3}
-.mobile-act-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:2px}
-.mobile-act-text strong{color:#0A0A0F}
-.mobile-home-bar{width:60px;height:4px;background:#ddd;border-radius:2px;margin:8px auto 0}
-/* Device chips */
-.device-feature-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
-.device-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:8px 16px;font-size:12px;color:#aaa;font-weight:500;transition:all .3s}
-.device-chip:hover{background:rgba(200,255,0,0.08);border-color:rgba(200,255,0,0.2);color:#C8FF00}
-
-/* ──────────────────────────────────────────────────────────
-   TESTIMONIALS WALL
-────────────────────────────────────────────────────────── */
-.testimonials-section{padding:90px 0;background:#f8f8f8}
-.twall-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
-@media(max-width:900px){.twall-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.twall-grid{grid-template-columns:1fr}}
-.twall-card{background:#fff;border:1px solid #eee;border-radius:20px;padding:28px;transition:transform .3s,box-shadow .3s}
-.twall-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.08)}
-.twall-featured{background:#0A0A0F;border-color:#0A0A0F;grid-column:1/-1}
-@media(max-width:600px){.twall-featured{grid-column:1}}
-.twall-featured .twall-stars{color:#C8FF00}
-.twall-featured .twall-quote{color:#ccc}
-.twall-featured .twall-aname{color:#fff}
-.twall-featured .twall-asub{color:#666}
-.twall-stars{color:#f59e0b;font-size:14px;letter-spacing:2px;margin-bottom:14px}
-.twall-quote{font-size:15px;line-height:1.65;color:#444;margin-bottom:24px;font-style:italic}
-.twall-author{display:flex;align-items:center;gap:10px}
-.twall-avatar{width:36px;height:36px;border-radius:50%;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.twall-aname{font-size:14px;font-weight:700;color:#0A0A0F}
-.twall-asub{font-size:11px;color:#888;margin-top:2px}
-.twall-lime{background:linear-gradient(135deg,#C8FF00,#a8e600);border-color:transparent;display:flex;flex-direction:column;justify-content:center;text-align:center}
-.twall-lime-stat{font-family:'Bricolage Grotesque',sans-serif;font-size:52px;font-weight:900;color:#0A0A0F;line-height:1}
-.twall-lime-label{font-size:14px;color:#1a2200;margin:12px 0 8px;font-weight:600;line-height:1.4}
-.twall-lime-author{font-size:12px;color:#3a5200}
-
-/* ═══════════════════════════════════════
-   SECTION-BY-SECTION BACKGROUND COLOURS
-═══════════════════════════════════════ */
-
-/* Hero — clean white */
-      section.hero { background-color:#e0f2fe; background-image:radial-gradient(circle, #93c5fd 1px, transparent 1px); background-size:24px 24px; }
-
-/* Logos strip — stays as-is (light grey) */
-
-/* Meta showcase — stays dark (already set) */
-
-/* Stats/proof section — dark charcoal */
-section.stats-proof-section { background: #0A0A0F; }
-section.stats-proof-section .section-label { color: #C8FF00; }
-section.stats-proof-section .section-title { color: #fff; }
-section.stats-proof-section .section-sub { color: #aaa; }
-
-/* How it works — clean white */
-section.section#features { background: #ffffff; }
-
-/* Use cases — green-yellow WITH diagonal stripe texture */
-section.section.usecases {
-  background-color: #C8FF00;
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 6px,
-      rgba(0,0,0,0.05) 6px,
-      rgba(0,0,0,0.05) 7px
-    );
-  position: relative;
-}
-section.section.usecases::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(200,255,0,0.35) 0%, rgba(168,230,0,0.45) 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-section.section.usecases > * { position: relative; z-index: 1; }
-section.section.usecases .section-inner { position: relative; z-index: 1; }
-section.section.usecases .section-label { color: #1a3300; opacity: 0.75; }
-section.section.usecases .section-title { color: #0A0A0F; }
-section.section.usecases .usecase-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.12); }
-section.section.usecases .usecase-card h3 { color: #0A0A0F; }
-section.section.usecases .usecase-card p { color: #1a2200; }
-section.section.usecases .uc-icon { background: rgba(255,255,255,0.1); color: #0A0A0F; }
-section.section.usecases .uc-icon svg { stroke: #0A0A0F; }
-section.section.usecases .uc-tag { background: rgba(0,0,0,0.12); color: #0A0A0F; border-color: rgba(0,0,0,0.2); }
-section.section.usecases .uc-featured { background: rgba(0,0,0,0.08) !important; border-color: rgba(0,0,0,0.3) !important; }
-
-/* Pricing — #C8FF00 lime WITH same diagonal stripe texture */
-section.section#pricing {
-  background-color: #C8FF00;
-  background-image:
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 6px,
-      rgba(0,0,0,0.06) 6px,
-      rgba(0,0,0,0.06) 7px
-    );
-  position: relative;
-}
-section.section#pricing::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(200,255,0,0.4) 0%, rgba(168,230,0,0.5) 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-section.section#pricing > * { position: relative; z-index: 1; }
-section.section#pricing .section-inner { position: relative; z-index: 1; }
-/* Keep pricing text dark so it reads well on lime */
-section.section#pricing .section-label { color: #1a3300; opacity: 0.7; }
-section.section#pricing .section-title { color: #0A0A0F; }
-section.section#pricing .section-sub { color: #1a3300; }
-
-/* FAQ — soft blush/pink as in image 6 */
-section.section.faq-section {
-  background: #fdf4f5;
-  position: relative;
-}
-section.section.faq-section::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(251,113,133,0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(196,181,253,0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-section.section.faq-section .section-label { color: #be185d; }
-section.section.faq-section .faq-item { border-color: #f9d0d8; }
-section.section.faq-section .faq-q { color: #1a1a2e; }
-section.section.faq-section .faq-q:hover { background: #fce7f3; }
-section.section.faq-section .faq-a { background: #fff0f3; border-color: #fce7f3; color: #555; }
-
-/* Creators wall — white */
-section.creators-wall-section { background: #ffffff; }
-
-/* Price compare — stays dark */
-/* Shadowban — stays dark */
-
-/* Device showcase — light grey */
-section.device-showcase-section { background: #f7f8fa; }
-
-/* Testimonials — white */
-section.testimonials-section { background: #ffffff; }
-
-/* CTA — stays dark */
-/* Contact — stays light grey */
-
-/* ═══════════════════════════════════════
-   MOBILE HERO FIX — show iPhone on mobile
-═══════════════════════════════════════ */
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column !important;
-    padding: 40px 20px 0 !important;
-    gap: 0 !important;
-    align-items: center !important;
-  }
-  .hero-content {
-    text-align: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-  }
-  .hero-btns { justify-content: center; flex-wrap: wrap; }
-  .hero-trust { justify-content: center; }
-  .hero-visual {
-    display: flex !important;
-    justify-content: center;
-    width: 100%;
-    margin-top: 32px;
-    overflow: visible;
-  }
-  .iphone-device { transform: scale(0.85); transform-origin: top center; }
-  .iphone-shell { width: 238px !important; min-height: 490px !important; }
-  .badge-top { right: -8px !important; top: 16px !important; font-size: 10px; padding: 5px 10px; }
-  .badge-bottom { left: -8px !important; bottom: 40px !important; font-size: 10px; padding: 5px 10px; }
-  .iphone-screen .bubble-in { font-size: 14px !important; }
-  .iphone-screen .bubble-out { font-size: 14px !important; }
-  .iphone-screen .link-title { font-size: 13px !important; }
-  .iphone-screen .link-url { font-size: 11px !important; }
-  .iphone-screen .msg-time { font-size: 11px !important; }
-}
-
-/* ═══════════════════════════════════════
-   IPHONE BORDER UPGRADE — cleaner like image 4
-═══════════════════════════════════════ */
-.iphone-shell {
-  background: linear-gradient(160deg, #1c1c1e 0%, #111111 50%, #0a0a0a 100%) !important;
-  border-radius: 50px !important;
-  box-shadow:
-    0 0 0 1.5px #3a3a3c,
-    0 0 0 3px #1c1c1e,
-    0 0 0 5px #2c2c2e,
-    0 40px 100px rgba(0,0,0,0.6),
-    0 8px 32px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.06) !important;
-}
-.iphone-screen {
-  border-radius: 38px !important;
-  background: #ffffff !important;
-  overflow: hidden;
-}
-.iphone-dynamic-island {
-  background: #000 !important;
-  border-radius: 24px !important;
-  width: 96px !important;
-  height: 30px !important;
-  margin-bottom: 8px !important;
-}
-/* end iphone override */
-
-<style>
-.iphone-device{position:relative;display:flex;align-items:center;justify-content:center}
-.iphone-shell{
-  position:relative;
-  width:260px;
-  min-height:530px;
-  background:linear-gradient(160deg,#2a2a2a 0%,#1a1a1a 40%,#0d0d0d 100%);
-  border-radius:44px;
-  padding:14px 10px 20px;
-  box-shadow:
-    0 0 0 1px #444,
-    0 0 0 2.5px #1a1a1a,
-    0 0 0 4px #555,
-    0 32px 80px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-}
-/* Dynamic Island */
-.iphone-dynamic-island{
-  width:90px;height:28px;
-  background:#000;
-  border-radius:20px;
-  margin:0 auto 10px;
-  display:flex;align-items:center;justify-content:flex-end;
-  padding-right:10px;
-  position:relative;
-  box-shadow:0 0 0 1px #333;
-}
-.iphone-camera{
-  width:9px;height:9px;
-  background:radial-gradient(circle at 35% 35%,#1a3a6b,#0a1a3a);
-  border-radius:50%;
-  border:1px solid #1a2a5a;
-  box-shadow:0 0 0 1.5px #0a1226;
-}
-/* Screen area */
-.iphone-screen{
-  background:#fff;
-  border-radius:32px;
-  overflow:hidden;
-  min-height:460px;
-}
-/* Status bar inside screen */
-.iphone-statusbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 18px 4px;
-  background:#fff;
-}
-.iphone-time{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:#0A0A0F;letter-spacing:-0.3px}
-.iphone-status-icons{display:flex;align-items:center;gap:5px}
-/* Side buttons */
-.iphone-btn-right{position:absolute;right:-3px;top:100px;width:3px;height:70px;background:linear-gradient(to bottom,#555,#444,#555);border-radius:0 3px 3px 0}
-.iphone-btn-left-1{position:absolute;left:-3px;top:80px;width:3px;height:28px;background:linear-gradient(to bottom,#555,#444,#555);border-radius:3px 0 0 3px}
-.iphone-btn-left-2{position:absolute;left:-3px;top:120px;width:3px;height:48px;background:linear-gradient(to bottom,#555,#444,#555);border-radius:3px 0 0 3px}
-.iphone-btn-left-3{position:absolute;left:-3px;top:180px;width:3px;height:48px;background:linear-gradient(to bottom,#555,#444,#555);border-radius:3px 0 0 3px}
-/* Home indicator */
-.iphone-home-indicator{
-  width:100px;height:4px;
-  background:rgba(255,255,255,0.25);
-  border-radius:4px;
-  margin:8px auto 0;
-}
-/* Floating badges */
-.iphone-badge{
-  position:absolute;
-  display:flex;align-items:center;gap:6px;
-  background:#0A0A0F;
-  color:#fff;
-  font-size:11px;font-weight:600;
-  padding:7px 12px;
-  border-radius:20px;
-  white-space:nowrap;
-  box-shadow:0 4px 20px rgba(0,0,0,0.25);
-  font-family:'Instrument Sans',sans-serif;
-}
-.badge-top{top:28px;right:-32px}
-.badge-bottom{bottom:60px;left:-36px}
-/* Override phone-mockup styles to work inside iphone shell */
-.iphone-screen .phone-header{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 14px 10px;
-  background:#fff;
-  border-bottom:1px solid #f0f0f0;
-}
-.iphone-screen .phone-avatar{
-  width:34px;height:34px;border-radius:50%;
-  background:linear-gradient(135deg,#7C3AED,#a855f7);
-  color:#fff;font-size:13px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.iphone-screen .phone-name{font-size:13px;font-weight:700;color:#0A0A0F;font-family:'Bricolage Grotesque',sans-serif}
-.iphone-screen .phone-sub{font-size:10px;color:#888;font-family:'Instrument Sans',sans-serif}
-.iphone-screen .phone-chat{padding:12px 12px 8px;display:flex;flex-direction:column;gap:6px;background:#f7f8fa;min-height:280px}
-.iphone-screen .msg-in,.iphone-screen .msg-out{display:flex;flex-direction:column}
-.iphone-screen .msg-out{align-items:flex-end}
-.iphone-screen .bubble-in{background:#fff;color:#0A0A0F;padding:9px 12px;border-radius:16px 16px 16px 4px;font-size:12px;line-height:1.45;box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex;align-items:center;gap:5px;font-family:'Instrument Sans',sans-serif;max-width:85%}
-.iphone-screen .bubble-out{background:#0A0A0F;color:#fff;padding:9px 12px;border-radius:16px 16px 4px 16px;font-size:12px;line-height:1.45;max-width:85%;font-family:'Instrument Sans',sans-serif}
-.iphone-screen .link-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:9px 11px;display:flex;align-items:center;gap:8px;margin-top:4px;max-width:85%;align-self:flex-end}
-.iphone-screen .link-icon{width:30px;height:30px;background:#f4f4f4;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.iphone-screen .link-title{font-size:11px;font-weight:700;color:#0A0A0F;font-family:'Bricolage Grotesque',sans-serif}
-.iphone-screen .link-url{font-size:10px;color:#888;font-family:'Instrument Sans',sans-serif}
-.iphone-screen .msg-time{font-size:9px;color:#bbb;padding:2px 2px 0;font-family:'Instrument Sans',sans-serif}
-.iphone-screen .msg-time.right{text-align:right}
-@media(max-width:900px){
-  .iphone-shell{width:230px;min-height:470px}
-  .badge-top{right:-20px}
-  .badge-bottom{left:-20px}
-}
-@media(max-width:700px){
-  .iphone-device{margin-top:32px}
-  .iphone-shell{width:240px}
-  .badge-top{top:20px;right:-10px}
-  .badge-bottom{bottom:50px;left:-10px}
-}
-
-/* ═══════════════════════════════════════
-   META SHOWCASE SECTION
-═══════════════════════════════════════ */
-.meta-showcase-section{
-  background:linear-gradient(135deg,#0A0A0F 0%,#0f0f1a 50%,#0A0A0F 100%);
-  padding:80px 24px;
-  position:relative;
-  overflow:hidden;
-}
-.meta-showcase-section::before{
-  content:'';position:absolute;top:-80px;right:-80px;
-  width:360px;height:360px;
-  background:radial-gradient(circle,rgba(124,58,237,0.12) 0%,transparent 70%);
-  pointer-events:none;
-}
-.meta-showcase-section::after{
-  content:'';position:absolute;bottom:-60px;left:-60px;
-  width:280px;height:280px;
-  background:radial-gradient(circle,rgba(200,255,0,0.07) 0%,transparent 70%);
-  pointer-events:none;
-}
-.meta-showcase-inner{
-  max-width:1140px;margin:0 auto;
-  display:grid;grid-template-columns:1fr auto 1fr;
-  gap:48px;align-items:center;
-}
-.meta-showcase-eyebrow{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:#C8FF00;font-family:'Instrument Sans',sans-serif;
-  margin-bottom:18px;
-}
-.meta-showcase-title{
-  font-family:'Bricolage Grotesque',sans-serif;
-  font-size:clamp(28px,4vw,44px);font-weight:900;
-  color:#fff;line-height:1.1;margin-bottom:16px;
-}
-.meta-showcase-accent{color:#C8FF00}
-.meta-showcase-desc{font-size:15px;color:#aaa;line-height:1.65;margin-bottom:24px;font-family:'Instrument Sans',sans-serif}
-.meta-showcase-cta{
-  display:inline-flex;align-items:center;gap:6px;
-  background:#C8FF00;color:#0A0A0F;
-  font-family:'Bricolage Grotesque',sans-serif;
-  font-size:14px;font-weight:700;
-  padding:12px 22px;border-radius:10px;
-  text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;
-}
-.meta-showcase-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,255,0,0.3)}
-/* Center visual */
-.meta-showcase-center{display:flex;flex-direction:column;align-items:center;gap:20px}
-.meta-logos-connector{display:flex;align-items:center;gap:12px}
-.msc-logo{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  font-family:'Bricolage Grotesque',sans-serif;font-size:11px;font-weight:700;
-  color:#fff;
-}
-.msc-connector{display:flex;align-items:center;gap:6px}
-.msc-line{width:28px;height:2px;background:linear-gradient(to right,#333,#C8FF0040)}
-.msc-verified-dot{
-  width:28px;height:28px;
-  background:#C8FF00;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 16px rgba(200,255,0,0.4);
-}
-.msc-trust-badge{
-  width:80px;height:80px;
-  border-radius:50%;
-  border:2px solid #C8FF0040;
-  background:rgba(200,255,0,0.06);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 24px rgba(200,255,0,0.1);
-}
-.msc-badge-inner{display:flex;flex-direction:column;align-items:center;gap:4px}
-.msc-badge-inner span{font-size:9px;font-weight:700;color:#C8FF00;font-family:'Instrument Sans',sans-serif;text-align:center;line-height:1.2}
-/* Right badge cards */
-.meta-showcase-right{display:flex;flex-direction:column;gap:10px}
-.msc-badge-card{
-  display:flex;align-items:center;gap:12px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.07);
-  border-radius:12px;padding:12px 14px;
-  transition:border-color 0.2s,background 0.2s;
-}
-.msc-badge-card:hover{background:rgba(255,255,255,0.07);border-color:rgba(200,255,0,0.25)}
-.msc-badge-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.msc-badge-name{font-family:'Bricolage Grotesque',sans-serif;font-size:13px;font-weight:700;color:#fff}
-.msc-badge-desc{font-family:'Instrument Sans',sans-serif;font-size:11px;color:#666;margin-top:2px}
-.msc-badge-check{
-  margin-left:auto;
-  width:20px;height:20px;border-radius:50%;
-  background:#C8FF0018;color:#C8FF00;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;flex-shrink:0;
-}
-@media(max-width:900px){
-  .meta-showcase-inner{grid-template-columns:1fr;gap:40px}
-  .meta-showcase-center{flex-direction:row;flex-wrap:wrap;justify-content:center}
-}
-@media(max-width:600px){
-  .meta-showcase-section{padding:56px 20px}
-}
-
-/* ═══════════════════════════════════════
-   CONTACT SECTION
-═══════════════════════════════════════ */
-.contact-section{
-  background:#f7f8fa;
-  padding:80px 24px;
-}
-.contact-inner{
-  max-width:1100px;margin:0 auto;
-  display:grid;grid-template-columns:1fr 1.2fr;
-  gap:64px;align-items:start;
-}
-.contact-eyebrow{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:#7C3AED;font-family:'Instrument Sans',sans-serif;margin-bottom:18px;
-}
-.contact-title{
-  font-family:'Bricolage Grotesque',sans-serif;
-  font-size:clamp(28px,3.5vw,42px);font-weight:900;
-  color:#0A0A0F;line-height:1.1;margin-bottom:16px;
-}
-.contact-accent{color:#7C3AED}
-.contact-desc{font-size:15px;color:#555;line-height:1.65;margin-bottom:32px;font-family:'Instrument Sans',sans-serif}
-.contact-channels{display:flex;flex-direction:column;gap:16px;margin-bottom:36px}
-.contact-channel{display:flex;align-items:center;gap:14px}
-.contact-channel-icon{
-  width:42px;height:42px;border-radius:10px;
-  background:#0A0A0F;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-}
-.contact-channel-label{font-size:11px;color:#999;font-family:'Instrument Sans',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
-.contact-channel-value{font-size:14px;font-weight:700;color:#0A0A0F;font-family:'Instrument Sans',sans-serif;text-decoration:none}
-.contact-channel-value:hover{color:#7C3AED}
-.contact-stats{
-  display:flex;align-items:center;gap:0;
-  background:#fff;border:1px solid #eee;border-radius:14px;
-  padding:18px 22px;
-}
-.contact-stat{flex:1;text-align:center}
-.contact-stat-num{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:900;color:#0A0A0F}
-.contact-stat-lbl{font-size:11px;color:#888;font-family:'Instrument Sans',sans-serif;margin-top:2px}
-.contact-stat-divider{width:1px;height:40px;background:#eee;flex-shrink:0}
-/* Form */
-.contact-form-wrap{
-  background:#fff;
-  border:1px solid #e8e8e8;
-  border-radius:18px;
-  padding:32px;
-  box-shadow:0 4px 32px rgba(0,0,0,0.05);
-}
-.contact-form{display:flex;flex-direction:column;gap:18px}
-.contact-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.contact-form-group{display:flex;flex-direction:column;gap:6px}
-.contact-label{font-size:12px;font-weight:700;color:#333;font-family:'Instrument Sans',sans-serif;letter-spacing:0.2px}
-.contact-input{
-  padding:11px 14px;
-  border:1.5px solid #e5e5e5;
-  border-radius:10px;
-  font-size:14px;font-family:'Instrument Sans',sans-serif;color:#0A0A0F;
-  background:#fafafa;outline:none;transition:border-color 0.2s,background 0.2s;
-  width:100%;box-sizing:border-box;
-}
-.contact-input:focus{border-color:#7C3AED;background:#fff}
-.contact-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.contact-textarea{resize:vertical;min-height:100px}
-.contact-submit{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  background:#0A0A0F;color:#fff;
-  font-family:'Bricolage Grotesque',sans-serif;
-  font-size:15px;font-weight:700;
-  padding:14px 24px;border-radius:10px;
-  border:none;cursor:pointer;
-  transition:background 0.2s,transform 0.15s;
-}
-.contact-submit:hover{background:#7C3AED;transform:translateY(-1px)}
-.contact-form-note{display:flex;align-items:center;gap:6px;font-size:11px;color:#999;font-family:'Instrument Sans',sans-serif;justify-content:center}
-.contact-success{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:12px;text-align:center;
-  padding:40px 20px;min-height:320px;
-}
-.contact-success-icon{
-  width:64px;height:64px;border-radius:50%;
-  background:#C8FF00;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 24px rgba(200,255,0,0.35);
-}
-.contact-success h3{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:900;color:#0A0A0F}
-.contact-success p{font-family:'Instrument Sans',sans-serif;font-size:15px;color:#555}
-@media(max-width:900px){
-  .contact-inner{grid-template-columns:1fr;gap:40px}
-  .contact-form-row{grid-template-columns:1fr}
-}
-@media(max-width:600px){
-  .contact-section{padding:56px 20px}
-  .contact-form-wrap{padding:22px 18px}
-  .contact-stats{padding:14px 16px}
-  .contact-stat-num{font-size:18px}
-}
-</style>
-
+<!-- ============================================================ -->
 <!-- CTA -->
+<!-- ============================================================ -->
 <section class="cta-section">
   <div class="cta-inner">
     <h2>Ready to automate your DMs?</h2>
@@ -1921,10 +1206,9 @@ section.testimonials-section { background: #ffffff; }
   </div>
 </section>
 
-<!-- CONTACT SECTION -->
+<!-- CONTACT -->
 <section class="contact-section" id="contact">
   <div class="contact-inner">
-    <!-- Left: Info panel -->
     <div class="contact-info">
       <div class="contact-eyebrow">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="#C8FF00"><circle cx="5" cy="5" r="5"/></svg>
@@ -1932,7 +1216,6 @@ section.testimonials-section { background: #ffffff; }
       </div>
       <h2 class="contact-title">We're here to<br><span class="contact-accent">help you grow.</span></h2>
       <p class="contact-desc">Have a question about automations, pricing, or your Instagram account? Our team replies within 24 hours — usually much faster.</p>
-
       <div class="contact-channels">
         <div class="contact-channel">
           <div class="contact-channel-icon">
@@ -1962,8 +1245,6 @@ section.testimonials-section { background: #ffffff; }
           </div>
         </div>
       </div>
-
-      <!-- Trust mini-stats -->
       <div class="contact-stats">
         <div class="contact-stat">
           <div class="contact-stat-num">14K+</div>
@@ -1981,8 +1262,6 @@ section.testimonials-section { background: #ffffff; }
         </div>
       </div>
     </div>
-
-    <!-- Right: Contact form -->
     <div class="contact-form-wrap">
       <form class="contact-form" onsubmit="handleContactForm(event)">
         <div class="contact-form-row">
@@ -2103,761 +1382,204 @@ section.testimonials-section { background: #ffffff; }
   </div>
 </footer>
 
+<!-- ============================================================ -->
+<!-- STYLES – FULL MASTER OVERRIDE -->
+<!-- ============================================================ -->
 <style>
-/* ═══════════════════════════════════════════════════════════════
-   DMFlow — Master Override Stylesheet
-   Micro dot-grid backgrounds + card colours + radius + mobile fix
-═══════════════════════════════════════════════════════════════ */
+/* ── BASE RESET ── */
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Instrument Sans',sans-serif; background:#fff; color:#0A0A0F; }
 
-/* ── DOT GRID PATTERNS ─────────────────────────────────────── */
+/* ── DOT GRID PATTERNS ── */
 :root {
-  /* White dots on dark — 24px grid, 1.4px dot */
-  --dot-dark:   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.10)'/%3E%3C/svg%3E");
-  /* White dots on purple */
-  --dot-purple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.12)'/%3E%3C/svg%3E");
-  /* Dark dots on lime */
-  --dot-lime:   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(0,0,0,0.09)'/%3E%3C/svg%3E");
+  --dot-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(255,255,255,0.10)'/%3E%3C/svg%3E");
+  --dot-lime: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='0.7' fill='rgba(0,0,0,0.09)'/%3E%3C/svg%3E");
+  --dot-blue: radial-gradient(circle, #93c5fd 1px, transparent 1px);
+  --dot-purple: radial-gradient(circle, #a78bfa 1px, transparent 1px);
+  --dot-green: radial-gradient(circle, #86efac 1px, transparent 1px);
+  --dot-yellow: radial-gradient(circle, #fde047 1px, transparent 1px);
+  --dot-pink: radial-gradient(circle, #f9a8d4 1px, transparent 1px);
+  --dot-orange: radial-gradient(circle, #fdba74 1px, transparent 1px);
 }
 
-/* ── SECTION BACKGROUNDS ───────────────────────────────────── */
+/* ── SECTION BACKGROUNDS ── */
+section.hero { background-color:#e0f2fe; background-image:var(--dot-blue); background-size:24px 24px; }
 
-/* S1 Hero — light blue with dots */
-section.hero { background-color:#e0f2fe !important; background-image:radial-gradient(circle, #93c5fd 1px, transparent 1px) !important; background-size:24px 24px !important; }
+.meta-showcase-section { background-color:#ede9fe; background-image:var(--dot-purple); background-size:24px 24px; }
+.meta-showcase-section .meta-showcase-title { color:#1e1b4b; }
+.meta-showcase-section .meta-showcase-accent { color:#7C3AED; }
+.meta-showcase-section .meta-showcase-desc { color:#4c1d95; }
+.meta-showcase-section .meta-showcase-eyebrow { color:#7C3AED; }
+.meta-showcase-section .meta-showcase-cta { background:#0A0A0F; color:#C8FF00; }
+.meta-showcase-section .msc-logo span { color:#1e1b4b; }
+.meta-showcase-section .msc-badge-inner span { color:#1e1b4b; }
+.meta-showcase-section .msc-trust-badge { border-color:#7C3AED; }
+.meta-showcase-section .msc-line { background:linear-gradient(to right,#a78bfa,#7C3AED); }
+.meta-showcase-section .msc-verified-dot { background:#7C3AED; border-color:#7C3AED; }
+.meta-showcase-section .msc-verified-dot svg { stroke:#fff; }
+.meta-showcase-section .msc-badge-card { background:#fff; border:1px solid #ddd6fe; border-radius:10px; }
+.meta-showcase-section .msc-badge-name { color:#1e1b4b; }
+.meta-showcase-section .msc-badge-desc { color:#6b7280; }
+.meta-showcase-section .msc-badge-check { color:#7C3AED; }
 
-/* S2 Meta Showcase — light purple + square intersection dot grid */
-section.meta-showcase-section,
-.meta-showcase-section {
-  background-color: #ede9fe !important;
-  background-image:
-    radial-gradient(circle, #a78bfa 1px, transparent 1px) !important;
-  background-size: 24px 24px !important;
-}
-section.meta-showcase-section::before,
-section.meta-showcase-section::after,
-.meta-showcase-section::before,
-.meta-showcase-section::after { display:none !important; }
+/* Stats – light blue */
+section.stats-proof-section { background-color:#e0f2fe; background-image:var(--dot-blue); background-size:24px 24px; }
+section.stats-proof-section .section-label { color:#0284c7; }
+section.stats-proof-section .section-title { color:#0A0A0F; }
+section.stats-proof-section .section-sub { color:#334155; }
 
-/* Fix text colours for light purple bg */
-.meta-showcase-section .meta-showcase-title { color:#1e1b4b !important; }
-.meta-showcase-section .meta-showcase-accent { color:#7C3AED !important; }
-.meta-showcase-section .meta-showcase-desc { color:#4c1d95 !important; }
-.meta-showcase-section .meta-showcase-eyebrow { color:#7C3AED !important; }
-.meta-showcase-section .meta-showcase-cta {
-  background:#0A0A0F !important;
-  color:#C8FF00 !important;
-}
-.meta-showcase-section .msc-logo span { color:#1e1b4b !important; }
-.meta-showcase-section .msc-badge-inner span { color:#1e1b4b !important; }
-.meta-showcase-section .msc-trust-badge { border-color:#7C3AED !important; }
-.meta-showcase-section .msc-line { background:linear-gradient(to right,#a78bfa,#7C3AED) !important; }
-.meta-showcase-section .msc-verified-dot {
-  background:#7C3AED !important;
-  border-color:#7C3AED !important;
-}
-.meta-showcase-section .msc-verified-dot svg { stroke:#fff !important; }
+/* How it works */
+section.section#features { background-color:#dcfce7; background-image:var(--dot-green); background-size:24px 24px; }
 
-/* S3 Stats / Proof — very dark navy + dots */
-section.stats-proof-section {
-  background-color:#0B0B14 !important;
-  background-image:var(--dot-dark) !important;
-  background-size:24px 24px !important;
-}
+/* Use Cases – light blue */
+section.section.usecases { background-color:#e0f2fe; background-image:var(--dot-blue); background-size:24px 24px; }
+section.section.usecases .section-label { color:#0284c7; }
+section.section.usecases .section-title { color:#0A0A0F; }
+section.section.usecases .usecase-card { background:#fff; border:1px solid #bae6fd; border-radius:10px; }
+section.section.usecases .uc-icon { background:#0A0A0F; color:#C8FF00; border-radius:10px; }
+section.section.usecases .uc-icon svg { stroke:#C8FF00; }
+section.section.usecases .uc-tag { background:#0A0A0F; color:#C8FF00; border:none; }
+section.section.usecases .uc-featured { background:#0A0A0F; border-color:#0A0A0F; }
+section.section.usecases .uc-featured h3 { color:#fff; }
+section.section.usecases .uc-featured p { color:#aaa; }
+section.section.usecases .uc-featured .uc-icon { background:#C8FF00; }
+section.section.usecases .uc-featured .uc-icon svg { stroke:#0A0A0F; }
+section.section.usecases .uc-featured .uc-tag { background:#C8FF00; color:#0A0A0F; }
 
-/* S4 How It Works — light green with dots */
-section.section#features { background-color:#dcfce7 !important; background-image:radial-gradient(circle, #86efac 1px, transparent 1px) !important; background-size:24px 24px !important; }
+/* Pricing */
+section.section#pricing { background-color:#C8FF00; background-image:var(--dot-lime); background-size:24px 24px; }
+section.section#pricing .section-label { color:#1a3300; opacity:0.7; }
+section.section#pricing .section-title { color:#0A0A0F; }
+section.section#pricing .section-sub { color:#1a3300; }
+.price-card { background:#fff; border:1.5px solid #d4e800; border-radius:10px; }
+.price-featured { background:#0A0A0F; border-color:#0A0A0F; }
+.price-featured .price-name { color:#C8FF00; }
+.price-featured .price-amount { color:#fff; }
+.price-featured .price-desc { color:#888; }
+.price-featured .price-list li { color:#ccc; }
 
-/* S5 Use Cases — deep purple + dots */
-section.section.usecases {
-  background-color:#2d0764 !important;
-  background-image:var(--dot-purple) !important;
-  background-size:24px 24px !important;
-}
-section.section.usecases::before,
-section.section.usecases::after { display:none !important; }
+/* Price Compare */
+.price-compare-section { background-color:#0A0A0F; background-image:var(--dot-dark); background-size:24px 24px; }
+.price-compare-section .pcc-card { background:#111; border:1px solid #222; border-radius:10px; }
+.price-compare-section .pcc-winner { border-color:#C8FF00; background:linear-gradient(135deg,#111,#141a00); }
+.price-compare-section .pcc-saving { background:rgba(200,255,0,0.08); border:1px solid rgba(200,255,0,0.2); border-radius:10px; }
 
-/* S6 Pricing — lime + dots */
-section.section#pricing {
-  background-color:#C8FF00 !important;
-  background-image:var(--dot-lime) !important;
-  background-size:24px 24px !important;
-}
-section.section#pricing::before,
-section.section#pricing::after { display:none !important; }
+/* Testimonials */
+.testimonials-section { background-color:#fce7f3; background-image:var(--dot-pink); background-size:24px 24px; }
+.twall-card { background:#fff; border:1.5px solid #e8e8e8; border-radius:10px; }
+.twall-featured { background:#0A0A0F; border-color:#0A0A0F; }
+.twall-featured .twall-stars { color:#C8FF00; }
+.twall-featured .twall-quote { color:#e5e5e5; }
+.twall-featured .twall-aname { color:#fff; }
+.twall-featured .twall-asub { color:#888; }
+.twall-lime { background:#C8FF00; border-color:#C8FF00; border-radius:10px; }
 
-/* S7 FAQ — light blue + square intersection dot grid */
-section.section.faq-section {
-  background-color:#e0f2fe !important;
-  background-image:radial-gradient(circle, #7dd3fc 1px, transparent 1px) !important;
-  background-size:24px 24px !important;
-}
-section.section.faq-section::before { display:none !important; }
-section.section.faq-section .section-label { color:#0284c7 !important; }
-section.section.faq-section .section-title { color:#0c1a2e !important; }
-section.section.faq-section .section-sub { color:#334155 !important; }
+/* Creators Wall */
+.creators-wall-section { background-color:#fefce8; background-image:var(--dot-yellow); background-size:24px 24px; }
+.cwall-card { background:#0A0A0F; border:1px solid #1e1e1e; border-radius:10px; }
+.cwall-name { color:#fff; }
+.cwall-followers { color:#aaa; }
 
-/* Creators Wall — light yellow with dots */
-section.creators-wall-section { background-color:#fefce8 !important; background-image:radial-gradient(circle, #fde047 1px, transparent 1px) !important; background-size:24px 24px !important; }
-
-/* Price Compare — dark + dots */
-.price-compare-section {
-  background-color:#0A0A0F !important;
-  background-image:var(--dot-dark) !important;
-  background-size:24px 24px !important;
-}
-.price-compare-section::before { display:none !important; }
-
-/* Shadowban Section — dark + dots */
-.shadowban-section {
-  background-color:#0A0A0F !important;
-  background-image:var(--dot-dark) !important;
-  background-size:24px 24px !important;
-}
-/* Fix text colours for dark bg */
-.shadowban-section .shadowban-title { color:#fff !important; }
-.shadowban-section .shadowban-safe-title { color:#fff !important; }
-.shadowban-section .shadowban-testimonial {
-  background:#141414 !important;
-  border-color:#222 !important;
-}
-.shadowban-section .shadowban-testimonial p { color:#bbb !important; }
-.shadowban-section .shadowban-author { border-top-color:#222 !important; }
-.shadowban-section .shadowban-aname { color:#fff !important; }
-
-/* Device Showcase — light lavender with dots */
-section.device-showcase-section {
-  background-color:#f3e8ff !important;
-  background-image:radial-gradient(circle, #d8b4fe 1px, transparent 1px) !important;
-  background-size:24px 24px !important;
-}
-/* Fix text on light device section */
-section.device-showcase-section .section-title { color:#0A0A0F !important; }
-section.device-showcase-section .section-sub { color:#555 !important; }
-section.device-showcase-section .section-label { color:#7C3AED !important; }
-
-/* Testimonials — light pink with dots */
-section.testimonials-section { background-color:#fce7f3 !important; background-image:radial-gradient(circle, #f9a8d4 1px, transparent 1px) !important; background-size:24px 24px !important; }
-
-/* CTA — dark + dots */
-.cta-section {
-  background-color:#0A0A0F !important;
-  background-image:var(--dot-dark) !important;
-  background-size:24px 24px !important;
-}
-
-/* Contact — light orange with dots */
-.contact-section { background-color:#fff7ed !important; background-image:radial-gradient(circle, #fdba74 1px, transparent 1px) !important; background-size:24px 24px !important; }
-
-/* ── CARD COLOURS: BLACK or WHITE only ─────────────────────── */
-
-/* --- Cards on WHITE sections → dark (#0A0A0F) cards --- */
-
-/* Step cards (How It Works — white bg) */
-.step-card {
-  background:#0A0A0F !important;
-  border:1px solid #1e1e1e !important;
-  border-radius:10px !important;
-}
-.step-card h3 { color:#fff !important; }
-.step-card p { color:#888 !important; }
-.step-card .step-num { color:#C8FF00 !important; }
-.step-card .step-icon { color:#C8FF00 !important; }
-.step-card .step-icon svg { stroke:#C8FF00 !important; }
-.step-featured {
-  background:#111827 !important;
-  border-color:#C8FF00 !important;
-}
-
-/* Testimonial cards (white bg) — white cards with dark border */
-.twall-card {
-  background:#ffffff !important;
-  border:1.5px solid #e8e8e8 !important;
-  border-radius:10px !important;
-  box-shadow:0 2px 12px rgba(0,0,0,0.06) !important;
-}
-.twall-featured {
-  background:#0A0A0F !important;
-  border-color:#0A0A0F !important;
-}
-.twall-featured .twall-stars { color:#C8FF00 !important; }
-.twall-featured .twall-quote { color:#e5e5e5 !important; }
-.twall-featured .twall-aname { color:#fff !important; }
-.twall-featured .twall-asub { color:#888 !important; }
-.twall-lime {
-  background:#C8FF00 !important;
-  border-color:#C8FF00 !important;
-  border-radius:10px !important;
-}
-
-/* Creator wall cards (white bg) — dark cards */
-.cwall-card {
-  background:#0A0A0F !important;
-  border:1px solid #1e1e1e !important;
-  border-radius:10px !important;
-}
-.cwall-name { color:#fff !important; }
-.cwall-followers { color:#aaa !important; }
-
-/* --- Cards on DARK sections → white cards --- */
-
-/* Meta badge cards (light purple bg) — white cards */
-.msc-badge-card {
-  background:#ffffff !important;
-  border:1px solid #ddd6fe !important;
-  border-radius:10px !important;
-  box-shadow:0 2px 12px rgba(124,58,237,0.08) !important;
-}
-.msc-badge-name { color:#1e1b4b !important; }
-.msc-badge-desc { color:#6b7280 !important; }
-.msc-badge-check { color:#7C3AED !important; font-weight:700; }
-
-/* Proof stat cards (dark bg) — all lime/green-yellow like card 1 */
-.proof-stat-card {
-  border-radius:10px !important;
-}
-.proof-stat-lime {
-  background:#C8FF00 !important;
-  border:none !important;
-}
-.proof-stat-lime .proof-stat-num,
-.proof-stat-lime .proof-stat-label { color:#0A0A0F !important; }
-.proof-stat-lime .proof-stat-x { color:#0A0A0F !important; }
-.proof-stat-lime .proof-check { color:#0A0A0F !important; }
-.proof-stat-lime .proof-cross { color:#333 !important; }
-.proof-stat-lime .proof-solution { background:#ffffff !important; color:#0A0A0F !important; border-color:rgba(0,0,0,0.12) !important; }
-.proof-stat-lime .proof-stat-divider { background:#0A0A0F !important; opacity:0.2 !important; }
-/* Featured (60%) — also lime */
-.proof-stat-featured {
-  background:#C8FF00 !important;
-  border:none !important;
-}
-.proof-stat-featured .proof-stat-num,
-.proof-stat-featured .proof-stat-label { color:#0A0A0F !important; }
-.proof-stat-featured .proof-stat-pct { color:#0A0A0F !important; }
-.proof-stat-featured .proof-check { color:#0A0A0F !important; }
-.proof-stat-featured .proof-cross { color:#333 !important; }
-.proof-stat-featured .proof-solution { background:#ffffff !important; color:#0A0A0F !important; border-color:rgba(0,0,0,0.12) !important; }
-.proof-stat-featured .proof-stat-divider { background:#0A0A0F !important; opacity:0.2 !important; }
-/* Purple (90%) — also lime */
-.proof-stat-purple {
-  background:#C8FF00 !important;
-  border:none !important;
-}
-.proof-stat-purple .proof-stat-num,
-.proof-stat-purple .proof-stat-label { color:#0A0A0F !important; }
-.proof-stat-purple .proof-stat-pct { color:#0A0A0F !important; }
-.proof-stat-purple .proof-check { color:#0A0A0F !important; }
-.proof-stat-purple .proof-cross { color:#333 !important; }
-.proof-stat-purple .proof-solution { background:#ffffff !important; color:#0A0A0F !important; border-color:rgba(0,0,0,0.12) !important; }
-.proof-stat-purple .proof-stat-divider { background:#0A0A0F !important; opacity:0.2 !important; }
-
-/* PCC cards (dark bg) — keep dark but clean */
-.pcc-card {
-  background:#111111 !important;
-  border:1px solid #222 !important;
-  border-radius:10px !important;
-}
-.pcc-winner {
-  background:#111111 !important;
-  border:1.5px solid #C8FF00 !important;
-}
-
-/* Shadowban testimonial (now dark bg) — white card */
-.shadowban-testimonial {
-  border-radius:10px !important;
-}
-
-/* Shadowban safe cards (dark bg) — dark card with lime icon */
-.shadowban-safe-card {
-  background:#141414 !important;
-  border:1px solid #1e1e1e !important;
-  border-radius:10px !important;
-}
-
-/* Use case cards (green-yellow bg) — white cards with dark icons */
-.usecase-card {
-  background:#ffffff !important;
-  border:1px solid rgba(0,0,0,0.12) !important;
-  border-radius:10px !important;
-  box-shadow:0 2px 12px rgba(0,0,0,0.08) !important;
-}
-.usecase-card h3 { color:#0A0A0F !important; }
-.usecase-card p { color:#334155 !important; }
-.usecase-card .uc-icon {
-  background:#0A0A0F !important;
-  color:#C8FF00 !important;
-  border-radius:10px !important;
-}
-.usecase-card .uc-icon svg { stroke:#C8FF00 !important; }
-.usecase-card .uc-tag {
-  background:#0A0A0F !important;
-  color:#C8FF00 !important;
-  border:none !important;
-}
-.uc-featured {
-  background:#0A0A0F !important;
-  border:1.5px solid #0A0A0F !important;
-}
-.uc-featured h3 { color:#fff !important; }
-.uc-featured p { color:#aaa !important; }
-.uc-featured .uc-icon { background:#C8FF00 !important; }
-.uc-featured .uc-icon svg { stroke:#0A0A0F !important; }
-.uc-featured .uc-tag { background:#C8FF00 !important; color:#0A0A0F !important; }
-
-/* Pricing cards (lime bg) — white & dark alternating */
-.price-card {
-  background:#ffffff !important;
-  border:1.5px solid #d4e800 !important;
-  border-radius:10px !important;
-}
-.price-card .price-name { color:#0A0A0F !important; }
-.price-card .price-amount { color:#0A0A0F !important; }
-.price-card .price-desc { color:#555 !important; }
-.price-featured {
-  background:#0A0A0F !important;
-  border:2px solid #0A0A0F !important;
-}
-.price-featured .price-name { color:#C8FF00 !important; }
-.price-featured .price-amount { color:#ffffff !important; }
-.price-featured .price-desc { color:#888 !important; }
-.price-featured .price-list li { color:#ccc !important; }
-
-/* Device chips (light bg) — dark chips */
-.device-chip {
-  background:#0A0A0F !important;
-  color:#fff !important;
-  border:1px solid #1e1e1e !important;
-  border-radius:10px !important;
-}
-
-/* Laptop auto cards */
-.ldc-auto-card {
-  background:#0A0A0F !important;
-  border:1px solid #1e1e1e !important;
-  border-radius:10px !important;
-}
-
-/* Mobile stat card */
-.mobile-stat-card { border-radius:10px !important; }
-
-/* Contact form wrap & stats (light bg) — white card */
-.contact-form-wrap {
-  background:#ffffff !important;
-  border:1.5px solid #e5e5e5 !important;
-  border-radius:10px !important;
-}
-.contact-stats {
-  background:#ffffff !important;
-  border:1.5px solid #e5e5e5 !important;
-  border-radius:10px !important;
-}
-
-/* FAQ items */
-.faq-item {
-  border-radius:10px !important;
-  border:1.5px solid #e8e8e8 !important;
+/* Device Showcase – with 3D background */
+.device-showcase-section {
+  position:relative;
+  background-color:#0A0A0F;
   overflow:hidden;
-  margin-bottom:8px;
+  padding:90px 0;
 }
-/* FAQ proper padding */
-section.section.faq-section .faq-item {
-  background:#ffffff !important;
-  border:1px solid #bae6fd !important;
-  border-radius:10px !important;
-  box-shadow:0 2px 10px rgba(2,132,199,0.07) !important;
-  overflow:hidden;
+.device-bg-overlay {
+  position:absolute;
+  inset:0;
+  background: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80') center/cover no-repeat;
+  opacity:0.15;
+  z-index:0;
 }
-section.section.faq-section .faq-q {
-  color:#0c1a2e !important;
-  padding: 18px 20px !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  line-height: 1.5;
-}
-section.section.faq-section .faq-q:hover { background:#f0f9ff !important; }
-section.section.faq-section .faq-a {
-  background:#f0f9ff !important;
-  color:#334155 !important;
-  border-color:#bae6fd !important;
-  padding: 16px 20px !important;
-  font-size: 14px !important;
-  line-height: 1.7 !important;
-  border-top: 1px solid #bae6fd !important;
-  display: none;
-  overflow: hidden;
-}
-section.section.faq-section .faq-item.open .faq-a {
-  display: block;
-}
-section.section.faq-section .faq-item.open .faq-arrow {
-  transform: rotate(180deg);
-}
-.faq-arrow {
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
+.device-showcase-section .section-inner { position:relative; z-index:2; }
+.device-showcase-section .section-title { color:#fff; }
+.device-showcase-section .section-sub { color:#ccc; }
+.device-showcase-section .section-label { color:#C8FF00; }
+.device-chip { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:10px; color:#ddd; }
+.device-chip:hover { background:rgba(200,255,0,0.12); border-color:#C8FF00; color:#C8FF00; }
 
-/* ── BUTTON RADIUS — 10px ───────────────────────────────────── */
-.btn-hero,
-.btn-hero-outline,
-.btn-primary,
-.btn-ghost,
-.btn-price,
-.btn-price-outline,
-.contact-submit,
-.meta-showcase-cta,
-.mob-cta,
-.announce-link {
+/* FAQ */
+section.section.faq-section { background-color:#e0f2fe; background-image:var(--dot-blue); background-size:24px 24px; }
+section.section.faq-section .section-label { color:#0284c7; }
+section.section.faq-section .section-title { color:#0c1a2e; }
+section.section.faq-section .section-sub { color:#334155; }
+section.section.faq-section .faq-item { background:#fff; border:1px solid #bae6fd; border-radius:10px; }
+section.section.faq-section .faq-q { color:#0c1a2e; }
+section.section.faq-section .faq-a { background:#f0f9ff; color:#334155; border-color:#bae6fd; }
+
+/* Shadowban – light blue */
+.shadowban-section { background-color:#e0f2fe; background-image:var(--dot-blue); background-size:24px 24px; }
+.shadowban-section .shadowban-title { color:#0A0A0F; }
+.shadowban-section .shadowban-safe-title { color:#0A0A0F; }
+.shadowban-section .shadowban-testimonial { background:#fff; border-color:#bae6fd; border-radius:10px; }
+.shadowban-section .shadowban-testimonial p { color:#334155; }
+.shadowban-section .shadowban-aname { color:#0A0A0F; }
+.shadowban-section .shadowban-author { border-top-color:#e2e8f0; }
+.shadowban-section .shadowban-quote { color:#93c5fd; }
+.shadowban-section .shadowban-safe-card { background:#0A0A0F; border:1px solid #1e293b; border-radius:10px; }
+.shadowban-section .shadowban-safe-h { color:#fff; }
+.shadowban-section .shadowban-safe-p { color:#94a3b8; }
+
+/* CTA */
+.cta-section { background-color:#0A0A0F; background-image:var(--dot-dark); background-size:24px 24px; }
+
+/* Contact */
+.contact-section { background-color:#fff7ed; background-image:var(--dot-orange); background-size:24px 24px; }
+.contact-form-wrap, .contact-stats { background:#fff; border:1.5px solid #e5e5e5; border-radius:10px; }
+
+/* ── 10px RADIUS ON ALL CARDS & BUTTONS ── */
+.btn-hero, .btn-hero-outline, .btn-primary, .btn-ghost,
+.btn-price, .btn-price-outline, .contact-submit,
+.meta-showcase-cta, .mob-cta, .announce-link,
+.price-card, .pcc-card, .step-card, .usecase-card,
+.twall-card, .cwall-card, .shadowban-safe-card,
+.faq-item, .contact-form-wrap, .contact-stats,
+.device-chip, .msc-badge-card {
   border-radius:10px !important;
 }
 
-/* ── SVG ICON COLOURS ─────────────────────────────────────── */
-/* Step cards — lime icons on dark cards */
-.step-card .step-icon { background:rgba(200,255,0,0.1) !important; border-radius:10px !important; }
-/* Use case icons — already handled above */
-/* Meta connector */
-.msc-line { background:linear-gradient(to right,#e8e8e8,#ccc) !important; }
-.msc-verified-dot { background:#0A0A0F !important; border-color:#0A0A0F !important; }
+/* ── NAV BUTTON COMPACT ── */
+.nav-right .btn-primary, .nav-right .btn-ghost {
+  border-radius:10px; padding:5px 14px; font-size:13px;
+  height:auto; line-height:1.5; display:inline-flex;
+  align-items:center; gap:6px; font-weight:600;
+}
+#navAppBtn { padding:3px 12px; font-size:12px; border-radius:10px; background:#0A0A0F; color:#fff; }
+#navRegisterBtn { padding:5px 14px; font-size:13px; border-radius:10px; background:#C8FF00; color:#0A0A0F; }
+#navLoginBtn { padding:5px 14px; font-size:13px; border-radius:10px; color:#0A0A0F; background:transparent; }
+#navUserAvatar { width:32px; height:32px; border-radius:50%; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#7C3AED; color:#fff; font-size:13px; font-weight:700; }
+#navUserAvatar img { width:100%; height:100%; object-fit:cover; }
 
-/* ── MOBILE NAV — lime/greenish-yellow bg with white dots ───── */
-@media (max-width: 768px) {
-  nav.nav {
-    background-color: #C8FF00 !important;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px) !important;
-    background-size: 22px 22px !important;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.10) !important;
-  }
-  nav.nav .logo { color: #0A0A0F !important; }
-  nav.nav .logo span { color: #0A0A0F !important; }
-  nav.nav .nav-hamburger span { background: #0A0A0F !important; }
-  nav.nav .btn-primary,
-  nav.nav .btn-ghost { color: #0A0A0F !important; }
-  nav.nav .nav-right .btn-ghost {
-    display: none !important;
-  }
-  nav.nav .nav-right .btn-primary#navRegisterBtn {
-    display: inline-flex !important;
-    align-items: center !important;
-    font-size: 13px !important;
-    padding: 6px 12px !important;
-    white-space: nowrap !important;
-    background: #ffffff !important;
-    color: #0A0A0F !important;
-    border: none !important;
-  }
+/* ── RESPONSIVE ── */
+@media (max-width:768px) {
+  .section-inner, .meta-showcase-inner, .contact-inner,
+  .cta-inner, .price-compare-inner { padding-left:20px; padding-right:20px; }
+  .proof-stats-grid, .steps-grid, .usecases-grid,
+  .pricing-grid, .twall-grid, .shadowban-grid,
+  .device-feature-chips, .faq-list { padding-left:4px; padding-right:4px; }
+  .step-card, .usecase-card, .price-card,
+  .proof-stat-card, .twall-card, .msc-badge-card,
+  .shadowban-safe-card, .faq-item { width:100%; box-sizing:border-box; }
+  .hero { flex-direction:column; padding:40px 20px 0; align-items:center; }
+  .iphone-device { transform:scale(0.85); }
+  .device-showcase-wrap { flex-direction:column; align-items:center; }
+  .laptop-screen { width:320px; }
 }
 
-/* ── JOIN 14,000 CREATORS button — space above + sides ─────── */
-section.creators-wall-section > div[style*="text-align:center"],
-section.creators-wall-section [style*="text-align:center;margin-top"] {
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-  padding-bottom: 8px !important;
-}
-@media (max-width: 768px) {
-  section.creators-wall-section > div[style*="text-align:center"] {
-    padding: 0 20px 12px !important;
-    margin-top: 28px !important;
-  }
-  section.creators-wall-section .btn-hero {
-    width: calc(100% - 0px) !important;
-    box-sizing: border-box !important;
-    display: block !important;
-    text-align: center !important;
-  }
-}
-
-/* ── MADE IN INDIA — smaller ────────────────────────────────── */
-.made-in-india {
-  font-size: 10px !important;
-  gap: 4px !important;
-}
-.made-in-india svg { width: 14px !important; height: 10px !important; }
-.india-name { font-size: 10px !important; }
-
-/* ── MOBILE proof stat cards — proper inner spacing ─────────── */
-@media (max-width: 768px) {
-  .proof-stat-card {
-    padding: 20px 18px !important;
-  }
-  .proof-stats-grid {
-    gap: 12px !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-  .proof-stat-solution,
-  .proof-stat-row.proof-solution {
-    padding: 10px 12px !important;
-    font-size: 13px !important;
-  }
-  .proof-stat-label { font-size: 10px !important; letter-spacing: 0.05em !important; }
-  .proof-stat-num { font-size: 52px !important; }
-}
-@media (max-width: 768px) {
-
-  /* Global section padding */
-  .section-inner,
-  .meta-showcase-inner,
-  .contact-inner,
-  .cta-inner,
-  .price-compare-inner { padding-left:20px !important; padding-right:20px !important; }
-
-  /* Grid containers get side padding so cards don't touch edges */
-  .proof-stats-grid,
-  .steps-grid,
-  .usecases-grid,
-  .pricing-grid,
-  .twall-grid,
-  .shadowban-grid,
-  .device-feature-chips,
-  .faq-list { padding-left:4px !important; padding-right:4px !important; box-sizing:border-box; }
-
-  /* Ensure all cards are full-width with no overflow */
-  .step-card,
-  .usecase-card,
-  .price-card,
-  .proof-stat-card,
-  .twall-card,
-  .msc-badge-card,
-  .shadowban-safe-card,
-  .faq-item {
-    width:100% !important;
-    margin-left:0 !important;
-    margin-right:0 !important;
-    box-sizing:border-box !important;
-  }
-
-  /* Contact cards */
-  .contact-form-wrap,
-  .contact-stats { width:100% !important; box-sizing:border-box !important; }
-
-  /* Hero */
-  .hero-content { padding-left:20px !important; padding-right:20px !important; box-sizing:border-box; }
-
-  /* Shadowban grid stacked */
-  .shadowban-grid { gap:24px !important; }
-
-  /* Device showcase */
-  .device-showcase-section .section-inner { padding-left:20px !important; padding-right:20px !important; }
-}
-
-  /* ═══════════════════════════════════════════════════════════════
-   NAV BUTTON FIXES — compact sizing & 10px radius
-═══════════════════════════════════════════════════════════════ */
-
-/* All nav buttons — uniform height & radius */
-.nav-right .btn-primary,
-.nav-right .btn-ghost {
-  border-radius: 10px !important;
-  padding: 5px 14px !important;
-  font-size: 13px !important;
-  height: auto !important;
-  line-height: 1.5 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  white-space: nowrap !important;
-  text-decoration: none !important;
-  font-weight: 600 !important;
-}
-
-/* ── Open App button (black) — extra compact ── */
-#navAppBtn {
-  padding: 3px 12px !important;
-  font-size: 12px !important;
-  border-radius: 10px !important;
-  height: auto !important;
-  line-height: 1.4 !important;
-  background: #0A0A0F !important;
-  color: #ffffff !important;
-  border: none !important;
-  font-weight: 600 !important;
-  display: none !important;  /* hidden by default, JS shows it */
-  align-items: center !important;
-  gap: 5px !important;
-}
-#navAppBtn[style*="display:inline-flex"] {
-  display: inline-flex !important;
-}
-#navAppBtn svg {
-  width: 12px !important;
-  height: 12px !important;
-  flex-shrink: 0 !important;
-}
-
-/* ── Start Free button (lime) — proper sizing ── */
-#navRegisterBtn {
-  padding: 5px 14px !important;
-  font-size: 13px !important;
-  border-radius: 10px !important;
-  height: auto !important;
-  line-height: 1.5 !important;
-  background: #C8FF00 !important;
-  color: #0A0A0F !important;
-  border: none !important;
-  font-weight: 700 !important;
-}
-
-/* ── Log in button (ghost) ── */
-#navLoginBtn {
-  padding: 5px 14px !important;
-  font-size: 13px !important;
-  border-radius: 10px !important;
-  height: auto !important;
-  line-height: 1.5 !important;
-  color: #0A0A0F !important;
-  font-weight: 600 !important;
-  background: transparent !important;
-}
-
-/* ── Profile avatar — proper sizing & image fit ── */
-#navUserAvatar {
-  width: 32px !important;
-  height: 32px !important;
-  border-radius: 50% !important;
-  flex-shrink: 0 !important;
-  display: none !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: #7C3AED !important;
-  color: #ffffff !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  cursor: pointer !important;
-  overflow: hidden !important;
-  text-transform: uppercase !important;
-  transition: transform 0.2s ease !important;
-}
-#navUserAvatar[style*="display:flex"] {
-  display: flex !important;
-}
-#navUserAvatar:hover {
-  transform: scale(1.05) !important;
-}
-#navUserAvatar img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  border-radius: 50% !important;
-  display: block !important;
-}
-
-/* ── Mobile nav drawer buttons ── */
-.mob-cta {
-  border-radius: 10px !important;
-  padding: 8px 16px !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  text-align: center !important;
-  display: block !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  text-decoration: none !important;
-}
-#mobAppLink {
-  background: #0A0A0F !important;
-  color: #ffffff !important;
-  border: none !important;
-}
-#mobRegisterLink {
-  background: #C8FF00 !important;
-  color: #0A0A0F !important;
-  border: none !important;
-}
-#mobLoginLink {
-  background: transparent !important;
-  color: #0A0A0F !important;
-  font-weight: 600 !important;
-}
-  /* ═══════════════════════════════════════════════════════════════
-   THREE SECTIONS → LIGHT BLUE WITH DOTS
-   (Stats/Proof + Use Cases + Shadowban)
-═══════════════════════════════════════════════════════════════ */
-
-/* ── 1. Stats/Proof Section ("THE DATA") ── */
-section.stats-proof-section {
-  background-color: #e0f2fe !important;
-  background-image: radial-gradient(circle, #93c5fd 1px, transparent 1px) !important;
-  background-size: 24px 24px !important;
-}
-section.stats-proof-section .section-title {
-  color: #0A0A0F !important;
-}
-section.stats-proof-section .section-sub {
-  color: #334155 !important;
-}
-section.stats-proof-section .section-label {
-  color: #0284c7 !important;
-}
-
-/* ── 2. Use Cases Section ("Every way you sell, automated.") ── */
-section.section.usecases {
-  background-color: #e0f2fe !important;
-  background-image: radial-gradient(circle, #93c5fd 1px, transparent 1px) !important;
-  background-size: 24px 24px !important;
-}
-section.section.usecases .section-title {
-  color: #0A0A0F !important;
-}
-section.section.usecases .section-label {
-  color: #0284c7 !important;
-}
-/* Keep use-case cards white (they already are) — just tweak border */
-section.section.usecases .usecase-card {
-  border-color: #bae6fd !important;
-  background: #ffffff !important;
-}
-
-/* ── 3. Shadowban Section ("IT'S NOT JUST ABOUT PRICING...") ── */
-.shadowban-section {
-  background-color: #e0f2fe !important;
-  background-image: radial-gradient(circle, #93c5fd 1px, transparent 1px) !important;
-  background-size: 24px 24px !important;
-}
-.shadowban-section .shadowban-title {
-  color: #0A0A0F !important;
-}
-.shadowban-section .shadowban-safe-title {
-  color: #0A0A0F !important;
-}
-/* Make the testimonial card white (instead of dark) so text is readable */
-.shadowban-section .shadowban-testimonial {
-  background: #ffffff !important;
-  border-color: #bae6fd !important;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-}
-.shadowban-section .shadowban-testimonial p {
-  color: #334155 !important;
-}
-.shadowban-section .shadowban-aname {
-  color: #0A0A0F !important;
-}
-.shadowban-section .shadowban-author {
-  border-top-color: #e2e8f0 !important;
-}
-.shadowban-section .shadowban-quote {
-  color: #93c5fd !important;
-}
-/* Keep safe cards dark for contrast — they look great on light blue */
-.shadowban-section .shadowban-safe-card {
-  background: #0A0A0F !important;
-  border-color: #1e293b !important;
-}
-.shadowban-section .shadowban-safe-h {
-  color: #ffffff !important;
-}
-.shadowban-section .shadowban-safe-p {
-  color: #94a3b8 !important;
-}
+/* ── SCROLLING WALL ANIMATIONS ── */
+.cwall-ltr { animation:scroll-ltr 40s linear infinite; }
+.cwall-rtl { animation:scroll-rtl 38s linear infinite; }
+@keyframes scroll-ltr { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+@keyframes scroll-rtl { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)} }
+.cwall-track-wrap { overflow:hidden; mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%); }
 </style>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
@@ -2874,32 +1596,26 @@ function handleContactForm(e) {
     success.style.display = 'flex';
   }, 900);
 }
-</script>
-<script>
-// Auth-aware nav: show profile + "Open App" if user is already logged in
+
+// Auth-aware nav
 (function() {
   try {
     const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
     const token = localStorage.getItem('dmflow_token');
     if (!user || !token) return;
-
-    // Hide login/register, show app button
-    const loginBtn    = document.getElementById('navLoginBtn');
+    const loginBtn = document.getElementById('navLoginBtn');
     const registerBtn = document.getElementById('navRegisterBtn');
-    const appBtn      = document.getElementById('navAppBtn');
-    const avatar      = document.getElementById('navUserAvatar');
-    const mobLogin    = document.getElementById('mobLoginLink');
+    const appBtn = document.getElementById('navAppBtn');
+    const avatar = document.getElementById('navUserAvatar');
+    const mobLogin = document.getElementById('mobLoginLink');
     const mobRegister = document.getElementById('mobRegisterLink');
-    const mobApp      = document.getElementById('mobAppLink');
-
-    if (loginBtn)    loginBtn.style.display    = 'none';
+    const mobApp = document.getElementById('mobAppLink');
+    if (loginBtn) loginBtn.style.display = 'none';
     if (registerBtn) registerBtn.style.display = 'none';
-    if (appBtn)      { appBtn.style.display = 'inline-flex'; }
-    if (mobLogin)    mobLogin.style.display    = 'none';
+    if (appBtn) appBtn.style.display = 'inline-flex';
+    if (mobLogin) mobLogin.style.display = 'none';
     if (mobRegister) mobRegister.style.display = 'none';
-    if (mobApp)      mobApp.style.display      = 'block';
-
-    // Show avatar with initial
+    if (mobApp) mobApp.style.display = 'block';
     if (avatar) {
       const name = user.name || user.displayName || '';
       const initial = name.charAt(0).toUpperCase() || '?';
@@ -2912,14 +1628,11 @@ function handleContactForm(e) {
     }
   } catch(e) {}
 })();
-</script>
-<script>
+
 function toggleFaq(btn) {
   var item = btn.closest('.faq-item');
   var isOpen = item.classList.contains('open');
-  // close all
   document.querySelectorAll('.faq-item.open').forEach(function(el){ el.classList.remove('open'); });
-  // open this one if it was closed
   if (!isOpen) item.classList.add('open');
 }
 </script>
