@@ -46,16 +46,11 @@ const API = (() => {
     if (_redirecting) return;
     _redirecting = true;
     clearToken();
+    // Also clear user data so the login page guard doesn't instantly redirect back
+    try { localStorage.removeItem('dmflow_user'); } catch(e) {}
     if (!silent) {
-      try {
-        const top   = window.top || window;
-        const path  = top.location.pathname;
-        const depth = (path.match(/\//g) || []).length - 1;
-        const back  = depth > 1 ? '../'.repeat(depth - 1) : '';
-        top.location.replace(back + 'pages/auth/login.html');
-      } catch(e) {
-        window.location.replace('/pages/auth/login.html');
-      }
+      // Use absolute path + replace() so back-button can't loop back into the app
+      window.location.replace('/pages/auth/login.html');
     }
   }
 
