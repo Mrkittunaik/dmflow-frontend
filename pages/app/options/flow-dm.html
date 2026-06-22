@@ -527,8 +527,19 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script src="../../../assets/js/api.js"></script>
+<script src="/assets/js/api.js"></script>
 <script>
+/* ═══════════════════════════════════════
+   FIX: wrapped in an IIFE so this tab's `state`, `buildPayload`,
+   DEMO_* constants etc. don't collide with the SAME names declared
+   by auto-dm.html or product-link-dm.html when the user switches
+   tabs. Without this, switching tabs throws "Identifier 'state' has
+   already been declared" and the entire new tab's script silently
+   fails to run. Only the functions referenced by onclick/oninput in
+   THIS file's own markup are exported onto window — everything else
+   stays safely scoped to this tab.
+═══════════════════════════════════════ */
+(function(){
 /* ═══════════════════════════════════════
    STATE
 ═══════════════════════════════════════ */
@@ -1283,4 +1294,26 @@ async function startAutomation() {
     }
   }, 1500);
 })();
+
+/* ── Export only the functions referenced by this file's own markup. ── */
+window.addFlowButton     = addFlowButton;
+window.addFlowKeyword    = addFlowKeyword;
+window.clearFlowMedia    = clearFlowMedia;
+window.closeProModal     = closeProModal;
+window.doUpgrade         = doUpgrade;
+window.insertFlowVar     = insertFlowVar;
+window.onFlowDmInput     = onFlowDmInput;
+window.removeFlowButton  = removeFlowButton;
+window.removeFlowKeyword = removeFlowKeyword;
+window.setFlowDelay      = setFlowDelay;
+window.setFlowMediaTab   = setFlowMediaTab;
+window.setFlowTriggerMode= setFlowTriggerMode;
+window.toggleFlowBtnType = toggleFlowBtnType;
+window.toggleStep        = toggleStep;
+window.updateFlowBtn     = updateFlowBtn;
+window.useFlowSug        = useFlowSug;
+window.scheduleAutoSave  = scheduleAutoSave;
+window.saveDraft         = saveDraft;
+window.startAutomation   = startAutomation;
+})(); // close tab IIFE
 </script>
