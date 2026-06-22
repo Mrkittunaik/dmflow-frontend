@@ -1019,7 +1019,7 @@ function buildPayload(active) {
 async function saveDraft() {
   if (!window.API || !API.getToken()) { toast('Please log in first.', 'error'); return; }
   const btn = document.querySelector('.btn-draft');
-  btn.textContent = 'Saving…';
+  if (btn) btn.textContent = 'Saving…';
   try {
     const payload = buildPayload(false);
     if (state.editId) {
@@ -1028,12 +1028,12 @@ async function saveDraft() {
       const res = await API.createAutomation(payload);
       if (res && res._id) state.editId = res._id;
     }
-    btn.textContent = 'Saved ✓';
+    if (btn) btn.textContent = 'Saved ✓';
     markSaved();
-    setTimeout(() => { btn.textContent = 'Save draft'; }, 2000);
+    setTimeout(() => { if (btn) btn.textContent = 'Save draft'; }, 2000);
   } catch(e) {
     toast('Failed to save: ' + (e.message || 'Error'), 'error');
-    btn.textContent = 'Save draft';
+    if (btn) btn.textContent = 'Save draft';
   }
 }
 
