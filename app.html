@@ -741,7 +741,10 @@ body{font-family:'Instrument Sans',sans-serif;background-color:#ffffff;backgroun
     localStorage.removeItem('dmflow_modal_seen');
     localStorage.removeItem('dmflow_avatar_ts');
     sessionStorage.clear();
-    window.location.replace('/');
+    // Replace current history entry so the browser back-button cannot
+    // return to app.html after logout (which crashes because API calls
+    // fire with no token and the page redirects again creating a loop).
+    window.location.replace('/pages/auth/login.html');
   };
 
   // ── More popup ──
