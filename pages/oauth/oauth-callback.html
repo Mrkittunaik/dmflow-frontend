@@ -83,10 +83,27 @@ body{font-family:'Instrument Sans',sans-serif;background:#F8F8FC;display:flex;al
 
   document.getElementById('msg').textContent = 'Completing sign in...';
 
+  // If the backend takes more than 6s, show a reassuring message — never mention Render/servers
+  const _slowTimer = setTimeout(() => {
+    const msgEl = document.getElementById('msg');
+    if (msgEl && msgEl.textContent !== 'Getting your profile...' && msgEl.style.display !== 'none') {
+      msgEl.textContent = 'Almost there, hang tight...';
+    }
+  }, 6000);
+  // After 18s, show a second message
+  const _verySlowTimer = setTimeout(() => {
+    const msgEl = document.getElementById('msg');
+    if (msgEl && msgEl.style.display !== 'none') {
+      msgEl.textContent = 'Just a moment more...';
+    }
+  }, 18000);
+
   fetch(API.BASE_URL + tokenEndpoint + '?code=' + encodeURIComponent(code))
     .then(r => r.json())
     .then(data => {
-      if (!data.token) throw new Error('No token');
+      clearTimeout(_slowTimer);
+      clearTimeout(_verySlowTimer);
+      if (!data.token) throw new Error(data.error || 'Authentication failed. Please try again.');
       API.setToken(data.token);
       document.getElementById('msg').textContent = 'Getting your profile...';
       return API.getMe();
@@ -110,13 +127,18 @@ body{font-family:'Instrument Sans',sans-serif;background:#F8F8FC;display:flex;al
       }));
       document.getElementById('msg').textContent = 'Welcome ' + user.name + '! Redirecting...';
       setTimeout(() => {
-        window.location.href = user.instagram?.connected
-          ? '../../app.html'
-          : '../onboarding/platform-select.html';
+        // Use replace() so the back-button from app doesn't return to this callback page
+        window.location.replace(
+          user.instagram?.connected
+            ? '../../app.html'
+            : '../onboarding/platform-select.html'
+        );
       }, 800);
     })
-    .catch(() => {
-      showError('Could not load your profile. Please try again.');
+    .catch(err => {
+      clearTimeout(_slowTimer);
+      clearTimeout(_verySlowTimer);
+      showError(err && err.message ? err.message : 'Could not complete sign in. Please try again.');
     });
 })();
 </script>
