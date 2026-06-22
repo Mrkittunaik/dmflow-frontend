@@ -750,6 +750,39 @@ const state = {
 };
 
 /* ═══════════════════════════════════════
+   MEDIA LOADING — declared BEFORE the INIT block below, since INIT
+   calls loadMedia() which reads _mediaCache/DEMO_POSTS/DEMO_REELS.
+   FIX: these used to be declared AFTER the INIT IIFE that calls
+   loadMedia(), causing "Cannot access '_mediaCache' before
+   initialization" the moment loadMedia() ran.
+═══════════════════════════════════════ */
+let _mediaCache = null;
+
+/* ── DEMO PLACEHOLDER MEDIA (shown when no IG account connected) ── */
+const DEMO_POSTS = [
+  {id:'demo1',caption:'#trending #viral',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo2',caption:'Hi',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo3',caption:'#god',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo4',caption:'New post',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo5',caption:'Check this',media_url:'',media_type:'IMAGE',_demo:true},
+  {id:'demo6',caption:'My life',media_url:'',media_type:'IMAGE',_demo:true},
+];
+const DEMO_REELS = [
+  {id:'demoreel1',caption:'Reel 1',media_url:'',media_type:'REEL',_demo:true},
+  {id:'demoreel2',caption:'Reel 2',media_url:'',media_type:'REEL',_demo:true},
+  {id:'demoreel3',caption:'Reel 3',media_url:'',media_type:'REEL',_demo:true},
+];
+const DEMO_GRADS = [
+  'linear-gradient(135deg,#F97316,#EF4444)',
+  'linear-gradient(135deg,#8B5CF6,#3B82F6)',
+  'linear-gradient(135deg,#10B981,#06B6D4)',
+  'linear-gradient(135deg,#F59E0B,#EF4444)',
+  'linear-gradient(135deg,#EC4899,#8B5CF6)',
+  'linear-gradient(135deg,#14B8A6,#22C55E)',
+];
+let _demoGradIdx = 0;
+
+/* ═══════════════════════════════════════
    INIT
 ═══════════════════════════════════════ */
 (async () => {
@@ -784,26 +817,6 @@ const state = {
   // Default suggestions
   renderKwSuggestions('');
 })();
-
-/* ═══════════════════════════════════════
-   MEDIA LOADING
-═══════════════════════════════════════ */
-let _mediaCache = null;
-
-/* ── DEMO PLACEHOLDER MEDIA (shown when no IG account connected) ── */
-const DEMO_POSTS = [
-  {id:'demo1',caption:'#trending #viral',media_url:'',media_type:'IMAGE',_demo:true},
-  {id:'demo2',caption:'Hi',media_url:'',media_type:'IMAGE',_demo:true},
-  {id:'demo3',caption:'#god',media_url:'',media_type:'IMAGE',_demo:true},
-  {id:'demo4',caption:'New post',media_url:'',media_type:'IMAGE',_demo:true},
-  {id:'demo5',caption:'Check this',media_url:'',media_type:'IMAGE',_demo:true},
-  {id:'demo6',caption:'My life',media_url:'',media_type:'IMAGE',_demo:true},
-];
-const DEMO_REELS = [
-  {id:'demoreel1',caption:'Reel 1',media_url:'',media_type:'REEL',_demo:true},
-  {id:'demoreel2',caption:'Reel 2',media_url:'',media_type:'REEL',_demo:true},
-  {id:'demoreel3',caption:'Reel 3',media_url:'',media_type:'REEL',_demo:true},
-];
 
 async function loadMedia() {
   if (_mediaCache) { renderGrids(_mediaCache); return; }
@@ -888,16 +901,6 @@ function renderGrids({ posts, reels }, err, isDemo) {
     }
   }
 }
-
-const DEMO_GRADS = [
-  'linear-gradient(135deg,#F97316,#EF4444)',
-  'linear-gradient(135deg,#8B5CF6,#3B82F6)',
-  'linear-gradient(135deg,#10B981,#06B6D4)',
-  'linear-gradient(135deg,#F59E0B,#EF4444)',
-  'linear-gradient(135deg,#EC4899,#8B5CF6)',
-  'linear-gradient(135deg,#14B8A6,#22C55E)',
-];
-let _demoGradIdx = 0;
 
 function mediaItem(m, isReel, isDemo) {
   const cap     = (m.caption || (isReel ? 'Reel' : 'Post')).substring(0, 22);
@@ -1706,6 +1709,7 @@ window.setDupWindow     = setDupWindow;
 window.setMediaTab      = setMediaTab;
 window.setTriggerMode   = setTriggerMode;
 window.toggleDuplicate  = toggleDuplicate;
+window.toggleCr         = toggleCr;
 window.toggleLinkCard   = toggleLinkCard;
 window.toggleStep       = toggleStep;
 window.useDmSug         = useDmSug;
