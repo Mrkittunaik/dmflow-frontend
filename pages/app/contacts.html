@@ -131,7 +131,7 @@ tr:hover td{background:#FAFAFE;}
 <script>
 (function() {
   const user = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
-  if (!user) { if (window !== window.top) { window.top.location.href = 'pages/auth/login.html'; } else { window.location.href = '../auth/login.html'; }; return; }
+  if (!user) { if (window !== window.top) { window.top.location.replace('/pages/auth/login.html'); } else { window.location.replace('/pages/auth/login.html'); }; return; }
 })();
 
 let currentPage = 1;
