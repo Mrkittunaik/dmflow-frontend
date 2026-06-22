@@ -112,7 +112,24 @@ document.head.appendChild(_ts);
 // ═══════════════════════════════════════════════════════════
 function googleLogin(e) {
   if (e) e.preventDefault();
+  // Show a clean in-page loading overlay so user never sees the Render cold-start blank tab
+  _showOAuthOverlay('Signing in with Google...');
   window.location.href = DMFLOW_CONFIG.BACKEND_URL + '/auth/google';
+}
+
+// ── Overlay helpers used by social login buttons ───────────────────────────
+function _showOAuthOverlay(msg) {
+  if (document.getElementById('_dmfOAuthOverlay')) return;
+  const o = document.createElement('div');
+  o.id = '_dmfOAuthOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:inherit;';
+  o.innerHTML = `
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#0A0A0F;">DM<span style="color:#7C3AED;">Flow</span></div>
+    <div style="width:38px;height:38px;border:3px solid #E2E2EA;border-top-color:#7C3AED;border-radius:50%;animation:_dmfOSpin .8s linear infinite;"></div>
+    <div id="_dmfOAuthMsg" style="font-size:14px;font-weight:500;color:#5A5A6E;">${msg || 'Signing in...'}</div>
+    <style>@keyframes _dmfOSpin{to{transform:rotate(360deg)}}</style>
+  `;
+  document.body.appendChild(o);
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -272,13 +289,7 @@ async function sendResetLink() {
 function signOut(e) {
   if (e) e.preventDefault();
   dmClearUser();
-  // Always go to login page cleanly
-  try {
-    const path  = window.top.location.pathname;
-    const depth = (path.match(/\//g) || []).length - 1;
-    const back  = depth > 1 ? '../'.repeat(depth - 1) : '';
-    window.top.location.href = back + 'pages/auth/login.html';
-  } catch(err) {
-    window.location.href = '/pages/auth/login.html';
-  }
+  // Use absolute path + replace() so the browser back-button cannot
+  // return to the app page and crash after token is already cleared.
+  window.location.replace('/pages/auth/login.html');
 }
