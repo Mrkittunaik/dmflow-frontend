@@ -152,30 +152,93 @@
 <script src="../../assets/js/api.js"></script>
 <script src="../../assets/js/auth.js"></script>
 <script>
-// If already logged in, skip login page
+// If already logged in, redirect away from login (use replace so back-button doesn't return here)
 (function() {
   try {
     const token = localStorage.getItem('dmflow_token');
     const user  = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
-    if (token && user) {
-      window.location.replace(user.instagram?.connected ? '../../app.html' : '../onboarding/platform-select.html');
+    // Only redirect if we have BOTH a valid token AND a valid user object
+    if (token && user && user.name) {
+      window.location.replace(
+        user.instagram?.connected
+          ? '../../app.html'
+          : '../onboarding/platform-select.html'
+      );
     }
   } catch(e) {}
 })();
-// Wake up the Render.com backend as early as possible so it's ready by login time
-(function pingBackend() {
+
+// ── Backend wakeup: ping silently as soon as login page loads ──────────────
+// Keeps a promise so googleLogin/facebookLogin can await it instead of waiting blind
+let _backendReady = false;
+let _backendReadyPromise = (function() {
   try {
     const url = (window.DMFLOW_API_URL || '').replace(/\/$/, '') + '/health';
-    fetch(url, { method: 'GET', signal: AbortSignal.timeout(8000) }).catch(() => {});
-  } catch(e) {}
+    return fetch(url, { method: 'GET', signal: AbortSignal.timeout(55000) })
+      .then(() => { _backendReady = true; })
+      .catch(() => { _backendReady = true; }); // even on error, try the redirect
+  } catch(e) { _backendReady = true; return Promise.resolve(); }
 })();
-function dmfBack(){if(document.referrer){history.back();}else{window.location.href="../../index.html";}}
-function facebookLogin(e){
+
+// ── Loading overlay (shown while backend is waking, no Render branding) ───
+function _showAuthOverlay(msg) {
+  if (document.getElementById('_dmfOverlay')) return;
+  const o = document.createElement('div');
+  o.id = '_dmfOverlay';
+  o.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:inherit;';
+  o.innerHTML = `
+    <div style="font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;color:#0A0A0F;">DM<span style="color:#7C3AED;">Flow</span></div>
+    <div style="width:38px;height:38px;border:3px solid #E2E2EA;border-top-color:#7C3AED;border-radius:50%;animation:_dmfSpin .8s linear infinite;"></div>
+    <div id="_dmfOverlayMsg" style="font-size:14px;font-weight:500;color:#5A5A6E;">${msg || 'Signing in...'}</div>
+    <style>@keyframes _dmfSpin{to{transform:rotate(360deg)}}</style>
+  `;
+  document.body.appendChild(o);
+}
+function _updateOverlayMsg(msg) {
+  const el = document.getElementById('_dmfOverlayMsg');
+  if (el) el.textContent = msg;
+}
+function _hideAuthOverlay() {
+  const o = document.getElementById('_dmfOverlay');
+  if (o) o.remove();
+}
+
+// ── Google login: show overlay, wait for backend, then redirect ────────────
+async function googleLogin(e) {
+  if (e) e.preventDefault();
+  const base = (window.DMFLOW_API_URL || '').replace(/\/$/, '');
+  if (!base) return;
+  _showAuthOverlay('Signing in with Google...');
+  // If backend already responded to our early ping, redirect immediately
+  if (!_backendReady) {
+    // Show a softer message after 5s if still waiting
+    const _t1 = setTimeout(() => _updateOverlayMsg('Almost there...'), 5000);
+    const _t2 = setTimeout(() => _updateOverlayMsg('Just a moment more...'), 18000);
+    await _backendReadyPromise;
+    clearTimeout(_t1);
+    clearTimeout(_t2);
+  }
+  window.location.href = base + '/auth/google';
+}
+
+function dmfBack(){
+  // Always go to index — never use history.back() which could return to
+  // the app shell (crash) after the user just logged out.
+  window.location.href = "../../index.html";
+}
+async function facebookLogin(e){
   e.preventDefault();
-  // Facebook OAuth — redirect to backend FB OAuth endpoint
   const base = (window.DMFLOW_API_URL||'').replace(/\/$/,'');
-  if(base) { window.location.href = base + '/auth/facebook'; }
-  else { alert('Facebook login coming soon!'); }
+  if (!base) { alert('Facebook login coming soon!'); return; }
+  _showAuthOverlay('Signing in with Facebook...');
+  if (!_backendReady) {
+    const _t1 = setTimeout(() => _updateOverlayMsg('Almost there...'), 5000);
+    const _t2 = setTimeout(() => _updateOverlayMsg('Just a moment more...'), 18000);
+    await _backendReadyPromise;
+    clearTimeout(_t1);
+    clearTimeout(_t2);
+  }
+  window.location.href = base + '/auth/facebook';
 }
 </script>
 </body>
