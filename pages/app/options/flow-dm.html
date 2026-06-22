@@ -564,34 +564,12 @@ const flowState = {
 };
 
 /* ═══════════════════════════════════════
-   INIT
-═══════════════════════════════════════ */
-(async () => {
-  // Load user name for phone preview
-  try {
-    const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
-    const igName = u.instagram?.username || u.username || u.name || 'you';
-    const firstChar = igName.charAt(0).toUpperCase();
-    document.getElementById('phoneName').textContent = igName;
-    document.getElementById('phoneAvatar').textContent = firstChar;
-  } catch(e) {}
-
-  // Check for edit param
-  const params = new URLSearchParams(window.location.search);
-  const editId = params.get('edit');
-  if (editId) {
-    state.editId = editId;
-    await loadExistingAutomation(editId);
-  }
-
-  // Load this tab's own media (independent of Auto DM — no shared DOM to read from)
-  await loadFlowMedia();
-
-  updateFlowPhonePreview();
-})();
-
-/* ═══════════════════════════════════════
-   FLOW MEDIA LOADING
+   FLOW MEDIA LOADING — declared BEFORE the INIT block below, since
+   INIT calls loadFlowMedia() which reads _flowMediaCache/DEMO_POSTS/
+   DEMO_REELS/DEMO_GRADS. FIX: these were declared AFTER the INIT IIFE
+   that calls loadFlowMedia(), causing "Cannot access '_flowMediaCache'
+   before initialization" the moment loadFlowMedia() ran — the exact
+   cause of the permanent loading spinner on the reel/post grid.
    Independent API call — does NOT depend on Auto DM's grid being
    present in the DOM, since each tab now loads on its own.
 ═══════════════════════════════════════ */
@@ -620,6 +598,33 @@ const DEMO_GRADS = [
   'linear-gradient(135deg,#14B8A6,#22C55E)',
 ];
 let _demoGradIdx = 0;
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+(async () => {
+  // Load user name for phone preview
+  try {
+    const u = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
+    const igName = u.instagram?.username || u.username || u.name || 'you';
+    const firstChar = igName.charAt(0).toUpperCase();
+    document.getElementById('phoneName').textContent = igName;
+    document.getElementById('phoneAvatar').textContent = firstChar;
+  } catch(e) {}
+
+  // Check for edit param
+  const params = new URLSearchParams(window.location.search);
+  const editId = params.get('edit');
+  if (editId) {
+    state.editId = editId;
+    await loadExistingAutomation(editId);
+  }
+
+  // Load this tab's own media (independent of Auto DM — no shared DOM to read from)
+  await loadFlowMedia();
+
+  updateFlowPhonePreview();
+})();
 
 async function loadFlowMedia() {
   flowState.mediaLoaded = true;
@@ -1311,6 +1316,7 @@ window.setFlowTriggerMode= setFlowTriggerMode;
 window.toggleFlowBtnType = toggleFlowBtnType;
 window.toggleStep        = toggleStep;
 window.updateFlowBtn     = updateFlowBtn;
+window.autoKeyword       = autoKeyword;
 window.useFlowSug        = useFlowSug;
 window.scheduleAutoSave  = scheduleAutoSave;
 window.saveDraft         = saveDraft;
