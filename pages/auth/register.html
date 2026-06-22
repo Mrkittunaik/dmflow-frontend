@@ -160,7 +160,7 @@
 <script src="../../assets/js/auth.js"></script>
 
 <script>
-function dmfBack(){if(document.referrer){history.back();}else{window.location.href="../../index.html";}}
+function dmfBack(){ window.location.href = "../../index.html"; }
 function facebookLogin(e){
   e.preventDefault();
   const base = (window.DMFLOW_API_URL||'').replace(/\/$/,'');
