@@ -545,7 +545,7 @@ button,textarea,input{font-family:inherit;}
   const u = JSON.parse(localStorage.getItem('dmflow_user')||'null');
   if(!u){
     const dest = '../auth/login.html';
-    if(window!==window.top) window.top.location.href = 'pages/auth/login.html';
+    if(window!==window.top) window.top.location.replace('/pages/auth/login.html');
     else window.location.href = dest;
   }
 })();
