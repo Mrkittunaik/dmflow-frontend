@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <!-- Favicon & App Icons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/apple-touch-icon-167x167.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png">
+  <link rel="manifest" href="/icons/site.webmanifest">
+  <meta name="msapplication-TileImage" content="/icons/mstile-150x150.png">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+  <meta name="msapplication-config" content="/icons/browserconfig.xml">
+  <meta name="theme-color" content="#0A0A0F">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="dmflow-api" content="https://api.dmflowapp.in">
+<title>Auto DM – DMFlow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-webkit-font-smoothing:antialiased;}
+
+/* ── SHELL ── */
+.app{display:flex;height:100vh;overflow:hidden;}
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;min-width:0;}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;height:56px;background:#fff;border-bottom:1.5px solid #EBEBF0;
+  flex-shrink:0;gap:12px;position:relative;z-index:200;
+}
+.topbar-help{display:flex;align-items:center;gap:5px;font-size:12px;color:#9898A8;cursor:pointer;}
+.topbar-help:hover{color:#0A0A0F;}
+.topbar-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.btn-draft{padding:8px 16px;background:#fff;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;color:#0A0A0F;transition:border-color .15s;}
+.btn-draft:hover{border-color:#0A0A0F;}
+.btn-start{display:flex;align-items:center;gap:6px;padding:8px 18px;background:#0A0A0F;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;white-space:nowrap;}
+.btn-start:hover:not(:disabled){background:#2A2A3A;}
+.btn-start:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── TYPE BAR ── */
+.type-bar{padding:10px 24px;background:#FAFAFA;border-bottom:1.5px solid #EBEBF0;flex-shrink:0;position:relative;z-index:199;}
+.type-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.type-tab{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:#fff;border:1.5px solid #DDDDE5;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#5A5A6E;transition:all .15s;white-space:nowrap;}
+.type-tab.active{background:#0A0A0F;color:#fff;border-color:#0A0A0F;}
+.type-tab:hover:not(.active):not(.locked){background:#F4F4F8;border-color:#9898A8;}
+.type-tab .pro-chip{font-size:9px;font-weight:800;background:#7C3AED;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;line-height:1.4;}
+.type-tab.locked{opacity:.7;border-style:dashed;}
+
+/* ── MOBILE: topbar + type-bar ── */
+@media(max-width:900px){
+  html,body{overflow-x:hidden;overflow-y:auto;height:auto;}
+  .app{flex-direction:column;height:auto;min-height:100vh;}
+  .main{flex:none;height:auto;overflow:visible;}
+
+  .topbar{padding:0 14px;height:52px;position:sticky;top:0;z-index:100;background:#fff;box-shadow:0 1px 0 #EBEBF0;}
+  .topbar-help{display:none;}
+  .topbar-title{font-size:13px;}
+  .btn-draft{padding:6px 12px;font-size:11px;border-radius:7px;}
+  .btn-start{padding:6px 12px;font-size:11px;gap:4px;border-radius:7px;}
+
+  .type-bar{padding:8px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:52px;z-index:99;background:#FAFAFA;border-bottom:1.5px solid #EBEBF0;}
+  .type-bar::-webkit-scrollbar{display:none;}
+  .type-tabs{flex-wrap:nowrap;width:max-content;gap:5px;}
+  .type-tab{padding:5px 11px;font-size:11px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-help" onclick="window.open('https://help.dmflow.in','_blank')">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1"/></svg>
+      Need help?
+    </div>
+    <div class="topbar-title" id="builderTitle">Auto DM Setup</div>
+    <div class="topbar-actions">
+      <span id="autosaveDot" class="autosave-dot" title="Auto-saved"></span>
+      <button class="btn-draft" onclick="saveDraft()">Save draft</button>
+      <button class="btn-start" id="btnStart" onclick="startAutomation()">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
+        Start automation
+      </button>
+    </div>
+  </div>
+
+  <!-- TYPE BAR -->
+  <div class="type-bar">
+    <div class="type-tabs">
+      <button class="type-tab active" id="tab-auto-dm" onclick="switchType('auto-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Auto DM
+      </button>
+      <button class="type-tab" id="tab-product-dm" onclick="switchType('product-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.8"/></svg>
+        Product Link DM
+      </button>
+      <button class="type-tab" id="tab-flow-dm" onclick="switchType('flow-dm',this)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="5" r="2" stroke="currentColor" stroke-width="1.8"/><circle cx="19" cy="19" r="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 12h4l4-5M7 12h4l4 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Flow DM
+        <span style="font-size:9px;font-weight:800;background:#059669;color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px;line-height:1.4;">NEW</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TAB CONTENT: each tab's self-contained file gets injected here -->
+  <div id="tabContent" style="flex:1;overflow:hidden;display:flex;position:relative;z-index:1;"></div>
+
+</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   TAB LOADER
+   Fetches each tab's self-contained file from options/
+   and injects it into #tabContent, re-running its <script>
+   tags so the tab's JS executes every time it loads.
+═══════════════════════════════════════ */
+const TAB_FILES = {
+  'auto-dm':    'options/auto-dm.html',
+  'product-dm': 'options/product-link-dm.html',
+  'flow-dm':    'options/flow-dm.html',
+};
+
+const TAB_TITLES = {
+  'auto-dm':    'Auto DM Setup',
+  'product-dm': 'Product Link DM Setup',
+  'flow-dm':    'Flow DM Setup',
+};
+
+let _currentTab = null;
+
+async function loadTab(type) {
+  if (_currentTab === type) return;
+  _currentTab = type;
+
+  const container = document.getElementById('tabContent');
+  const url = TAB_FILES[type];
+  if (!url) return;
+
+  const res = await fetch(url);
+  const html = await res.text();
+
+  // Parse the fetched HTML so we can separate script tags from the rest.
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = html;
+
+  // Pull out script tags (inline + src) before injecting, since
+  // innerHTML does not execute <script> content automatically.
+  const scripts = Array.from(wrapper.querySelectorAll('script'));
+  scripts.forEach(s => s.remove());
+
+  // Inject the remaining markup (HTML + <style> tags work fine via innerHTML).
+  container.innerHTML = wrapper.innerHTML;
+
+  // Re-create and append each script tag so the browser executes it.
+  scripts.forEach(oldScript => {
+    const newScript = document.createElement('script');
+    if (oldScript.src) {
+      newScript.src = oldScript.src;
+    } else {
+      newScript.textContent = oldScript.textContent;
+    }
+    document.body.appendChild(newScript);
+  });
+
+  document.getElementById('builderTitle').textContent = TAB_TITLES[type] || 'Auto DM Setup';
+}
+
+function switchType(type, btn) {
+  document.querySelectorAll('.type-tab:not(.locked)').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadTab(type);
+}
+
+// Load Auto DM by default on page load
+document.addEventListener('DOMContentLoaded', () => {
+  loadTab('auto-dm');
+});
+</script>
+</body>
+</html>
