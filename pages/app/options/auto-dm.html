@@ -1366,6 +1366,7 @@ function _restoreStep6(settings) {
 ═══════════════════════════════════════ */
 function buildPayload(active) {
   const backendType = 'keyword_dm';
+  // Determine link card state from DOM (toggle is visual-only, no separate state flag)
   const linkOn = document.getElementById('linkCardSection')?.style.display !== 'none';
   return {
     name: document.getElementById('builderTitle').textContent.replace(' Setup',''),
@@ -1407,7 +1408,7 @@ function buildPayload(active) {
 async function saveDraft() {
   if (!window.API || !API.getToken()) { toast('Please log in first.', 'error'); return; }
   const btn = document.querySelector('.btn-draft');
-  btn.textContent = 'Saving…';
+  if (btn) btn.textContent = 'Saving…';
   try {
     const payload = buildPayload(false);
     if (state.editId) {
@@ -1416,12 +1417,12 @@ async function saveDraft() {
       const res = await API.createAutomation(payload);
       if (res && res._id) state.editId = res._id;
     }
-    btn.textContent = 'Saved ✓';
+    if (btn) btn.textContent = 'Saved ✓';
     markSaved();
-    setTimeout(() => { btn.textContent = 'Save draft'; }, 2000);
+    setTimeout(() => { if (btn) btn.textContent = 'Save draft'; }, 2000);
   } catch(e) {
     toast('Failed to save: ' + (e.message || 'Error'), 'error');
-    btn.textContent = 'Save draft';
+    if (btn) btn.textContent = 'Save draft';
   }
 }
 
@@ -1496,6 +1497,20 @@ async function loadExistingAutomation(id) {
     document.getElementById('dmTextarea').value = state.dmText;
     document.getElementById('lcTitle').value    = state.lcTitle;
     document.getElementById('lcUrl').value      = state.lcUrl;
+
+    // ── Restore link card toggle state ────────────────────────────
+    // If a real URL was saved (not the placeholder), show the link card section
+    const hadRealLink = a.actions?.dm?.linkUrl && a.actions.dm.linkUrl !== 'yourstore.com/look';
+    if (hadRealLink) {
+      const section = document.getElementById('linkCardSection');
+      const toggle  = document.getElementById('linkToggle');
+      const knob    = document.getElementById('linkToggleKnob');
+      if (section) section.style.display = 'block';
+      if (toggle)  toggle.style.background = '#7C3AED';
+      if (knob)    knob.style.left = '19px';
+    }
+    document.getElementById('lcTitlePreview').textContent = state.lcTitle || 'Link title';
+    document.getElementById('lcUrlPreview').textContent   = state.lcUrl   || 'your-url.com';
 
     // ── Media selection ────────────────────────────────────────────
     if (a.applyAll) {
