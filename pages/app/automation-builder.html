@@ -122,6 +122,34 @@ body{font-family:'Instrument Sans',sans-serif;background:#F4F4F8;color:#0A0A0F;-
 
 <script>
 /* ═══════════════════════════════════════
+   API SCRIPT — loaded ONCE here, up front.
+   FIX: previously each tab file injected its own
+   <script src="../../../assets/js/api.js">, which (a) used a
+   broken relative path once the file was injected into this shell
+   instead of loaded standalone, and (b) re-downloaded/re-executed
+   api.js on every single tab switch, racing against the tab's own
+   inline script that immediately calls window.API on load. That
+   race is why posts/reels silently fell back to demo data — the
+   inline code ran before window.API existed.
+   Now api.js loads once, here, before any tab content is fetched,
+   and every tab's <script src="/assets/js/api.js"> tag is detected
+   and skipped during injection since it's already loaded.
+═══════════════════════════════════════ */
+let _apiReady = null;
+function ensureApiLoaded() {
+  if (_apiReady) return _apiReady;
+  _apiReady = new Promise((resolve) => {
+    if (window.API) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = '/assets/js/api.js';
+    s.onload = () => resolve();
+    s.onerror = () => resolve(); // fail open — tab JS already null-checks window.API
+    document.body.appendChild(s);
+  });
+  return _apiReady;
+}
+
+/* ═══════════════════════════════════════
    TAB LOADER
    Fetches each tab's self-contained file from options/
    and injects it into #tabContent, re-running its <script>
@@ -149,23 +177,47 @@ async function loadTab(type) {
   const url = TAB_FILES[type];
   if (!url) return;
 
-  const res = await fetch(url);
-  const html = await res.text();
+  // Make sure window.API exists BEFORE the tab's own inline script runs,
+  // so its DOMContentLoaded-style init (loadMedia, etc.) never races it.
+  await ensureApiLoaded();
+
+  let res, html;
+  try {
+    res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    html = await res.text();
+  } catch (e) {
+    container.innerHTML = `<div style="padding:40px;text-align:center;color:#9898A8;font-size:13px;">
+      Couldn't load this section (${url}). Check your connection and try again.
+    </div>`;
+    _currentTab = null; // allow retry on next click
+    return;
+  }
 
   // Parse the fetched HTML so we can separate script tags from the rest.
   const wrapper = document.createElement('div');
   wrapper.innerHTML = html;
 
-  // Pull out script tags (inline + src) before injecting, since
-  // innerHTML does not execute <script> content automatically.
+  // Pull out script tags before injecting, since innerHTML does not
+  // execute <script> content automatically. Skip the api.js src tag —
+  // it's already loaded once by ensureApiLoaded() above; re-injecting it
+  // here would just race the inline script again on every tab switch.
   const scripts = Array.from(wrapper.querySelectorAll('script'));
   scripts.forEach(s => s.remove());
+
+  // Remove any leftover <style> blocks from a previously-loaded tab so
+  // they don't keep piling up in the DOM on every switch.
+  document.querySelectorAll('style[data-tab-style]').forEach(el => el.remove());
+
+  // Tag this tab's <style> blocks so the next switch can clean them up.
+  wrapper.querySelectorAll('style').forEach(st => st.setAttribute('data-tab-style', type));
 
   // Inject the remaining markup (HTML + <style> tags work fine via innerHTML).
   container.innerHTML = wrapper.innerHTML;
 
-  // Re-create and append each script tag so the browser executes it.
+  // Re-create and append each non-api.js script tag so the browser executes it.
   scripts.forEach(oldScript => {
+    if (oldScript.src && oldScript.src.includes('/assets/js/api.js')) return; // already loaded
     const newScript = document.createElement('script');
     if (oldScript.src) {
       newScript.src = oldScript.src;
