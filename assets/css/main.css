@@ -70,10 +70,11 @@ html { overflow-x: hidden; }
 .nav-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 40px;
+  padding: 12px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: nowrap;
 }
 .logo {
   font-family: 'Bricolage Grotesque', sans-serif;
@@ -82,12 +83,14 @@ html { overflow-x: hidden; }
   color: var(--black);
   text-decoration: none;
   letter-spacing: -0.5px;
+  flex-shrink: 0;
 }
 .logo span { color: var(--purple); }
 .nav-links {
   display: flex;
-  gap: 32px;
+  gap: 28px;
   list-style: none;
+  flex-shrink: 0;
 }
 .nav-links a {
   font-size: 14px;
@@ -95,9 +98,10 @@ html { overflow-x: hidden; }
   text-decoration: none;
   font-weight: 500;
   transition: color .2s;
+  white-space: nowrap;
 }
 .nav-links a:hover { color: var(--black); }
-.nav-right { display: flex; gap: 10px; align-items: center; }
+.nav-right { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; flex-shrink: 0; }
 
 .btn-ghost {
   padding: 8px 18px;
@@ -1842,8 +1846,8 @@ h1 .accent {
 .sidebar-overlay { display: none; }
 
 /* NAV mobile */
-@media (max-width: 768px) {
-  .nav-inner { padding: 0 16px; height: 56px; }
+@media (max-width: 1080px) {
+  .nav-inner { padding: 0 20px; height: 56px; }
   .nav-links { display: none; }
   .nav-right .btn-ghost { display: none; }
   .btn-primary { padding: 9px 16px; font-size: 13px; }
