@@ -58,31 +58,9 @@
       <a href="pages/auth/register.html" class="btn-signup" id="navRegisterBtn">Sign Up</a>
       <a href="app.html" class="btn-primary" id="navAppBtn" style="display:none;gap:6px;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Open App</a>
       <div id="navUserAvatar" style="display:none;width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0" title="Go to app" onclick="window.location.href='app.html'"></div>
-      <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
-        <span></span><span></span><span></span>
-      </div>
     </div>
   </div>
 </nav>
-<!-- Mobile nav drawer — OUTSIDE nav so no clipping -->
-<div class="nav-mobile-drawer" id="mobileDrawer">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-    <span style="font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;color:#0A0A0F;">DM<span style="color:#7C3AED;">Flow</span></span>
-    <button onclick="closeMobileNav()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#0A0A0F;padding:4px 8px;">✕</button>
-  </div>
-  <div class="mob-divider"></div>
-  <a href="#features" onclick="closeMobileNav()">Features</a>
-  <a href="#templates" onclick="closeMobileNav()">Templates</a>
-  <a href="#pricing" onclick="closeMobileNav()">Pricing</a>
-  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
-  <a href="careers.html" onclick="closeMobileNav()">Careers</a>
-  <a href="#contact" onclick="closeMobileNav()">Contact</a>
-  <div class="mob-divider"></div>
-  <a href="pages/auth/login.html" id="mobLoginLink">Join with Google</a>
-  <a href="pages/auth/register.html" class="mob-cta" id="mobRegisterLink">Sign Up</a>
-  <a href="app.html" class="mob-cta" id="mobAppLink" style="display:none;background:var(--purple)">Open App →</a>
-</div>
-<div class="mob-overlay" id="mobOverlay" onclick="closeMobileNav()"></div>
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar">
