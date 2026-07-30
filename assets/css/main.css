@@ -78,15 +78,39 @@ body { max-width: 100%; }
   flex-wrap: nowrap;
 }
 .logo {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--black);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   text-decoration: none;
-  letter-spacing: -0.5px;
   flex-shrink: 0;
 }
-.logo span { color: var(--purple); }
+.logo-text {
+  position: relative;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -0.5px;
+  -webkit-text-stroke: 1.4px var(--black);
+  text-stroke: 1.4px var(--black);
+  paint-order: stroke fill;
+  padding-left: 12px;
+}
+.logo-text::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 8px;
+  height: 4px;
+  background: #2563eb;
+  border-radius: 1px;
+}
+.logo-accent {
+  color: var(--purple);
+  -webkit-text-stroke: 1.4px var(--black);
+  text-stroke: 1.4px var(--black);
+}
 .nav-links {
   display: flex;
   gap: 28px;
@@ -716,8 +740,9 @@ h1 .accent {
   padding-bottom: 48px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.footer-brand .logo { color: #fff; font-size: 20px; }
-.footer-brand .logo span { color: var(--lime); }
+.footer-brand .logo-text { color: #fff; font-size: 20px; -webkit-text-stroke: 1.4px #fff; text-stroke: 1.4px #fff; }
+.footer-brand .logo-text::before { background: var(--lime); }
+.footer-brand .logo-accent { color: var(--lime); -webkit-text-stroke: 1.4px #fff; text-stroke: 1.4px #fff; }
 .footer-brand p {
   font-size: 13px;
   color: rgba(255,255,255,0.5);
