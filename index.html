@@ -51,8 +51,11 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="nav-right">
-      <a href="pages/auth/login.html" class="btn-ghost" id="navLoginBtn">Log in</a>
-      <a href="pages/auth/register.html" class="btn-primary" id="navRegisterBtn">Start free →</a>
+      <a href="pages/auth/login.html" class="btn-google" id="navLoginBtn">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+        Join with Google
+      </a>
+      <a href="pages/auth/register.html" class="btn-signup" id="navRegisterBtn">Sign Up</a>
       <a href="app.html" class="btn-primary" id="navAppBtn" style="display:none;gap:6px;align-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Open App</a>
       <div id="navUserAvatar" style="display:none;width:32px;height:32px;border-radius:50%;background:var(--purple);color:#fff;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0" title="Go to app" onclick="window.location.href='app.html'"></div>
       <div class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()">
@@ -75,8 +78,8 @@
   <a href="careers.html" onclick="closeMobileNav()">Careers</a>
   <a href="#contact" onclick="closeMobileNav()">Contact</a>
   <div class="mob-divider"></div>
-  <a href="pages/auth/login.html" id="mobLoginLink">Log in</a>
-  <a href="pages/auth/register.html" class="mob-cta" id="mobRegisterLink">Start free →</a>
+  <a href="pages/auth/login.html" id="mobLoginLink">Join with Google</a>
+  <a href="pages/auth/register.html" class="mob-cta" id="mobRegisterLink">Sign Up</a>
   <a href="app.html" class="mob-cta" id="mobAppLink" style="display:none;background:var(--purple)">Open App →</a>
 </div>
 <div class="mob-overlay" id="mobOverlay" onclick="closeMobileNav()"></div>
@@ -1366,8 +1369,54 @@
    SECTION-BY-SECTION BACKGROUND COLOURS
 ═══════════════════════════════════════ */
 
+/* Nav — Join with Google / Sign Up buttons */
+.btn-google {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #3c4043;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.btn-google:hover { background: #f8f9fa; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.btn-signup {
+  display: inline-block;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.btn-signup:hover { background: #1d4ed8; transform: translateY(-1px); }
+@media (max-width: 480px) {
+  .btn-google span, .btn-google { font-size: 13px; padding: 8px 12px; }
+}
+
 /* Hero — clean white */
-      section.hero { background-color:#e0f2fe; background-image:radial-gradient(circle, #93c5fd 1px, transparent 1px); background-size:24px 24px; }
+      section.hero { background-color:#ffffff; background-image:none; background-size:auto; }
+      section.hero h1 .accent {
+        background: linear-gradient(90deg, #ec4899 0%, #d946ef 45%, #7C3AED 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #7C3AED;
+      }
 
 /* Logos strip — stays as-is (light grey) */
 
@@ -2124,8 +2173,8 @@ section.testimonials-section { background: #ffffff; }
 
 /* ── SECTION BACKGROUNDS ───────────────────────────────────── */
 
-/* S1 Hero — light blue with dots */
-section.hero { background-color:#e0f2fe !important; background-image:radial-gradient(circle, #93c5fd 1px, transparent 1px) !important; background-size:24px 24px !important; }
+/* S1 Hero — clean white, no dots */
+section.hero { background-color:#ffffff !important; background-image:none !important; background-size:auto !important; }
 
 /* S2 Meta Showcase — light purple + square intersection dot grid */
 section.meta-showcase-section,
@@ -2541,19 +2590,17 @@ section.section.faq-section .faq-item.open .faq-arrow {
   nav.nav .logo { color: #0A0A0F !important; }
   nav.nav .logo span { color: #0A0A0F !important; }
   nav.nav .nav-hamburger span { background: #0A0A0F !important; }
-  nav.nav .btn-primary,
-  nav.nav .btn-ghost { color: #0A0A0F !important; }
-  nav.nav .nav-right .btn-ghost {
+  nav.nav .nav-right .btn-google {
     display: none !important;
   }
-  nav.nav .nav-right .btn-primary#navRegisterBtn {
+  nav.nav .nav-right #navRegisterBtn {
     display: inline-flex !important;
     align-items: center !important;
     font-size: 13px !important;
-    padding: 6px 12px !important;
+    padding: 6px 14px !important;
     white-space: nowrap !important;
-    background: #ffffff !important;
-    color: #0A0A0F !important;
+    background: #2563eb !important;
+    color: #ffffff !important;
     border: none !important;
   }
 }
@@ -2657,8 +2704,7 @@ section.creators-wall-section [style*="text-align:center;margin-top"] {
 ═══════════════════════════════════════════════════════════════ */
 
 /* All nav buttons — uniform height & radius */
-.nav-right .btn-primary,
-.nav-right .btn-ghost {
+.nav-right .btn-primary {
   border-radius: 10px !important;
   padding: 5px 14px !important;
   font-size: 13px !important;
@@ -2696,29 +2742,30 @@ section.creators-wall-section [style*="text-align:center;margin-top"] {
   flex-shrink: 0 !important;
 }
 
-/* ── Start Free button (lime) — proper sizing ── */
+/* ── Sign Up button (blue) — proper sizing ── */
 #navRegisterBtn {
-  padding: 5px 14px !important;
-  font-size: 13px !important;
-  border-radius: 10px !important;
+  padding: 9px 20px !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
   height: auto !important;
   line-height: 1.5 !important;
-  background: #C8FF00 !important;
-  color: #0A0A0F !important;
+  background: #2563eb !important;
+  color: #ffffff !important;
   border: none !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
 }
 
-/* ── Log in button (ghost) ── */
+/* ── Join with Google button ── */
 #navLoginBtn {
-  padding: 5px 14px !important;
-  font-size: 13px !important;
-  border-radius: 10px !important;
+  padding: 9px 16px !important;
+  font-size: 14px !important;
+  border-radius: 8px !important;
   height: auto !important;
   line-height: 1.5 !important;
-  color: #0A0A0F !important;
-  font-weight: 600 !important;
-  background: transparent !important;
+  color: #3c4043 !important;
+  font-weight: 500 !important;
+  background: #ffffff !important;
+  border: 1px solid #dadce0 !important;
 }
 
 /* ── Profile avatar — proper sizing & image fit ── */
@@ -2925,6 +2972,101 @@ function toggleFaq(btn) {
   // open this one if it was closed
   if (!isOpen) item.classList.add('open');
 }
+</script>
+
+<!-- COOKIE CONSENT -->
+<style>
+.cookie-consent {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  max-width: 360px;
+  width: calc(100% - 48px);
+  background: #17171c;
+  color: #fff;
+  border-radius: 14px;
+  padding: 20px 20px 18px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  z-index: 999;
+  font-family: 'Instrument Sans', sans-serif;
+  transform: translateY(140%);
+  opacity: 0;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .35s ease;
+}
+.cookie-consent.show { transform: translateY(0); opacity: 1; }
+.cookie-consent-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #9898a8;
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+}
+.cookie-consent-close:hover { color: #fff; }
+.cookie-consent p {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #d6d6de;
+  margin: 0 18px 14px 0;
+}
+.cookie-consent a {
+  color: #fff;
+  text-decoration: underline;
+}
+.cookie-consent-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  color: #0A0A0F;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.cookie-consent-btn:hover { opacity: .85; }
+@media (max-width: 480px) {
+  .cookie-consent { left: 16px; right: 16px; bottom: 16px; max-width: none; width: auto; }
+}
+</style>
+<div class="cookie-consent" id="cookieConsent" role="dialog" aria-label="Cookie consent">
+  <button class="cookie-consent-close" id="cookieConsentClose" aria-label="Close">✕</button>
+  <p>We use cookies for a better experience. <a href="pages/settings/privacy.html">Learn more</a>.</p>
+  <button class="cookie-consent-btn" id="cookieConsentAccept">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M9 8.5a.5.5 0 100-1 .5.5 0 000 1zM15 6.5a.5.5 0 100-1 .5.5 0 000 1zM8 13a.5.5 0 100-1 .5.5 0 000 1z"/></svg>
+    Accept
+  </button>
+</div>
+<script>
+(function() {
+  var CONSENT_KEY = 'dmflow_cookie_consent';
+  var banner = document.getElementById('cookieConsent');
+  if (!banner) return;
+  if (localStorage.getItem(CONSENT_KEY) === 'accepted') return;
+
+  setTimeout(function() { banner.classList.add('show'); }, 600);
+
+  function dismiss() {
+    banner.classList.remove('show');
+    setTimeout(function() { banner.style.display = 'none'; }, 450);
+  }
+
+  document.getElementById('cookieConsentAccept').addEventListener('click', function() {
+    localStorage.setItem(CONSENT_KEY, 'accepted');
+    dismiss();
+  });
+  document.getElementById('cookieConsentClose').addEventListener('click', function() {
+    dismiss();
+  });
+})();
 </script>
 </body>
 </html>
