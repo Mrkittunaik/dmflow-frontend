@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Payment successful – DMFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--purple:#7C3AED;--pink:#EC4899;--black:#0A0A0F;--gray-50:#F8F8FC;--gray-200:#E2E2EA;--text2:#5A5A6E;--text3:#9898A8;--green:#22C55E;--grad:linear-gradient(135deg,#EC4899,#7C3AED);}
+body{font-family:'Instrument Sans',sans-serif;background:var(--gray-50);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.card{max-width:440px;width:100%;background:#fff;border-radius:24px;padding:40px 32px;text-align:center;box-shadow:0 20px 60px rgba(124,58,237,.12);}
+.check-wrap{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#4ADE80,#22C55E);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;animation:pop .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes pop{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
+p.sub{color:var(--text2);font-size:14px;margin-bottom:24px;}
+.receipt{background:var(--gray-50);border-radius:14px;padding:16px 18px;text-align:left;margin-bottom:24px;}
+.rrow{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;color:var(--text2);}
+.rrow span:last-child{color:var(--black);font-weight:700;}
+.rrow.total{border-top:1px solid var(--gray-200);margin-top:4px;padding-top:11px;font-weight:800;color:var(--black);}
+.btn{display:block;width:100%;padding:15px;background:var(--grad);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;}
+.btn-ghost{display:block;width:100%;padding:13px;background:none;color:var(--text2);border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="check-wrap">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+  </div>
+  <h1>Payment successful 🎉</h1>
+  <p class="sub" id="subText">You're all set on your new plan.</p>
+
+  <div class="receipt" id="receipt">
+    <div class="rrow"><span>Plan</span><span id="rPlan">—</span></div>
+    <div class="rrow"><span>Date</span><span id="rDate">—</span></div>
+    <div class="rrow"><span>Transaction ID</span><span id="rTxn">—</span></div>
+    <div class="rrow total"><span>Amount paid</span><span id="rAmount">—</span></div>
+  </div>
+
+  <a class="btn" id="dashBtn" href="/app.html">Go to Dashboard</a>
+  <a class="btn-ghost" href="/index.html">Back to home</a>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const plan = params.get('plan') || 'pro';
+const amount = params.get('amount');
+const returnTo = params.get('return');
+
+document.getElementById('rPlan').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
+document.getElementById('rDate').textContent = new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+document.getElementById('rTxn').textContent = 'TXN' + Date.now().toString().slice(-10);
+document.getElementById('rAmount').textContent = amount ? '₹' + Number(amount).toLocaleString('en-IN') : '—';
+
+// prefer sending the user back into the app if that's where they came from
+if (returnTo && returnTo.includes('app')) {
+  document.getElementById('dashBtn').href = '/app.html';
+}
+</script>
+</body>
+</html>

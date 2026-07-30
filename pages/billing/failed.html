@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Payment failed – DMFlow</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--purple:#7C3AED;--pink:#EC4899;--black:#0A0A0F;--gray-50:#F8F8FC;--gray-200:#E2E2EA;--text2:#5A5A6E;--red:#EF4444;--grad:linear-gradient(135deg,#EC4899,#7C3AED);}
+body{font-family:'Instrument Sans',sans-serif;background:var(--gray-50);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.card{max-width:420px;width:100%;background:#fff;border-radius:24px;padding:40px 32px;text-align:center;box-shadow:0 20px 60px rgba(239,68,68,.10);}
+.x-wrap{width:76px;height:76px;border-radius:50%;background:#FEF2F2;display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
+h1{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
+p.sub{color:var(--text2);font-size:14px;margin-bottom:26px;line-height:1.5;}
+.btn{display:block;width:100%;padding:15px;background:var(--grad);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;}
+.btn-ghost{display:block;width:100%;padding:13px;background:none;color:var(--text2);border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="x-wrap">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </div>
+  <h1>Payment didn't go through</h1>
+  <p class="sub">Don't worry, you haven't been charged. This can happen due to a network issue or a declined transaction. Your plan and any coupon you applied are still saved — you can pick up right where you left off.</p>
+  <a class="btn" id="retryBtn" href="checkout.html">Try again</a>
+  <a class="btn-ghost" id="homeBtn" href="/index.html">Back to home</a>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const plan = params.get('plan') || 'pro';
+const returnTo = params.get('return') || '/index.html';
+document.getElementById('retryBtn').href = `checkout.html?plan=${encodeURIComponent(plan)}&return=${encodeURIComponent(returnTo)}`;
+document.getElementById('homeBtn').href = returnTo.includes('app') ? '/app.html' : '/index.html';
+</script>
+</body>
+</html>
