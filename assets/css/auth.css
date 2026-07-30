@@ -1,5 +1,37 @@
 /* ===== AUTH PAGES EXTRA STYLES ===== */
 
+/* Auth logo — sticker/outline wordmark to match main nav */
+.auth-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #fff;
+  -webkit-text-stroke: 1.4px #fff;
+  text-stroke: 1.4px #fff;
+  paint-order: stroke fill;
+  position: relative;
+  padding-left: 12px;
+}
+.auth-logo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 8px;
+  height: 4px;
+  background: var(--lime);
+  border-radius: 1px;
+}
+.auth-logo span {
+  color: var(--lime);
+  -webkit-text-stroke: 1.4px #fff;
+  text-stroke: 1.4px #fff;
+}
+
 /* Left panel features list */
 .auth-features {
   margin-top: 28px;
