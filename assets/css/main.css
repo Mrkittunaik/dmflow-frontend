@@ -138,15 +138,18 @@ body { max-width: 100%; }
 
 /* ===== HERO ===== */
 .hero {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 80px 40px 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  min-height: calc(100vh - 120px);
+  text-align: center;
 }
+.hero-content { display: flex; flex-direction: column; align-items: center; }
+.hero-sub { margin-left: auto; margin-right: auto; }
+.hero-btns { justify-content: center; }
+.hero-trust { justify-content: center; }
 .hero-badge {
   display: inline-flex;
   align-items: center;
