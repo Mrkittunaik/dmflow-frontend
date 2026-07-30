@@ -29,7 +29,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-html { overflow-x: hidden; }
+html { overflow-x: hidden; max-width: 100%; }
+body { max-width: 100%; }
 
 /* ===== ANNOUNCE BAR ===== */
 .announce-bar {
@@ -1829,89 +1830,39 @@ h1 .accent {
 /* ===== MOBILE RESPONSIVE — FULL OVERHAUL ===== */
 
 /* Hide mobile-only elements on desktop */
-.nav-hamburger { display: none; }
-.nav-mobile-drawer {
-  position: fixed;
-  top: 0; right: -100%; bottom: 0;
-  width: 80%; max-width: 300px;
-  background: #fff; z-index: 1001;
-  padding: 24px 20px;
-  display: flex; flex-direction: column; gap: 4px;
-  overflow-y: auto; transition: right .3s ease;
-  box-shadow: -4px 0 24px rgba(0,0,0,0.12);
-}
-.nav-mobile-drawer.open { right: 0; }
-.mob-overlay { display: none; }
+.nav-hamburger { display: none !important; }
+.nav-mobile-drawer { display: none !important; }
+.mob-overlay { display: none !important; }
 .dash-mobile-topbar { display: none; }
 .sidebar-overlay { display: none; }
 
 /* NAV mobile */
 @media (max-width: 1080px) {
-  .nav-inner { padding: 0 20px; height: 56px; }
-  .nav-links { display: none; }
+  .nav-inner {
+    padding: 0 16px;
+    height: 52px;
+  }
+  .nav-links {
+    gap: 12px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 14px), transparent 100%);
+    mask-image: linear-gradient(to right, #000 calc(100% - 14px), transparent 100%);
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links li { flex-shrink: 0; }
+  .nav-links a { font-size: 12px; }
+  .nav-right { gap: 6px; flex-shrink: 0; }
+  .btn-google { padding: 6px 10px; font-size: 12px; gap: 5px; }
+  .btn-google svg { width: 14px; height: 14px; }
+  .btn-signup { padding: 7px 12px; font-size: 12px; }
   .nav-right .btn-ghost { display: none; }
   .btn-primary { padding: 9px 16px; font-size: 13px; }
-
-  /* Hamburger — inject via JS */
-  .nav-hamburger {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 8px;
-    margin-left: auto;
-    margin-right: 8px;
-  }
-  .nav-hamburger span { width: 22px; height: 2px; background: var(--black); border-radius: 2px; transition: all .3s; display: block; }
-
-  /* Mobile nav drawer — slides in from right */
-  .nav-mobile-drawer {
-    position: fixed;
-    top: 0; right: -100%; bottom: 0;
-    width: 80%;
-    max-width: 300px;
-    background: #fff;
-    z-index: 1001;
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    overflow-y: auto;
-    transition: right .3s ease;
-    box-shadow: -4px 0 24px rgba(0,0,0,0.12);
-  }
-  .nav-mobile-drawer.open { right: 0; }
-  .nav-mobile-drawer a {
-    display: block;
-    padding: 14px 16px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--black);
-    text-decoration: none;
-    border-radius: 10px;
-    transition: background .15s;
-  }
-  .nav-mobile-drawer a:hover { background: var(--gray-50); }
-  .nav-mobile-drawer .mob-divider { height: 1px; background: var(--gray-200); margin: 8px 0; }
-  .nav-mobile-drawer .mob-cta {
-    display: block;
-    margin-top: 12px;
-    padding: 14px;
-    background: var(--black);
-    color: #fff !important;
-    text-align: center;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: 700;
-  }
-  .mob-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 1000;
-  }
-  .mob-overlay.show { display: block; }
 
   /* Announce bar */
   .announce-bar { font-size: 12px; padding: 8px 16px; flex-wrap: wrap; gap: 4px; text-align: center; justify-content: center; }
