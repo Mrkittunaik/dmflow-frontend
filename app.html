@@ -830,16 +830,16 @@ body{font-family:'Instrument Sans',sans-serif;background-color:#ffffff;backgroun
     </div>
     <div class="up-body">
       <div class="up-plan-cards">
-        <div class="up-plan-card" id="planCardMonthly" onclick="selectPlan('monthly')">
-          <div class="up-plan-name">Monthly</div>
-          <div class="up-plan-price">₹999<span>/mo</span></div>
-          <div class="up-plan-dms">5,000 DMs/month</div>
+        <div class="up-plan-card selected" id="planCardMonthly" onclick="selectPlan('monthly')">
+          <div class="up-plan-name">Pro</div>
+          <div class="up-plan-price">₹199<span>/mo</span></div>
+          <div class="up-plan-dms">Unlimited DMs</div>
         </div>
-        <div class="up-plan-card selected" id="planCardYearly" onclick="selectPlan('yearly')">
-          <div class="up-pop">Save 40%</div>
-          <div class="up-plan-name">Yearly</div>
-          <div class="up-plan-price">₹599<span>/mo</span></div>
-          <div class="up-plan-dms">5,000 DMs/month</div>
+        <div class="up-plan-card" id="planCardYearly" onclick="selectPlan('yearly')">
+          <div class="up-pop">For teams</div>
+          <div class="up-plan-name">Agency</div>
+          <div class="up-plan-price">₹299<span>/mo</span></div>
+          <div class="up-plan-dms">Unlimited DMs</div>
         </div>
       </div>
       <div class="up-features">
@@ -852,7 +852,7 @@ body{font-family:'Instrument Sans',sans-serif;background-color:#ffffff;backgroun
         <div class="up-feat"><svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Advanced Follower Gate &amp; Scheduling</div>
       </div>
       <button class="up-cta" id="upCtaBtn" onclick="startUpgrade()">
-        ✦ Upgrade to Pro — ₹599/mo
+        ✦ Upgrade to Pro — ₹199/mo
       </button>
       <div class="up-footer">Cancel anytime · Secure payment via Razorpay</div>
     </div>
@@ -860,7 +860,7 @@ body{font-family:'Instrument Sans',sans-serif;background-color:#ffffff;backgroun
 </div>
 
 <script>
-let _selectedPlan = 'yearly';
+let _selectedPlan = 'monthly';
 function openUpgradeModal() {
   document.getElementById('appUpgradeModal').classList.add('open');
 }
@@ -872,59 +872,17 @@ function selectPlan(plan) {
   document.getElementById('planCardMonthly').classList.toggle('selected', plan === 'monthly');
   document.getElementById('planCardYearly').classList.toggle('selected', plan === 'yearly');
   const btn = document.getElementById('upCtaBtn');
-  if (btn) btn.textContent = plan === 'yearly' ? '✦ Upgrade to Pro — ₹599/mo' : '✦ Upgrade to Pro — ₹999/mo';
+  if (btn) btn.textContent = plan === 'yearly' ? '✦ Upgrade to Agency — ₹299/mo' : '✦ Upgrade to Pro — ₹199/mo';
 }
-async function startUpgrade() {
-  const btn = document.getElementById('upCtaBtn');
-  if (btn) { btn.textContent = 'Processing…'; btn.disabled = true; }
-  try {
-    if (window.API && API.getToken()) {
-      const planId = _selectedPlan === 'yearly' ? 'pro_yearly' : 'pro_monthly';
-      const order = await API.createOrder(planId);
-      if (order && order.razorpayOrderId && window.Razorpay) {
-        const user = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
-        const rz = new window.Razorpay({
-          key: order.razorpayKeyId || '',
-          amount: order.amount,
-          currency: order.currency || 'INR',
-          name: 'DMFlow',
-          description: 'Pro Plan',
-          order_id: order.razorpayOrderId,
-          prefill: { name: user.name || '', email: user.email || '' },
-          theme: { color: '#7C3AED' },
-          handler: async function(response) {
-            try {
-              const result = await API.verifyPayment({
-                razorpayOrderId: response.razorpay_order_id,
-                razorpayPaymentId: response.razorpay_payment_id,
-                razorpaySignature: response.razorpay_signature
-              });
-              if (result && result.success) {
-                const stored = JSON.parse(localStorage.getItem('dmflow_user') || '{}');
-                stored.plan = 'pro';
-                localStorage.setItem('dmflow_user', JSON.stringify(stored));
-                closeUpgradeModal();
-                const sbPlan = document.getElementById('sbPlan');
-                if (sbPlan) sbPlan.textContent = 'Pro Plan';
-                showUpgradeSuccess();
-              }
-            } catch(e) { alert('Payment verification failed. Contact support.'); }
-          }
-        });
-        rz.open();
-      } else {
-        // Fallback — no Razorpay SDK loaded, show settings page
-        closeUpgradeModal();
-        navigate('pages/settings/settings.html?upgrade=1', 'settings');
-      }
-    } else {
-      closeUpgradeModal();
-      navigate('pages/auth/login.html', 'login');
-    }
-  } catch(e) {
-    alert('Could not initiate payment. Please try again.');
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = _selectedPlan === 'yearly' ? '✦ Upgrade to Pro — ₹599/mo' : '✦ Upgrade to Pro — ₹999/mo'; }
+function startUpgrade() {
+  // All real payment logic (coupon, details, Razorpay) now lives in the
+  // dedicated checkout flow so pricing stays in sync with plans.js everywhere.
+  closeUpgradeModal();
+  const planId = _selectedPlan === 'yearly' ? 'agency' : 'pro'; // maps modal choice to shared PLANS ids
+  if (window.API && API.getToken && API.getToken()) {
+    window.location.href = `pages/billing/checkout.html?plan=${planId}&return=app`;
+  } else {
+    window.location.href = `pages/auth/login.html?next=${encodeURIComponent('pages/billing/checkout.html?plan=' + planId + '&return=app')}`;
   }
 }
 function showUpgradeSuccess() {
