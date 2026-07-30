@@ -216,9 +216,10 @@ const API = (() => {
     refreshIgToken: ()    => { _cacheInvalidate('/ig/'); return req('POST', '/api/ig/refresh-token'); },
 
     // ── Billing ─────────────────────────────────────────────────
-    getPlans:      ()       => req('GET',  '/api/billing/plans'),
-    createOrder:   (planId) => req('POST', '/api/billing/order',  { planId }),
-    verifyPayment: (data)   => req('POST', '/api/billing/verify', data),
+    getPlans:      ()             => req('GET',  '/api/billing/plans'),
+    createOrder:   (planId, couponCode) => req('POST', '/api/billing/order',  { planId, couponCode }),
+    verifyPayment: (data)         => req('POST', '/api/billing/verify', data),
+    applyCoupon:   (code, planId) => req('POST', '/api/billing/coupon/validate', { code, planId }),
 
     // ── Health ──────────────────────────────────────────────────
     ping: () => req('GET', '/health', null, { silent: true, timeout: 5000, noCache: true }),
