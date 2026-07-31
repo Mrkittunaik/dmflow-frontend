@@ -128,10 +128,13 @@ body{font-family:'Instrument Sans',sans-serif;background:#F8F8FC;display:flex;al
       document.getElementById('msg').textContent = 'Welcome ' + user.name + '! Redirecting...';
       setTimeout(() => {
         // Use replace() so the back-button from app doesn't return to this callback page
+        const _next = urlParams.get('next');
         window.location.replace(
-          user.instagram?.connected
-            ? '../../app.html'
-            : '../onboarding/platform-select.html'
+          _next
+            ? _next
+            : (user.instagram?.connected
+                ? '../../app.html'
+                : '../onboarding/platform-select.html')
         );
       }, 800);
     })
