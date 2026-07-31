@@ -157,12 +157,15 @@
   try {
     const token = localStorage.getItem('dmflow_token');
     const user  = JSON.parse(localStorage.getItem('dmflow_user') || 'null');
+    const next  = new URLSearchParams(location.search).get('next');
     // Only redirect if we have BOTH a valid token AND a valid user object
     if (token && user && user.name) {
       window.location.replace(
-        user.instagram?.connected
-          ? '../../app.html'
-          : '../onboarding/platform-select.html'
+        next
+          ? next
+          : (user.instagram?.connected
+              ? '../../app.html'
+              : '../onboarding/platform-select.html')
       );
     }
   } catch(e) {}
@@ -218,7 +221,8 @@ async function googleLogin(e) {
     clearTimeout(_t1);
     clearTimeout(_t2);
   }
-  window.location.href = base + '/auth/google';
+  const _next = new URLSearchParams(location.search).get('next');
+  window.location.href = base + '/auth/google' + (_next ? '?next=' + encodeURIComponent(_next) : '');
 }
 
 function dmfBack(){
@@ -238,7 +242,8 @@ async function facebookLogin(e){
     clearTimeout(_t1);
     clearTimeout(_t2);
   }
-  window.location.href = base + '/auth/facebook';
+  const _next = new URLSearchParams(location.search).get('next');
+  window.location.href = base + '/auth/facebook' + (_next ? '?next=' + encodeURIComponent(_next) : '');
 }
 </script>
 </body>
