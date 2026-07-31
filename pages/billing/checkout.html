@@ -249,7 +249,40 @@ body{font-family:'Instrument Sans',sans-serif;background:var(--gray-50);color:va
 // ── State ──
 const params = new URLSearchParams(location.search);
 const planId = params.get('plan') || 'pro';
-const returnTo = params.get('return') || document.referrer || '/index.html';
+
+// 'return' may be a short code (index/app) from the linking page, an already
+// full/relative path, or absent — resolve all cases to a real, safe URL.
+function resolveReturnTo() {
+  const raw = params.get('return');
+  const knownRoutes = {
+    index: '/index.html',
+    app: '/app.html'
+  };
+  if (raw) {
+    if (knownRoutes[raw]) return knownRoutes[raw];
+    // already looks like a path/URL (has a slash, an extension, or is a full URL)
+    if (/^https?:\/\//.test(raw) || raw.includes('/') || raw.includes('.html')) return raw;
+  }
+  // fall back to wherever the browser actually came from, if it's same-origin
+  if (document.referrer && document.referrer.startsWith(location.origin)) {
+    return document.referrer;
+  }
+  return '/index.html';
+}
+const returnTo = resolveReturnTo();
+
+// ── Auth gate: require login BEFORE showing checkout at all ──
+// If not logged in, bounce to login immediately with `next` pointing back
+// to this exact checkout URL (plan + return preserved) so login sends the
+// user straight back here afterward instead of to the app/dashboard.
+(function requireLogin() {
+  const hasToken = !!localStorage.getItem('dmflow_token');
+  const user = (() => { try { return JSON.parse(localStorage.getItem('dmflow_user') || 'null'); } catch(e) { return null; } })();
+  if (!hasToken || !user) {
+    window.location.replace('/pages/auth/login.html?next=' + encodeURIComponent(location.href));
+  }
+})();
+
 let plansData = null;
 let currentStep = 1;
 let discount = { active: false, code: '', type: 'percent', value: 0 };
