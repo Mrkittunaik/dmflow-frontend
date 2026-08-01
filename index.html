@@ -2556,7 +2556,41 @@ section.creators-wall-section [style*="text-align:center;margin-top"] {
 
   /* Device showcase */
   .device-showcase-section .section-inner { padding-left:20px !important; padding-right:20px !important; }
+
+  /* Cards keep the same proportions as desktop, single column,
+     sized fluidly with clamp() so they scale smoothly per device
+     instead of a fixed cramped size. */
+  .steps-grid, .usecases-grid {
+    grid-template-columns: 1fr !important;
+    gap: clamp(12px, 4vw, 20px) !important;
+  }
+  .step-card, .usecase-card {
+    padding: clamp(20px, 6vw, 32px) clamp(16px, 5vw, 28px) !important;
+    padding-top: clamp(26px, 7vw, 34px) !important;
+  }
+  .step-card .step-num { font-size: clamp(32px, 9vw, 44px) !important; }
+  .step-card .step-icon, .usecase-card .uc-icon {
+    width: clamp(40px, 11vw, 48px) !important;
+    height: clamp(40px, 11vw, 48px) !important;
+  }
+  .step-card .step-icon svg, .usecase-card .uc-icon svg {
+    width: clamp(20px, 5.5vw, 24px) !important;
+    height: clamp(20px, 5.5vw, 24px) !important;
+  }
+  .step-card h3, .usecase-card h3 {
+    font-size: clamp(17px, 4.5vw, 20px) !important;
+    line-height: 1.3 !important;
+  }
+  .step-card p, .usecase-card p {
+    font-size: clamp(13.5px, 3.6vw, 15px) !important;
+    line-height: 1.6 !important;
+  }
+  .usecase-card .uc-tag {
+    font-size: clamp(10.5px, 2.8vw, 12px) !important;
+    padding: 6px 12px !important;
+  }
 }
+
 
   /* ═══════════════════════════════════════════════════════════════
    NAV BUTTON FIXES — compact sizing & 10px radius
