@@ -416,15 +416,16 @@ h1 .accent {
   background: var(--gray-50);
   border-top: 1px solid var(--gray-200);
   border-bottom: 1px solid var(--gray-200);
-  padding: 22px 40px;
+  padding: 22px 0 26px;
+  overflow: hidden;
 }
 .logos-inner {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 16px;
+  padding: 0 40px;
   display: flex;
   align-items: center;
-  gap: 32px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 .logos-label {
   font-size: 12px;
@@ -434,16 +435,36 @@ h1 .accent {
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-.logos-row {
-  display: flex;
-  gap: 28px;
-  flex-wrap: wrap;
+
+/* ---- logo marquee ---- */
+.logos-marquee {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.logos-row span {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gray-400);
-  font-family: 'Bricolage Grotesque', sans-serif;
+.logos-track {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+  width: max-content;
+  animation: logosScroll 28s linear infinite;
+}
+.logos-marquee:hover .logos-track { animation-play-state: paused; }
+.logos-logo {
+  height: 26px;
+  width: auto;
+  filter: grayscale(1) opacity(0.45);
+  transition: filter .25s ease, transform .25s ease;
+  flex-shrink: 0;
+}
+.logos-logo:hover {
+  filter: grayscale(0) opacity(1);
+  transform: translateY(-2px);
+}
+@keyframes logosScroll {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
 }
 
 /* ===== SECTIONS ===== */
@@ -2177,10 +2198,11 @@ h1 .accent {
 
 
   /* LOGOS */
-  .logos-strip { padding: 12px 16px; overflow: hidden; }
-  .logos-inner { flex-direction: column; gap: 8px; align-items: center; }
+  .logos-strip { padding: 14px 0 18px; }
+  .logos-inner { padding: 0 16px; }
   .logos-label { text-align: center; font-size: 10px; }
-  .logos-row { gap: 8px 14px; flex-wrap: wrap; justify-content: center; font-size: 12px; }
+  .logos-track { gap: 36px; }
+  .logos-logo { height: 20px; }
 
   /* META PARTNER BADGES */
   .meta-partner-strip { padding: 10px 12px; overflow: hidden; }
