@@ -2492,31 +2492,29 @@ section.creators-wall-section [style*="text-align:center;margin-top"] {
 .made-in-india svg { width: 14px !important; height: 10px !important; }
 .india-name { font-size: 10px !important; }
 
-/* ── MOBILE proof stat cards — keep 3-across like desktop, just small ── */
+/* ── MOBILE proof stat cards — normal readable stacked layout ── */
 @media (max-width: 768px) {
   .proof-stats-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: clamp(5px, 1.8vw, 10px) !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
   .proof-stat-card {
-    padding: clamp(8px, 2.8vw, 14px) clamp(6px, 2.2vw, 10px) !important;
-    border-radius: 10px !important;
+    padding: 22px 20px !important;
+    border-radius: 14px !important;
   }
-  .proof-stat-num { font-size: clamp(18px, 6.5vw, 30px) !important; letter-spacing: -0.5px !important; margin-bottom: 2px !important; }
-  .proof-stat-x, .proof-stat-pct { font-size: clamp(11px, 4vw, 16px) !important; }
-  .proof-stat-label { font-size: clamp(6.5px, 2.3vw, 9px) !important; letter-spacing: 0.02em !important; line-height: 1.2 !important; margin-top: 2px !important; }
-  .proof-stat-divider { margin: 6px 0 !important; }
+  .proof-stat-num { font-size: clamp(34px, 12vw, 48px) !important; letter-spacing: -1px !important; margin-bottom: 6px !important; }
+  .proof-stat-x, .proof-stat-pct { font-size: clamp(20px, 6vw, 28px) !important; }
+  .proof-stat-label { font-size: 11px !important; letter-spacing: 0.05em !important; }
   .proof-stat-row {
-    font-size: clamp(7px, 2.4vw, 9.5px) !important;
-    line-height: 1.35 !important;
-    margin-bottom: 6px !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
   }
   .proof-stat-solution,
   .proof-stat-row.proof-solution {
-    padding: clamp(6px, 2vw, 10px) !important;
-    font-size: clamp(7px, 2.4vw, 9.5px) !important;
+    padding: 12px 14px !important;
+    font-size: 13.5px !important;
   }
 }
 
