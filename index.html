@@ -2927,123 +2927,96 @@ function toggleFaq(btn) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   PHOTO CARD REDESIGN — Steps + Use Cases
-   Each card gets a real photo background with a colour-tint overlay
-   so text stays readable, plus a small white glass icon badge.
+   WAVE CARD REDESIGN — Steps + Use Cases
+   White top half (icon + title) → wavy divider → solid colour
+   bottom half (description + tag), like a classic service card.
 ═══════════════════════════════════════════════════════════════ */
 
 .step-card, .usecase-card {
   position: relative !important;
   overflow: hidden !important;
-  background-size: cover !important;
+  background-color:#ffffff !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100% !important;
   background-position: center !important;
-  isolation: isolate !important;
+  border: none !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.10) !important;
+  padding-top: 34px !important;
 }
-.step-card::before, .usecase-card::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 0 !important;
-  pointer-events: none !important;
-}
-.step-card > *, .usecase-card > * { position: relative !important; z-index: 1 !important; }
+.step-card::before, .usecase-card::before { content: none !important; background: none !important; }
 
-/* ---- Step cards ---- */
-.steps-grid .step-card:nth-child(1) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1675352161918-2dc701738691?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
+/* number / icon sit in the white zone */
+.step-card .step-num { color:#c9c9d4 !important; opacity:1 !important; margin-bottom:10px !important; }
+.step-card .step-icon, .usecase-card .uc-icon {
+  box-shadow: none !important;
+  border: none !important;
+  margin-bottom: 14px !important;
 }
-.steps-grid .step-card:nth-child(1)::before {
-  background: linear-gradient(160deg, rgba(214,36,159,0.55) 0%, rgba(124,58,237,0.65) 100%) !important;
-}
+.step-card h3, .usecase-card h3 { color:#0A0A0F !important; margin-bottom: 22px !important; }
 
-.steps-grid .step-card:nth-child(2) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1759215524600-7971d6a4dac0?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.steps-grid .step-card:nth-child(2)::before {
-  background: linear-gradient(160deg, rgba(6,182,212,0.55) 0%, rgba(99,102,241,0.65) 100%) !important;
-}
-
-.steps-grid .step-card:nth-child(3) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1594999853185-0034ea1c977e?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.steps-grid .step-card:nth-child(3)::before {
-  background: linear-gradient(160deg, rgba(124,58,237,0.55) 0%, rgba(20,20,40,0.7) 100%) !important;
-}
-
-.step-card h3, .step-card p, .step-card .step-num { color:#fff !important; }
-.step-card p { color:rgba(255,255,255,0.88) !important; }
-.step-card .step-icon {
-  background:rgba(255,255,255,0.85) !important;
-  border:1px solid rgba(255,255,255,0.9) !important;
-  box-shadow:0 4px 14px rgba(0,0,0,0.18) !important;
-}
-.step-card .step-icon svg { stroke:#B0289A !important; }
-
-/* ---- Use case cards ---- */
-.usecases-grid .usecase-card:nth-child(1) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1675352161918-2dc701738691?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.usecases-grid .usecase-card:nth-child(1)::before {
-  background: linear-gradient(160deg, rgba(214,36,159,0.55) 0%, rgba(124,58,237,0.65) 100%) !important;
-}
-
-.usecases-grid .usecase-card:nth-child(2) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1603791445824-0050bd436b6d?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.usecases-grid .usecase-card:nth-child(2)::before {
-  background: linear-gradient(160deg, rgba(6,182,212,0.5) 0%, rgba(30,20,50,0.75) 100%) !important;
-}
-
-.usecases-grid .usecase-card:nth-child(3) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1759215524600-7971d6a4dac0?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.usecases-grid .usecase-card:nth-child(3)::before {
-  background: linear-gradient(160deg, rgba(245,158,11,0.5) 0%, rgba(239,68,68,0.65) 100%) !important;
-}
-
-.usecases-grid .usecase-card:nth-child(4) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1594999853185-0034ea1c977e?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.usecases-grid .usecase-card:nth-child(4)::before {
-  background: linear-gradient(160deg, rgba(16,185,129,0.55) 0%, rgba(5,150,105,0.7) 100%) !important;
-}
-
-.usecases-grid .usecase-card:nth-child(5) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1669659873450-64d5f78f59e9?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.usecases-grid .usecase-card:nth-child(5)::before {
-  background: linear-gradient(160deg, rgba(139,92,246,0.55) 0%, rgba(99,102,241,0.7) 100%) !important;
-}
-
-.usecases-grid .usecase-card:nth-child(6) {
-  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
-  border:1px solid rgba(255,255,255,0.3) !important;
-}
-.usecases-grid .usecase-card:nth-child(6)::before {
-  background: linear-gradient(160deg, rgba(214,36,159,0.5) 0%, rgba(30,20,50,0.72) 100%) !important;
-}
-
-.usecase-card h3, .usecase-card p { color:#fff !important; }
-.usecase-card p { color:rgba(255,255,255,0.88) !important; }
-.usecase-card .uc-icon {
-  background:rgba(255,255,255,0.85) !important;
-  border:1px solid rgba(255,255,255,0.9) !important;
-  box-shadow:0 4px 14px rgba(0,0,0,0.18) !important;
-}
-.usecase-card .uc-icon svg { stroke:#B0289A !important; }
+/* description + tag sit in the coloured zone lower down */
+.step-card p, .usecase-card p { color:rgba(255,255,255,0.92) !important; margin-top: 2px !important; }
 .usecase-card .uc-tag {
   background:rgba(255,255,255,0.25) !important;
   color:#fff !important;
   border:1px solid rgba(255,255,255,0.35) !important;
 }
+
+/* Wave SVG generator (per-card colour), stretched 100%x100% so the wave
+   sits at a consistent ~44% down regardless of card height */
+.steps-grid .step-card:nth-child(1) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,128 C100,95 300,165 400,120 L400,300 L0,300 Z' fill='%237C3AED'/%3E%3C/svg%3E") !important;
+}
+.steps-grid .step-card:nth-child(1) .step-icon { background:#F3EBFE !important; }
+.steps-grid .step-card:nth-child(1) .step-icon svg { stroke:#7C3AED !important; }
+
+.steps-grid .step-card:nth-child(2) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,128 C100,95 300,165 400,120 L400,300 L0,300 Z' fill='%23F97316'/%3E%3C/svg%3E") !important;
+}
+.steps-grid .step-card:nth-child(2) .step-icon { background:#FFEEDD !important; }
+.steps-grid .step-card:nth-child(2) .step-icon svg { stroke:#F97316 !important; }
+
+.steps-grid .step-card:nth-child(3) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,128 C100,95 300,165 400,120 L400,300 L0,300 Z' fill='%2314B8A6'/%3E%3C/svg%3E") !important;
+}
+.steps-grid .step-card:nth-child(3) .step-icon { background:#DDF7F3 !important; }
+.steps-grid .step-card:nth-child(3) .step-icon svg { stroke:#0F9C8B !important; }
+
+.usecases-grid .usecase-card:nth-child(1) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,140 C100,105 300,175 400,132 L400,300 L0,300 Z' fill='%237C3AED'/%3E%3C/svg%3E") !important;
+}
+.usecases-grid .usecase-card:nth-child(1) .uc-icon { background:#F3EBFE !important; }
+.usecases-grid .usecase-card:nth-child(1) .uc-icon svg { stroke:#7C3AED !important; }
+
+.usecases-grid .usecase-card:nth-child(2) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,140 C100,105 300,175 400,132 L400,300 L0,300 Z' fill='%23EC4899'/%3E%3C/svg%3E") !important;
+}
+.usecases-grid .usecase-card:nth-child(2) .uc-icon { background:#FDE8F1 !important; }
+.usecases-grid .usecase-card:nth-child(2) .uc-icon svg { stroke:#EC4899 !important; }
+
+.usecases-grid .usecase-card:nth-child(3) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,140 C100,105 300,175 400,132 L400,300 L0,300 Z' fill='%23F97316'/%3E%3C/svg%3E") !important;
+}
+.usecases-grid .usecase-card:nth-child(3) .uc-icon { background:#FFEEDD !important; }
+.usecases-grid .usecase-card:nth-child(3) .uc-icon svg { stroke:#F97316 !important; }
+
+.usecases-grid .usecase-card:nth-child(4) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,140 C100,105 300,175 400,132 L400,300 L0,300 Z' fill='%2310B981'/%3E%3C/svg%3E") !important;
+}
+.usecases-grid .usecase-card:nth-child(4) .uc-icon { background:#DDF7EC !important; }
+.usecases-grid .usecase-card:nth-child(4) .uc-icon svg { stroke:#059669 !important; }
+
+.usecases-grid .usecase-card:nth-child(5) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,140 C100,105 300,175 400,132 L400,300 L0,300 Z' fill='%236366F1'/%3E%3C/svg%3E") !important;
+}
+.usecases-grid .usecase-card:nth-child(5) .uc-icon { background:#EAEAFE !important; }
+.usecases-grid .usecase-card:nth-child(5) .uc-icon svg { stroke:#4F46E5 !important; }
+
+.usecases-grid .usecase-card:nth-child(6) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='none'%3E%3Cpath d='M0,140 C100,105 300,175 400,132 L400,300 L0,300 Z' fill='%2306B6D4'/%3E%3C/svg%3E") !important;
+}
+.usecases-grid .usecase-card:nth-child(6) .uc-icon { background:#DEF6FB !important; }
+.usecases-grid .usecase-card:nth-child(6) .uc-icon svg { stroke:#0891B2 !important; }
 </style>
 <div class="cookie-consent" id="cookieConsent" role="dialog" aria-label="Cookie consent">
   <button class="cookie-consent-close" id="cookieConsentClose" aria-label="Close">✕</button>
