@@ -2925,6 +2925,79 @@ function toggleFaq(btn) {
 @media (max-width: 480px) {
   .cookie-consent { left: 16px; right: 16px; bottom: 16px; max-width: none; width: auto; }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   MULTI-COLOUR CARD REDESIGN — Steps + Use Cases
+   Each card gets its own accent instead of one repeated gradient
+═══════════════════════════════════════════════════════════════ */
+
+/* ---- Step cards: 01 white, 02 pink-purple (featured), 03 teal ---- */
+.steps-grid .step-card:nth-child(1) {
+  background:#ffffff !important;
+  border:1px solid #eee0f5 !important;
+  box-shadow:0 8px 24px rgba(124,58,237,0.08) !important;
+}
+.steps-grid .step-card:nth-child(1) h3 { color:#0A0A0F !important; }
+.steps-grid .step-card:nth-child(1) p { color:#5b5b66 !important; }
+.steps-grid .step-card:nth-child(1) .step-num { color:#D6249F !important; opacity:1 !important; }
+.steps-grid .step-card:nth-child(1) .step-icon {
+  background:#FBEAFB !important;
+  border:1px solid #F3D5F4 !important;
+  box-shadow:none !important;
+}
+.steps-grid .step-card:nth-child(1) .step-icon svg { stroke:#D6249F !important; }
+
+.steps-grid .step-card:nth-child(3) {
+  background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 60%, #6366F1 100%) !important;
+  border:1px solid rgba(255,255,255,0.35) !important;
+}
+.steps-grid .step-card:nth-child(3) .step-icon svg { stroke:#0E7490 !important; }
+
+/* ---- Use case cards: distinct accent per card ---- */
+.usecases-grid .usecase-card:nth-child(1) {
+  background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%) !important;
+  border:1px solid rgba(255,255,255,0.35) !important;
+}
+.usecases-grid .usecase-card:nth-child(1) .uc-icon svg { stroke:#0E7490 !important; }
+
+/* card 2 (featured) keeps the pink-purple gradient already applied via .uc-featured */
+
+.usecases-grid .usecase-card:nth-child(3) {
+  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%) !important;
+  border:1px solid rgba(255,255,255,0.35) !important;
+}
+.usecases-grid .usecase-card:nth-child(3) .uc-icon svg { stroke:#C2410C !important; }
+
+.usecases-grid .usecase-card:nth-child(4) {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+  border:1px solid rgba(255,255,255,0.35) !important;
+}
+.usecases-grid .usecase-card:nth-child(4) .uc-icon svg { stroke:#047857 !important; }
+
+.usecases-grid .usecase-card:nth-child(5) {
+  background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%) !important;
+  border:1px solid rgba(255,255,255,0.35) !important;
+}
+.usecases-grid .usecase-card:nth-child(5) .uc-icon svg { stroke:#4F46E5 !important; }
+
+.usecases-grid .usecase-card:nth-child(6) {
+  background:#ffffff !important;
+  border:1px solid #eee0f5 !important;
+  box-shadow:0 8px 24px rgba(124,58,237,0.08) !important;
+}
+.usecases-grid .usecase-card:nth-child(6) h3 { color:#0A0A0F !important; }
+.usecases-grid .usecase-card:nth-child(6) p { color:#5b5b66 !important; }
+.usecases-grid .usecase-card:nth-child(6) .uc-icon {
+  background:#FBEAFB !important;
+  border:1px solid #F3D5F4 !important;
+  box-shadow:none !important;
+}
+.usecases-grid .usecase-card:nth-child(6) .uc-icon svg { stroke:#D6249F !important; }
+.usecases-grid .usecase-card:nth-child(6) .uc-tag {
+  background:#FBEAFB !important;
+  color:#D6249F !important;
+  border:1px solid #F3D5F4 !important;
+}
 </style>
 <div class="cookie-consent" id="cookieConsent" role="dialog" aria-label="Cookie consent">
   <button class="cookie-consent-close" id="cookieConsentClose" aria-label="Close">✕</button>
