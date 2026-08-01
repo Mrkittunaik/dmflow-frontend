@@ -2927,76 +2927,122 @@ function toggleFaq(btn) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MULTI-COLOUR CARD REDESIGN — Steps + Use Cases
-   Each card gets its own accent instead of one repeated gradient
+   PHOTO CARD REDESIGN — Steps + Use Cases
+   Each card gets a real photo background with a colour-tint overlay
+   so text stays readable, plus a small white glass icon badge.
 ═══════════════════════════════════════════════════════════════ */
 
-/* ---- Step cards: 01 white, 02 pink-purple (featured), 03 teal ---- */
+.step-card, .usecase-card {
+  position: relative !important;
+  overflow: hidden !important;
+  background-size: cover !important;
+  background-position: center !important;
+  isolation: isolate !important;
+}
+.step-card::before, .usecase-card::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+.step-card > *, .usecase-card > * { position: relative !important; z-index: 1 !important; }
+
+/* ---- Step cards ---- */
 .steps-grid .step-card:nth-child(1) {
-  background:#ffffff !important;
-  border:1px solid #eee0f5 !important;
-  box-shadow:0 8px 24px rgba(124,58,237,0.08) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1675352161918-2dc701738691?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.steps-grid .step-card:nth-child(1) h3 { color:#0A0A0F !important; }
-.steps-grid .step-card:nth-child(1) p { color:#5b5b66 !important; }
-.steps-grid .step-card:nth-child(1) .step-num { color:#D6249F !important; opacity:1 !important; }
-.steps-grid .step-card:nth-child(1) .step-icon {
-  background:#FBEAFB !important;
-  border:1px solid #F3D5F4 !important;
-  box-shadow:none !important;
+.steps-grid .step-card:nth-child(1)::before {
+  background: linear-gradient(160deg, rgba(214,36,159,0.55) 0%, rgba(124,58,237,0.65) 100%) !important;
 }
-.steps-grid .step-card:nth-child(1) .step-icon svg { stroke:#D6249F !important; }
+
+.steps-grid .step-card:nth-child(2) {
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1759215524600-7971d6a4dac0?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
+}
+.steps-grid .step-card:nth-child(2)::before {
+  background: linear-gradient(160deg, rgba(6,182,212,0.55) 0%, rgba(99,102,241,0.65) 100%) !important;
+}
 
 .steps-grid .step-card:nth-child(3) {
-  background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 60%, #6366F1 100%) !important;
-  border:1px solid rgba(255,255,255,0.35) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1594999853185-0034ea1c977e?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.steps-grid .step-card:nth-child(3) .step-icon svg { stroke:#0E7490 !important; }
+.steps-grid .step-card:nth-child(3)::before {
+  background: linear-gradient(160deg, rgba(124,58,237,0.55) 0%, rgba(20,20,40,0.7) 100%) !important;
+}
 
-/* ---- Use case cards: distinct accent per card ---- */
+.step-card h3, .step-card p, .step-card .step-num { color:#fff !important; }
+.step-card p { color:rgba(255,255,255,0.88) !important; }
+.step-card .step-icon {
+  background:rgba(255,255,255,0.85) !important;
+  border:1px solid rgba(255,255,255,0.9) !important;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18) !important;
+}
+.step-card .step-icon svg { stroke:#B0289A !important; }
+
+/* ---- Use case cards ---- */
 .usecases-grid .usecase-card:nth-child(1) {
-  background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%) !important;
-  border:1px solid rgba(255,255,255,0.35) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1675352161918-2dc701738691?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.usecases-grid .usecase-card:nth-child(1) .uc-icon svg { stroke:#0E7490 !important; }
+.usecases-grid .usecase-card:nth-child(1)::before {
+  background: linear-gradient(160deg, rgba(214,36,159,0.55) 0%, rgba(124,58,237,0.65) 100%) !important;
+}
 
-/* card 2 (featured) keeps the pink-purple gradient already applied via .uc-featured */
+.usecases-grid .usecase-card:nth-child(2) {
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1603791445824-0050bd436b6d?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
+}
+.usecases-grid .usecase-card:nth-child(2)::before {
+  background: linear-gradient(160deg, rgba(6,182,212,0.5) 0%, rgba(30,20,50,0.75) 100%) !important;
+}
 
 .usecases-grid .usecase-card:nth-child(3) {
-  background: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%) !important;
-  border:1px solid rgba(255,255,255,0.35) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1759215524600-7971d6a4dac0?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.usecases-grid .usecase-card:nth-child(3) .uc-icon svg { stroke:#C2410C !important; }
+.usecases-grid .usecase-card:nth-child(3)::before {
+  background: linear-gradient(160deg, rgba(245,158,11,0.5) 0%, rgba(239,68,68,0.65) 100%) !important;
+}
 
 .usecases-grid .usecase-card:nth-child(4) {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
-  border:1px solid rgba(255,255,255,0.35) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1594999853185-0034ea1c977e?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.usecases-grid .usecase-card:nth-child(4) .uc-icon svg { stroke:#047857 !important; }
+.usecases-grid .usecase-card:nth-child(4)::before {
+  background: linear-gradient(160deg, rgba(16,185,129,0.55) 0%, rgba(5,150,105,0.7) 100%) !important;
+}
 
 .usecases-grid .usecase-card:nth-child(5) {
-  background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%) !important;
-  border:1px solid rgba(255,255,255,0.35) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1669659873450-64d5f78f59e9?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.usecases-grid .usecase-card:nth-child(5) .uc-icon svg { stroke:#4F46E5 !important; }
+.usecases-grid .usecase-card:nth-child(5)::before {
+  background: linear-gradient(160deg, rgba(139,92,246,0.55) 0%, rgba(99,102,241,0.7) 100%) !important;
+}
 
 .usecases-grid .usecase-card:nth-child(6) {
-  background:#ffffff !important;
-  border:1px solid #eee0f5 !important;
-  box-shadow:0 8px 24px rgba(124,58,237,0.08) !important;
+  background-image: linear-gradient(rgba(20,10,30,0.15), rgba(20,10,30,0.15)), url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?fm=jpg&q=80&w=1200&auto=format&fit=crop') !important;
+  border:1px solid rgba(255,255,255,0.3) !important;
 }
-.usecases-grid .usecase-card:nth-child(6) h3 { color:#0A0A0F !important; }
-.usecases-grid .usecase-card:nth-child(6) p { color:#5b5b66 !important; }
-.usecases-grid .usecase-card:nth-child(6) .uc-icon {
-  background:#FBEAFB !important;
-  border:1px solid #F3D5F4 !important;
-  box-shadow:none !important;
+.usecases-grid .usecase-card:nth-child(6)::before {
+  background: linear-gradient(160deg, rgba(214,36,159,0.5) 0%, rgba(30,20,50,0.72) 100%) !important;
 }
-.usecases-grid .usecase-card:nth-child(6) .uc-icon svg { stroke:#D6249F !important; }
-.usecases-grid .usecase-card:nth-child(6) .uc-tag {
-  background:#FBEAFB !important;
-  color:#D6249F !important;
-  border:1px solid #F3D5F4 !important;
+
+.usecase-card h3, .usecase-card p { color:#fff !important; }
+.usecase-card p { color:rgba(255,255,255,0.88) !important; }
+.usecase-card .uc-icon {
+  background:rgba(255,255,255,0.85) !important;
+  border:1px solid rgba(255,255,255,0.9) !important;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18) !important;
+}
+.usecase-card .uc-icon svg { stroke:#B0289A !important; }
+.usecase-card .uc-tag {
+  background:rgba(255,255,255,0.25) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,0.35) !important;
 }
 </style>
 <div class="cookie-consent" id="cookieConsent" role="dialog" aria-label="Cookie consent">
