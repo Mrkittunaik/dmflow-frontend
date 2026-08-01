@@ -2124,37 +2124,58 @@ section.testimonials-section { background: #ffffff; }
 /* S1 Hero — clean white, no dots */
 section.hero { background-color:#ffffff !important; background-image:none !important; background-size:auto !important; }
 
-/* S2 Meta Showcase — light purple + square intersection dot grid */
+/* S2 Meta Showcase — clean white section */
 section.meta-showcase-section,
 .meta-showcase-section {
-  background-color: #ede9fe !important;
-  background-image:
-    radial-gradient(circle, #a78bfa 1px, transparent 1px) !important;
-  background-size: 24px 24px !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
 }
 section.meta-showcase-section::before,
 section.meta-showcase-section::after,
 .meta-showcase-section::before,
 .meta-showcase-section::after { display:none !important; }
 
-/* Fix text colours for light purple bg */
-.meta-showcase-section .meta-showcase-title { color:#1e1b4b !important; }
-.meta-showcase-section .meta-showcase-accent { color:#7C3AED !important; }
-.meta-showcase-section .meta-showcase-desc { color:#4c1d95 !important; }
+/* Fix text colours for white bg */
+.meta-showcase-section .meta-showcase-title {
+  color:#0A0A0F !important;
+  font-size: clamp(34px, 4.6vw, 54px) !important;
+}
+.meta-showcase-section .meta-showcase-accent {
+  background: linear-gradient(135deg, #7C3AED, #DB2777) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+.meta-showcase-section .meta-showcase-desc { color:#4b5563 !important; font-size: 16px !important; }
 .meta-showcase-section .meta-showcase-eyebrow { color:#7C3AED !important; }
 .meta-showcase-section .meta-showcase-cta {
   background:#0A0A0F !important;
   color:#C8FF00 !important;
 }
-.meta-showcase-section .msc-logo span { color:#1e1b4b !important; }
-.meta-showcase-section .msc-badge-inner span { color:#1e1b4b !important; }
-.meta-showcase-section .msc-trust-badge { border-color:#7C3AED !important; }
-.meta-showcase-section .msc-line { background:linear-gradient(to right,#a78bfa,#7C3AED) !important; }
+.meta-showcase-section .msc-logo span { color:#0A0A0F !important; }
+.meta-showcase-section .msc-badge-inner span { color:#0A0A0F !important; }
+.meta-showcase-section .msc-trust-badge {
+  border-color:#7C3AED !important;
+  background: rgba(124,58,237,0.06) !important;
+}
+.meta-showcase-section .msc-line { background:linear-gradient(to right,#e2d9fb,#7C3AED) !important; }
 .meta-showcase-section .msc-verified-dot {
   background:#7C3AED !important;
   border-color:#7C3AED !important;
+  box-shadow: 0 0 18px rgba(124,58,237,0.35) !important;
 }
 .meta-showcase-section .msc-verified-dot svg { stroke:#fff !important; }
+.meta-showcase-section .msc-badge-card {
+  background:#F8F8FC !important;
+  border:1px solid #E2E2EA !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04) !important;
+}
+.meta-showcase-section .msc-badge-card:hover {
+  background:#fff !important;
+  border-color:#C4B5FD !important;
+  box-shadow: 0 8px 20px rgba(124,58,237,0.12) !important;
+}
+.meta-showcase-section .msc-badge-desc { color:#6b7280 !important; }
 
 /* S3 Stats / Proof — very dark navy + dots */
 section.stats-proof-section {
