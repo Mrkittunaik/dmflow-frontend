@@ -2492,24 +2492,34 @@ section.creators-wall-section [style*="text-align:center;margin-top"] {
 .made-in-india svg { width: 14px !important; height: 10px !important; }
 .india-name { font-size: 10px !important; }
 
-/* ── MOBILE proof stat cards — proper inner spacing ─────────── */
+/* ── MOBILE proof stat cards — keep 3-across like desktop, just small ── */
 @media (max-width: 768px) {
-  .proof-stat-card {
-    padding: 20px 18px !important;
-  }
   .proof-stats-grid {
-    gap: 12px !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: clamp(5px, 1.8vw, 10px) !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  .proof-stat-card {
+    padding: clamp(8px, 2.8vw, 14px) clamp(6px, 2.2vw, 10px) !important;
+    border-radius: 10px !important;
+  }
+  .proof-stat-num { font-size: clamp(18px, 6.5vw, 30px) !important; letter-spacing: -0.5px !important; margin-bottom: 2px !important; }
+  .proof-stat-x, .proof-stat-pct { font-size: clamp(11px, 4vw, 16px) !important; }
+  .proof-stat-label { font-size: clamp(6.5px, 2.3vw, 9px) !important; letter-spacing: 0.02em !important; line-height: 1.2 !important; margin-top: 2px !important; }
+  .proof-stat-divider { margin: 6px 0 !important; }
+  .proof-stat-row {
+    font-size: clamp(7px, 2.4vw, 9.5px) !important;
+    line-height: 1.35 !important;
+    margin-bottom: 6px !important;
   }
   .proof-stat-solution,
   .proof-stat-row.proof-solution {
-    padding: 10px 12px !important;
-    font-size: 13px !important;
+    padding: clamp(6px, 2vw, 10px) !important;
+    font-size: clamp(7px, 2.4vw, 9.5px) !important;
   }
-  .proof-stat-label { font-size: 10px !important; letter-spacing: 0.05em !important; }
-  .proof-stat-num { font-size: 52px !important; }
 }
+
 @media (max-width: 768px) {
 
   /* Global section padding */
@@ -2589,6 +2599,28 @@ section.creators-wall-section [style*="text-align:center;margin-top"] {
     font-size: clamp(10.5px, 2.8vw, 12px) !important;
     padding: 6px 12px !important;
   }
+
+  /* Price cards — fluid auto-adjust */
+  .price-card {
+    padding: clamp(20px, 6vw, 32px) clamp(16px, 5vw, 26px) !important;
+  }
+  .price-name { font-size: clamp(13px, 3.6vw, 15px) !important; }
+  .price-amount { font-size: clamp(30px, 9vw, 42px) !important; }
+  .price-amount span { font-size: clamp(13px, 3.6vw, 16px) !important; }
+  .price-desc { font-size: clamp(12px, 3.2vw, 13.5px) !important; }
+  .price-list li { font-size: clamp(12px, 3.2vw, 13.5px) !important; }
+
+  /* Testimonial wall cards — fluid auto-adjust */
+  .twall-grid .twall-card { padding: clamp(20px, 6vw, 28px) clamp(16px, 5vw, 24px) !important; }
+  .twall-quote { font-size: clamp(13px, 3.6vw, 15px) !important; line-height: 1.55 !important; }
+  .twall-aname { font-size: clamp(12.5px, 3.4vw, 14px) !important; }
+  .twall-asub { font-size: clamp(10px, 2.8vw, 11px) !important; }
+  .twall-avatar { width: clamp(30px, 8vw, 36px) !important; height: clamp(30px, 8vw, 36px) !important; }
+  .twall-lime-stat { font-size: clamp(32px, 10vw, 44px) !important; }
+  .twall-lime-label { font-size: clamp(12px, 3.4vw, 13.5px) !important; }
+
+  /* Shadowban safe cards — fluid auto-adjust */
+  .shadowban-safe-card { padding: clamp(14px, 4vw, 18px) !important; gap: clamp(10px, 3vw, 14px) !important; }
 }
 
 
