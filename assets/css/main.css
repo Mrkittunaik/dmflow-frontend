@@ -445,10 +445,12 @@ h1 .accent {
 }
 .logos-track {
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   gap: 56px;
   width: max-content;
   animation: logosScroll 28s linear infinite;
+  will-change: transform;
 }
 .logos-marquee:hover .logos-track { animation-play-state: paused; }
 .logos-logo {
@@ -463,8 +465,8 @@ h1 .accent {
   transform: translateY(-2px);
 }
 @keyframes logosScroll {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
 }
 
 /* ===== SECTIONS ===== */
