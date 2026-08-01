@@ -188,17 +188,18 @@
 <!-- META PARTNERSHIP SHOWCASE SECTION -->
 <section class="meta-showcase-section">
   <div class="meta-showcase-inner">
-    <!-- Left: Headline -->
+    <!-- Top: Centered headline -->
     <div class="meta-showcase-left">
       <div class="meta-showcase-eyebrow">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="#C8FF00"><circle cx="5" cy="5" r="5"/></svg>
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="#7C3AED"><circle cx="5" cy="5" r="5"/></svg>
         Official Certifications
       </div>
-      <h2 class="meta-showcase-title">Built on<br><span class="meta-showcase-accent">Meta's Official</span><br>Infrastructure.</h2>
+      <h2 class="meta-showcase-title">Built on Meta's Official Infrastructure.</h2>
       <p class="meta-showcase-desc">DMFlow is the only Indian Instagram automation platform with full Meta Business Partner certification. Your account is protected by the same infrastructure Meta uses — not third-party bots.</p>
       <a href="pages/auth/register.html" class="meta-showcase-cta">Connect Securely →</a>
     </div>
 
+    <div class="meta-showcase-row">
     <!-- Center: Logos connection visual -->
     <div class="meta-showcase-center">
       <div class="meta-logos-connector">
@@ -288,6 +289,7 @@
         </div>
         <div class="msc-badge-check">✓</div>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -1674,9 +1676,18 @@ section.testimonials-section { background: #ffffff; }
   pointer-events:none;
 }
 .meta-showcase-inner{
-  max-width:1140px;margin:0 auto;
-  display:grid;grid-template-columns:1fr auto 1fr;
-  gap:48px;align-items:center;
+  max-width:1100px;margin:0 auto;
+  display:flex;flex-direction:column;align-items:center;
+  gap:48px;
+}
+.meta-showcase-left{
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;max-width:700px;
+}
+.meta-showcase-row{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;
+  gap:56px;flex-wrap:wrap;
 }
 .meta-showcase-eyebrow{
   display:inline-flex;align-items:center;gap:7px;
@@ -1686,8 +1697,8 @@ section.testimonials-section { background: #ffffff; }
 }
 .meta-showcase-title{
   font-family:'Bricolage Grotesque',sans-serif;
-  font-size:clamp(28px,4vw,44px);font-weight:900;
-  color:#fff;line-height:1.1;margin-bottom:16px;
+  font-size:clamp(30px,4.4vw,50px);font-weight:900;
+  color:#fff;line-height:1.12;margin-bottom:16px;
 }
 .meta-showcase-accent{color:#C8FF00}
 .meta-showcase-desc{font-size:15px;color:#aaa;line-height:1.65;margin-bottom:24px;font-family:'Instrument Sans',sans-serif}
@@ -1727,7 +1738,7 @@ section.testimonials-section { background: #ffffff; }
 .msc-badge-inner{display:flex;flex-direction:column;align-items:center;gap:4px}
 .msc-badge-inner span{font-size:9px;font-weight:700;color:#C8FF00;font-family:'Instrument Sans',sans-serif;text-align:center;line-height:1.2}
 /* Right badge cards */
-.meta-showcase-right{display:flex;flex-direction:column;gap:10px}
+.meta-showcase-right{display:flex;flex-direction:column;gap:10px;max-width:420px;width:100%}
 .msc-badge-card{
   display:flex;align-items:center;gap:12px;
   background:rgba(255,255,255,0.04);
@@ -1747,7 +1758,7 @@ section.testimonials-section { background: #ffffff; }
   font-size:11px;font-weight:700;flex-shrink:0;
 }
 @media(max-width:900px){
-  .meta-showcase-inner{grid-template-columns:1fr;gap:40px}
+  .meta-showcase-row{flex-direction:column;gap:32px}
   .meta-showcase-center{flex-direction:row;flex-wrap:wrap;justify-content:center}
 }
 @media(max-width:600px){
@@ -2138,15 +2149,9 @@ section.meta-showcase-section::after,
 /* Fix text colours for white bg */
 .meta-showcase-section .meta-showcase-title {
   color:#0A0A0F !important;
-  font-size: clamp(34px, 4.6vw, 54px) !important;
+  font-size: clamp(30px, 4.4vw, 50px) !important;
 }
-.meta-showcase-section .meta-showcase-accent {
-  background: linear-gradient(135deg, #7C3AED, #DB2777) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-}
-.meta-showcase-section .meta-showcase-desc { color:#4b5563 !important; font-size: 16px !important; }
+.meta-showcase-section .meta-showcase-desc { color:#4b5563 !important; font-size: 16px !important; max-width: 640px; margin-left:auto; margin-right:auto; }
 .meta-showcase-section .meta-showcase-eyebrow { color:#7C3AED !important; }
 .meta-showcase-section .meta-showcase-cta {
   background:#0A0A0F !important;
