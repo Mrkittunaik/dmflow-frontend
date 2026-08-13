@@ -13,6 +13,22 @@
   const getSavedPhone = () => { try { return localStorage.getItem(PHONE_KEY) || ''; } catch (_) { return ''; } };
   const clearSavedPhone = () => { try { localStorage.removeItem(PHONE_KEY); } catch (_) {} };
 
+  // Stable per-browser id so the backend can tell distinct visitors apart
+  // for the "live now" heartbeat (sent as x-session-id on every track() call).
+  const SESSION_KEY = 'dmflow_ext_session';
+  function getSessionId() {
+    try {
+      let id = localStorage.getItem(SESSION_KEY);
+      if (!id) {
+        id = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+        localStorage.setItem(SESSION_KEY, id);
+      }
+      return id;
+    } catch (_) {
+      return 'sess_' + Math.random().toString(36).slice(2);
+    }
+  }
+
   // ---------- Analytics (visit / clicks / downloads) ----------
   // Fire-and-forget — never blocks the UI if the backend endpoint isn't ready yet.
   // Expected backend routes (implement whenever ready):
@@ -22,11 +38,19 @@
     try {
       fetch(`${API}/api/extension/track`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Session-Id': getSessionId() },
         body: JSON.stringify({ event, ts: Date.now() }),
         keepalive: true,
       }).catch(() => {});
     } catch (_) {}
+  }
+
+  // Keep the "live now" heartbeat warm while the tab is open, so a visitor
+  // who loaded the page once but hasn't clicked anything still counts as live.
+  function startHeartbeat() {
+    setInterval(() => {
+      if (document.visibilityState === 'visible') track('visit_heartbeat');
+    }, 30000);
   }
 
   // ---------- open/close helpers ----------
@@ -291,6 +315,7 @@
       set('ext-stat-clicks', s.downloadClicks);
       set('ext-stat-downloads', s.downloads);
       set('ext-stat-wa', s.whatsappClicks);
+      set('ext-stat-visits', s.totalVisits);
     } catch (_) {}
   }
 
@@ -463,6 +488,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     track('visit');
+    startHeartbeat();
     loadPaymentQr();
     initDownloadButton();
     initLeadForm();
