@@ -1998,97 +1998,6 @@ h1 .accent {
   flex-shrink: 0;
 }
 
-/* ===== SOCIAL PROOF STATS SECTION ===== */
-.stats-proof-section {
-  padding: 80px 40px;
-  background: var(--gray-50);
-  border-top: 1px solid var(--gray-200);
-  border-bottom: 1px solid var(--gray-200);
-}
-.proof-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.proof-stat-card {
-  background: #fff;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
-  padding: 32px 28px;
-  transition: all .25s;
-}
-.proof-stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.proof-stat-num {
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 64px;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 6px;
-  letter-spacing: -3px;
-}
-.proof-stat-lime .proof-stat-num { color: var(--lime-dark); }
-.proof-stat-featured .proof-stat-num { color: #f59e0b; }
-.proof-stat-purple .proof-stat-num { color: var(--purple); }
-
-.proof-stat-x {
-  font-size: 36px;
-  letter-spacing: 0;
-}
-.proof-stat-pct {
-  font-size: 36px;
-  letter-spacing: 0;
-}
-.proof-stat-label {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text2);
-  margin-bottom: 16px;
-}
-.proof-stat-divider {
-  height: 1px;
-  background: var(--gray-200);
-  margin-bottom: 16px;
-}
-.proof-stat-data {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.proof-stat-row {
-  font-size: 12.5px;
-  color: var(--text2);
-  line-height: 1.6;
-  padding-left: 20px;
-  position: relative;
-}
-.proof-stat-row::before {
-  position: absolute;
-  left: 0;
-  top: 1px;
-  font-size: 12px;
-  font-weight: 700;
-}
-.proof-check::before { content: '✓'; color: #22c55e; }
-.proof-cross::before { content: '✗'; color: #ef4444; }
-.proof-solution {
-  background: var(--gray-50);
-  border-radius: 8px;
-  padding: 10px 12px 10px 28px;
-  color: var(--black);
-  font-weight: 500;
-}
-.proof-solution::before { content: '→'; color: var(--text2); }
-
-@media (max-width: 900px) {
-  .proof-stats-grid { grid-template-columns: 1fr; }
-  .stats-proof-section { padding: 48px 20px; }
-}
 @media (max-width: 768px) {
   .meta-partner-strip { padding: 10px 12px; overflow: hidden; }
   .meta-partner-inner { flex-wrap: wrap; gap: 6px; justify-content: center; }
@@ -2098,7 +2007,6 @@ h1 .accent {
   .meta-badge-title { font-size: 11px; white-space: nowrap; }
   .meta-badge-sub { font-size: 9px; }
   .meta-partner-divider { display: none; }
-  .proof-stat-num { font-size: 52px; }
 }
 
 
