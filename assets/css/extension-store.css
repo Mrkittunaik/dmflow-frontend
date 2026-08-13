@@ -176,4 +176,7 @@
 @media (max-width:640px){
   .ext-card{padding:28px;flex-direction:column;text-align:center;}
   .ext-card-body p{max-width:none;}
+  .ext-card-logo{width:64px;height:64px;border-radius:16px;}
+  .ext-card-logo svg{width:34px;height:34px;}
+  .ext-badges{justify-content:center;}
 }
