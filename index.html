@@ -31,6 +31,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/extension-store.css">
 </head>
 <!-- NAV -->
 <nav class="nav">
@@ -1843,6 +1844,153 @@ section.testimonials-section { background: #ffffff; }
 </section>
 
 
+<!-- EXTENSION STORE -->
+<section class="section" id="ext-store">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-label">Chrome Extension</div>
+      <h2 class="section-title">Grab the DMFlow<br>contact extractor.</h2>
+    </div>
+    <div class="ext-card">
+      <div class="ext-card-logo">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="7" fill="#0A0A0F"/>
+          <path d="M16 5L8 16H13L11 23L20 12H15Z" fill="#C8FF00"/>
+        </svg>
+      </div>
+      <div class="ext-card-body">
+        <h3>DMFlow Contact Extractor</h3>
+        <p>A lightweight Chrome extension that auto-extracts business names, phone numbers & addresses from any site you visit — built for lead collection at scale.</p>
+        <div class="ext-badges">
+          <span class="ext-badge">⚡ One-click install</span>
+          <span class="ext-badge">📇 CSV / Excel export</span>
+          <span class="ext-badge">🔒 Verified access</span>
+        </div>
+        <button class="btn-ext-download" id="ext-download-btn">
+          Download Extension
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Ext Modal: Step 1 - Lead Form ===== -->
+<div class="ext-overlay" id="ext-overlay-form">
+  <div class="ext-modal">
+    <button class="ext-modal-close" data-ext-close>&times;</button>
+    <h4>Get the extension</h4>
+    <p class="ext-sub">Enter your details — we'll show you your unlock price next.</p>
+    <form id="ext-lead-form">
+      <div class="ext-field">
+        <label>Full name</label>
+        <input type="text" id="ext-name" placeholder="Your name" required>
+      </div>
+      <div class="ext-field">
+        <label>WhatsApp number</label>
+        <input type="tel" id="ext-phone" placeholder="10-digit number" required>
+      </div>
+      <div class="ext-error" id="ext-form-error"></div>
+      <button type="submit" class="ext-btn-primary" id="ext-lead-submit">Continue →</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== Ext Modal: Step 2 - Payment ===== -->
+<div class="ext-overlay" id="ext-overlay-pay">
+  <div class="ext-modal">
+    <button class="ext-modal-close" data-ext-close>&times;</button>
+    <h4>Complete your payment</h4>
+    <p class="ext-sub">Scan the QR or pay via WhatsApp, then confirm below.</p>
+    <div class="ext-pay-card">
+      <div class="ext-confetti-wrap" id="ext-confetti-wrap"></div>
+      <span class="ext-tier-tag" id="ext-tier-tag">TIER</span>
+      <div class="ext-price" id="ext-price-amount">₹0</div>
+      <div class="ext-price-note" id="ext-price-note"></div>
+      <div class="ext-qr-box">
+        <!-- Placeholder QR — swap src with your real UPI QR image -->
+        <div class="ext-qr-placeholder">Your UPI QR<br>goes here</div>
+      </div>
+      <div class="ext-pay-actions">
+        <a class="ext-btn-wa" href="https://wa.me/910000000000?text=Hi%2C%20I%20want%20to%20buy%20the%20DMFlow%20extension" target="_blank">
+          Buy via WhatsApp
+        </a>
+      </div>
+    </div>
+    <button class="ext-btn-primary" id="ext-paid-btn" style="margin-top:16px;">I've Paid ✓</button>
+  </div>
+</div>
+
+<!-- ===== Ext Modal: Step 3 - Waiting ===== -->
+<div class="ext-overlay" id="ext-overlay-wait">
+  <div class="ext-modal">
+    <button class="ext-modal-close" data-ext-close>&times;</button>
+    <div class="ext-wait">
+      <div class="ext-wait-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C8FF00" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      </div>
+      <h4 id="ext-wait-title">Waiting for verification</h4>
+      <p id="ext-wait-sub">We're verifying your payment. This usually takes a few minutes — keep this open.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Ext Modal: Step 4 - Approved / Download ===== -->
+<div class="ext-overlay" id="ext-overlay-done">
+  <div class="ext-modal">
+    <button class="ext-modal-close" data-ext-close>&times;</button>
+    <div class="ext-wait">
+      <div class="ext-done-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#C8FF00" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h4>You're approved! 🎉</h4>
+      <p>Your access is verified. Download the extension below.</p>
+      <button class="ext-btn-primary" id="ext-final-download-btn" style="margin-top:8px;">Download Extension</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Admin Login ===== -->
+<div class="ext-overlay" id="ext-overlay-admin-login">
+  <div class="ext-modal">
+    <button class="ext-modal-close" data-ext-close>&times;</button>
+    <h4>Admin login</h4>
+    <p class="ext-sub">Extension access dashboard</p>
+    <form id="ext-admin-login-form">
+      <div class="ext-field">
+        <label>Password</label>
+        <input type="password" id="ext-admin-password" required>
+      </div>
+      <div class="ext-error" id="ext-admin-login-error"></div>
+      <button type="submit" class="ext-btn-primary">Login</button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== Admin Dashboard ===== -->
+<div class="ext-overlay" id="ext-overlay-admin-dash">
+  <div class="ext-modal ext-admin-modal">
+    <button class="ext-modal-close" data-ext-close>&times;</button>
+    <h4>Extension leads</h4>
+    <p class="ext-sub">Approve after verifying payment. Approved users get the download unlocked automatically.</p>
+    <table class="ext-admin-table">
+      <thead>
+        <tr><th>Name</th><th>Phone</th><th>Price</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody id="ext-admin-tbody">
+        <tr><td colspan="5">Loading...</td></tr>
+      </tbody>
+    </table>
+    <div class="ext-admin-upload">
+      <form id="ext-admin-upload-form" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <input type="file" id="ext-admin-file" accept=".zip">
+        <button type="submit" class="ext-btn-primary" style="width:auto;padding:9px 18px;">Upload extension file</button>
+      </form>
+      <span id="ext-admin-upload-status" style="font-size:12px;color:var(--gray-400);"></span>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
@@ -1910,6 +2058,7 @@ section.testimonials-section { background: #ffffff; }
       <a href="pages/settings/privacy.html">Privacy</a>
       <a href="pages/settings/terms.html">Terms</a>
       <a href="pages/settings/security.html">Security</a>
+      <a href="#" id="footer-admin-link" class="footer-admin-link" title="Admin">kittu</a>
     </div>
   </div>
 </footer>
@@ -2780,6 +2929,7 @@ section.section.usecases .usecase-card {
 }
 </style>
 <script src="assets/js/config.js"></script>
+<script src="assets/js/extension-store.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/main.js"></script>
 <script>
