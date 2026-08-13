@@ -8,6 +8,11 @@
   let currentLeadId = null;
   let pollTimer = null;
 
+  const PHONE_KEY = 'dmflow_ext_phone';
+  const savePhone = (phone) => { try { localStorage.setItem(PHONE_KEY, phone); } catch (_) {} };
+  const getSavedPhone = () => { try { return localStorage.getItem(PHONE_KEY) || ''; } catch (_) { return ''; } };
+  const clearSavedPhone = () => { try { localStorage.removeItem(PHONE_KEY); } catch (_) {} };
+
   // ---------- open/close helpers ----------
   function openOverlay(id) { $('#' + id).classList.add('open'); }
   function closeOverlay(id) { $('#' + id).classList.remove('open'); }
@@ -25,10 +30,50 @@
   function initDownloadButton() {
     const btn = $('#ext-download-btn');
     if (!btn) return;
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
+      const savedPhone = getSavedPhone();
+      if (savedPhone) {
+        btn.disabled = true;
+        const original = btn.textContent;
+        btn.textContent = 'Checking...';
+        const resumed = await tryResume(savedPhone);
+        btn.disabled = false;
+        btn.textContent = original;
+        if (resumed) return;
+      }
       resetLeadForm();
       openOverlay('ext-overlay-form');
     });
+  }
+
+  // Returning user: look up their existing lead by phone and jump straight
+  // to the right screen (approved -> download, pending -> waiting).
+  // Returns true if it handled things (caller should not open the fresh form).
+  async function tryResume(phone) {
+    try {
+      const res = await fetch(`${API}/api/extension/leads/by-phone/${phone}`);
+      if (!res.ok) { clearSavedPhone(); return false; }
+      const data = await res.json();
+      currentLeadId = data.id;
+
+      if (data.status === 'approved') {
+        openOverlay('ext-overlay-done');
+        return true;
+      }
+      if (data.status === 'rejected') {
+        clearSavedPhone();
+        return false;
+      }
+      // pending / paid_pending_verification
+      renderPaymentCard(data.tier, data.price, data.originalPrice, data.tierRank);
+      $('#ext-wait-title').textContent = 'Waiting for verification';
+      $('#ext-wait-sub').textContent = "We're verifying your payment. This usually takes a few minutes — keep this open.";
+      openOverlay('ext-overlay-wait');
+      startPolling();
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   function resetLeadForm() {
@@ -65,6 +110,7 @@
         if (!res.ok) throw new Error(data.error || 'Something went wrong');
 
         currentLeadId = data.id;
+        savePhone(phone);
         renderPaymentCard(data.tier, data.price, data.originalPrice, data.tierRank);
         closeOverlay('ext-overlay-form');
         openOverlay('ext-overlay-pay');
@@ -171,6 +217,7 @@
     btn.addEventListener('click', () => {
       if (!currentLeadId) return;
       window.location.href = `${API}/api/extension/download/${currentLeadId}`;
+      clearSavedPhone();
     });
   }
 
