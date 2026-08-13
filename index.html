@@ -1916,12 +1916,12 @@ section.testimonials-section { background: #ffffff; }
       <span class="ext-tier-tag" id="ext-tier-tag">TIER</span>
       <div class="ext-price" id="ext-price-amount">₹0</div>
       <div class="ext-price-note" id="ext-price-note"></div>
-      <div class="ext-qr-box">
-        <!-- Placeholder QR — swap src with your real UPI QR image -->
+      <div class="ext-qr-box" id="ext-qr-box">
+        <!-- JS fills this with the admin-uploaded QR image, or falls back to placeholder -->
         <div class="ext-qr-placeholder">Your UPI QR<br>goes here</div>
       </div>
       <div class="ext-pay-actions">
-        <a class="ext-btn-wa" href="https://wa.me/919347864031?text=Hi%2C%20I%20want%20to%20buy%20the%20DMFlow%20extension" target="_blank">
+        <a class="ext-btn-wa" id="ext-wa-btn" href="https://wa.me/919347864031?text=Hi%2C%20I%20want%20to%20buy%20the%20DMFlow%20extension" target="_blank">
           Buy via WhatsApp
         </a>
       </div>
@@ -1980,8 +1980,41 @@ section.testimonials-section { background: #ffffff; }
 <div class="ext-overlay" id="ext-overlay-admin-dash">
   <div class="ext-modal ext-admin-modal">
     <button class="ext-modal-close" data-ext-close>&times;</button>
-    <h4>Extension leads</h4>
+    <h4>Extension dashboard</h4>
     <p class="ext-sub">Approve after verifying payment. Approved users get the download unlocked automatically.</p>
+
+    <!-- Live stats -->
+    <div class="ext-stats-grid" id="ext-stats-grid">
+      <div class="ext-stat-card">
+        <div class="ext-stat-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#C8FF00" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>
+        </div>
+        <div class="ext-stat-value" id="ext-stat-live">0</div>
+        <div class="ext-stat-label">Live now <span class="ext-live-dot"></span></div>
+      </div>
+      <div class="ext-stat-card">
+        <div class="ext-stat-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#C8FF00" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>
+        </div>
+        <div class="ext-stat-value" id="ext-stat-clicks">0</div>
+        <div class="ext-stat-label">Download clicks</div>
+      </div>
+      <div class="ext-stat-card">
+        <div class="ext-stat-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#C8FF00" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </div>
+        <div class="ext-stat-value" id="ext-stat-downloads">0</div>
+        <div class="ext-stat-label">Downloads done</div>
+      </div>
+      <div class="ext-stat-card">
+        <div class="ext-stat-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#25D366" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <div class="ext-stat-value" id="ext-stat-wa">0</div>
+        <div class="ext-stat-label">WhatsApp clicks</div>
+      </div>
+    </div>
+
     <table class="ext-admin-table">
       <thead>
         <tr><th>Name</th><th>Phone</th><th>Price</th><th>Status</th><th>Action</th></tr>
@@ -1990,12 +2023,37 @@ section.testimonials-section { background: #ffffff; }
         <tr><td colspan="5">Loading...</td></tr>
       </tbody>
     </table>
-    <div class="ext-admin-upload">
-      <form id="ext-admin-upload-form" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <input type="file" id="ext-admin-file" accept=".zip">
-        <button type="submit" class="ext-btn-primary" style="width:auto;padding:9px 18px;">Upload extension file</button>
-      </form>
-      <span id="ext-admin-upload-status" style="font-size:12px;color:var(--gray-400);"></span>
+
+    <!-- Uploads -->
+    <div class="ext-admin-uploads-row">
+      <div class="ext-admin-upload">
+        <div class="ext-admin-upload-head">
+          <span class="ext-admin-upload-title">QR code</span>
+          <span class="ext-admin-upload-hint">Shown on the payment card</span>
+        </div>
+        <div class="ext-admin-upload-body">
+          <img id="ext-admin-qr-preview" class="ext-admin-qr-preview" style="display:none;" alt="Current QR">
+          <form id="ext-admin-qr-form" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <input type="file" id="ext-admin-qr-file" accept="image/*">
+            <button type="submit" class="ext-btn-primary" style="width:auto;padding:9px 18px;">Save QR</button>
+          </form>
+        </div>
+        <span id="ext-admin-qr-status" class="ext-admin-upload-status"></span>
+      </div>
+
+      <div class="ext-admin-upload">
+        <div class="ext-admin-upload-head">
+          <span class="ext-admin-upload-title">Extension file</span>
+          <span class="ext-admin-upload-hint">.zip served on approved download</span>
+        </div>
+        <div class="ext-admin-upload-body">
+          <form id="ext-admin-upload-form" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <input type="file" id="ext-admin-file" accept=".zip">
+            <button type="submit" class="ext-btn-primary" style="width:auto;padding:9px 18px;">Save file</button>
+          </form>
+        </div>
+        <span id="ext-admin-upload-status" class="ext-admin-upload-status"></span>
+      </div>
     </div>
   </div>
 </div>
