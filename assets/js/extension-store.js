@@ -13,16 +13,35 @@
   const getSavedPhone = () => { try { return localStorage.getItem(PHONE_KEY) || ''; } catch (_) { return ''; } };
   const clearSavedPhone = () => { try { localStorage.removeItem(PHONE_KEY); } catch (_) {} };
 
+  // ---------- Analytics (visit / clicks / downloads) ----------
+  // Fire-and-forget — never blocks the UI if the backend endpoint isn't ready yet.
+  // Expected backend routes (implement whenever ready):
+  //   POST /api/extension/track           body: { event: 'visit'|'download_click'|'whatsapp_click'|'download_complete' }
+  //   GET  /api/extension/admin/stats      -> { live, downloadClicks, downloads, whatsappClicks }  (Bearer admin token)
+  function track(event) {
+    try {
+      fetch(`${API}/api/extension/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event, ts: Date.now() }),
+        keepalive: true,
+      }).catch(() => {});
+    } catch (_) {}
+  }
+
   // ---------- open/close helpers ----------
   function openOverlay(id) { $('#' + id).classList.add('open'); }
   function closeOverlay(id) { $('#' + id).classList.remove('open'); }
 
   document.addEventListener('click', (e) => {
     if (e.target.matches('[data-ext-close]')) {
-      closeOverlay(e.target.closest('.ext-overlay').id);
+      const overlayEl = e.target.closest('.ext-overlay');
+      closeOverlay(overlayEl.id);
+      if (overlayEl.id === 'ext-overlay-admin-dash') stopStatsPolling();
     }
     if (e.target.classList.contains('ext-overlay')) {
       e.target.classList.remove('open');
+      if (e.target.id === 'ext-overlay-admin-dash') stopStatsPolling();
     }
   });
 
@@ -31,6 +50,7 @@
     const btn = $('#ext-download-btn');
     if (!btn) return;
     btn.addEventListener('click', async () => {
+      track('download_click');
       const savedPhone = getSavedPhone();
       if (savedPhone) {
         btn.disabled = true;
@@ -216,13 +236,104 @@
     if (!btn) return;
     btn.addEventListener('click', () => {
       if (!currentLeadId) return;
+      track('download_complete');
       window.location.href = `${API}/api/extension/download/${currentLeadId}`;
       clearSavedPhone();
     });
   }
 
+  function initWhatsappButton() {
+    const btn = $('#ext-wa-btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => track('whatsapp_click'));
+  }
+
+  // ---------- QR code (fetched for the payment card, uploaded from admin) ----------
+  async function loadPaymentQr() {
+    const box = $('#ext-qr-box');
+    if (!box) return;
+    try {
+      const res = await fetch(`${API}/api/extension/qr`);
+      if (!res.ok) return; // keep placeholder
+      const data = await res.json();
+      if (data && data.url) {
+        box.innerHTML = `<img src="${data.url}" alt="UPI QR code">`;
+      }
+    } catch (_) {
+      // backend not ready yet — placeholder stays
+    }
+  }
+
   // ================= ADMIN =================
   let adminToken = null;
+  let statsTimer = null;
+
+  function startStatsPolling() {
+    stopStatsPolling();
+    loadAdminStats();
+    statsTimer = setInterval(loadAdminStats, 5000);
+  }
+  function stopStatsPolling() {
+    if (statsTimer) clearInterval(statsTimer);
+    statsTimer = null;
+  }
+
+  async function loadAdminStats() {
+    if (!adminToken) return;
+    try {
+      const res = await fetch(`${API}/api/extension/admin/stats`, {
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      if (!res.ok) return;
+      const s = await res.json();
+      const set = (id, v) => { const el = $('#' + id); if (el) el.textContent = (v ?? 0); };
+      set('ext-stat-live', s.live);
+      set('ext-stat-clicks', s.downloadClicks);
+      set('ext-stat-downloads', s.downloads);
+      set('ext-stat-wa', s.whatsappClicks);
+    } catch (_) {}
+  }
+
+  async function loadAdminQrPreview() {
+    if (!adminToken) return;
+    try {
+      const res = await fetch(`${API}/api/extension/qr`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const img = $('#ext-admin-qr-preview');
+      if (img && data && data.url) {
+        img.src = data.url;
+        img.style.display = 'block';
+      }
+    } catch (_) {}
+  }
+
+  function initAdminQrUpload() {
+    const form = $('#ext-admin-qr-form');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = $('#ext-admin-qr-file');
+      const statusEl = $('#ext-admin-qr-status');
+      if (!fileInput.files.length) return;
+      const fd = new FormData();
+      fd.append('file', fileInput.files[0]);
+      statusEl.textContent = 'Uploading...';
+      try {
+        const res = await fetch(`${API}/api/extension/admin/qr`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${adminToken}` },
+          body: fd,
+        });
+        if (!res.ok) throw new Error('Upload failed');
+        statusEl.textContent = '✓ QR saved';
+        fileInput.value = '';
+        loadAdminQrPreview();
+      } catch (err) {
+        statusEl.textContent = 'Upload failed, try again';
+      }
+    });
+  }
 
   function initAdminLink() {
     const link = $('#footer-admin-link');
@@ -254,6 +365,8 @@
         closeOverlay('ext-overlay-admin-login');
         openOverlay('ext-overlay-admin-dash');
         loadAdminLeads();
+        loadAdminQrPreview();
+        startStatsPolling();
       } catch (err) {
         errEl.textContent = err.message || 'Invalid password';
         errEl.classList.add('show');
@@ -349,13 +462,17 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    track('visit');
+    loadPaymentQr();
     initDownloadButton();
     initLeadForm();
     initPaidButton();
     initDownloadFinal();
+    initWhatsappButton();
     initAdminLink();
     initAdminLoginForm();
     initAdminTableActions();
     initAdminUpload();
+    initAdminQrUpload();
   });
 })();
