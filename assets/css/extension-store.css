@@ -1,0 +1,173 @@
+/* ================= EXTENSION STORE SECTION ================= */
+#ext-store{
+  background:var(--black);
+  padding:100px 24px;
+  position:relative;
+  overflow:hidden;
+}
+#ext-store .section-inner{max-width:1100px;margin:0 auto;}
+#ext-store .section-label{color:var(--lime);}
+#ext-store .section-title{color:var(--white);}
+
+.ext-card{
+  background:linear-gradient(160deg,#15151d,#0e0e14);
+  border:1px solid rgba(200,255,0,0.15);
+  border-radius:var(--radius-lg);
+  padding:48px;
+  display:flex;
+  align-items:center;
+  gap:40px;
+  flex-wrap:wrap;
+  box-shadow:var(--shadow-lg);
+}
+.ext-card-logo{
+  width:96px;height:96px;border-radius:24px;
+  background:var(--lime);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ext-card-logo svg{width:52px;height:52px;}
+.ext-card-body{flex:1;min-width:240px;}
+.ext-card-body h3{color:var(--white);font-size:24px;margin:0 0 8px;}
+.ext-card-body p{color:var(--gray-400);font-size:15px;line-height:1.6;margin:0 0 20px;max-width:520px;}
+.ext-badges{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+.ext-badge{
+  font-size:12px;color:var(--lime);border:1px solid rgba(200,255,0,0.25);
+  padding:4px 10px;border-radius:999px;background:rgba(200,255,0,0.06);
+}
+.btn-ext-download{
+  background:var(--lime);color:var(--black);font-weight:700;
+  border:none;padding:14px 28px;border-radius:999px;cursor:pointer;
+  font-size:15px;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .15s ease;
+}
+.btn-ext-download:hover{transform:translateY(-2px);}
+
+/* ---- Overlay / Modal ---- */
+.ext-overlay{
+  position:fixed;inset:0;background:rgba(5,5,8,0.82);backdrop-filter:blur(6px);
+  z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.ext-overlay.open{display:flex;}
+.ext-modal{
+  background:#111117;border:1px solid rgba(200,255,0,0.15);
+  border-radius:20px;max-width:420px;width:100%;padding:32px;
+  position:relative;color:var(--white);
+  max-height:88vh;overflow-y:auto;
+}
+.ext-modal-close{
+  position:absolute;top:14px;right:14px;background:none;border:none;
+  color:var(--gray-400);font-size:20px;cursor:pointer;line-height:1;
+}
+.ext-modal h4{margin:0 0 6px;font-size:19px;}
+.ext-modal .ext-sub{color:var(--gray-400);font-size:13px;margin:0 0 22px;}
+
+.ext-field{margin-bottom:16px;}
+.ext-field label{display:block;font-size:13px;color:var(--gray-400);margin-bottom:6px;}
+.ext-field input{
+  width:100%;background:#0A0A0F;border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px;padding:12px 14px;color:var(--white);font-size:14px;
+  box-sizing:border-box;
+}
+.ext-field input:focus{outline:none;border-color:var(--lime);}
+
+.ext-btn-primary{
+  width:100%;background:var(--lime);color:var(--black);font-weight:700;
+  border:none;padding:13px;border-radius:10px;cursor:pointer;font-size:14px;margin-top:6px;
+}
+.ext-btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.ext-btn-secondary{
+  width:100%;background:transparent;color:var(--gray-400);font-weight:600;
+  border:1px solid rgba(255,255,255,0.15);padding:11px;border-radius:10px;cursor:pointer;
+  font-size:13px;margin-top:10px;
+}
+
+.ext-error{color:#ff6b6b;font-size:12.5px;margin-top:-6px;margin-bottom:10px;display:none;}
+.ext-error.show{display:block;}
+
+/* ---- Payment card ---- */
+.ext-pay-card{
+  background:linear-gradient(160deg,#181822,#0e0e14);
+  border:1px solid rgba(200,255,0,0.2);border-radius:16px;
+  padding:24px;text-align:center;position:relative;overflow:hidden;
+}
+.ext-tier-tag{
+  display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;
+  background:rgba(200,255,0,0.12);color:var(--lime);padding:4px 12px;
+  border-radius:999px;margin-bottom:10px;text-transform:uppercase;
+}
+.ext-price{font-size:38px;font-weight:800;color:var(--white);margin:4px 0;}
+.ext-price span{font-size:15px;color:var(--gray-400);text-decoration:line-through;margin-left:8px;font-weight:500;}
+.ext-price-note{color:var(--gray-400);font-size:12.5px;margin-bottom:18px;}
+.ext-qr-box{
+  width:170px;height:170px;background:#fff;border-radius:14px;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.ext-qr-box img{width:100%;height:100%;object-fit:contain;}
+.ext-qr-placeholder{color:#999;font-size:12px;text-align:center;padding:10px;}
+.ext-pay-actions{display:flex;gap:10px;margin-top:4px;}
+.ext-btn-wa{
+  flex:1;background:#25D366;color:#062b13;font-weight:700;border:none;
+  padding:12px;border-radius:10px;cursor:pointer;font-size:13px;
+  display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;
+}
+
+/* confetti canvas layer for the pay card */
+.ext-confetti-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.ext-confetti-piece{
+  position:absolute;top:-10px;width:8px;height:14px;opacity:0.9;
+  animation:extConfettiFall linear forwards;
+}
+@keyframes extConfettiFall{
+  to{ transform: translateY(340px) rotate(540deg); opacity:0; }
+}
+
+/* ---- Waiting state ---- */
+.ext-wait{text-align:center;padding:10px 0;}
+.ext-wait-icon{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 18px;
+  background:rgba(200,255,0,0.1);display:flex;align-items:center;justify-content:center;
+  animation:extPulse 1.4s ease-in-out infinite;
+}
+@keyframes extPulse{
+  0%,100%{ transform:scale(1); box-shadow:0 0 0 0 rgba(200,255,0,0.25);}
+  50%{ transform:scale(1.08); box-shadow:0 0 0 10px rgba(200,255,0,0);}
+}
+.ext-wait h4{margin-bottom:6px;}
+.ext-wait p{color:var(--gray-400);font-size:13.5px;}
+
+/* ---- Approved / Download state ---- */
+.ext-done-icon{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 18px;background:rgba(200,255,0,0.15);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ---- Admin ---- */
+.footer-admin-link{cursor:pointer;}
+.ext-admin-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px;}
+.ext-admin-table th,.ext-admin-table td{
+  text-align:left;padding:9px 8px;border-bottom:1px solid rgba(255,255,255,0.08);color:var(--white);
+}
+.ext-admin-table th{color:var(--gray-400);font-weight:600;font-size:11.5px;text-transform:uppercase;}
+.ext-status-pill{
+  font-size:11px;padding:3px 9px;border-radius:999px;font-weight:700;text-transform:capitalize;
+}
+.ext-status-pill.pending{background:rgba(255,193,7,0.15);color:#ffc107;}
+.ext-status-pill.approved{background:rgba(200,255,0,0.15);color:var(--lime);}
+.ext-status-pill.rejected{background:rgba(255,107,107,0.15);color:#ff6b6b;}
+.ext-admin-actions button{
+  font-size:11.5px;padding:5px 10px;border-radius:7px;border:none;cursor:pointer;font-weight:700;margin-right:6px;
+}
+.ext-admin-actions .approve-btn{background:var(--lime);color:var(--black);}
+.ext-admin-actions .reject-btn{background:rgba(255,107,107,0.15);color:#ff6b6b;}
+.ext-admin-upload{
+  border:1px dashed rgba(200,255,0,0.3);border-radius:12px;padding:16px;margin-top:18px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.ext-admin-upload input[type=file]{color:var(--gray-400);font-size:12.5px;}
+.ext-admin-modal{max-width:760px;}
+
+@media (max-width:640px){
+  .ext-card{padding:28px;flex-direction:column;text-align:center;}
+  .ext-card-body p{max-width:none;}
+}
