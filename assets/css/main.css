@@ -2148,7 +2148,8 @@ h1 .accent {
   /* FOOTER */
   .footer { padding: 40px 20px 24px; }
   .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-  .footer-cols { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .footer-cols { grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; }
+  .footer-col { min-width: 0; }
   .footer-bottom { flex-direction: column; gap: 16px; align-items: center; text-align: center; }
   .footer-links { gap: 16px; }
   .made-in-india { align-self: center; }
@@ -2169,7 +2170,7 @@ h1 .accent {
   h1 { font-size: 28px; }
   .section-title { font-size: 22px; }
   .stats-row { grid-template-columns: 1fr; }
-  .footer-cols { grid-template-columns: 1fr; gap: 20px; }
+  .footer-cols { grid-template-columns: 1fr 1fr; gap: 16px; }
   .ps-grid { grid-template-columns: 1fr; }
   .pricing-toggle { flex-wrap: wrap; justify-content: center; }
   .faq-q { font-size: 14px; }
