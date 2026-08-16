@@ -47,13 +47,12 @@
     <div class="wa-builder-topbar">
       <div class="wa-flex wa-gap-10">
         <a href="automations.html" class="wa-icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></a>
-        <input class="wa-name-input" value="Welcome New Customer">
-        <span class="wa-badge green">Active</span>
+        <input class="wa-name-input" id="waAutoName" value="New Automation">
+        <span class="wa-badge gray" id="waAutoStatusBadge">Draft</span>
       </div>
       <div class="wa-flex wa-gap-8">
-        <button class="wa-btn wa-btn-outline wa-btn-sm">Test</button>
-        <button class="wa-btn wa-btn-outline wa-btn-sm">View Logs</button>
-        <button class="wa-btn wa-btn-primary wa-btn-sm">Save</button>
+        <button class="wa-btn wa-btn-outline wa-btn-sm" id="waAutoToggleBtn">Activate</button>
+        <button class="wa-btn wa-btn-primary wa-btn-sm" id="waAutoSaveBtn">Save</button>
       </div>
     </div>
 
@@ -189,11 +188,95 @@
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme();
 WA_NAV.render('automations');
+
+// NOTE: only name / active / trigger.whatsappEvents are wired to the real
+// Automation model (channel: 'whatsapp'). The drag-and-drop node canvas
+// below has no backing graph schema in Automation.js yet (it stores a
+// flat trigger + actions[] shape, not an arbitrary node graph) — building
+// that persistence is a separate piece of work, so the canvas stays
+// visual-only for now rather than inventing a schema that doesn't match
+// the rest of the app.
+
+const params = new URLSearchParams(location.search);
+const automationId = params.get('id');
+const nameInput = document.getElementById('waAutoName');
+const statusBadge = document.getElementById('waAutoStatusBadge');
+const toggleBtn = document.getElementById('waAutoToggleBtn');
+const saveBtn = document.getElementById('waAutoSaveBtn');
+
+let currentAutomation = null;
+let connectionId = null;
+
+async function init() {
+  try {
+    const conn = await API.getWhatsAppConnection();
+    connectionId = conn._id || null;
+  } catch (e) { /* not connected yet — creating will fail with a clear error */ }
+
+  if (automationId) {
+    try {
+      const all = await API.getAutomations();
+      currentAutomation = all.find(a => a._id === automationId);
+      if (currentAutomation) {
+        nameInput.value = currentAutomation.name;
+        renderStatus(currentAutomation.active);
+      }
+    } catch (err) {
+      console.error('Failed to load automation:', err);
+    }
+  } else {
+    renderStatus(false);
+  }
+}
+
+function renderStatus(active) {
+  statusBadge.textContent = active ? 'Active' : 'Draft';
+  statusBadge.className = 'wa-badge ' + (active ? 'green' : 'gray');
+  toggleBtn.textContent = active ? 'Pause' : 'Activate';
+}
+
+toggleBtn.addEventListener('click', async () => {
+  if (!currentAutomation) { alert('Save the automation first.'); return; }
+  try {
+    await API.toggleAutomation(currentAutomation._id);
+    currentAutomation.active = !currentAutomation.active;
+    renderStatus(currentAutomation.active);
+  } catch (err) {
+    alert('Could not toggle automation: ' + err.message);
+  }
+});
+
+saveBtn.addEventListener('click', async () => {
+  const name = nameInput.value.trim();
+  if (!name) { alert('Name is required.'); return; }
+  saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+  try {
+    if (currentAutomation) {
+      await API.updateAutomation(currentAutomation._id, { name });
+    } else {
+      if (!connectionId) { alert('Connect a WhatsApp number before creating an automation.'); return; }
+      currentAutomation = await API.createAutomation({
+        name, channel: 'whatsapp', connectionId,
+        trigger: { whatsappEvents: ['whatsapp_new_message'] },
+      });
+      history.replaceState(null, '', `automation-builder.html?id=${currentAutomation._id}`);
+    }
+    WA_UI.toast('Automation saved', 'success');
+  } catch (err) {
+    alert('Could not save automation: ' + err.message);
+  } finally {
+    saveBtn.disabled = false; saveBtn.textContent = 'Save';
+  }
+});
+
+init();
 </script>
 </body>
 </html>
