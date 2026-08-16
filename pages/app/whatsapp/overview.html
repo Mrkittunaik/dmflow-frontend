@@ -93,11 +93,11 @@
               <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm4.93 13.57c-.207.583-1.207 1.146-1.664 1.195-.457.05-.47.358-2.963-.619-2.49-.977-3.99-3.529-4.11-3.693-.12-.164-.983-1.307-.983-2.493 0-1.186.619-1.77.839-2.008.22-.238.478-.298.638-.298.16 0 .319.002.459.008.147.007.345-.056.54.412.2.478.679 1.649.739 1.769.06.12.1.26.02.42-.08.16-.12.26-.239.4-.12.14-.252.312-.36.42-.12.12-.244.25-.105.49.14.24.619.998 1.33 1.617.914.81 1.684 1.06 1.924 1.18.24.12.38.1.52-.06.14-.16.599-.699.759-.939.16-.24.319-.2.539-.12.22.08 1.399.66 1.639.78.239.12.399.18.459.28.059.1.059.58-.148 1.163z"/></svg>
             </div>
             <div>
-              <div class="wa-conn-name" id="waBizName">Aarav Fashion Co.</div>
-              <div class="wa-conn-phone" id="waBizPhone">+91 98765 43210</div>
+              <div class="wa-conn-name" id="waBizName">—</div>
+              <div class="wa-conn-phone" id="waBizPhone">—</div>
               <div class="wa-conn-badges">
-                <span class="wa-conn-badge"><span class="wa-status-dot on"></span> Connected</span>
-                <span class="wa-conn-badge">API Healthy</span>
+                <span class="wa-conn-badge"><span class="wa-status-dot" id="waConnDot"></span> <span id="waConnLabel">Not connected</span></span>
+                <span class="wa-conn-badge" id="waHealthBadge" style="display:none;">API Healthy</span>
               </div>
             </div>
           </div>
@@ -242,6 +242,8 @@
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
@@ -249,8 +251,31 @@ WA_UI.initTheme();
 WA_NAV.render('overview');
 
 const data = WA_UI.store();
-document.getElementById('waBizName').textContent = data.business.name;
-document.getElementById('waBizPhone').textContent = data.business.phone;
+
+// ── Real connection card (spec: never show a fake business/number) ──────
+(async function loadRealConnection() {
+  try {
+    const conn = await API.getWhatsAppConnection();
+    if (!conn || !conn.connected) {
+      document.getElementById('waBizName').textContent = 'No WhatsApp connected';
+      document.getElementById('waBizPhone').textContent = 'Connect a number to get started';
+      document.getElementById('waConnLabel').textContent = 'Not connected';
+      return;
+    }
+    document.getElementById('waBizName').textContent  = conn.businessName || conn.verifiedName || 'WhatsApp Business';
+    document.getElementById('waBizPhone').textContent = conn.displayPhoneNumber || '—';
+    document.getElementById('waConnLabel').textContent = 'Connected';
+    document.getElementById('waConnDot').classList.add('on');
+    if (conn.connectionStatus === 'healthy') {
+      const badge = document.getElementById('waHealthBadge');
+      badge.style.display = '';
+      badge.textContent = 'API Healthy';
+    }
+  } catch (e) {
+    document.getElementById('waBizName').textContent = 'No WhatsApp connected';
+    document.getElementById('waBizPhone').textContent = 'Connect a number to get started';
+  }
+})();
 
 const statsGrid = document.getElementById('waStatsGrid');
 const stats = [
