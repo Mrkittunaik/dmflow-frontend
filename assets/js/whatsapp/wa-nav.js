@@ -23,7 +23,8 @@
     team:       '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="8" r="2.4" stroke="currentColor" stroke-width="1.8"/><path d="M21 20c0-2.3-1.7-4-4-4.6" stroke="currentColor" stroke-width="1.8"/></svg>',
     billing:    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/></svg>',
     settings:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 00-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 00-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 005 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9c.6.5 1.3.9 2.1 1.2L10 21h4l.5-2.6c.8-.3 1.5-.7 2.1-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
-    logs:       '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 3v4H5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 7a9 9 0 1 1-2.3 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+    logs:       '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 3v4H5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 7a9 9 0 1 1-2.3 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    more:       '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/></svg>'
   };
 
   const MAIN_NAV = [
@@ -50,9 +51,33 @@
     { key: 'settings',      label: 'Settings',       href: 'settings.html',     icon: 'settings' }
   ];
 
+  // The 5 items pinned to the mobile tab bar — highest-frequency actions first,
+  // everything else (main + footer nav) lives behind "More".
+  const TAB_KEYS = ['overview', 'inbox', 'automations', 'campaigns', 'analytics'];
+  const ALL_ITEMS = [...MAIN_NAV, ...BOTTOM_NAV];
+  const TAB_NAV  = TAB_KEYS.map(k => ALL_ITEMS.find(i => i.key === k)).filter(Boolean);
+  const MORE_MAIN   = MAIN_NAV.filter(i => !TAB_KEYS.includes(i.key));
+  const MORE_BOTTOM = BOTTOM_NAV.filter(i => !TAB_KEYS.includes(i.key));
+
   function link(item, active) {
     const badge = item.badge ? `<span class="wa-sb-badge">${item.badge}</span>` : '';
     return `<a class="wa-sb-link${active ? ' active' : ''}" href="${BASE}${item.href}">${ICONS[item.icon] || ''}<span>${item.label}</span>${badge}</a>`;
+  }
+
+  function sheetLink(item, active) {
+    const badge = item.badge ? `<span class="wa-sheet-badge">${item.badge}</span>` : '';
+    return `<a class="wa-sheet-link${active ? ' active' : ''}" href="${BASE}${item.href}">
+      <span class="wa-sheet-ico">${ICONS[item.icon] || ''}</span>
+      <span>${item.label}</span>${badge}
+    </a>`;
+  }
+
+  function tabLink(item, active) {
+    const badge = item.badge ? `<span class="wa-tab-badge">${item.badge}</span>` : '';
+    return `<a class="wa-tab-link${active ? ' active' : ''}" href="${BASE}${item.href}">
+      <span class="wa-tab-ico">${ICONS[item.icon] || ''}${badge}</span>
+      <span class="wa-tab-label">${item.label}</span>
+    </a>`;
   }
 
   function render(activeKey) {
@@ -60,7 +85,9 @@
     if (!mount) return;
     const main = MAIN_NAV.map(i => link(i, i.key === activeKey)).join('');
     const bottom = BOTTOM_NAV.map(i => link(i, i.key === activeKey)).join('');
-    mount.innerHTML = `
+
+    // ----- Desktop / laptop sidebar (unchanged, shown ≥981px) -----
+    const sidebarHtml = `
       <div class="wa-sidebar" id="waSidebar">
         <div class="wa-sb-brand">
           <div class="wa-sb-logo">W</div>
@@ -74,6 +101,45 @@
           ${bottom}
         </div>
       </div>`;
+
+    // ----- Mobile bottom tab bar: 5 pinned tabs + "More" -----
+    const tabsHtml = TAB_NAV.map(i => tabLink(i, i.key === activeKey)).join('');
+    const isMoreActive = !TAB_KEYS.includes(activeKey);
+    const moreTabHtml = `
+      <button class="wa-tab-link wa-tab-more${isMoreActive ? ' active' : ''}" id="waMoreTabBtn" type="button">
+        <span class="wa-tab-ico">${ICONS.more}</span>
+        <span class="wa-tab-label">More</span>
+      </button>`;
+
+    const bottomBarHtml = `
+      <nav class="wa-bottom-bar" id="waBottomBar">
+        ${tabsHtml}
+        ${moreTabHtml}
+      </nav>`;
+
+    // ----- "More" bottom sheet (mobile) -----
+    const moreMainHtml   = MORE_MAIN.map(i => sheetLink(i, i.key === activeKey)).join('');
+    const moreBottomHtml = MORE_BOTTOM.map(i => sheetLink(i, i.key === activeKey)).join('');
+    const sheetHtml = `
+      <div class="wa-sheet-overlay" id="waSheetOverlay"></div>
+      <div class="wa-sheet" id="waMoreSheet" role="dialog" aria-modal="true" aria-label="More menu">
+        <div class="wa-sheet-handle"></div>
+        <div class="wa-sheet-head">
+          <span>More</span>
+          <button class="wa-sheet-close" id="waSheetCloseBtn" type="button" aria-label="Close">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="wa-sheet-scroll">
+          <div class="wa-sheet-grid">${moreMainHtml}</div>
+          <div class="wa-sheet-divider"></div>
+          <div class="wa-sheet-grid">${moreBottomHtml}</div>
+        </div>
+      </div>`;
+
+    mount.innerHTML = sidebarHtml + bottomBarHtml + sheetHtml;
+    document.body.classList.add('wa-has-bottom-bar');
+    bindSheetEvents();
   }
 
   function toggleMobile() {
@@ -81,5 +147,62 @@
     if (sb) sb.classList.toggle('open');
   }
 
-  window.WA_NAV = { render, toggleMobile };
+  // ---- More sheet open/close (with tap + swipe animation) ----
+  function openSheet() {
+    const overlay = document.getElementById('waSheetOverlay');
+    const sheet   = document.getElementById('waMoreSheet');
+    const btn     = document.getElementById('waMoreTabBtn');
+    if (!overlay || !sheet) return;
+    overlay.classList.add('open');
+    sheet.classList.add('open');
+    if (btn) btn.classList.add('pressed-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheet() {
+    const overlay = document.getElementById('waSheetOverlay');
+    const sheet   = document.getElementById('waMoreSheet');
+    const btn     = document.getElementById('waMoreTabBtn');
+    if (!overlay || !sheet) return;
+    overlay.classList.remove('open');
+    sheet.classList.remove('open');
+    if (btn) btn.classList.remove('pressed-open');
+    document.body.style.overflow = '';
+  }
+
+  function bindSheetEvents() {
+    const moreBtn = document.getElementById('waMoreTabBtn');
+    const overlay = document.getElementById('waSheetOverlay');
+    const closeBtn = document.getElementById('waSheetCloseBtn');
+    const sheet = document.getElementById('waMoreSheet');
+    if (moreBtn) moreBtn.addEventListener('click', openSheet);
+    if (overlay) overlay.addEventListener('click', closeSheet);
+    if (closeBtn) closeBtn.addEventListener('click', closeSheet);
+
+    // Swipe-down-to-close on the handle/sheet
+    if (sheet) {
+      let startY = null;
+      sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; }, { passive: true });
+      sheet.addEventListener('touchmove', e => {
+        if (startY == null) return;
+        const dy = e.touches[0].clientY - startY;
+        if (dy > 0) sheet.style.transform = `translateY(${dy}px)`;
+      }, { passive: true });
+      sheet.addEventListener('touchend', e => {
+        if (startY == null) return;
+        const dy = (e.changedTouches[0].clientY - startY);
+        sheet.style.transform = '';
+        if (dy > 80) closeSheet();
+        startY = null;
+      });
+    }
+
+    // Ripple / bounce feedback on all tab links
+    document.querySelectorAll('.wa-tab-link').forEach(el => {
+      el.addEventListener('pointerdown', () => el.classList.add('tap'));
+      el.addEventListener('pointerup', () => setTimeout(() => el.classList.remove('tap'), 160));
+      el.addEventListener('pointerleave', () => el.classList.remove('tap'));
+    });
+  }
+
+  window.WA_NAV = { render, toggleMobile, openSheet, closeSheet };
 })();
