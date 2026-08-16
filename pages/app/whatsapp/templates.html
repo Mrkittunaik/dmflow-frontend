@@ -43,37 +43,69 @@
           <div class="wa-tab">Pending</div>
           <div class="wa-tab">Rejected</div>
         </div>
-        <a href="template-builder.html" class="wa-btn wa-btn-primary wa-btn-sm">+ Create Template</a>
+        <div class="wa-flex wa-gap-8">
+          <button class="wa-btn wa-btn-outline wa-btn-sm" id="waSyncBtn">Sync from Meta</button>
+          <a href="template-builder.html" class="wa-btn wa-btn-primary wa-btn-sm">+ Create Template</a>
+        </div>
       </div>
 
-      <div class="wa-tpl-grid" id="waTplGrid"></div>
+      <div class="wa-tpl-grid" id="waTplGrid"><div class="wa-muted" style="padding:16px;">Loading…</div></div>
 
     </div></div>
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme();
 WA_NAV.render('templates');
 
-const data = WA_UI.store();
-const statusColor = { approved:'green', pending:'amber', rejected:'red' };
+const statusColor = { APPROVED:'green', PENDING:'amber', REJECTED:'red', DRAFT:'gray', PAUSED:'amber' };
 
-document.getElementById('waTplGrid').innerHTML = data.templates.map(t => `
-  <div class="wa-tpl-card">
-    <div class="wa-flex wa-between">
-      <div class="wa-tpl-name">${t.name}</div>
-      <span class="wa-badge ${statusColor[t.status]}">${t.status}</span>
-    </div>
-    <div class="wa-tpl-meta">${t.category} · ${t.lang}</div>
-    <div class="wa-tpl-actions">
-      <a href="template-builder.html?id=${t.id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
-      <button class="wa-btn wa-btn-outline wa-btn-sm">Preview</button>
-      <button class="wa-btn wa-btn-outline wa-btn-sm">Duplicate</button>
-    </div>
-  </div>`).join('');
+async function loadTemplates() {
+  const grid = document.getElementById('waTplGrid');
+  try {
+    const { templates } = await API.getWhatsAppTemplates();
+    if (!templates.length) {
+      grid.innerHTML = '<div class="wa-muted" style="padding:16px;">No templates yet. Create one or sync from Meta.</div>';
+      return;
+    }
+    grid.innerHTML = templates.map(t => `
+      <div class="wa-tpl-card">
+        <div class="wa-flex wa-between">
+          <div class="wa-tpl-name">${t.templateName}</div>
+          <span class="wa-badge ${statusColor[t.status] || 'gray'}">${t.status}</span>
+        </div>
+        <div class="wa-tpl-meta">${t.category} · ${t.language}</div>
+        <div class="wa-tpl-actions">
+          <a href="template-builder.html?id=${t._id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
+        </div>
+      </div>`).join('');
+  } catch (err) {
+    console.error('Failed to load templates:', err);
+    grid.innerHTML = '<div class="wa-muted" style="padding:16px;">Could not load templates.</div>';
+  }
+}
+
+document.getElementById('waSyncBtn').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  btn.disabled = true; btn.textContent = 'Syncing…';
+  try {
+    const conn = await API.getWhatsAppConnection();
+    if (!conn.connected) { alert('Connect a WhatsApp number first.'); return; }
+    await API.syncWhatsAppTemplates(conn._id);
+    await loadTemplates();
+  } catch (err) {
+    alert('Sync failed: ' + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Sync from Meta';
+  }
+});
+
+loadTemplates();
 </script>
 </body>
 </html>
