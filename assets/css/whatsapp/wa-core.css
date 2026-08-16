@@ -320,9 +320,133 @@
 .wa-grow{flex:1;min-width:0;}
 .wa-truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
+/* =========================================================
+   Mobile bottom tab bar + "More" sheet
+   Sidebar = laptop/desktop (>=981px). Bottom bar = mobile (<=980px).
+   ========================================================= */
+
+.wa-bottom-bar{ display:none; }
+
 @media (max-width: 980px){
   .wa-sidebar{position:fixed;left:0;top:0;height:100vh;transform:translateX(-100%);transition:transform .2s;z-index:1200;}
   .wa-sidebar.open{transform:translateX(0);}
   .wa-stats-grid{grid-template-columns:repeat(2,1fr);}
   .wa-pad{padding:16px;}
+
+  /* Reserve space so content doesn't sit under the fixed bottom bar */
+  body.wa-has-bottom-bar .wa-scroll{ padding-bottom: 8px; }
+  body.wa-has-bottom-bar .wa-app{ height:100dvh; }
+  body.wa-has-bottom-bar .wa-main{ padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+
+  .wa-bottom-bar{
+    display:flex; align-items:stretch; justify-content:space-around;
+    position:fixed; left:0; right:0; bottom:0; z-index:1300;
+    height:calc(60px + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
+    background:var(--wa-bg-panel);
+    border-top:1px solid var(--wa-border);
+    box-shadow:0 -4px 18px rgba(7,94,84,0.10);
+  }
+
+  .wa-tab-link{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:3px; text-decoration:none; color:var(--wa-text-3); background:transparent; border:none;
+    font-family:inherit; cursor:pointer; position:relative; padding:6px 2px 4px;
+    -webkit-tap-highlight-color:transparent; user-select:none;
+    transition:color .18s ease;
+  }
+  .wa-tab-ico{
+    position:relative; width:26px; height:26px; display:flex; align-items:center; justify-content:center;
+    border-radius:9px; transition:background .18s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+  }
+  .wa-tab-ico svg{ width:19px; height:19px; transition:transform .18s cubic-bezier(.34,1.56,.64,1); }
+  .wa-tab-label{
+    font-size:10px; font-weight:700; letter-spacing:.1px;
+    transform:translateY(0); transition:transform .18s ease, opacity .18s ease;
+  }
+
+  /* Active tab: pill highlight + icon pop, like premium delivery apps */
+  .wa-tab-link.active{ color:var(--wa-green-dark); }
+  .wa-tab-link.active .wa-tab-ico{ background:var(--wa-green-pale); transform:translateY(-2px); }
+  .wa-tab-link.active .wa-tab-ico svg{ transform:scale(1.08); }
+  .wa-tab-link.active .wa-tab-label{ transform:translateY(-1px); }
+
+  /* Tap feedback: quick bouncy squash on press */
+  .wa-tab-link.tap .wa-tab-ico{ transform:scale(.86); }
+  .wa-tab-link:active .wa-tab-ico{ transform:scale(.86); }
+
+  .wa-tab-badge{
+    position:absolute; top:-3px; right:-6px; min-width:15px; height:15px; padding:0 4px;
+    border-radius:8px; background:var(--wa-red); color:#fff; font-size:9px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; border:2px solid var(--wa-bg-panel);
+  }
+
+  .wa-tab-more.pressed-open .wa-tab-ico{ background:var(--wa-green-pale); color:var(--wa-green-dark); }
+  .wa-tab-more.pressed-open{ color:var(--wa-green-dark); }
+  .wa-tab-more.pressed-open .wa-tab-ico svg{ transform:rotate(90deg) scale(1.05); }
+  .wa-tab-more .wa-tab-ico svg{ transition:transform .25s cubic-bezier(.34,1.56,.64,1); }
+
+  /* ---- More sheet ---- */
+  .wa-sheet-overlay{
+    position:fixed; inset:0; background:rgba(10,10,15,0.45); z-index:1400;
+    opacity:0; pointer-events:none; transition:opacity .22s ease;
+  }
+  .wa-sheet-overlay.open{ opacity:1; pointer-events:auto; }
+
+  .wa-sheet{
+    position:fixed; left:0; right:0; bottom:0; z-index:1500;
+    background:var(--wa-bg-panel); border-radius:16px 16px 0 0;
+    max-height:78vh; display:flex; flex-direction:column;
+    transform:translateY(100%); transition:transform .28s cubic-bezier(.32,.72,0,1);
+    box-shadow:0 -12px 32px rgba(7,94,84,0.18);
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .wa-sheet.open{ transform:translateY(0); }
+
+  .wa-sheet-handle{
+    width:36px; height:4px; border-radius:2px; background:var(--wa-border);
+    margin:10px auto 2px;
+  }
+  .wa-sheet-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:8px 18px 10px; font-family:var(--wa-font-head); font-weight:800; font-size:15px;
+    border-bottom:1px solid var(--wa-border-soft);
+  }
+  .wa-sheet-close{
+    width:30px; height:30px; border-radius:50%; border:none; background:var(--wa-bg-sunken);
+    color:var(--wa-text-2); display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .15s, transform .15s;
+  }
+  .wa-sheet-close:active{ transform:scale(.9); }
+
+  .wa-sheet-scroll{ overflow-y:auto; padding:10px 10px calc(20px + env(safe-area-inset-bottom)); }
+  .wa-sheet-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+  .wa-sheet-divider{ height:1px; background:var(--wa-border-soft); margin:12px 6px; }
+
+  .wa-sheet-link{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    text-decoration:none; color:var(--wa-ink-soft); padding:12px 4px; border-radius:12px;
+    text-align:center; font-size:11px; font-weight:700; line-height:1.2; position:relative;
+    transition:background .15s, transform .12s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wa-sheet-link:active{ background:var(--wa-bg-sunken); transform:scale(.95); }
+  .wa-sheet-link.active{ color:var(--wa-green-dark); }
+  .wa-sheet-ico{
+    width:44px; height:44px; border-radius:13px; background:var(--wa-bg-sunken);
+    display:flex; align-items:center; justify-content:center; color:var(--wa-text-2);
+    transition:background .15s, color .15s;
+  }
+  .wa-sheet-ico svg{ width:19px; height:19px; }
+  .wa-sheet-link.active .wa-sheet-ico{ background:var(--wa-green); color:#053b2e; }
+  .wa-sheet-badge{
+    position:absolute; top:6px; right:14px; min-width:15px; height:15px; padding:0 4px;
+    border-radius:8px; background:var(--wa-red); color:#fff; font-size:9px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+  }
+}
+
+/* Sidebar is the laptop/desktop nav — hide bottom bar & sheet entirely above breakpoint */
+@media (min-width: 981px){
+  .wa-bottom-bar, .wa-sheet, .wa-sheet-overlay{ display:none !important; }
 }
