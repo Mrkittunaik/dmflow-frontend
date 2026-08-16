@@ -46,15 +46,9 @@
         <div class="wa-settings-content" style="flex:1;">
 
           <div class="wa-settings-panel active" data-panel="wa">
-            <div class="wa-card wa-card-pad">
+            <div class="wa-card wa-card-pad" id="waAccountCard">
               <div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div>
-              <div class="wa-cust-row" style="padding:6px 0;"><span>Business name</span><span class="wa-bold">Aarav Fashion Co.</span></div>
-              <div class="wa-cust-row" style="padding:6px 0;"><span>Connected number</span><span class="wa-bold">+91 98765 43210</span></div>
-              <div class="wa-cust-row" style="padding:6px 0;"><span>Status</span><span class="wa-badge green">Connected</span></div>
-              <div class="wa-flex wa-gap-8" style="margin-top:12px;">
-                <button class="wa-btn wa-btn-outline wa-btn-sm">Manage in Meta</button>
-                <button class="wa-btn wa-btn-danger wa-btn-sm">Disconnect</button>
-              </div>
+              <div class="wa-muted">Loading…</div>
             </div>
           </div>
 
@@ -130,11 +124,66 @@
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme(); WA_NAV.render('settings');
 document.querySelectorAll('.wa-toggle').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
+
+let waConnectionId = null;
+
+async function loadAccountCard() {
+  const card = document.getElementById('waAccountCard');
+  try {
+    const conn = await API.getWhatsAppConnection();
+    if (!conn.connected) {
+      card.innerHTML = `
+        <div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div>
+        <div class="wa-muted">No WhatsApp number connected yet.</div>
+        <a class="wa-btn wa-btn-primary wa-btn-sm" style="margin-top:12px;display:inline-block;" href="../../onboarding/whatsapp/connect.html">Connect WhatsApp</a>`;
+      return;
+    }
+    waConnectionId = conn._id;
+    card.innerHTML = `
+      <div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div>
+      <div class="wa-cust-row" style="padding:6px 0;"><span>Business name</span><span class="wa-bold">${conn.businessName || conn.verifiedName || '—'}</span></div>
+      <div class="wa-cust-row" style="padding:6px 0;"><span>Connected number</span><span class="wa-bold">${conn.displayPhoneNumber || '—'}</span></div>
+      <div class="wa-cust-row" style="padding:6px 0;"><span>Status</span><span class="wa-badge ${conn.connected ? 'green' : 'red'}">${conn.status}</span></div>
+      <div class="wa-cust-row" style="padding:6px 0;"><span>Webhook</span><span class="wa-badge ${conn.webhookSubscribed ? 'green' : 'red'}">${conn.webhookSubscribed ? 'Subscribed' : 'Not subscribed'}</span></div>
+      <div class="wa-flex wa-gap-8" style="margin-top:12px;">
+        ${!conn.webhookSubscribed ? '<button class="wa-btn wa-btn-outline wa-btn-sm" id="waFixWebhookBtn">Fix Webhook</button>' : ''}
+        <button class="wa-btn wa-btn-danger wa-btn-sm" id="waDisconnectBtn">Disconnect</button>
+      </div>`;
+
+    const fixBtn = document.getElementById('waFixWebhookBtn');
+    if (fixBtn) fixBtn.addEventListener('click', async () => {
+      fixBtn.disabled = true; fixBtn.textContent = 'Fixing…';
+      try {
+        await API.resubscribeWhatsAppWebhook(waConnectionId);
+        loadAccountCard();
+      } catch (err) {
+        alert('Could not fix webhook: ' + err.message);
+        fixBtn.disabled = false; fixBtn.textContent = 'Fix Webhook';
+      }
+    });
+
+    document.getElementById('waDisconnectBtn').addEventListener('click', async () => {
+      if (!confirm('Disconnect this WhatsApp number? Historical conversations and messages will be preserved, but no new messages can be sent or received until you reconnect.')) return;
+      try {
+        await API.disconnectWhatsApp(waConnectionId);
+        loadAccountCard();
+      } catch (err) {
+        alert('Could not disconnect: ' + err.message);
+      }
+    });
+  } catch (err) {
+    console.error('Failed to load WhatsApp account:', err);
+    card.innerHTML = `<div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div><div class="wa-muted">Could not load connection details.</div>`;
+  }
+}
+loadAccountCard();
 document.querySelectorAll('.wa-settings-nav-item').forEach(item => {
   item.addEventListener('click', () => {
     document.querySelectorAll('.wa-settings-nav-item').forEach(i=>i.classList.remove('active'));
