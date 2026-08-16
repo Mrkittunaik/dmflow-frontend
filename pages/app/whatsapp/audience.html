@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Audience – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-seg-list{display:flex;flex-direction:column;gap:10px;}
+.wa-seg-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.wa-seg-name{font-weight:700;font-size:13px;}
+.wa-seg-count{font-size:11.5px;color:var(--wa-text-3);margin-top:2px;}
+
+.wa-cond-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--wa-border-soft);}
+.wa-cond-row:last-child{border-bottom:none;}
+.wa-cond-and{font-size:10px;font-weight:800;color:var(--wa-green-teal);background:var(--wa-green-pale);padding:2px 8px;border-radius:var(--wa-r-sm);}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Audience</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-two-col-layout" style="display:grid;grid-template-columns:1fr 380px;gap:16px;">
+        <div class="wa-flex-col wa-gap-10">
+          <div class="wa-flex wa-between">
+            <div class="wa-card-title">Saved Segments</div>
+            <button class="wa-btn wa-btn-primary wa-btn-sm">+ Create Segment</button>
+          </div>
+          <div class="wa-seg-list">
+            <div class="wa-seg-card">
+              <div><div class="wa-seg-name">Interested — Not Purchased</div><div class="wa-seg-count">842 contacts</div></div>
+              <div class="wa-flex wa-gap-6"><button class="wa-btn wa-btn-outline wa-btn-sm">Use in Campaign</button><button class="wa-btn wa-btn-outline wa-btn-sm">Edit</button></div>
+            </div>
+            <div class="wa-seg-card">
+              <div><div class="wa-seg-name">VIP Customers</div><div class="wa-seg-count">156 contacts</div></div>
+              <div class="wa-flex wa-gap-6"><button class="wa-btn wa-btn-outline wa-btn-sm">Use in Campaign</button><button class="wa-btn wa-btn-outline wa-btn-sm">Edit</button></div>
+            </div>
+            <div class="wa-seg-card">
+              <div><div class="wa-seg-name">Abandoned Cart (7 days)</div><div class="wa-seg-count">318 contacts</div></div>
+              <div class="wa-flex wa-gap-6"><button class="wa-btn wa-btn-outline wa-btn-sm">Use in Campaign</button><button class="wa-btn wa-btn-outline wa-btn-sm">Edit</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="wa-card wa-card-pad">
+          <div class="wa-card-title" style="margin-bottom:12px;">Segment Builder</div>
+          <div class="wa-cond-row">
+            <select class="wa-select" style="width:auto;"><option>Tag</option></select>
+            <select class="wa-select" style="width:auto;"><option>=</option></select>
+            <input class="wa-input" value="Interested" style="width:auto;flex:1;">
+          </div>
+          <div style="text-align:center;padding:4px;"><span class="wa-cond-and">AND</span></div>
+          <div class="wa-cond-row">
+            <select class="wa-select" style="width:auto;"><option>Last message</option></select>
+            <select class="wa-select" style="width:auto;"><option>&lt;</option></select>
+            <input class="wa-input" value="7 days" style="width:auto;flex:1;">
+          </div>
+          <div style="text-align:center;padding:4px;"><span class="wa-cond-and">AND</span></div>
+          <div class="wa-cond-row">
+            <select class="wa-select" style="width:auto;"><option>Purchased</option></select>
+            <select class="wa-select" style="width:auto;"><option>=</option></select>
+            <input class="wa-input" value="No" style="width:auto;flex:1;">
+          </div>
+          <button class="wa-btn wa-btn-outline wa-btn-sm" style="margin-top:10px;">+ Add Condition</button>
+          <div class="wa-flex wa-gap-8" style="margin-top:16px;">
+            <button class="wa-btn wa-btn-outline wa-btn-sm" style="flex:1;">Preview Audience</button>
+            <button class="wa-btn wa-btn-primary wa-btn-sm" style="flex:1;">Save Segment</button>
+          </div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>WA_UI.initTheme(); WA_NAV.render('audience');</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Campaigns – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Campaigns</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-flex wa-between">
+        <div class="wa-card-title">All Campaigns</div>
+        <button class="wa-btn wa-btn-primary wa-btn-sm" onclick="document.getElementById('waCampModal').style.display='flex'">+ Create Campaign</button>
+      </div>
+
+      <div class="wa-card">
+        <table class="wa-table">
+          <thead><tr><th>Campaign</th><th>Audience</th><th>Sent</th><th>Delivered</th><th>Read</th><th>Replied</th><th>Converted</th><th>Status</th></tr></thead>
+          <tbody id="waCampBody"></tbody>
+        </table>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<!-- create campaign wizard modal -->
+<div class="wa-modal-overlay" id="waCampModal" style="display:none;">
+  <div class="wa-modal" style="width:520px;">
+    <div class="wa-modal-head">
+      <div class="wa-card-title">Create Campaign</div>
+      <button class="wa-icon-btn" onclick="document.getElementById('waCampModal').style.display='none'">✕</button>
+    </div>
+    <div class="wa-modal-body">
+      <div class="wa-field"><label class="wa-label">Campaign name</label><input class="wa-input" placeholder="e.g. Diwali Flash Sale"></div>
+      <div class="wa-field"><label class="wa-label">Audience</label>
+        <select class="wa-select"><option>All Contacts</option><option>Interested — Not Purchased</option><option>VIP Customers</option><option>Abandoned Cart (7 days)</option></select>
+      </div>
+      <div class="wa-field"><label class="wa-label">Template</label>
+        <select class="wa-select"><option>flash_sale_promo</option><option>festival_greeting</option></select>
+      </div>
+      <div class="wa-field"><label class="wa-label">Schedule</label>
+        <select class="wa-select"><option>Send now</option><option>Schedule for later</option></select>
+      </div>
+    </div>
+    <div class="wa-modal-foot">
+      <button class="wa-btn wa-btn-ghost" onclick="document.getElementById('waCampModal').style.display='none'">Cancel</button>
+      <button class="wa-btn wa-btn-primary" onclick="WA_UI.toast('Campaign scheduled','success');document.getElementById('waCampModal').style.display='none'">Preview &amp; Send</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme(); WA_NAV.render('campaigns');
+const campaigns = [
+  { name:'Diwali Flash Sale', aud:'All Contacts (4,820)', sent:4820, delivered:4712, read:3980, replied:612, conv:118, status:'Completed' },
+  { name:'New Arrivals — Winter', aud:'Interested (842)', sent:842, delivered:820, read:640, replied:98, conv:22, status:'Completed' },
+  { name:'Abandoned Cart Push', aud:'Cart Abandoned (318)', sent:318, delivered:310, read:210, replied:44, conv:31, status:'Running' },
+  { name:'VIP Early Access', aud:'VIP Customers (156)', sent:0, delivered:0, read:0, replied:0, conv:0, status:'Scheduled' }
+];
+const statusColor = { Completed:'gray', Running:'green', Scheduled:'amber' };
+document.getElementById('waCampBody').innerHTML = campaigns.map(c => `
+  <tr>
+    <td class="wa-bold">${c.name}</td>
+    <td class="wa-muted">${c.aud}</td>
+    <td>${c.sent.toLocaleString()}</td>
+    <td>${c.delivered.toLocaleString()}</td>
+    <td>${c.read.toLocaleString()}</td>
+    <td>${c.replied.toLocaleString()}</td>
+    <td>${c.conv.toLocaleString()}</td>
+    <td><span class="wa-badge ${statusColor[c.status]}">${c.status}</span></td>
+  </tr>`).join('');
+</script>
+</body>
+</html>

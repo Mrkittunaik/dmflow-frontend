@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Flows – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-flow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.wa-flow-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);padding:16px 18px;display:flex;flex-direction:column;gap:10px;}
+.wa-flow-steps{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:10.5px;color:var(--wa-text-2);}
+.wa-flow-step{background:var(--wa-bg-sunken);padding:3px 8px;border-radius:var(--wa-r-sm);}
+@media(max-width:1000px){.wa-flow-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.wa-flow-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Flows</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-flex wa-between">
+        <div class="wa-card-title">WhatsApp Flows</div>
+        <button class="wa-btn wa-btn-primary wa-btn-sm">+ Create Flow</button>
+      </div>
+
+      <div class="wa-flow-grid" id="waFlowGrid"></div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme(); WA_NAV.render('flows');
+const flows = [
+  { name:'Appointment Booking', steps:['Start','Details','Date','Confirm'], used:214 },
+  { name:'Customer Registration', steps:['Start','Name','Phone','Address'], used:98 },
+  { name:'Product Selection', steps:['Start','Category','Product','Options'], used:412 },
+  { name:'Address Collection', steps:['Start','Address','Confirm'], used:301 },
+  { name:'Feedback Survey', steps:['Start','Rating','Comment'], used:76 },
+  { name:'Lead Qualification', steps:['Start','Budget','Timeline','Contact'], used:150 }
+];
+document.getElementById('waFlowGrid').innerHTML = flows.map(f => `
+  <div class="wa-flow-card">
+    <div class="wa-flex wa-between">
+      <div class="wa-auto-name" style="font-family:var(--wa-font-head);font-weight:800;font-size:13.5px;">${f.name}</div>
+      <span class="wa-badge green">Live</span>
+    </div>
+    <div class="wa-flow-steps">${f.steps.map((s,i)=>`<span class="wa-flow-step">${s}</span>${i<f.steps.length-1?'→':''}`).join('')}</div>
+    <div class="wa-muted" style="font-size:11px;">Used in ${f.used} conversations</div>
+    <div class="wa-flex wa-gap-6">
+      <button class="wa-btn wa-btn-outline wa-btn-sm" style="flex:1;">Edit</button>
+      <button class="wa-btn wa-btn-outline wa-btn-sm" style="flex:1;">Preview</button>
+    </div>
+  </div>`).join('');
+</script>
+</body>
+</html>

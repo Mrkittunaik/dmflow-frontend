@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Automation Logs – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-log-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);margin-bottom:10px;overflow:hidden;}
+.wa-log-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;}
+.wa-log-cust{font-weight:700;font-size:12.5px;}
+.wa-log-meta{font-size:11px;color:var(--wa-text-3);margin-top:2px;}
+.wa-log-body{display:none;padding:0 16px 14px;border-top:1px solid var(--wa-border-soft);}
+.wa-log-body.open{display:block;}
+.wa-log-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--wa-border-soft);}
+.wa-log-step:last-child{border-bottom:none;}
+.wa-log-step-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.wa-log-step-icon.ok{background:var(--wa-green-pale);color:var(--wa-green-dark);}
+.wa-log-step-icon.err{background:#FEE2E2;color:var(--wa-red);}
+.wa-log-step-title{font-size:12px;font-weight:700;}
+.wa-log-step-detail{font-size:11.5px;color:var(--wa-text-2);margin-top:1px;}
+.wa-log-step-time{font-size:10px;color:var(--wa-text-3);margin-left:auto;flex-shrink:0;}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Automation Logs</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-flex wa-between">
+        <div class="wa-card-title">Execution Logs</div>
+        <select class="wa-select" style="width:auto;">
+          <option>All automations</option><option>Welcome New Customer</option><option>Abandoned Cart Recovery</option>
+        </select>
+      </div>
+
+      <div id="waLogList"></div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme(); WA_NAV.render('logs');
+
+const logs = [
+  { cust:'Rahul Nair', automation:'Price Enquiry Bot', status:'Success', time:'2m ago', steps:[
+    { title:'Trigger: Keyword "price"', detail:'Matched incoming message', ok:true, time:'10:02:01' },
+    { title:'Condition: Message contains', detail:'Matched', ok:true, time:'10:02:01' },
+    { title:'Action: Send Product', detail:'Classic Formal Shirt sent', ok:true, time:'10:02:02' },
+    { title:'Action: Button clicked', detail:'"View Product" clicked', ok:true, time:'10:03:10' },
+    { title:'Action: Start Automation', detail:'Started "Add to Cart Flow"', ok:true, time:'10:03:11' }
+  ]},
+  { cust:'Meera Iyer', automation:'Abandoned Cart Recovery', status:'Failed', time:'38m ago', steps:[
+    { title:'Trigger: Cart abandoned', detail:'Cart idle 60+ min', ok:true, time:'09:24:00' },
+    { title:'Action: Wait 1 hour', detail:'Completed', ok:true, time:'10:24:00' },
+    { title:'Action: Send reminder', detail:'Failed — template not approved', ok:false, time:'10:24:02' }
+  ]},
+  { cust:'Sanjay Gupta', automation:'Welcome New Customer', status:'Success', time:'1h ago', steps:[
+    { title:'Trigger: New message', detail:'First contact', ok:true, time:'09:10:00' },
+    { title:'Action: Send text', detail:'Welcome message delivered', ok:true, time:'09:10:01' },
+    { title:'Action: Add tag', detail:'Tagged "New Lead"', ok:true, time:'09:10:01' }
+  ]}
+];
+
+document.getElementById('waLogList').innerHTML = logs.map((l,i) => `
+  <div class="wa-log-card">
+    <div class="wa-log-head" onclick="document.getElementById('log${i}').classList.toggle('open')">
+      <div>
+        <div class="wa-log-cust">${l.cust} <span class="wa-muted" style="font-weight:500;">— ${l.automation}</span></div>
+        <div class="wa-log-meta">${l.time}</div>
+      </div>
+      <span class="wa-badge ${l.status==='Success'?'green':'red'}">${l.status}</span>
+    </div>
+    <div class="wa-log-body" id="log${i}">
+      ${l.steps.map(s => `
+        <div class="wa-log-step">
+          <div class="wa-log-step-icon ${s.ok?'ok':'err'}">${s.ok?'✓':'✕'}</div>
+          <div><div class="wa-log-step-title">${s.title}</div><div class="wa-log-step-detail">${s.detail}</div></div>
+          <div class="wa-log-step-time">${s.time}</div>
+        </div>`).join('')}
+    </div>
+  </div>`).join('');
+</script>
+</body>
+</html>

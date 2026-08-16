@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Orders – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-tabs{display:flex;gap:4px;border-bottom:1px solid var(--wa-border);flex-wrap:wrap;}
+.wa-tab{font-size:12.5px;font-weight:700;padding:9px 14px;color:var(--wa-text-2);cursor:pointer;border-bottom:2px solid transparent;}
+.wa-tab.active{color:var(--wa-green-dark);border-bottom-color:var(--wa-green-dark);}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Orders</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-tabs">
+        <div class="wa-tab active">All</div>
+        <div class="wa-tab">Pending</div>
+        <div class="wa-tab">Confirmed</div>
+        <div class="wa-tab">Paid</div>
+        <div class="wa-tab">Processing</div>
+        <div class="wa-tab">Shipped</div>
+        <div class="wa-tab">Delivered</div>
+        <div class="wa-tab">Cancelled</div>
+      </div>
+
+      <div class="wa-card">
+        <table class="wa-table">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Products</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th><th></th></tr></thead>
+          <tbody id="waOrdersBody"></tbody>
+        </table>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme();
+WA_NAV.render('orders');
+
+const statusColor = { Pending:'amber', Confirmed:'blue', Paid:'green', Processing:'blue', Shipped:'blue', Delivered:'green', Cancelled:'red' };
+const orders = [
+  { id:'#4821', cust:'Rohit Kumar', products:'Classic Formal Shirt', amt:'₹1,299', pay:'Paid', status:'Confirmed', date:'16 Aug' },
+  { id:'#4820', cust:'Sneha Patil', products:'Denim Jacket, Sneakers', amt:'₹4,698', pay:'Paid', status:'Shipped', date:'15 Aug' },
+  { id:'#4819', cust:'Karan Mehta', products:'Leather Belt', amt:'₹599', pay:'COD', status:'Pending', date:'15 Aug' },
+  { id:'#4818', cust:'Neha Joshi', products:'Cotton Kurta', amt:'₹1,099', pay:'Paid', status:'Delivered', date:'13 Aug' },
+  { id:'#4817', cust:'Vikram Singh', products:'Slim Fit Chinos x2', amt:'₹3,798', pay:'Paid', status:'Processing', date:'12 Aug' },
+  { id:'#4816', cust:'Arjun Rao', products:'Casual Polo Tee', amt:'₹799', pay:'Failed', status:'Cancelled', date:'10 Aug' }
+];
+
+document.getElementById('waOrdersBody').innerHTML = orders.map(o => `
+  <tr>
+    <td class="wa-bold">${o.id}</td>
+    <td>${o.cust}</td>
+    <td class="wa-muted">${o.products}</td>
+    <td class="wa-bold">${o.amt}</td>
+    <td>${o.pay}</td>
+    <td><span class="wa-badge ${statusColor[o.status]}">${o.status}</span></td>
+    <td class="wa-muted">${o.date}</td>
+    <td><button class="wa-btn wa-btn-outline wa-btn-sm">View</button></td>
+  </tr>`).join('');
+</script>
+</body>
+</html>

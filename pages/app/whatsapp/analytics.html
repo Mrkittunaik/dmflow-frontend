@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Analytics – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-chart-placeholder{height:200px;display:flex;align-items:flex-end;gap:6px;padding:12px;}
+.wa-bar{flex:1;background:var(--wa-green);border-radius:3px 3px 0 0;opacity:.85;}
+.wa-bar:nth-child(even){background:var(--wa-green-teal);}
+.wa-two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Analytics</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-stats-grid" id="waAnalyticsStats"></div>
+
+      <div class="wa-two-col">
+        <div class="wa-card"><div class="wa-card-head"><div class="wa-card-title">Conversion Rate</div></div><div class="wa-card-pad"><div class="wa-chart-placeholder" id="chartConv"></div></div></div>
+        <div class="wa-card"><div class="wa-card-head"><div class="wa-card-title">Agent Response Time</div></div><div class="wa-card-pad"><div class="wa-chart-placeholder" id="chartResp"></div></div></div>
+      </div>
+
+      <div class="wa-two-col">
+        <div class="wa-card wa-card-pad">
+          <div class="wa-card-title" style="margin-bottom:10px;">Automation Performance</div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Triggered</span><span class="wa-bold">8,420</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Completed</span><span class="wa-bold">7,910</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Failed</span><span class="wa-bold" style="color:var(--wa-red);">146</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Converted</span><span class="wa-bold" style="color:var(--wa-green-dark);">1,284</span></div>
+        </div>
+        <div class="wa-card wa-card-pad">
+          <div class="wa-card-title" style="margin-bottom:10px;">Campaign Performance</div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Sent</span><span class="wa-bold">5,980</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Delivered</span><span class="wa-bold">5,842</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Read</span><span class="wa-bold">4,830</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Converted</span><span class="wa-bold" style="color:var(--wa-green-dark);">171</span></div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme(); WA_NAV.render('analytics');
+const stats = [
+  { label:'Conversations', val:'1,264' }, { label:'Messages', val:'33,650' },
+  { label:'Response Time', val:'2m 14s' }, { label:'Conversion Rate', val:'6.8%' }
+];
+document.getElementById('waAnalyticsStats').innerHTML = stats.map(s=>`
+  <div class="wa-stat-box"><div class="wa-stat-label">${s.label}</div><div class="wa-stat-val">${s.val}</div></div>`).join('');
+document.getElementById('chartConv').innerHTML = [30,45,38,60,52,70,65].map(h=>`<div class="wa-bar" style="height:${h}%"></div>`).join('');
+document.getElementById('chartResp').innerHTML = [80,60,70,50,55,40,45].map(h=>`<div class="wa-bar" style="height:${h}%"></div>`).join('');
+</script>
+</body>
+</html>

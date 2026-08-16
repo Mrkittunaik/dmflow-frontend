@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Settings – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-settings-layout{display:flex;gap:20px;align-items:flex-start;}
+.wa-settings-nav{width:200px;flex-shrink:0;display:flex;flex-direction:column;gap:2px;}
+.wa-settings-nav-item{font-size:12.5px;font-weight:600;padding:8px 12px;border-radius:var(--wa-r-sm);color:var(--wa-text-2);cursor:pointer;}
+.wa-settings-nav-item.active{background:var(--wa-green-pale);color:var(--wa-green-dark);font-weight:700;}
+.wa-settings-panel{flex:1;display:none;flex-direction:column;gap:16px;}
+.wa-settings-panel.active{display:flex;}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Settings</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-settings-layout">
+        <div class="wa-settings-nav" id="waSettingsNav">
+          <div class="wa-settings-nav-item active" data-panel="wa">WhatsApp Business</div>
+          <div class="wa-settings-nav-item" data-panel="numbers">Phone Numbers</div>
+          <div class="wa-settings-nav-item" data-panel="profile">Business Profile</div>
+          <div class="wa-settings-nav-item" data-panel="webhooks">Webhooks</div>
+          <div class="wa-settings-nav-item" data-panel="api">API</div>
+          <div class="wa-settings-nav-item" data-panel="notif">Notifications</div>
+          <div class="wa-settings-nav-item" data-panel="integrations">Integrations</div>
+          <div class="wa-settings-nav-item" data-panel="payment">Payment</div>
+          <div class="wa-settings-nav-item" data-panel="website">Website & Domain</div>
+          <div class="wa-settings-nav-item" data-panel="security">Security</div>
+        </div>
+
+        <div class="wa-settings-content" style="flex:1;">
+
+          <div class="wa-settings-panel active" data-panel="wa">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div>
+              <div class="wa-cust-row" style="padding:6px 0;"><span>Business name</span><span class="wa-bold">Aarav Fashion Co.</span></div>
+              <div class="wa-cust-row" style="padding:6px 0;"><span>Connected number</span><span class="wa-bold">+91 98765 43210</span></div>
+              <div class="wa-cust-row" style="padding:6px 0;"><span>Status</span><span class="wa-badge green">Connected</span></div>
+              <div class="wa-flex wa-gap-8" style="margin-top:12px;">
+                <button class="wa-btn wa-btn-outline wa-btn-sm">Manage in Meta</button>
+                <button class="wa-btn wa-btn-danger wa-btn-sm">Disconnect</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="numbers">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-card-title" style="margin-bottom:10px;">Phone Numbers</div>
+              <div class="wa-cust-row" style="padding:8px 0;"><span>+91 98765 43210 (Primary)</span><span class="wa-badge green">Verified</span></div>
+              <button class="wa-btn wa-btn-outline wa-btn-sm" style="margin-top:10px;">+ Add Number</button>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="profile">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-flex-col wa-gap-14" style="max-width:420px;">
+                <div class="wa-field"><label class="wa-label">Business name</label><input class="wa-input" value="Aarav Fashion Co."></div>
+                <div class="wa-field"><label class="wa-label">About</label><input class="wa-input" value="Premium formal & casual wear."></div>
+                <div class="wa-field"><label class="wa-label">Category</label><select class="wa-select"><option>Retail & Clothing</option></select></div>
+                <button class="wa-btn wa-btn-primary wa-btn-sm" style="width:fit-content;">Save Changes</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="webhooks">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-field"><label class="wa-label">Webhook URL</label><input class="wa-input" value="https://api.dmflowapp.in/webhooks/whatsapp"></div>
+              <div class="wa-hint" style="margin-top:6px;">Subscribed events: messages, message_status, template_status</div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="api">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-field"><label class="wa-label">API Key</label>
+                <div class="wa-flex wa-gap-8"><input class="wa-input" type="password" value="sk_live_••••••••••••4821" readonly><button class="wa-btn wa-btn-outline wa-btn-sm">Reveal</button><button class="wa-btn wa-btn-outline wa-btn-sm">Regenerate</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="notif">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-toggle-row" style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:12.5px;font-weight:600;">Email notifications</span><button class="wa-toggle on"></button></div>
+              <div class="wa-toggle-row" style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:12.5px;font-weight:600;">New order alerts</span><button class="wa-toggle on"></button></div>
+              <div class="wa-toggle-row" style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:12.5px;font-weight:600;">Automation failure alerts</span><button class="wa-toggle on"></button></div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="integrations">
+            <div class="wa-card wa-card-pad"><div class="wa-muted">No integrations connected yet.</div></div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="payment">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-field"><label class="wa-label">Payment gateway</label><select class="wa-select"><option>Razorpay</option><option>Stripe</option><option>Cashfree</option></select></div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="website">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-field"><label class="wa-label">Domain</label><input class="wa-input" value="aaravfashion.com"></div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="security">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-toggle-row" style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:12.5px;font-weight:600;">Two-factor authentication</span><button class="wa-toggle"></button></div>
+              <div class="wa-toggle-row" style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:12.5px;font-weight:600;">Login alerts</span><button class="wa-toggle on"></button></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme(); WA_NAV.render('settings');
+document.querySelectorAll('.wa-toggle').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
+document.querySelectorAll('.wa-settings-nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.wa-settings-nav-item').forEach(i=>i.classList.remove('active'));
+    document.querySelectorAll('.wa-settings-panel').forEach(p=>p.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelector(`.wa-settings-panel[data-panel="${item.dataset.panel}"]`).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

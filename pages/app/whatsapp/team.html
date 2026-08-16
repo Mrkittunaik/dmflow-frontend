@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Team – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Team</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-flex wa-between">
+        <div class="wa-card-title">Team Members</div>
+        <button class="wa-btn wa-btn-primary wa-btn-sm">+ Invite Member</button>
+      </div>
+
+      <div class="wa-card">
+        <table class="wa-table">
+          <thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Assigned Chats</th><th>Status</th><th></th></tr></thead>
+          <tbody id="waTeamBody"></tbody>
+        </table>
+      </div>
+
+      <div class="wa-card wa-card-pad">
+        <div class="wa-card-title" style="margin-bottom:10px;">Auto-Assignment Rules</div>
+        <div class="wa-cust-row" style="padding:8px 0;"><span>New conversations</span><span class="wa-bold">Round robin — Sales team</span></div>
+        <div class="wa-cust-row" style="padding:8px 0;"><span>VIP tagged contacts</span><span class="wa-bold">Assign to Meera</span></div>
+        <div class="wa-cust-row" style="padding:8px 0;"><span>Support keyword</span><span class="wa-bold">Assign to Support team</span></div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme(); WA_NAV.render('team');
+const team = [
+  { name:'Aarav Mehta', role:'Owner', dept:'Management', chats:0, status:'Active' },
+  { name:'Rahul Nair', role:'Admin', dept:'Sales', chats:24, status:'Active' },
+  { name:'Meera Iyer', role:'Manager', dept:'Support', chats:31, status:'Active' },
+  { name:'Sanjay Gupta', role:'Agent', dept:'Sales', chats:18, status:'Away' },
+  { name:'Divya Rao', role:'Agent', dept:'Support', chats:12, status:'Offline' }
+];
+document.getElementById('waTeamBody').innerHTML = team.map(t => `
+  <tr>
+    <td><div class="wa-name-cell" style="display:flex;align-items:center;gap:10px;"><div class="wa-avatar" style="width:28px;height:28px;font-size:11px;">${t.name[0]}</div><span class="wa-bold">${t.name}</span></div></td>
+    <td><span class="wa-badge blue">${t.role}</span></td>
+    <td>${t.dept}</td>
+    <td>${t.chats}</td>
+    <td><span class="wa-flex wa-gap-6"><span class="wa-status-dot ${t.status==='Active'?'on':t.status==='Away'?'warn':'off'}"></span>${t.status}</span></td>
+    <td><button class="wa-btn wa-btn-outline wa-btn-sm">Manage</button></td>
+  </tr>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Billing & Usage – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-usage-bar-track{height:8px;border-radius:4px;background:var(--wa-border-soft);overflow:hidden;margin-top:8px;}
+.wa-usage-bar-fill{height:100%;background:var(--wa-green);}
+.wa-usage-row{padding:14px 0;border-bottom:1px solid var(--wa-border-soft);}
+.wa-usage-row:last-child{border-bottom:none;}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Billing & Usage</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-conn-card" style="background:linear-gradient(135deg,var(--wa-green-dark),var(--wa-green-teal));">
+        <div>
+          <div class="wa-conn-name">Growth Plan</div>
+          <div class="wa-conn-phone">₹2,499/month · Renews on 1 Sep 2026</div>
+        </div>
+        <div class="wa-flex wa-gap-8">
+          <button class="wa-btn wa-btn-sm" style="background:rgba(255,255,255,0.15);color:#fff;">Downgrade</button>
+          <button class="wa-btn wa-btn-accent wa-btn-sm">Upgrade Plan</button>
+        </div>
+      </div>
+
+      <div class="wa-card wa-card-pad">
+        <div class="wa-card-title" style="margin-bottom:6px;">Usage This Month</div>
+        <div class="wa-usage-row">
+          <div class="wa-flex wa-between"><span style="font-size:12.5px;font-weight:700;">Contacts</span><span class="wa-muted" style="font-size:12px;">4,820 / 10,000</span></div>
+          <div class="wa-usage-bar-track"><div class="wa-usage-bar-fill" style="width:48%;"></div></div>
+        </div>
+        <div class="wa-usage-row">
+          <div class="wa-flex wa-between"><span style="font-size:12.5px;font-weight:700;">Messages sent</span><span class="wa-muted" style="font-size:12px;">18,420 / 25,000</span></div>
+          <div class="wa-usage-bar-track"><div class="wa-usage-bar-fill" style="width:74%;"></div></div>
+        </div>
+        <div class="wa-usage-row">
+          <div class="wa-flex wa-between"><span style="font-size:12.5px;font-weight:700;">Automation runs</span><span class="wa-muted" style="font-size:12px;">6,210 / 15,000</span></div>
+          <div class="wa-usage-bar-track"><div class="wa-usage-bar-fill" style="width:41%;"></div></div>
+        </div>
+        <div class="wa-usage-row">
+          <div class="wa-flex wa-between"><span style="font-size:12.5px;font-weight:700;">AI usage</span><span class="wa-muted" style="font-size:12px;">2,140 / 5,000</span></div>
+          <div class="wa-usage-bar-track"><div class="wa-usage-bar-fill" style="width:43%;"></div></div>
+        </div>
+        <div class="wa-usage-row">
+          <div class="wa-flex wa-between"><span style="font-size:12.5px;font-weight:700;">Team members</span><span class="wa-muted" style="font-size:12px;">5 / 10</span></div>
+          <div class="wa-usage-bar-track"><div class="wa-usage-bar-fill" style="width:50%;"></div></div>
+        </div>
+      </div>
+
+      <div class="wa-card">
+        <div class="wa-card-head"><div class="wa-card-title">Billing History</div></div>
+        <table class="wa-table">
+          <thead><tr><th>Invoice</th><th>Date</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>INV-2026-08</td><td>1 Aug 2026</td><td>₹2,499</td><td><span class="wa-badge green">Paid</span></td><td><button class="wa-btn wa-btn-outline wa-btn-sm">Download</button></td></tr>
+            <tr><td>INV-2026-07</td><td>1 Jul 2026</td><td>₹2,499</td><td><span class="wa-badge green">Paid</span></td><td><button class="wa-btn wa-btn-outline wa-btn-sm">Download</button></td></tr>
+            <tr><td>INV-2026-06</td><td>1 Jun 2026</td><td>₹2,499</td><td><span class="wa-badge green">Paid</span></td><td><button class="wa-btn wa-btn-outline wa-btn-sm">Download</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>WA_UI.initTheme(); WA_NAV.render('billing');</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Templates – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-tabs{display:flex;gap:4px;border-bottom:1px solid var(--wa-border);flex-wrap:wrap;}
+.wa-tab{font-size:12.5px;font-weight:700;padding:9px 14px;color:var(--wa-text-2);cursor:pointer;border-bottom:2px solid transparent;}
+.wa-tab.active{color:var(--wa-green-dark);border-bottom-color:var(--wa-green-dark);}
+.wa-tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.wa-tpl-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;}
+.wa-tpl-name{font-family:var(--wa-font-head);font-weight:800;font-size:13.5px;}
+.wa-tpl-meta{font-size:11.5px;color:var(--wa-text-3);}
+.wa-tpl-actions{display:flex;gap:6px;margin-top:6px;}
+@media(max-width:1100px){.wa-tpl-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:680px){.wa-tpl-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Templates</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-flex wa-between">
+        <div class="wa-tabs">
+          <div class="wa-tab active">All</div>
+          <div class="wa-tab">Marketing</div>
+          <div class="wa-tab">Utility</div>
+          <div class="wa-tab">Authentication</div>
+          <div class="wa-tab">Approved</div>
+          <div class="wa-tab">Pending</div>
+          <div class="wa-tab">Rejected</div>
+        </div>
+        <a href="template-builder.html" class="wa-btn wa-btn-primary wa-btn-sm">+ Create Template</a>
+      </div>
+
+      <div class="wa-tpl-grid" id="waTplGrid"></div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>
+WA_UI.initTheme();
+WA_NAV.render('templates');
+
+const data = WA_UI.store();
+const statusColor = { approved:'green', pending:'amber', rejected:'red' };
+
+document.getElementById('waTplGrid').innerHTML = data.templates.map(t => `
+  <div class="wa-tpl-card">
+    <div class="wa-flex wa-between">
+      <div class="wa-tpl-name">${t.name}</div>
+      <span class="wa-badge ${statusColor[t.status]}">${t.status}</span>
+    </div>
+    <div class="wa-tpl-meta">${t.category} · ${t.lang}</div>
+    <div class="wa-tpl-actions">
+      <a href="template-builder.html?id=${t.id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
+      <button class="wa-btn wa-btn-outline wa-btn-sm">Preview</button>
+      <button class="wa-btn wa-btn-outline wa-btn-sm">Duplicate</button>
+    </div>
+  </div>`).join('');
+</script>
+</body>
+</html>

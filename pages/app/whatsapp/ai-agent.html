@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AI Agent – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-ai-layout{display:grid;grid-template-columns:1fr 340px;gap:16px;}
+.wa-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--wa-border-soft);}
+.wa-toggle-row:last-child{border-bottom:none;}
+.wa-test-chat{display:flex;flex-direction:column;gap:8px;height:340px;overflow-y:auto;padding:12px;background:var(--wa-bg-sunken);border-radius:var(--wa-r-sm);}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">AI Agent</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-conn-card" style="background:linear-gradient(135deg,var(--wa-green-dark),var(--wa-green-teal));">
+        <div class="wa-flex wa-gap-14">
+          <div class="wa-conn-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="7" width="14" height="11" rx="2" stroke="white" stroke-width="1.8"/><path d="M12 7V3M9 3h6" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div><div class="wa-conn-name">AI Agent is Active</div><div class="wa-conn-phone">Handling 68% of incoming conversations automatically</div></div>
+        </div>
+        <button class="wa-toggle on" style="background:rgba(255,255,255,.3);"></button>
+      </div>
+
+      <div class="wa-ai-layout">
+        <div class="wa-flex-col wa-gap-14">
+          <div class="wa-card wa-card-pad">
+            <div class="wa-card-title" style="margin-bottom:10px;">Business Knowledge</div>
+            <div class="wa-field"><label class="wa-label">FAQs</label><textarea class="wa-textarea" placeholder="Q: What are your delivery times?&#10;A: 3-5 business days across India.">Q: What are your delivery times?
+A: 3-5 business days across India.
+
+Q: Do you offer COD?
+A: Yes, Cash on Delivery is available on all orders under ₹5,000.</textarea></div>
+          </div>
+          <div class="wa-card wa-card-pad">
+            <div class="wa-card-title" style="margin-bottom:10px;">Tone & Instructions</div>
+            <div class="wa-field" style="margin-bottom:12px;"><label class="wa-label">Tone</label>
+              <select class="wa-select"><option>Friendly & casual</option><option>Professional</option><option>Concise</option></select>
+            </div>
+            <div class="wa-field"><label class="wa-label">Custom instructions</label>
+              <textarea class="wa-textarea">Always recommend our bestsellers when a customer is unsure. Never promise delivery dates outside 3-5 days.</textarea>
+            </div>
+          </div>
+          <div class="wa-card wa-card-pad">
+            <div class="wa-card-title" style="margin-bottom:6px;">AI Actions</div>
+            <div class="wa-toggle-row"><span style="font-size:12.5px;font-weight:600;">Recommend products</span><button class="wa-toggle on"></button></div>
+            <div class="wa-toggle-row"><span style="font-size:12.5px;font-weight:600;">Search catalog</span><button class="wa-toggle on"></button></div>
+            <div class="wa-toggle-row"><span style="font-size:12.5px;font-weight:600;">Qualify leads</span><button class="wa-toggle on"></button></div>
+            <div class="wa-toggle-row"><span style="font-size:12.5px;font-weight:600;">Create orders</span><button class="wa-toggle"></button></div>
+            <div class="wa-toggle-row"><span style="font-size:12.5px;font-weight:600;">Start automations</span><button class="wa-toggle on"></button></div>
+            <div class="wa-toggle-row"><span style="font-size:12.5px;font-weight:600;">Human handover on frustration</span><button class="wa-toggle on"></button></div>
+          </div>
+        </div>
+
+        <div class="wa-card wa-card-pad" style="align-self:start;">
+          <div class="wa-card-title" style="margin-bottom:10px;">Test Your AI Agent</div>
+          <div class="wa-test-chat">
+            <div class="wa-msg in" style="max-width:90%;">Do you have the formal shirt in size L?</div>
+            <div class="wa-msg bot" style="max-width:90%;"><div class="wa-msg-sender">AI Agent</div>Yes! The Classic Formal Shirt is available in size L in Blue, Black &amp; White — ₹1,299. Want me to add it to your cart?</div>
+          </div>
+          <div class="wa-flex wa-gap-8" style="margin-top:10px;">
+            <input class="wa-input" placeholder="Try a message…">
+            <button class="wa-btn wa-btn-primary wa-btn-sm">Send</button>
+          </div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>WA_UI.initTheme(); WA_NAV.render('ai');
+document.querySelectorAll('.wa-toggle').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));</script>
+</body>
+</html>

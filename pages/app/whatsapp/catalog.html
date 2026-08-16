@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Catalog – DMFlow WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<style>
+.wa-cat-nav{display:flex;gap:8px;flex-wrap:wrap;}
+.wa-cat-nav a{text-decoration:none;color:inherit;}
+.wa-cat-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);padding:16px 18px;flex:1;min-width:150px;display:flex;flex-direction:column;gap:8px;}
+.wa-cat-num{font-family:var(--wa-font-head);font-size:22px;font-weight:800;}
+</style>
+</head>
+<body class="wa-scope">
+<div class="wa-app">
+  <div id="waSidebarMount"></div>
+  <div class="wa-main">
+    <div class="wa-topbar">
+      <div class="wa-topbar-title">Catalog</div>
+      <div class="wa-topbar-actions">
+        <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
+        <div class="wa-avatar">A</div>
+      </div>
+    </div>
+    <div class="wa-scroll"><div class="wa-pad">
+
+      <div class="wa-cat-nav">
+        <div class="wa-cat-card"><div class="wa-section-label">Products</div><div class="wa-cat-num">128</div><a href="products.html" class="wa-btn wa-btn-outline wa-btn-sm">Manage</a></div>
+        <div class="wa-cat-card"><div class="wa-section-label">Categories</div><div class="wa-cat-num">9</div><button class="wa-btn wa-btn-outline wa-btn-sm">Manage</button></div>
+        <div class="wa-cat-card"><div class="wa-section-label">Collections</div><div class="wa-cat-num">14</div><button class="wa-btn wa-btn-outline wa-btn-sm">Manage</button></div>
+        <div class="wa-cat-card"><div class="wa-section-label">Product Pages</div><div class="wa-cat-num">128</div><button class="wa-btn wa-btn-outline wa-btn-sm">Manage</button></div>
+      </div>
+
+      <div class="wa-card wa-card-pad">
+        <div class="wa-card-title" style="margin-bottom:10px;">Catalog Settings</div>
+        <div class="wa-flex-col wa-gap-14" style="max-width:420px;">
+          <div class="wa-field"><label class="wa-label">Default currency</label><select class="wa-select"><option>INR (₹)</option><option>USD ($)</option></select></div>
+          <div class="wa-field"><label class="wa-label">Website base URL</label><input class="wa-input" value="https://aaravfashion.com"></div>
+          <div class="wa-toggle-row" style="display:flex;justify-content:space-between;padding:6px 0;">
+            <span style="font-size:12.5px;font-weight:600;">Auto-sync stock from website</span>
+            <button class="wa-toggle on"></button>
+          </div>
+        </div>
+      </div>
+
+    </div></div>
+  </div>
+</div>
+
+<script src="../../../assets/js/whatsapp/wa-nav.js"></script>
+<script src="../../../assets/js/whatsapp/wa-ui.js"></script>
+<script>WA_UI.initTheme(); WA_NAV.render('catalog');
+document.querySelectorAll('.wa-toggle').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));</script>
+</body>
+</html>
