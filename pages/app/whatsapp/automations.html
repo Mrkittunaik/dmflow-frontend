@@ -49,44 +49,73 @@
         <a href="automation-builder.html" class="wa-btn wa-btn-primary wa-btn-sm">+ Create Automation</a>
       </div>
 
-      <div class="wa-auto-grid" id="waAutoGrid"></div>
+      <div class="wa-auto-grid" id="waAutoGrid"><div class="wa-muted" style="padding:16px;">Loading…</div></div>
 
     </div></div>
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme();
 WA_NAV.render('automations');
 
-const data = WA_UI.store();
-const statusColor = { active:'green', paused:'amber', draft:'gray' };
+async function loadAutomations() {
+  const grid = document.getElementById('waAutoGrid');
+  try {
+    const all = await API.getAutomations();
+    const automations = all.filter(a => a.channel === 'whatsapp');
 
-document.getElementById('waAutoGrid').innerHTML = data.automations.map(a => `
-  <div class="wa-auto-card">
-    <div class="wa-auto-top">
-      <div>
-        <div class="wa-auto-name">${a.name}</div>
-        <div class="wa-auto-trigger">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          ${a.trigger}
+    if (!automations.length) {
+      grid.innerHTML = '<div class="wa-muted" style="padding:16px;">No WhatsApp automations yet.</div>';
+      return;
+    }
+
+    grid.innerHTML = automations.map(a => {
+      const triggerLabel = (a.trigger?.whatsappEvents || []).map(e => e.replace('whatsapp_', '').replace(/_/g, ' ')).join(', ') || 'No trigger set';
+      return `
+      <div class="wa-auto-card">
+        <div class="wa-auto-top">
+          <div>
+            <div class="wa-auto-name">${a.name}</div>
+            <div class="wa-auto-trigger">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              ${triggerLabel}
+            </div>
+          </div>
+          <span class="wa-badge ${a.active ? 'green' : 'gray'}">${a.active ? 'active' : 'paused'}</span>
         </div>
-      </div>
-      <span class="wa-badge ${statusColor[a.status]}">${a.status}</span>
-    </div>
-    <div class="wa-auto-stats">
-      <div><div class="wa-auto-stat-num">${a.runs.toLocaleString()}</div><div class="wa-auto-stat-lbl">Runs</div></div>
-      <div><div class="wa-auto-stat-num">${a.success}%</div><div class="wa-auto-stat-lbl">Success</div></div>
-    </div>
-    <div class="wa-auto-actions">
-      <a href="automation-builder.html?id=${a.id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
-      <button class="wa-btn wa-btn-outline wa-btn-sm">Duplicate</button>
-      <button class="wa-btn wa-btn-outline wa-btn-sm">${a.status==='active'?'Pause':'Activate'}</button>
-      <button class="wa-btn wa-btn-ghost wa-btn-sm" style="margin-left:auto;">Logs</button>
-    </div>
-  </div>`).join('');
+        <div class="wa-auto-stats">
+          <div><div class="wa-auto-stat-num">${(a.stats?.triggered || 0).toLocaleString()}</div><div class="wa-auto-stat-lbl">Triggered</div></div>
+          <div><div class="wa-auto-stat-num">${(a.stats?.dmsSent || 0).toLocaleString()}</div><div class="wa-auto-stat-lbl">DMs Sent</div></div>
+        </div>
+        <div class="wa-auto-actions">
+          <a href="automation-builder.html?id=${a._id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
+          <button class="wa-btn wa-btn-outline wa-btn-sm" data-toggle="${a._id}">${a.active ? 'Pause' : 'Activate'}</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    grid.querySelectorAll('[data-toggle]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        try {
+          await API.toggleAutomation(btn.dataset.toggle);
+          loadAutomations();
+        } catch (err) {
+          alert('Could not toggle automation: ' + err.message);
+        }
+      });
+    });
+  } catch (err) {
+    console.error('Failed to load automations:', err);
+    grid.innerHTML = '<div class="wa-muted" style="padding:16px;">Could not load automations.</div>';
+  }
+}
+
+loadAutomations();
 </script>
 </body>
 </html>
