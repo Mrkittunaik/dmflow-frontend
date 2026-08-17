@@ -24,7 +24,7 @@
       <div class="wa-topbar-title">Settings</div>
       <div class="wa-topbar-actions">
         <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
-        <div class="wa-avatar">A</div>
+        <a class="wa-avatar" href="settings.html" title="Account settings" style="text-decoration:none;">A</a>
       </div>
     </div>
     <div class="wa-scroll"><div class="wa-pad">
@@ -32,6 +32,7 @@
       <div class="wa-settings-layout">
         <div class="wa-settings-nav" id="waSettingsNav">
           <div class="wa-settings-nav-item active" data-panel="wa">WhatsApp Business</div>
+          <div class="wa-settings-nav-item" data-panel="categories">Auto-Tag Categories</div>
           <div class="wa-settings-nav-item" data-panel="numbers">Phone Numbers</div>
           <div class="wa-settings-nav-item" data-panel="profile">Business Profile</div>
           <div class="wa-settings-nav-item" data-panel="webhooks">Webhooks</div>
@@ -49,6 +50,25 @@
             <div class="wa-card wa-card-pad" id="waAccountCard">
               <div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div>
               <div class="wa-muted">Loading…</div>
+            </div>
+          </div>
+
+          <div class="wa-settings-panel" data-panel="categories">
+            <div class="wa-card wa-card-pad">
+              <div class="wa-card-title" style="margin-bottom:6px;">Auto-Tag Categories</div>
+              <div class="wa-muted" style="font-size:12.5px;margin-bottom:14px;">
+                When a customer's message contains one of these keywords, the category is added to their contact tags automatically.
+              </div>
+              <div class="wa-flex wa-gap-8" style="margin-bottom:14px;flex-wrap:wrap;">
+                <input class="wa-input" id="wkKeyword" placeholder="Keyword (e.g. PRICE)" style="flex:1;min-width:120px;">
+                <input class="wa-input" id="wkCategory" placeholder="Category (e.g. Lead)" style="flex:1;min-width:120px;">
+                <select class="wa-input" id="wkMatchType" style="width:120px;">
+                  <option value="contains">Contains</option>
+                  <option value="exact">Exact match</option>
+                </select>
+                <button class="wa-btn wa-btn-primary wa-btn-sm" id="wkAddBtn">Add Rule</button>
+              </div>
+              <div id="wkRulesList"><div class="wa-muted">Loading…</div></div>
             </div>
           </div>
 
@@ -146,6 +166,7 @@ async function loadAccountCard() {
       return;
     }
     waConnectionId = conn._id;
+    loadKeywordRules();
     card.innerHTML = `
       <div class="wa-card-title" style="margin-bottom:10px;">WhatsApp Business Account</div>
       <div class="wa-cust-row" style="padding:6px 0;"><span>Business name</span><span class="wa-bold">${conn.businessName || conn.verifiedName || '—'}</span></div>
@@ -184,6 +205,65 @@ async function loadAccountCard() {
   }
 }
 loadAccountCard();
+
+// ── Keyword categories panel ────────────────────────────────────────────
+async function loadKeywordRules() {
+  const list = document.getElementById('wkRulesList');
+  try {
+    if (!waConnectionId) {
+      list.innerHTML = '<div class="wa-muted">Connect a WhatsApp number first.</div>';
+      return;
+    }
+    const { rules } = await API.getWhatsAppKeywordRules(waConnectionId);
+    if (!rules.length) {
+      list.innerHTML = '<div class="wa-muted">No rules yet — add one above.</div>';
+      return;
+    }
+    list.innerHTML = rules.map(r => `
+      <div class="wa-cust-row" style="padding:8px 0;" data-id="${r._id}">
+        <span><span class="wa-tag" style="margin-right:8px;">${r.category}</span>← "${r.keyword}" (${r.matchType})</span>
+        <span class="wa-flex wa-gap-8">
+          <span class="wa-muted" style="font-size:11.5px;">${r.matchCount || 0} matches</span>
+          <button class="wa-btn wa-btn-outline wa-btn-sm" data-del="${r._id}">Delete</button>
+        </span>
+      </div>`).join('');
+
+    list.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        try {
+          await API.deleteWhatsAppKeywordRule(btn.dataset.del);
+          loadKeywordRules();
+        } catch (err) {
+          alert('Could not delete rule: ' + err.message);
+        }
+      });
+    });
+  } catch (err) {
+    console.error('Failed to load keyword rules:', err);
+    list.innerHTML = '<div class="wa-muted">Could not load rules.</div>';
+  }
+}
+
+document.getElementById('wkAddBtn').addEventListener('click', async () => {
+  const keyword = document.getElementById('wkKeyword').value.trim();
+  const category = document.getElementById('wkCategory').value.trim();
+  const matchType = document.getElementById('wkMatchType').value;
+  if (!keyword || !category) { alert('Enter both a keyword and a category.'); return; }
+  if (!waConnectionId) { alert('Connect a WhatsApp number first.'); return; }
+  try {
+    await API.createWhatsAppKeywordRule({ connectionId: waConnectionId, keyword, category, matchType });
+    document.getElementById('wkKeyword').value = '';
+    document.getElementById('wkCategory').value = '';
+    loadKeywordRules();
+  } catch (err) {
+    alert('Could not add rule: ' + err.message);
+  }
+});
+
+// Fallback call in case there's no WhatsApp connection at all (loadAccountCard
+// returns early in that branch and never calls loadKeywordRules itself).
+loadKeywordRules();
+
 document.querySelectorAll('.wa-settings-nav-item').forEach(item => {
   item.addEventListener('click', () => {
     document.querySelectorAll('.wa-settings-nav-item').forEach(i=>i.classList.remove('active'));
