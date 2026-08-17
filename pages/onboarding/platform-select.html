@@ -42,6 +42,11 @@ body{background:#F4F4F8;font-family:'Instrument Sans',sans-serif;display:flex;fl
 .ps-head{text-align:center;margin-bottom:28px;}
 .ps-head h1{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;color:#0A0A0F;letter-spacing:-0.7px;margin-bottom:6px;}
 .ps-head p{font-size:14px;color:#6b7280;}
+.ps-progress{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:6px 14px;background:#fff;border:1px solid #E2E2EA;border-radius:5px;}
+.ps-progress-dots{display:flex;gap:4px;}
+.ps-progress-dot{width:6px;height:6px;border-radius:50%;background:#E2E2EA;}
+.ps-progress-dot.filled{background:#16a34a;}
+.ps-progress-text{font-size:11.5px;font-weight:600;color:#5A5A6E;}
 
 /* GRID */
 .ps-grid{
@@ -51,18 +56,27 @@ body{background:#F4F4F8;font-family:'Instrument Sans',sans-serif;display:flex;fl
 
 /* CARD */
 .ps-card{
-  background:#fff;border:2px solid #E2E2EA;border-radius:16px;
+  background:#fff;border:2px solid #E2E2EA;border-radius:5px;
   padding:20px 16px;cursor:pointer;transition:all .2s;position:relative;
   text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:10px;
+  aspect-ratio:1/1;justify-content:center;overflow:hidden;
 }
-.ps-card.available:hover{border-color:#7C3AED;box-shadow:0 6px 24px rgba(124,58,237,0.12);transform:translateY(-2px);}
+.ps-card.available::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,rgba(124,58,237,0.05),transparent 55%);
+  opacity:0;transition:opacity .2s;
+}
+.ps-card.available:hover::after{opacity:1;}
+.ps-card.available:hover{border-color:#7C3AED;box-shadow:0 10px 28px rgba(124,58,237,0.16);transform:translateY(-3px);}
 .ps-card.locked{cursor:default;opacity:0.55;}
+.ps-card.locked .ps-icon-wrap{filter:grayscale(60%);}
 .ps-card.locked:hover{transform:none;box-shadow:none;border-color:#E2E2EA;}
 
 /* BADGE */
 .ps-badge{
   position:absolute;top:10px;right:10px;
-  font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:0.3px;
+  font-size:9px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:0.3px;
+  display:inline-flex;align-items:center;gap:3px;
 }
 .ps-badge.live{background:#dcfce7;color:#16a34a;}
 .ps-badge.soon{background:#f3f4f6;color:#9ca3af;}
@@ -70,7 +84,7 @@ body{background:#F4F4F8;font-family:'Instrument Sans',sans-serif;display:flex;fl
 
 /* ICON WRAPPER */
 .ps-icon-wrap{
-  width:52px;height:52px;border-radius:14px;
+  width:52px;height:52px;border-radius:5px;
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
 }
@@ -92,12 +106,9 @@ body{background:#F4F4F8;font-family:'Instrument Sans',sans-serif;display:flex;fl
   .ps-card{
     padding:16px 8px 12px;
     gap:7px;
-    border-radius:14px;
-    aspect-ratio:1/1;
-    justify-content:center;
   }
   .ps-card-desc{display:none;}
-  .ps-icon-wrap{width:42px;height:42px;border-radius:11px;}
+  .ps-icon-wrap{width:42px;height:42px;border-radius:5px;}
   .ps-icon-wrap svg{width:22px!important;height:22px!important;}
   .ps-card-name{font-size:11px;}
   .ps-badge{font-size:8px;padding:2px 6px;top:7px;right:7px;}
@@ -122,13 +133,24 @@ body{background:#F4F4F8;font-family:'Instrument Sans',sans-serif;display:flex;fl
   <div class="ps-head">
     <h1>Which platform do you want to automate?</h1>
     <p>Select a platform to set up your auto-DM workflow.</p>
+    <div class="ps-progress">
+      <div class="ps-progress-dots">
+        <span class="ps-progress-dot filled"></span>
+        <span class="ps-progress-dot filled"></span>
+        <span class="ps-progress-dot"></span>
+        <span class="ps-progress-dot"></span>
+        <span class="ps-progress-dot"></span>
+        <span class="ps-progress-dot"></span>
+      </div>
+      <span class="ps-progress-text">2 of 6 platforms live</span>
+    </div>
   </div>
 
   <div class="ps-grid">
 
     <!-- Instagram — LIVE -->
     <a href="connect.html" class="ps-card available">
-      <span class="ps-badge live" style="display:inline-flex;align-items:center;gap:3px;"><svg width="9" height="9" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Live</span>
+      <span class="ps-badge live"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#16a34a"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Live</span>
       <div class="ps-icon-wrap" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
         <!-- Instagram SVG -->
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +165,7 @@ body{background:#F4F4F8;font-family:'Instrument Sans',sans-serif;display:flex;fl
 
     <!-- WhatsApp — LIVE -->
     <a href="whatsapp/connect.html" class="ps-card available">
-      <span class="ps-badge live" style="display:inline-flex;align-items:center;gap:3px;"><svg width="9" height="9" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Live</span>
+      <span class="ps-badge live"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" fill="#16a34a"/><path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Live</span>
       <div class="ps-icon-wrap" style="background:#25D366;">
         <!-- WhatsApp SVG -->
         <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
