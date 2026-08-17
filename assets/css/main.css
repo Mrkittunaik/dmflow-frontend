@@ -843,6 +843,21 @@ h1 .accent {
   overflow: hidden;
   box-shadow: var(--shadow-lg);
 }
+/* Login page only — scoped override, does not affect register/forgot-password */
+.auth-page--login .auth-left {
+  background:
+    linear-gradient(160deg, rgba(10,10,15,0.88) 0%, rgba(20,10,30,0.75) 55%, rgba(10,10,15,0.92) 100%),
+    url('https://images.unsplash.com/photo-1521931961826-fe48677230a5?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+  border-radius: 5px;
+}
+.auth-page--login .auth-illustration { border-radius: 5px; }
+.auth-page--login .auth-flow-ico { border-radius: 5px; }
+.auth-page--login .auth-int-card { border-radius: 5px; }
+.auth-page--login .auth-builder-node { border-radius: 5px; }
+.auth-page--login .auth-builder-node-icon { border-radius: 5px; }
+.auth-page--login .auth-builder-pill { border-radius: 5px; }
+.auth-page--login .auth-builder-bubble { border-radius: 5px; }
+.auth-page--login .auth-meta-badge { border-radius: 5px; }
 .auth-left::before {
   content: '';
   position: absolute;
