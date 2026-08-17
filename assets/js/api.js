@@ -209,6 +209,12 @@ const API = (() => {
     getWhatsAppTemplates:  ()             => req('GET', '/api/whatsapp/templates'),
     syncWhatsAppTemplates: (connectionId) => { _cacheInvalidate('/api/whatsapp/templates'); return req('POST', '/api/whatsapp/templates/sync', { connectionId }); },
 
+    // ── WhatsApp Keyword Rules (auto-tag categories) ────────────────
+    getWhatsAppKeywordRules:    (connectionId) => req('GET', '/api/whatsapp/keyword-rules' + (connectionId ? '?connectionId=' + connectionId : '')),
+    createWhatsAppKeywordRule:  (data)         => req('POST', '/api/whatsapp/keyword-rules', data),
+    updateWhatsAppKeywordRule:  (id, data)     => req('PATCH', '/api/whatsapp/keyword-rules/' + id, data),
+    deleteWhatsAppKeywordRule:  (id)           => req('DELETE', '/api/whatsapp/keyword-rules/' + id),
+
     // ── WhatsApp Contacts ────────────────────────────────────────────
     getWhatsAppContacts: (page, search) => req('GET', '/api/whatsapp/contacts?page=' + (page || 1) + (search ? '&search=' + encodeURIComponent(search) : '')),
 
