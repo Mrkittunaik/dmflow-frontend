@@ -190,6 +190,10 @@ const API = (() => {
       _cacheInvalidate('/api/whatsapp');
       return req('POST', '/auth/whatsapp/connect', { code, wabaId, phoneNumberId });
     },
+    manualConnectWhatsApp: (accessToken, wabaId, phoneNumberId) => {
+      _cacheInvalidate('/api/whatsapp');
+      return req('POST', '/auth/whatsapp/manual-connect', { accessToken, wabaId, phoneNumberId });
+    },
     getWhatsAppConnection:  ()      => req('GET', '/api/whatsapp/connection', null, { noCache: true }),
     getWhatsAppConnections: ()      => req('GET', '/api/whatsapp/connections'),
     disconnectWhatsApp:     (id)    => { _cacheInvalidate('/api/whatsapp'); return req('DELETE', '/api/whatsapp/connections/' + id); },
