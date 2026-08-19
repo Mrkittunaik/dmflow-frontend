@@ -78,6 +78,21 @@ body{margin:0;background:var(--wa-bg);font-family:'Instrument Sans',sans-serif;}
       Continue with Facebook to connect WhatsApp
     </button>
     <div class="wac-fineprint">You'll be redirected to Meta to select or verify your WhatsApp Business Account, phone number, and permissions.</div>
+
+    <div style="text-align:center;margin-top:14px;">
+      <a href="#" onclick="toggleManual(event)" style="font-size:12px;color:var(--wa-text-3);text-decoration:underline;">Have a token already? Connect manually</a>
+    </div>
+
+    <div id="wacManual" class="wac-card wac-hidden" style="margin-top:14px;">
+      <div style="font-size:12px;font-weight:700;margin-bottom:10px;">Manual connect (dev/testing only)</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <input id="wacManualToken" type="text" placeholder="Access token" style="padding:10px;border:1px solid var(--wa-border);border-radius:var(--wa-r-sm);font-size:12px;font-family:inherit;">
+        <input id="wacManualWaba" type="text" placeholder="WhatsApp Business Account ID" style="padding:10px;border:1px solid var(--wa-border);border-radius:var(--wa-r-sm);font-size:12px;font-family:inherit;">
+        <input id="wacManualPhone" type="text" placeholder="Phone Number ID" style="padding:10px;border:1px solid var(--wa-border);border-radius:var(--wa-r-sm);font-size:12px;font-family:inherit;">
+        <button class="wac-connect-btn" style="background:var(--wa-ink,#111);" onclick="startManualConnect()">Connect manually</button>
+        <div id="wacManualError" style="font-size:11px;color:#e11d48;display:none;"></div>
+      </div>
+    </div>
   </div>
 
   <!-- STEP: connecting -->
@@ -161,6 +176,34 @@ function showError(msg) {
 }
 
 window.resetConnect = () => showStep('wacNotConnected');
+
+window.toggleManual = (e) => {
+  e.preventDefault();
+  document.getElementById('wacManual').classList.toggle('wac-hidden');
+};
+
+window.startManualConnect = async function () {
+  const accessToken   = document.getElementById('wacManualToken').value.trim();
+  const wabaId         = document.getElementById('wacManualWaba').value.trim();
+  const phoneNumberId = document.getElementById('wacManualPhone').value.trim();
+  const errEl = document.getElementById('wacManualError');
+  errEl.style.display = 'none';
+
+  if (!accessToken || !wabaId || !phoneNumberId) {
+    errEl.textContent = 'Please fill in all three fields.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  showStep('wacConnecting');
+  try {
+    const connection = await API.manualConnectWhatsApp(accessToken, wabaId, phoneNumberId);
+    renderConnected(connection);
+    showStep('wacConnected');
+  } catch (e) {
+    showError(e.message || 'Manual connection failed. Check the token/IDs and try again.');
+  }
+};
 
 // ── Load the Meta JS SDK once, on demand ──────────────────────────────
 let _fbSdkPromise = null;
