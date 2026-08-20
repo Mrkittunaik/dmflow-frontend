@@ -21,6 +21,11 @@
     <div class="wa-topbar">
       <div class="wa-topbar-title">Analytics</div>
       <div class="wa-topbar-actions">
+        <select class="wa-select wa-select-sm" id="waRangeSelect">
+          <option value="7d">Last 7 days</option>
+          <option value="30d" selected>Last 30 days</option>
+          <option value="90d">Last 90 days</option>
+        </select>
         <button class="wa-icon-btn" id="waThemeBtn" onclick="WA_UI.toggleTheme()"></button>
         <a class="wa-avatar" href="settings.html" title="Account settings" style="text-decoration:none;">A</a>
       </div>
@@ -37,17 +42,17 @@
       <div class="wa-two-col">
         <div class="wa-card wa-card-pad">
           <div class="wa-card-title" style="margin-bottom:10px;">Automation Performance</div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Triggered</span><span class="wa-bold">8,420</span></div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Completed</span><span class="wa-bold">7,910</span></div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Failed</span><span class="wa-bold" style="color:var(--wa-red);">146</span></div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Converted</span><span class="wa-bold" style="color:var(--wa-green-dark);">1,284</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Triggered</span><span class="wa-bold" id="autoTriggered">—</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Completed</span><span class="wa-bold" id="autoCompleted">—</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Failed</span><span class="wa-bold" style="color:var(--wa-red);" id="autoFailed">—</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Converted</span><span class="wa-bold" style="color:var(--wa-green-dark);" id="autoConverted">—</span></div>
         </div>
         <div class="wa-card wa-card-pad">
           <div class="wa-card-title" style="margin-bottom:10px;">Campaign Performance</div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Sent</span><span class="wa-bold">5,980</span></div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Delivered</span><span class="wa-bold">5,842</span></div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Read</span><span class="wa-bold">4,830</span></div>
-          <div class="wa-cust-row" style="padding:6px 0;"><span>Converted</span><span class="wa-bold" style="color:var(--wa-green-dark);">171</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Sent</span><span class="wa-bold" id="campSent">—</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Delivered</span><span class="wa-bold" id="campDelivered">—</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Read</span><span class="wa-bold" id="campRead">—</span></div>
+          <div class="wa-cust-row" style="padding:6px 0;"><span>Converted</span><span class="wa-bold" style="color:var(--wa-green-dark);" id="campConverted">—</span></div>
         </div>
       </div>
 
@@ -59,14 +64,59 @@
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme(); WA_NAV.render('analytics');
-const stats = [
-  { label:'Conversations', val:'1,264' }, { label:'Messages', val:'33,650' },
-  { label:'Response Time', val:'2m 14s' }, { label:'Conversion Rate', val:'6.8%' }
-];
-document.getElementById('waAnalyticsStats').innerHTML = stats.map(s=>`
-  <div class="wa-stat-box"><div class="wa-stat-label">${s.label}</div><div class="wa-stat-val">${s.val}</div></div>`).join('');
-document.getElementById('chartConv').innerHTML = [30,45,38,60,52,70,65].map(h=>`<div class="wa-bar" style="height:${h}%"></div>`).join('');
-document.getElementById('chartResp').innerHTML = [80,60,70,50,55,40,45].map(h=>`<div class="wa-bar" style="height:${h}%"></div>`).join('');
+
+const statsGrid = document.getElementById('waAnalyticsStats');
+
+function renderBars(elId, series, valueKey) {
+  const el = document.getElementById(elId);
+  if (!series || !series.length) {
+    el.innerHTML = `<div style="width:100%;text-align:center;color:var(--wa-text-3);font-size:12px;align-self:center;">No data yet</div>`;
+    return;
+  }
+  const max = Math.max(1, ...series.map(d => d[valueKey] || d.value || 0));
+  el.innerHTML = series.map(d => {
+    const v = d[valueKey] || d.value || 0;
+    return `<div class="wa-bar" title="${d.label || ''}: ${v}" style="height:${Math.max(4,(v/max)*100)}%"></div>`;
+  }).join('');
+}
+
+async function loadAnalytics(range) {
+  statsGrid.innerHTML = `<div class="wa-stat-box"><div class="wa-stat-label">Loading…</div></div>`;
+  try {
+    const a = await API.getWhatsAppAnalytics(range);
+
+    const stats = [
+      { label:'Conversations', val: (a.conversations ?? a.repliedConversations ?? 0).toLocaleString() },
+      { label:'Messages', val: ((a.messages?.sent || 0) + (a.messages?.received || 0)).toLocaleString() },
+      { label:'Response Time', val: a.avgResponseTime || '—' },
+      { label:'Conversion Rate', val: a.conversionRate != null ? a.conversionRate + '%' : '—' }
+    ];
+    statsGrid.innerHTML = stats.map(s=>`
+      <div class="wa-stat-box"><div class="wa-stat-label">${s.label}</div><div class="wa-stat-val">${s.val}</div></div>`).join('');
+
+    renderBars('chartConv', a.conversionSeries || a.series, 'value');
+    renderBars('chartResp', a.responseTimeSeries, 'value');
+
+    const auto = a.automationRuns || {};
+    document.getElementById('autoTriggered').textContent = (auto.triggered || 0).toLocaleString();
+    document.getElementById('autoCompleted').textContent = (auto.completed || 0).toLocaleString();
+    document.getElementById('autoFailed').textContent    = (auto.failed || 0).toLocaleString();
+    document.getElementById('autoConverted').textContent = (auto.converted || 0).toLocaleString();
+
+    const camp = a.campaignPerformance || {};
+    document.getElementById('campSent').textContent      = (camp.sent || 0).toLocaleString();
+    document.getElementById('campDelivered').textContent = (camp.delivered || 0).toLocaleString();
+    document.getElementById('campRead').textContent      = (camp.read || 0).toLocaleString();
+    document.getElementById('campConverted').textContent = (camp.converted || 0).toLocaleString();
+  } catch (e) {
+    statsGrid.innerHTML = `<div class="wa-stat-box"><div class="wa-stat-label">Could not load analytics</div></div>`;
+    document.getElementById('chartConv').innerHTML = '';
+    document.getElementById('chartResp').innerHTML = '';
+  }
+}
+
+document.getElementById('waRangeSelect').addEventListener('change', e => loadAnalytics(e.target.value));
+loadAnalytics('30d');
 </script>
 </body>
 </html>
