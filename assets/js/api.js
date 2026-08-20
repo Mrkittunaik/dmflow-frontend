@@ -222,6 +222,16 @@ const API = (() => {
     // ── WhatsApp Contacts ────────────────────────────────────────────
     getWhatsAppContacts: (page, search) => req('GET', '/api/whatsapp/contacts?page=' + (page || 1) + (search ? '&search=' + encodeURIComponent(search) : '')),
 
+    // ── WhatsApp Analytics ───────────────────────────────────────────
+    getWhatsAppAnalytics: (range, connectionId) => req('GET', '/api/whatsapp/analytics?range=' + (range || '7d') + (connectionId ? '&connectionId=' + connectionId : ''), null, { noCache: true }),
+
+    // ── WhatsApp Campaigns ───────────────────────────────────────────
+    getWhatsAppCampaigns:      ()        => req('GET', '/api/whatsapp/campaigns'),
+    getWhatsAppCampaign:       (id)      => req('GET', '/api/whatsapp/campaigns/' + id),
+    createWhatsAppCampaign:    (data)    => { _cacheInvalidate('/api/whatsapp/campaigns'); return req('POST', '/api/whatsapp/campaigns', data); },
+    startWhatsAppCampaign:     (id)      => { _cacheInvalidate('/api/whatsapp/campaigns'); return req('POST', '/api/whatsapp/campaigns/' + id + '/start'); },
+    cancelWhatsAppCampaign:    (id)      => { _cacheInvalidate('/api/whatsapp/campaigns'); return req('POST', '/api/whatsapp/campaigns/' + id + '/cancel'); },
+
     // ── User ────────────────────────────────────────────────────
     getMe:         (noCache) => req('GET', '/api/user/me', null, { noCache: !!noCache }),
     updateProfile: (data)    => { _cacheInvalidate('/api/user/me'); return req('PATCH', '/api/user/profile', data); },
