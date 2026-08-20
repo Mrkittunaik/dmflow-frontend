@@ -215,6 +215,7 @@ WA_UI.initTheme();
 WA_NAV.render('inbox');
 
 let activeConvoId = null;
+const composerInput = document.querySelector('.wa-composer-input');
 
 function fmtTime(iso) {
   const d = new Date(iso);
@@ -260,38 +261,63 @@ function renderMessages(messages) {
   wrap.scrollTop = wrap.scrollHeight;
 }
 
-async function openConversation(id) {
+let _lastMsgCount = 0;
+
+async function openConversation(id, opts) {
+  const silent = opts && opts.silent;
   activeConvoId = id;
   try {
     const { conversation, messages } = await API.getWhatsAppConversation(id);
     document.querySelector('.wa-chat-name').textContent = conversation.customerName || conversation.customerPhone;
     document.querySelector('.wa-cust-name').textContent = conversation.customerName || conversation.customerPhone;
     document.querySelector('.wa-cust-phone').textContent = conversation.customerPhone;
-    renderMessages(messages);
+    // Avoid re-render flicker on live poll unless message count actually changed
+    if (!silent || messages.length !== _lastMsgCount) {
+      renderMessages(messages);
+      _lastMsgCount = messages.length;
+    }
     if (conversation.unread) await API.markWhatsAppRead(id);
-    loadInbox(); // refresh unread counts in the list
+    loadInbox(null, { silent: true }); // refresh unread counts in the list
   } catch (err) {
-    console.error('Failed to load conversation:', err);
+    if (!silent) console.error('Failed to load conversation:', err);
   }
 }
 
-async function loadInbox(search) {
+let _inboxLoading = false;
+async function loadInbox(search, opts) {
+  const silent = opts && opts.silent;
+  if (_inboxLoading) return;
+  _inboxLoading = true;
   try {
     const { conversations } = await API.getWhatsAppInbox(1, search);
     renderConvList(conversations);
     if (!activeConvoId && conversations.length) openConversation(conversations[0]._id);
   } catch (err) {
-    console.error('Failed to load inbox:', err);
-    document.getElementById('waConvList').innerHTML = '<div class="wa-muted" style="padding:16px;">Could not load conversations.</div>';
+    if (!silent) {
+      console.error('Failed to load inbox:', err);
+      document.getElementById('waConvList').innerHTML = '<div class="wa-muted" style="padding:16px;">Could not load conversations.</div>';
+    }
+  } finally {
+    _inboxLoading = false;
   }
 }
+
+// ── Live updates: poll for new messages/conversations like WhatsApp Web ──
+// Conversation list refreshes every 5s; the open chat refreshes every 3s.
+// Both polls stay silent (no spinners/errors) so nothing flickers or
+// interrupts the person while they're reading or typing.
+setInterval(() => loadInbox(document.querySelector('.wa-conv-search input').value, { silent: true }), 5000);
+setInterval(() => {
+  if (activeConvoId && !composerInput.matches(':focus')) {
+    openConversation(activeConvoId, { silent: true });
+  }
+}, 3000);
 
 document.querySelector('.wa-conv-search input').addEventListener('input', (e) => {
   clearTimeout(window._waSearchDebounce);
   window._waSearchDebounce = setTimeout(() => loadInbox(e.target.value), 300);
 });
 
-const composerInput = document.querySelector('.wa-composer-input');
 const sendBtn = document.querySelector('.wa-composer-row .wa-btn-accent');
 
 async function sendReply() {
