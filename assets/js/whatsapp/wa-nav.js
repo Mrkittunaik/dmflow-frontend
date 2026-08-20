@@ -29,7 +29,7 @@
 
   const MAIN_NAV = [
     { key: 'overview',    label: 'Overview',    href: 'overview.html',    icon: 'overview' },
-    { key: 'inbox',       label: 'Inbox',        href: 'inbox.html',       icon: 'inbox', badge: '12' },
+    { key: 'inbox',       label: 'Inbox',        href: 'inbox.html',       icon: 'inbox' },
     { key: 'contacts',    label: 'Contacts',     href: 'contacts.html',    icon: 'contacts' },
     { key: 'audience',    label: 'Audience',     href: 'audience.html',    icon: 'audience' },
     { key: 'automations', label: 'Automations',  href: 'automations.html',icon: 'automations' },
@@ -60,21 +60,21 @@
   const MORE_BOTTOM = BOTTOM_NAV.filter(i => !TAB_KEYS.includes(i.key));
 
   function link(item, active) {
-    const badge = item.badge ? `<span class="wa-sb-badge">${item.badge}</span>` : '';
-    return `<a class="wa-sb-link${active ? ' active' : ''}" href="${BASE}${item.href}">${ICONS[item.icon] || ''}<span>${item.label}</span>${badge}</a>`;
+    const badge = item.badge ? `<span class="wa-sb-badge">${item.badge}</span>` : `<span class="wa-sb-badge" style="display:none;"></span>`;
+    return `<a class="wa-sb-link${active ? ' active' : ''}" data-nav-key="${item.key}" href="${BASE}${item.href}">${ICONS[item.icon] || ''}<span>${item.label}</span>${badge}</a>`;
   }
 
   function sheetLink(item, active) {
-    const badge = item.badge ? `<span class="wa-sheet-badge">${item.badge}</span>` : '';
-    return `<a class="wa-sheet-link${active ? ' active' : ''}" href="${BASE}${item.href}">
+    const badge = item.badge ? `<span class="wa-sheet-badge">${item.badge}</span>` : `<span class="wa-sheet-badge" style="display:none;"></span>`;
+    return `<a class="wa-sheet-link${active ? ' active' : ''}" data-nav-key="${item.key}" href="${BASE}${item.href}">
       <span class="wa-sheet-ico">${ICONS[item.icon] || ''}</span>
       <span>${item.label}</span>${badge}
     </a>`;
   }
 
   function tabLink(item, active) {
-    const badge = item.badge ? `<span class="wa-tab-badge">${item.badge}</span>` : '';
-    return `<a class="wa-tab-link${active ? ' active' : ''}" href="${BASE}${item.href}">
+    const badge = item.badge ? `<span class="wa-tab-badge">${item.badge}</span>` : `<span class="wa-tab-badge" style="display:none;"></span>`;
+    return `<a class="wa-tab-link${active ? ' active' : ''}" data-nav-key="${item.key}" href="${BASE}${item.href}">
       <span class="wa-tab-ico">${ICONS[item.icon] || ''}${badge}</span>
       <span class="wa-tab-label">${item.label}</span>
     </a>`;
@@ -140,6 +140,19 @@
     mount.innerHTML = sidebarHtml + bottomBarHtml + sheetHtml;
     document.body.classList.add('wa-has-bottom-bar');
     bindSheetEvents();
+    updateInboxBadge();
+  }
+
+  // ---- Real unread-count badge on Inbox (sidebar + tab bar + sheet) ----
+  async function updateInboxBadge() {
+    if (typeof API === 'undefined' || !API.getWhatsAppInbox) return;
+    try {
+      const res = await API.getWhatsAppInbox(1);
+      const unread = (res.conversations || []).filter(c => c.unread).length || res.unreadCount || 0;
+      const badgeHtml = unread > 0 ? String(unread) : '';
+      document.querySelectorAll('[data-nav-key="inbox"] .wa-sb-badge, [data-nav-key="inbox"] .wa-tab-badge, [data-nav-key="inbox"] .wa-sheet-badge')
+        .forEach(el => { el.textContent = badgeHtml; el.style.display = unread > 0 ? '' : 'none'; });
+    } catch (e) { /* silent — badge just won't update */ }
   }
 
   function toggleMobile() {
@@ -204,5 +217,5 @@
     });
   }
 
-  window.WA_NAV = { render, toggleMobile, openSheet, closeSheet };
+  window.WA_NAV = { render, toggleMobile, openSheet, closeSheet, updateInboxBadge };
 })();
