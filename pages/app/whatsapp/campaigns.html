@@ -23,13 +23,13 @@
 
       <div class="wa-flex wa-between">
         <div class="wa-card-title">All Campaigns</div>
-        <button class="wa-btn wa-btn-primary wa-btn-sm" onclick="document.getElementById('waCampModal').style.display='flex'">+ Create Campaign</button>
+        <button class="wa-btn wa-btn-primary wa-btn-sm" onclick="openCampModal()">+ Create Campaign</button>
       </div>
 
       <div class="wa-card">
         <table class="wa-table">
-          <thead><tr><th>Campaign</th><th>Audience</th><th>Sent</th><th>Delivered</th><th>Read</th><th>Replied</th><th>Converted</th><th>Status</th></tr></thead>
-          <tbody id="waCampBody"></tbody>
+          <thead><tr><th>Campaign</th><th>Audience</th><th>Sent</th><th>Delivered</th><th>Read</th><th>Replied</th><th>Converted</th><th>Status</th><th></th></tr></thead>
+          <tbody id="waCampBody"><tr><td colspan="9" class="wa-muted">Loading…</td></tr></tbody>
         </table>
       </div>
 
@@ -45,20 +45,20 @@
       <button class="wa-icon-btn" onclick="document.getElementById('waCampModal').style.display='none'">✕</button>
     </div>
     <div class="wa-modal-body">
-      <div class="wa-field"><label class="wa-label">Campaign name</label><input class="wa-input" placeholder="e.g. Diwali Flash Sale"></div>
+      <div class="wa-field"><label class="wa-label">Campaign name</label><input class="wa-input" id="waCampName" placeholder="e.g. Diwali Flash Sale"></div>
       <div class="wa-field"><label class="wa-label">Audience</label>
-        <select class="wa-select"><option>All Contacts</option><option>Interested — Not Purchased</option><option>VIP Customers</option><option>Abandoned Cart (7 days)</option></select>
+        <select class="wa-select" id="waCampAudience"><option value="all">All Contacts</option></select>
       </div>
       <div class="wa-field"><label class="wa-label">Template</label>
-        <select class="wa-select"><option>flash_sale_promo</option><option>festival_greeting</option></select>
+        <select class="wa-select" id="waCampTemplate"><option value="">Loading templates…</option></select>
       </div>
       <div class="wa-field"><label class="wa-label">Schedule</label>
-        <select class="wa-select"><option>Send now</option><option>Schedule for later</option></select>
+        <select class="wa-select" id="waCampSchedule"><option value="now">Send now</option><option value="later">Schedule for later</option></select>
       </div>
     </div>
     <div class="wa-modal-foot">
       <button class="wa-btn wa-btn-ghost" onclick="document.getElementById('waCampModal').style.display='none'">Cancel</button>
-      <button class="wa-btn wa-btn-primary" onclick="WA_UI.toast('Campaign scheduled','success');document.getElementById('waCampModal').style.display='none'">Preview &amp; Send</button>
+      <button class="wa-btn wa-btn-primary" id="waCampSubmitBtn" onclick="submitCampaign()">Preview &amp; Send</button>
     </div>
   </div>
 </div>
@@ -67,24 +67,87 @@
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme(); WA_NAV.render('campaigns');
-const campaigns = [
-  { name:'Diwali Flash Sale', aud:'All Contacts (4,820)', sent:4820, delivered:4712, read:3980, replied:612, conv:118, status:'Completed' },
-  { name:'New Arrivals — Winter', aud:'Interested (842)', sent:842, delivered:820, read:640, replied:98, conv:22, status:'Completed' },
-  { name:'Abandoned Cart Push', aud:'Cart Abandoned (318)', sent:318, delivered:310, read:210, replied:44, conv:31, status:'Running' },
-  { name:'VIP Early Access', aud:'VIP Customers (156)', sent:0, delivered:0, read:0, replied:0, conv:0, status:'Scheduled' }
-];
-const statusColor = { Completed:'gray', Running:'green', Scheduled:'amber' };
-document.getElementById('waCampBody').innerHTML = campaigns.map(c => `
-  <tr>
-    <td class="wa-bold">${c.name}</td>
-    <td class="wa-muted">${c.aud}</td>
-    <td>${c.sent.toLocaleString()}</td>
-    <td>${c.delivered.toLocaleString()}</td>
-    <td>${c.read.toLocaleString()}</td>
-    <td>${c.replied.toLocaleString()}</td>
-    <td>${c.conv.toLocaleString()}</td>
-    <td><span class="wa-badge ${statusColor[c.status]}">${c.status}</span></td>
-  </tr>`).join('');
+
+const statusColor = { completed:'gray', running:'green', scheduled:'amber', draft:'gray', failed:'red', cancelled:'gray' };
+const body = document.getElementById('waCampBody');
+
+async function loadCampaigns() {
+  try {
+    const res = await API.getWhatsAppCampaigns();
+    const campaigns = res.campaigns || res || [];
+    if (!campaigns.length) {
+      body.innerHTML = `<tr><td colspan="9" class="wa-muted">No campaigns yet. Create your first one.</td></tr>`;
+      return;
+    }
+    body.innerHTML = campaigns.map(c => {
+      const status = (c.status || 'draft').toLowerCase();
+      return `
+      <tr>
+        <td class="wa-bold">${c.name || 'Untitled'}</td>
+        <td class="wa-muted">${c.audienceLabel || c.audience || '—'}</td>
+        <td>${(c.sent || 0).toLocaleString()}</td>
+        <td>${(c.delivered || 0).toLocaleString()}</td>
+        <td>${(c.read || 0).toLocaleString()}</td>
+        <td>${(c.replied || 0).toLocaleString()}</td>
+        <td>${(c.converted || 0).toLocaleString()}</td>
+        <td><span class="wa-badge ${statusColor[status] || 'gray'}">${c.status || 'Draft'}</span></td>
+        <td>
+          ${status === 'scheduled' || status === 'draft' ? `<button class="wa-btn wa-btn-ghost wa-btn-sm" onclick="startCampaign('${c._id || c.id}')">Start</button>` : ''}
+          ${status === 'running' || status === 'scheduled' ? `<button class="wa-btn wa-btn-ghost wa-btn-sm" onclick="cancelCampaign('${c._id || c.id}')">Cancel</button>` : ''}
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    body.innerHTML = `<tr><td colspan="9" class="wa-muted">Could not load campaigns: ${e.message}</td></tr>`;
+  }
+}
+
+async function startCampaign(id) {
+  try { await API.startWhatsAppCampaign(id); WA_UI.toast('Campaign started', 'success'); loadCampaigns(); }
+  catch (e) { WA_UI.toast(e.message || 'Could not start campaign', 'error'); }
+}
+async function cancelCampaign(id) {
+  try { await API.cancelWhatsAppCampaign(id); WA_UI.toast('Campaign cancelled', 'success'); loadCampaigns(); }
+  catch (e) { WA_UI.toast(e.message || 'Could not cancel campaign', 'error'); }
+}
+
+async function openCampModal() {
+  document.getElementById('waCampModal').style.display = 'flex';
+  const tplSel = document.getElementById('waCampTemplate');
+  try {
+    const res = await API.getWhatsAppTemplates();
+    const templates = (res.templates || []).filter(t => t.status === 'approved');
+    tplSel.innerHTML = templates.length
+      ? templates.map(t => `<option value="${t.templateName || t.name}">${t.templateName || t.name}</option>`).join('')
+      : `<option value="">No approved templates</option>`;
+  } catch (e) {
+    tplSel.innerHTML = `<option value="">Could not load templates</option>`;
+  }
+}
+
+async function submitCampaign() {
+  const name     = document.getElementById('waCampName').value.trim();
+  const audience = document.getElementById('waCampAudience').value;
+  const template = document.getElementById('waCampTemplate').value;
+  const schedule = document.getElementById('waCampSchedule').value;
+  if (!name)     return WA_UI.toast('Campaign name is required', 'error');
+  if (!template) return WA_UI.toast('Choose a template', 'error');
+
+  const btn = document.getElementById('waCampSubmitBtn');
+  btn.disabled = true;
+  try {
+    await API.createWhatsAppCampaign({ name, audience, template, schedule });
+    WA_UI.toast('Campaign created', 'success');
+    document.getElementById('waCampModal').style.display = 'none';
+    loadCampaigns();
+  } catch (e) {
+    WA_UI.toast(e.message || 'Could not create campaign', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+loadCampaigns();
 </script>
 </body>
 </html>
