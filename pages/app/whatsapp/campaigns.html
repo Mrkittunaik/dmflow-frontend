@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body class="wa-scope">
 <div class="wa-app">
@@ -39,38 +40,76 @@
 
 <!-- create campaign wizard modal -->
 <div class="wa-modal-overlay" id="waCampModal" style="display:none;">
-  <div class="wa-modal" style="width:520px;">
+  <div class="wa-modal" style="width:560px;">
     <div class="wa-modal-head">
       <div class="wa-card-title">Create Campaign</div>
-      <button class="wa-icon-btn" onclick="document.getElementById('waCampModal').style.display='none'">✕</button>
+      <button class="wa-icon-btn" onclick="closeCampModal()">✕</button>
     </div>
     <div class="wa-modal-body">
+
       <div class="wa-field"><label class="wa-label">Campaign name</label><input class="wa-input" id="waCampName" placeholder="e.g. Diwali Flash Sale"></div>
-      <div class="wa-field"><label class="wa-label">Audience</label>
-        <select class="wa-select" id="waCampAudience"><option value="all">All Contacts</option></select>
+
+      <div class="wa-field" id="waCampConnectionField" style="display:none;">
+        <label class="wa-label">WhatsApp number</label>
+        <select class="wa-select" id="waCampConnection" onchange="onConnectionChange()"></select>
       </div>
+
+      <div class="wa-field">
+        <label class="wa-label">Audience</label>
+        <select class="wa-select" id="waCampAudience" onchange="onAudienceSelectChanged()">
+          <option value="all">All Contacts</option>
+          <option value="upload">Upload Excel / CSV file</option>
+        </select>
+      </div>
+
+      <!-- shown only when Audience = Upload Excel / CSV file -->
+      <div class="wa-field" id="waCampUploadField" style="display:none;">
+        <label class="wa-label">File (.xlsx / .csv, needs a Phone column, Name optional)</label>
+        <input type="file" class="wa-input" id="waCampFile" accept=".xlsx,.xls,.csv" onchange="onFileChosen(event)">
+        <div class="wa-muted" id="waCampFileStatus" style="margin-top:6px;font-size:13px;"></div>
+      </div>
+
       <div class="wa-field"><label class="wa-label">Template</label>
         <select class="wa-select" id="waCampTemplate"><option value="">Loading templates…</option></select>
       </div>
+
+      <div class="wa-field" id="waCampLimitField" style="display:none;">
+        <label class="wa-label">Limit (optional)</label>
+        <input class="wa-input" id="waCampLimit" type="number" min="1" placeholder="e.g. 500 — leave blank to send to everyone in the file">
+      </div>
+
       <div class="wa-field"><label class="wa-label">Schedule</label>
         <select class="wa-select" id="waCampSchedule"><option value="now">Send now</option><option value="later">Schedule for later</option></select>
       </div>
+      <div class="wa-field" id="waCampScheduleAtField" style="display:none;">
+        <label class="wa-label">Send at</label>
+        <input class="wa-input" id="waCampScheduleAt" type="datetime-local">
+      </div>
+
     </div>
     <div class="wa-modal-foot">
-      <button class="wa-btn wa-btn-ghost" onclick="document.getElementById('waCampModal').style.display='none'">Cancel</button>
+      <button class="wa-btn wa-btn-ghost" onclick="closeCampModal()">Cancel</button>
       <button class="wa-btn wa-btn-primary" id="waCampSubmitBtn" onclick="submitCampaign()">Preview &amp; Send</button>
     </div>
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme(); WA_NAV.render('campaigns');
 
-const statusColor = { completed:'gray', running:'green', scheduled:'amber', draft:'gray', failed:'red', cancelled:'gray' };
+const statusColor = { completed:'gray', running:'green', sending:'green', scheduled:'amber', draft:'gray', failed:'red', cancelled:'gray' };
 const body = document.getElementById('waCampBody');
 
+// Parsed rows from the chosen file: [{ phone, name }]
+let waCampParsedRows = [];
+let waCampConnections = [];
+let waCampBatches = [];
+
+// ── Load campaigns list ──────────────────────────────────────────────
 async function loadCampaigns() {
   try {
     const res = await API.getWhatsAppCampaigns();
@@ -81,19 +120,22 @@ async function loadCampaigns() {
     }
     body.innerHTML = campaigns.map(c => {
       const status = (c.status || 'draft').toLowerCase();
+      const audienceLabel = c.audienceType === 'batch'
+        ? (c.batchId && c.batchId.name ? c.batchId.name : 'Uploaded list')
+        : 'All Contacts';
       return `
       <tr>
         <td class="wa-bold">${c.name || 'Untitled'}</td>
-        <td class="wa-muted">${c.audienceLabel || c.audience || '—'}</td>
-        <td>${(c.sent || 0).toLocaleString()}</td>
-        <td>${(c.delivered || 0).toLocaleString()}</td>
-        <td>${(c.read || 0).toLocaleString()}</td>
-        <td>${(c.replied || 0).toLocaleString()}</td>
-        <td>${(c.converted || 0).toLocaleString()}</td>
+        <td class="wa-muted">${audienceLabel}</td>
+        <td>${(c.stats?.sent || 0).toLocaleString()}</td>
+        <td>${(c.stats?.delivered || 0).toLocaleString()}</td>
+        <td>${(c.stats?.read || 0).toLocaleString()}</td>
+        <td>${(c.stats?.replied || 0).toLocaleString()}</td>
+        <td>${(c.stats?.converted || 0).toLocaleString()}</td>
         <td><span class="wa-badge ${statusColor[status] || 'gray'}">${c.status || 'Draft'}</span></td>
         <td>
           ${status === 'scheduled' || status === 'draft' ? `<button class="wa-btn wa-btn-ghost wa-btn-sm" onclick="startCampaign('${c._id || c.id}')">Start</button>` : ''}
-          ${status === 'running' || status === 'scheduled' ? `<button class="wa-btn wa-btn-ghost wa-btn-sm" onclick="cancelCampaign('${c._id || c.id}')">Cancel</button>` : ''}
+          ${status === 'running' || status === 'sending' || status === 'scheduled' ? `<button class="wa-btn wa-btn-ghost wa-btn-sm" onclick="cancelCampaign('${c._id || c.id}')">Cancel</button>` : ''}
         </td>
       </tr>`;
     }).join('');
@@ -111,41 +153,229 @@ async function cancelCampaign(id) {
   catch (e) { WA_UI.toast(e.message || 'Could not cancel campaign', 'error'); }
 }
 
+// ── Modal open/close ─────────────────────────────────────────────────
+function closeCampModal() {
+  document.getElementById('waCampModal').style.display = 'none';
+}
+
 async function openCampModal() {
   document.getElementById('waCampModal').style.display = 'flex';
+
+  // reset state
+  waCampParsedRows = [];
+  document.getElementById('waCampName').value = '';
+  document.getElementById('waCampAudience').value = 'all';
+  document.getElementById('waCampFile').value = '';
+  document.getElementById('waCampFileStatus').textContent = '';
+  document.getElementById('waCampLimit').value = '';
+  document.getElementById('waCampSchedule').value = 'now';
+  document.getElementById('waCampScheduleAt').value = '';
+  document.getElementById('waCampScheduleAtField').style.display = 'none';
+  document.getElementById('waCampUploadField').style.display = 'none';
+  document.getElementById('waCampLimitField').style.display = 'none';
+
+  await loadConnections();
+  await loadBatchesForSelectedConnection();
+  await loadTemplatesForSelectedConnection();
+}
+
+// ── Connections ───────────────────────────────────────────────────────
+async function loadConnections() {
+  const sel = document.getElementById('waCampConnection');
+  const field = document.getElementById('waCampConnectionField');
+  try {
+    const res = await API.getWhatsAppConnections();
+    waCampConnections = res.connections || [];
+    if (waCampConnections.length <= 1) {
+      // single (or zero) connection: no need to show the picker
+      field.style.display = 'none';
+      sel.innerHTML = waCampConnections.map(c => `<option value="${c._id}">${c.displayPhoneNumber || c.verifiedName || c._id}</option>`).join('');
+    } else {
+      field.style.display = '';
+      sel.innerHTML = waCampConnections.map(c => `<option value="${c._id}">${c.displayPhoneNumber || c.verifiedName || c._id}</option>`).join('');
+    }
+  } catch (e) {
+    waCampConnections = [];
+    field.style.display = 'none';
+    WA_UI.toast('Could not load WhatsApp connections', 'error');
+  }
+}
+
+function getSelectedConnectionId() {
+  const sel = document.getElementById('waCampConnection');
+  if (sel.value) return sel.value;
+  return waCampConnections[0] ? waCampConnections[0]._id : null;
+}
+
+function onConnectionChange() {
+  loadBatchesForSelectedConnection();
+  loadTemplatesForSelectedConnection();
+}
+
+// ── Templates (scoped to the selected connection) ──────────────────────
+async function loadTemplatesForSelectedConnection() {
   const tplSel = document.getElementById('waCampTemplate');
+  tplSel.innerHTML = `<option value="">Loading templates…</option>`;
   try {
     const res = await API.getWhatsAppTemplates();
-    const templates = (res.templates || []).filter(t => t.status === 'approved');
+    const connectionId = getSelectedConnectionId();
+    let templates = (res.templates || []).filter(t => t.status === 'APPROVED');
+    if (connectionId) templates = templates.filter(t => String(t.connectionId) === String(connectionId));
     tplSel.innerHTML = templates.length
-      ? templates.map(t => `<option value="${t.templateName || t.name}">${t.templateName || t.name}</option>`).join('')
+      ? templates.map(t => `<option value="${t._id}">${t.templateName || t.name}</option>`).join('')
       : `<option value="">No approved templates</option>`;
   } catch (e) {
     tplSel.innerHTML = `<option value="">Could not load templates</option>`;
   }
 }
 
+// ── Audience / batches ───────────────────────────────────────────────
+
+async function loadBatchesForSelectedConnection() {
+  const batchSel = document.getElementById('waCampAudience');
+  try {
+    const connectionId = getSelectedConnectionId();
+    const res = await API.getWhatsAppContactBatches(connectionId);
+    waCampBatches = res.batches || [];
+
+    // Rebuild the Audience dropdown: All Contacts, Upload new file, then each existing batch as its own selectable audience
+    const current = batchSel.value;
+    const staticOptions = `<option value="all">All Contacts</option><option value="upload">Upload Excel / CSV file</option>`;
+    const batchOptions = waCampBatches.length
+      ? `<optgroup label="Previously uploaded lists">` +
+        waCampBatches.map(b => `<option value="existing_batch::${b._id}">${b.name} (${b.importedCount || 0})</option>`).join('') +
+        `</optgroup>`
+      : '';
+    batchSel.innerHTML = staticOptions + batchOptions;
+    if (current && [...batchSel.options].some(o => o.value === current)) batchSel.value = current;
+    onAudienceSelectChanged();
+  } catch (e) {
+    // non-fatal — just means "previously uploaded lists" won't show
+  }
+}
+
+function onAudienceSelectChanged() {
+  const val = document.getElementById('waCampAudience').value;
+  const isUpload = val === 'upload';
+  const isExistingBatch = val.startsWith('existing_batch::');
+  document.getElementById('waCampUploadField').style.display = isUpload ? '' : 'none';
+  document.getElementById('waCampLimitField').style.display  = (isUpload || isExistingBatch) ? '' : 'none';
+}
+
+// ── File parsing (client-side, via SheetJS) ─────────────────────────────
+function onFileChosen(evt) {
+  const file = evt.target.files[0];
+  const statusEl = document.getElementById('waCampFileStatus');
+  waCampParsedRows = [];
+  if (!file) { statusEl.textContent = ''; return; }
+
+  statusEl.textContent = 'Reading file…';
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const firstSheet = workbook.SheetNames[0];
+      const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { defval: '' });
+
+      // Find the phone/name columns case-insensitively
+      const keysInFile = rows.length ? Object.keys(rows[0]) : [];
+      const phoneKey = keysInFile.find(k => /phone|mobile|number|contact/i.test(k)) || keysInFile[0];
+      const nameKey  = keysInFile.find(k => /name/i.test(k));
+
+      const parsed = rows
+        .map(r => ({ phone: String(r[phoneKey] ?? '').trim(), name: nameKey ? String(r[nameKey] ?? '').trim() : '' }))
+        .filter(r => r.phone.replace(/\D/g, '').length >= 8);
+
+      waCampParsedRows = parsed;
+      statusEl.textContent = `${parsed.length.toLocaleString()} valid contact${parsed.length === 1 ? '' : 's'} found in ${file.name} (of ${rows.length.toLocaleString()} rows).`;
+      if (!parsed.length) statusEl.textContent += ' Check that the file has a Phone column.';
+    } catch (err) {
+      statusEl.textContent = 'Could not read that file — make sure it is a valid .xlsx or .csv.';
+    }
+  };
+  reader.onerror = () => { statusEl.textContent = 'Could not read that file.'; };
+  reader.readAsArrayBuffer(file);
+}
+
+// ── Submit ────────────────────────────────────────────────────────────
 async function submitCampaign() {
-  const name     = document.getElementById('waCampName').value.trim();
-  const audience = document.getElementById('waCampAudience').value;
-  const template = document.getElementById('waCampTemplate').value;
-  const schedule = document.getElementById('waCampSchedule').value;
-  if (!name)     return WA_UI.toast('Campaign name is required', 'error');
-  if (!template) return WA_UI.toast('Choose a template', 'error');
+  const name         = document.getElementById('waCampName').value.trim();
+  const audienceVal  = document.getElementById('waCampAudience').value;
+  const templateId   = document.getElementById('waCampTemplate').value;
+  const schedule     = document.getElementById('waCampSchedule').value;
+  const scheduleAt   = document.getElementById('waCampScheduleAt').value;
+  const limitRaw     = document.getElementById('waCampLimit').value;
+  const connectionId = getSelectedConnectionId();
+
+  if (!name)         return WA_UI.toast('Campaign name is required', 'error');
+  if (!connectionId) return WA_UI.toast('No WhatsApp connection found — connect a number first', 'error');
+  if (!templateId)   return WA_UI.toast('Choose a template', 'error');
+  if (schedule === 'later' && !scheduleAt) return WA_UI.toast('Pick a date/time to schedule for', 'error');
+  if (audienceVal === 'upload' && waCampParsedRows.length === 0) {
+    return WA_UI.toast('Upload a file with at least one valid contact first', 'error');
+  }
 
   const btn = document.getElementById('waCampSubmitBtn');
   btn.disabled = true;
+  const originalLabel = btn.textContent;
+
   try {
-    await API.createWhatsAppCampaign({ name, audience, template, schedule });
-    WA_UI.toast('Campaign created', 'success');
-    document.getElementById('waCampModal').style.display = 'none';
+    let audienceType = 'all';
+    let batchId = null;
+
+    if (audienceVal === 'upload') {
+      btn.textContent = 'Uploading contacts…';
+      const importRes = await API.importWhatsAppContacts({
+        connectionId,
+        batchName: name,
+        fileName: document.getElementById('waCampFile').files[0]?.name || '',
+        contacts: waCampParsedRows,
+      });
+      audienceType = 'batch';
+      batchId = importRes.batch._id;
+      WA_UI.toast(`${importRes.imported.toLocaleString()} contacts imported${importRes.skipped ? `, ${importRes.skipped} skipped` : ''}`, 'success');
+    } else if (audienceVal.startsWith('existing_batch::')) {
+      audienceType = 'batch';
+      batchId = audienceVal.split('::')[1];
+    }
+
+    btn.textContent = 'Creating campaign…';
+    const payload = {
+      connectionId,
+      name,
+      templateId,
+      audienceType,
+      batchId,
+      limit: limitRaw ? parseInt(limitRaw) : null,
+      scheduledAt: schedule === 'later' ? new Date(scheduleAt).toISOString() : null,
+    };
+    const campaign = await API.createWhatsAppCampaign(payload);
+    const campaignId = campaign._id || campaign.id;
+
+    if (schedule === 'now') {
+      btn.textContent = 'Sending…';
+      await API.startWhatsAppCampaign(campaignId);
+      WA_UI.toast('Campaign created and started', 'success');
+    } else {
+      WA_UI.toast('Campaign scheduled', 'success');
+    }
+
+    closeCampModal();
     loadCampaigns();
   } catch (e) {
     WA_UI.toast(e.message || 'Could not create campaign', 'error');
   } finally {
     btn.disabled = false;
+    btn.textContent = originalLabel;
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('waCampSchedule').addEventListener('change', (e) => {
+    document.getElementById('waCampScheduleAtField').style.display = e.target.value === 'later' ? '' : 'none';
+  });
+});
 
 loadCampaigns();
 </script>
