@@ -99,7 +99,10 @@
             <input class="wa-input" id="tplHeaderText" placeholder="Header text">
           </div>
           <div class="wa-field" id="tplHeaderMediaField" style="margin-top:10px;display:none;">
-            <input class="wa-input" id="tplHeaderMediaUrl" placeholder="Media URL (for preview only — upload happens on submit)">
+            <label class="wa-label" id="tplHeaderMediaLabel">Upload image</label>
+            <input type="file" class="wa-input" id="tplHeaderMediaFile" accept="image/jpeg,image/png">
+            <div class="wa-hint" id="tplHeaderMediaHint">JPG or PNG, up to 16MB. Meta requires the file uploaded here — a plain URL won't work.</div>
+            <div id="tplHeaderMediaStatus" style="margin-top:8px;font-size:12px;display:none;"></div>
           </div>
         </div>
 
@@ -178,7 +181,23 @@ const bodyInput   = document.getElementById('tplBody');
 const footerInput = document.getElementById('tplFooter');
 const headerType  = document.getElementById('tplHeaderType');
 const headerText  = document.getElementById('tplHeaderText');
-const headerMedia = document.getElementById('tplHeaderMediaUrl');
+const headerMediaFile   = document.getElementById('tplHeaderMediaFile');
+const headerMediaLabel  = document.getElementById('tplHeaderMediaLabel');
+const headerMediaHint   = document.getElementById('tplHeaderMediaHint');
+const headerMediaStatus = document.getElementById('tplHeaderMediaStatus');
+
+// Media state — separate from the DOM: what the live preview shows (a local
+// data URL) is NOT what Meta needs (an uploaded handle). Both are tracked
+// here and only the handle is ever sent to the backend on submit.
+let headerMediaPreviewUrl = ''; // local object URL, for the phone preview only
+let headerMediaHandle     = ''; // Meta media handle, set once upload succeeds
+let headerMediaUploading  = false;
+
+const HEADER_MEDIA_ACCEPT = {
+  IMAGE:    { accept: 'image/jpeg,image/png', label: 'Upload image', hint: 'JPG or PNG, up to 16MB.' },
+  VIDEO:    { accept: 'video/mp4,video/3gpp', label: 'Upload video', hint: 'MP4 or 3GPP, up to 16MB.' },
+  DOCUMENT: { accept: 'application/pdf',      label: 'Upload document', hint: 'PDF, up to 16MB.' },
+};
 
 // Button icons matching Meta's real rendering
 const BTN_ICONS = {
@@ -224,7 +243,18 @@ async function loadExistingTemplate() {
     if (t.header && t.header.type) {
       headerType.value = String(t.header.type).toUpperCase();
       if (t.header.type === 'TEXT') headerText.value = t.header.text || '';
-      if (['IMAGE','VIDEO','DOCUMENT'].includes(t.header.type)) headerMedia.value = t.header.mediaUrl || '';
+      if (['IMAGE','VIDEO','DOCUMENT'].includes(t.header.type)) {
+        // Existing templates already have their media on Meta's side (as a
+        // handle or a synced-down URL) — nothing to re-upload unless the
+        // person picks a new file, so just show it for reference.
+        headerMediaPreviewUrl = t.header.mediaUrl || '';
+        headerMediaHandle = t.header.mediaHandle || 'existing';
+        if (headerMediaPreviewUrl) {
+          headerMediaStatus.style.display = '';
+          headerMediaStatus.style.color = 'var(--wa-text-2)';
+          headerMediaStatus.textContent = 'Using existing media from Meta.';
+        }
+      }
     }
 
     tplButtons = Array.isArray(t.buttons) ? t.buttons.map(b => ({
@@ -260,6 +290,7 @@ function lockFormAsReadOnly(status) {
   note.style.display = '';
   note.textContent = `This template is ${status} on Meta and can no longer be edited here — Meta locks template content once submitted. Duplicate it under a new name to make changes.`;
   document.querySelectorAll('.wa-tb-form input, .wa-tb-form textarea, .wa-tb-form select, #tplAddBtnBtn').forEach(el => el.disabled = true);
+  document.getElementById('tplAddBtnBtn').setAttribute('data-locked', '1');
   const saveBtn = document.getElementById('tbSaveDraftBtn');
   const submitBtn = document.getElementById('tbSubmitBtn');
   saveBtn.textContent = 'Duplicate as New';
@@ -276,9 +307,63 @@ function duplicateAsNew() {
 function renderHeaderFields() {
   const type = headerType.value;
   document.getElementById('tplHeaderTextField').style.display = type === 'TEXT' ? '' : 'none';
-  document.getElementById('tplHeaderMediaField').style.display = ['IMAGE','VIDEO','DOCUMENT'].includes(type) ? '' : 'none';
+  const isMedia = ['IMAGE','VIDEO','DOCUMENT'].includes(type);
+  document.getElementById('tplHeaderMediaField').style.display = isMedia ? '' : 'none';
+  if (isMedia) {
+    const cfg = HEADER_MEDIA_ACCEPT[type];
+    headerMediaFile.accept = cfg.accept;
+    headerMediaLabel.textContent = cfg.label;
+    headerMediaHint.textContent = cfg.hint + ' Meta requires the file uploaded here — a plain URL won\'t work.';
+  }
 }
-headerType.addEventListener('change', () => { renderHeaderFields(); renderPreview(); });
+headerType.addEventListener('change', () => {
+  // Switching header type invalidates whatever was uploaded for the old type.
+  headerMediaHandle = '';
+  headerMediaPreviewUrl = '';
+  headerMediaFile.value = '';
+  headerMediaStatus.style.display = 'none';
+  renderHeaderFields();
+  renderPreview();
+});
+
+// Upload the picked file to Meta as soon as it's chosen (not on submit) so
+// the person gets immediate feedback if it fails, and submit doesn't have
+// to juggle upload + create in one step.
+headerMediaFile.addEventListener('change', async () => {
+  const file = headerMediaFile.files[0];
+  headerMediaHandle = '';
+  if (!file) { headerMediaStatus.style.display = 'none'; renderPreview(); return; }
+
+  // Local preview immediately, independent of the upload.
+  if (headerMediaPreviewUrl) URL.revokeObjectURL(headerMediaPreviewUrl);
+  headerMediaPreviewUrl = URL.createObjectURL(file);
+  renderPreview();
+
+  const connectionId = getSelectedConnectionId();
+  if (!connectionId) {
+    headerMediaStatus.style.display = '';
+    headerMediaStatus.style.color = '#e11d48';
+    headerMediaStatus.textContent = 'Connect a WhatsApp number before uploading media.';
+    return;
+  }
+
+  headerMediaUploading = true;
+  headerMediaStatus.style.display = '';
+  headerMediaStatus.style.color = 'var(--wa-text-2)';
+  headerMediaStatus.textContent = 'Uploading…';
+
+  try {
+    const { mediaHandle } = await API.uploadWhatsAppTemplateMedia(connectionId, headerType.value, file);
+    headerMediaHandle = mediaHandle;
+    headerMediaStatus.style.color = 'var(--wa-green-dark)';
+    headerMediaStatus.textContent = '✓ Uploaded — ready to submit.';
+  } catch (e) {
+    headerMediaStatus.style.color = '#e11d48';
+    headerMediaStatus.textContent = e.message || 'Upload failed. Try a different file.';
+  } finally {
+    headerMediaUploading = false;
+  }
+});
 
 // Buttons editor
 function addButton() {
@@ -298,6 +383,8 @@ function updateButton(idx, field, value) {
 }
 function renderButtonsList() {
   const list = document.getElementById('tplButtonsList');
+  const addBtn = document.getElementById('tplAddBtnBtn');
+  if (addBtn && !addBtn.hasAttribute('data-locked')) addBtn.disabled = tplButtons.length >= 3;
   if (!tplButtons.length) {
     list.innerHTML = `<div class="wa-hint">No buttons added.</div>`;
     return;
@@ -345,14 +432,16 @@ function renderPreview() {
   if (type === 'TEXT') {
     headerArea.innerHTML = `<div class="wa-phone-header-text">${escapeHtml(applySample(headerText.value) || 'Header text')}</div>`;
   } else if (type === 'IMAGE') {
-    const url = headerMedia.value.trim();
-    headerArea.innerHTML = url
-      ? `<img class="wa-phone-header-img" src="${escapeAttr(url)}" onerror="this.outerHTML='<div class=&quot;wa-phone-header-img&quot;>Image header</div>'">`
+    headerArea.innerHTML = headerMediaPreviewUrl
+      ? `<img class="wa-phone-header-img" src="${escapeAttr(headerMediaPreviewUrl)}">`
       : `<div class="wa-phone-header-img">Image header</div>`;
   } else if (type === 'VIDEO') {
-    headerArea.innerHTML = `<div class="wa-phone-header-img">▶ Video header</div>`;
+    headerArea.innerHTML = headerMediaPreviewUrl
+      ? `<video class="wa-phone-header-img" src="${escapeAttr(headerMediaPreviewUrl)}" muted></video>`
+      : `<div class="wa-phone-header-img">▶ Video header</div>`;
   } else if (type === 'DOCUMENT') {
-    headerArea.innerHTML = `<div class="wa-phone-header-doc"><div class="wa-phone-header-doc-icon">📄</div><div style="font-size:11px;font-weight:600;color:#111;">document.pdf</div></div>`;
+    const fname = headerMediaFile.files[0] ? headerMediaFile.files[0].name : 'document.pdf';
+    headerArea.innerHTML = `<div class="wa-phone-header-doc"><div class="wa-phone-header-doc-icon">📄</div><div style="font-size:11px;font-weight:600;color:#111;">${escapeHtml(fname)}</div></div>`;
   } else {
     headerArea.innerHTML = '';
   }
@@ -393,14 +482,13 @@ function insertVar(v) {
 bodyInput.addEventListener('input', renderPreview);
 footerInput.addEventListener('input', renderPreview);
 headerText.addEventListener('input', renderPreview);
-headerMedia.addEventListener('input', renderPreview);
 
 // Save / Submit
 function collectFormData() {
   const type = headerType.value;
   let header = null;
   if (type === 'TEXT') header = { type: 'TEXT', text: headerText.value.trim() };
-  else if (['IMAGE','VIDEO','DOCUMENT'].includes(type)) header = { type, mediaUrl: headerMedia.value.trim() };
+  else if (['IMAGE','VIDEO','DOCUMENT'].includes(type)) header = { type, mediaHandle: headerMediaHandle };
 
   return {
     connectionId: getSelectedConnectionId(),
@@ -427,6 +515,19 @@ async function saveTemplate(submit) {
   if (!data.templateName) return WA_UI.toast('Template name is required', 'error');
   if (!/^[a-z0-9_]+$/.test(data.templateName)) return WA_UI.toast('Template name must be lowercase letters, numbers, and underscores only', 'error');
   if (!data.body) return WA_UI.toast('Body text is required', 'error');
+  if (submit && headerMediaUploading) return WA_UI.toast('Media is still uploading — wait a moment and try again', 'error');
+  if (submit && data.header && ['IMAGE','VIDEO','DOCUMENT'].includes(data.header.type) && !data.header.mediaHandle) {
+    return WA_UI.toast('Upload the header media before submitting', 'error');
+  }
+  if (data.buttons.length > 3) return WA_UI.toast('Meta allows up to 3 buttons per template', 'error');
+  for (const b of data.buttons) {
+    if (b.type === 'CUSTOM_URL' && !/^https?:\/\//i.test(b.url)) {
+      return WA_UI.toast(`Button "${b.label}" needs a valid URL starting with http:// or https://`, 'error');
+    }
+    if (b.type === 'CALL_BUSINESS' && !/^\+?[0-9\s-]{6,}$/.test(b.payload)) {
+      return WA_UI.toast(`Button "${b.label}" needs a valid phone number`, 'error');
+    }
+  }
 
   const btn = submit ? document.getElementById('tbSubmitBtn') : document.getElementById('tbSaveDraftBtn');
   const original = btn.textContent;
