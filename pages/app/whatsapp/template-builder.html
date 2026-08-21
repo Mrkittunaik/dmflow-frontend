@@ -10,19 +10,33 @@
 <style>
 .wa-tb{display:flex;height:100%;overflow:hidden;}
 .wa-tb-form{flex:1;overflow-y:auto;padding:22px 26px;display:flex;flex-direction:column;gap:16px;max-width:640px;}
-.wa-tb-preview-col{width:340px;flex-shrink:0;border-left:1px solid var(--wa-border);background:var(--wa-bg-sunken);display:flex;flex-direction:column;align-items:center;padding:26px 18px;}
+.wa-tb-preview-col{width:340px;flex-shrink:0;border-left:1px solid var(--wa-border);background:var(--wa-bg-sunken);display:flex;flex-direction:column;align-items:center;padding:26px 18px;overflow-y:auto;}
 
+/* Phone chrome */
 .wa-phone{width:280px;background:#0A0A0F;border-radius:20px;padding:8px;box-shadow:var(--wa-shadow-lg);}
 .wa-phone-screen{background:#E5DDD5;border-radius:14px;overflow:hidden;min-height:420px;display:flex;flex-direction:column;}
 .wa-phone-head{background:var(--wa-green-dark);color:#fff;padding:12px 14px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;}
 .wa-phone-body{flex:1;padding:12px;}
-.wa-phone-bubble{background:#fff;border-radius:var(--wa-r);padding:9px 11px;font-size:12px;line-height:1.5;box-shadow:0 1px 1px rgba(0,0,0,.08);}
-.wa-phone-header-img{width:100%;height:90px;background:linear-gradient(135deg,var(--wa-green),var(--wa-green-teal));border-radius:var(--wa-r-sm);margin-bottom:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;}
-.wa-phone-footer{font-size:10px;color:#8696a0;margin-top:6px;}
-.wa-phone-btn{border-top:1px solid #f0f0f0;text-align:center;padding:8px 0;font-size:12px;color:var(--wa-blue);font-weight:600;}
+
+/* Message bubble, matching real WhatsApp business-template look */
+.wa-phone-bubble{background:#fff;border-radius:8px 8px 8px 2px;overflow:hidden;box-shadow:0 1px 1px rgba(0,0,0,.08);font-size:12.5px;line-height:1.5;max-width:100%;}
+.wa-phone-bubble-inner{padding:8px 9px 6px;}
+.wa-phone-header-img{width:100%;height:110px;object-fit:cover;background:linear-gradient(135deg,var(--wa-green),var(--wa-green-teal));display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;}
+.wa-phone-header-doc{display:flex;align-items:center;gap:8px;background:#f5f5f5;border-radius:6px;padding:10px;margin:0 0 6px;}
+.wa-phone-header-doc-icon{width:34px;height:34px;border-radius:6px;background:var(--wa-green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.wa-phone-header-text{font-weight:700;font-size:13px;margin-bottom:4px;color:#111;}
+.wa-phone-body-text{color:#111;white-space:pre-wrap;word-break:break-word;}
+.wa-phone-footer{font-size:10.5px;color:#8696a0;margin-top:5px;}
+.wa-phone-time{font-size:9.5px;color:#8696a0;text-align:right;margin-top:3px;}
+
+.wa-phone-btn{border-top:1px solid #f0f0f0;text-align:center;padding:8px 0;font-size:12.5px;color:#00a5f4;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:default;}
+.wa-phone-btn svg{width:13px;height:13px;flex-shrink:0;}
 
 .wa-btn-row{display:flex;gap:8px;align-items:flex-end;}
 .wa-var-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;background:var(--wa-green-pale);color:var(--wa-green-dark);padding:3px 8px;border-radius:var(--wa-r-sm);cursor:pointer;border:none;}
+.wa-btn-card{border-color:var(--wa-border-soft);}
+.wa-btn-remove{color:#e11d48;font-size:11px;font-weight:700;cursor:pointer;background:none;border:none;padding:2px 4px;}
+.wa-status-note{font-size:12px;padding:10px 12px;border-radius:var(--wa-r-sm);background:var(--wa-bg-sunken);color:var(--wa-text-2);}
 </style>
 </head>
 <body class="wa-scope">
@@ -32,44 +46,66 @@
     <div class="wa-builder-topbar" style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:var(--wa-bg-panel);border-bottom:1px solid var(--wa-border);">
       <div class="wa-flex wa-gap-10">
         <a href="templates.html" class="wa-icon-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></a>
-        <span class="wa-card-title">New Template</span>
+        <span class="wa-card-title" id="tbTitle">New Template</span>
       </div>
       <div class="wa-flex wa-gap-8">
-        <button class="wa-btn wa-btn-outline wa-btn-sm">Save Draft</button>
-        <button class="wa-btn wa-btn-primary wa-btn-sm">Submit for Approval</button>
+        <button class="wa-btn wa-btn-outline wa-btn-sm" id="tbSaveDraftBtn" onclick="saveTemplate(false)">Save Draft</button>
+        <button class="wa-btn wa-btn-primary wa-btn-sm" id="tbSubmitBtn" onclick="saveTemplate(true)">Submit for Approval</button>
       </div>
     </div>
 
     <div class="wa-tb">
       <div class="wa-tb-form">
 
+        <div class="wa-status-note" id="tbStatusNote" style="display:none;"></div>
+
         <div class="wa-card wa-card-pad">
           <div class="wa-section-label" style="margin-bottom:10px;">Basics</div>
           <div class="wa-flex-col wa-gap-14">
-            <div class="wa-field"><label class="wa-label">Template name</label><input class="wa-input" id="tplName" placeholder="e.g. order_confirmation" value="order_confirmation"></div>
+            <div class="wa-field" id="tplConnectionField" style="display:none;">
+              <label class="wa-label">WhatsApp number</label>
+              <select class="wa-select" id="tplConnection"></select>
+            </div>
+            <div class="wa-field">
+              <label class="wa-label">Template name</label>
+              <input class="wa-input" id="tplName" placeholder="e.g. order_confirmation">
+              <div class="wa-hint">Lowercase letters, numbers, underscores only — Meta requirement, and cannot be changed after submission.</div>
+            </div>
             <div class="wa-btn-row">
               <div class="wa-field" style="flex:1;"><label class="wa-label">Category</label>
                 <select class="wa-select" id="tplCat">
-                  <option>Utility</option><option>Marketing</option><option>Authentication</option>
+                  <option value="UTILITY">Utility</option><option value="MARKETING">Marketing</option><option value="AUTHENTICATION">Authentication</option>
                 </select>
               </div>
               <div class="wa-field" style="flex:1;"><label class="wa-label">Language</label>
-                <select class="wa-select"><option>English</option><option>Hindi</option><option>Spanish</option></select>
+                <select class="wa-select" id="tplLang">
+                  <option value="en_US">English</option><option value="hi_IN">Hindi</option><option value="es_ES">Spanish</option>
+                </select>
               </div>
             </div>
           </div>
         </div>
 
         <div class="wa-card wa-card-pad">
-          <div class="wa-section-label" style="margin-bottom:10px;">Header</div>
+          <div class="wa-section-label" style="margin-bottom:10px;">Header (optional)</div>
           <select class="wa-select" id="tplHeaderType">
-            <option>None</option><option selected>Image</option><option>Text</option><option>Video</option><option>Document</option>
+            <option value="NONE">None</option>
+            <option value="TEXT">Text</option>
+            <option value="IMAGE">Image</option>
+            <option value="VIDEO">Video</option>
+            <option value="DOCUMENT">Document</option>
           </select>
+          <div class="wa-field" id="tplHeaderTextField" style="margin-top:10px;display:none;">
+            <input class="wa-input" id="tplHeaderText" placeholder="Header text">
+          </div>
+          <div class="wa-field" id="tplHeaderMediaField" style="margin-top:10px;display:none;">
+            <input class="wa-input" id="tplHeaderMediaUrl" placeholder="Media URL (for preview only — upload happens on submit)">
+          </div>
         </div>
 
         <div class="wa-card wa-card-pad">
           <div class="wa-section-label" style="margin-bottom:10px;">Body</div>
-          <textarea class="wa-textarea" id="tplBody" style="min-height:100px;">Hi {{customer.name}}, your order {{order.id}} has been confirmed and will arrive by {{order.eta}}.</textarea>
+          <textarea class="wa-textarea" id="tplBody" style="min-height:100px;" placeholder="Hi {{customer.name}}, your order {{order.id}} has been confirmed."></textarea>
           <div class="wa-flex wa-gap-6" style="margin-top:8px;flex-wrap:wrap;">
             <button class="wa-var-chip" onclick="insertVar('customer.name')">+ customer.name</button>
             <button class="wa-var-chip" onclick="insertVar('order.id')">+ order.id</button>
@@ -80,42 +116,15 @@
 
         <div class="wa-card wa-card-pad">
           <div class="wa-section-label" style="margin-bottom:10px;">Footer (optional)</div>
-          <input class="wa-input" id="tplFooter" placeholder="e.g. DMFlow — Powered by WhatsApp Business" value="Thank you for shopping with us!">
+          <input class="wa-input" id="tplFooter" placeholder="e.g. Thank you for shopping with us!">
         </div>
 
         <div class="wa-card wa-card-pad">
           <div class="wa-flex wa-between" style="margin-bottom:10px;">
-            <div class="wa-section-label">Buttons</div>
-            <button class="wa-btn wa-btn-outline wa-btn-sm">+ Add Button</button>
+            <div class="wa-section-label">Buttons (up to 3)</div>
+            <button class="wa-btn wa-btn-outline wa-btn-sm" id="tplAddBtnBtn" onclick="addButton()">+ Add Button</button>
           </div>
-
-          <div class="wa-flex-col wa-gap-10">
-            <div class="wa-card" style="border-color:var(--wa-border-soft);">
-              <div class="wa-card-pad" style="display:flex;flex-direction:column;gap:8px;">
-                <div class="wa-btn-row">
-                  <div class="wa-field" style="flex:1;"><label class="wa-label">Button label</label><input class="wa-input" value="Track Order"></div>
-                  <div class="wa-field" style="flex:1;"><label class="wa-label">Action</label>
-                    <select class="wa-select">
-                      <option>Track Order</option><option>Open Product</option><option>Open Catalog</option>
-                      <option>Start Automation</option><option>Custom URL</option><option>Call Business</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="wa-card" style="border-color:var(--wa-border-soft);">
-              <div class="wa-card-pad" style="display:flex;flex-direction:column;gap:8px;">
-                <div class="wa-btn-row">
-                  <div class="wa-field" style="flex:1;"><label class="wa-label">Button label</label><input class="wa-input" value="View Order"></div>
-                  <div class="wa-field" style="flex:1;"><label class="wa-label">Action</label>
-                    <select class="wa-select">
-                      <option>Open Product</option><option selected>Custom URL</option><option>Start Automation</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="wa-flex-col wa-gap-10" id="tplButtonsList"></div>
         </div>
 
       </div>
@@ -127,55 +136,320 @@
           <div class="wa-phone-screen">
             <div class="wa-phone-head">
               <div style="width:26px;height:26px;border-radius:50%;background:var(--wa-green);"></div>
-              Aarav Fashion Co.
+              Your Business
             </div>
             <div class="wa-phone-body">
-              <div class="wa-phone-bubble">
-                <div class="wa-phone-header-img" id="pvHeaderImg">Image header</div>
-                <div id="pvBody">Hi Priya, your order #4821 has been confirmed and will arrive by Fri, 20 Jun.</div>
-                <div class="wa-phone-footer" id="pvFooter">Thank you for shopping with us!</div>
-              </div>
-              <div class="wa-phone-bubble" style="margin-top:6px;padding:0;overflow:hidden;">
-                <div class="wa-phone-btn">📦 Track Order</div>
-                <div class="wa-phone-btn">🧾 View Order</div>
+              <div class="wa-phone-bubble" id="pvBubble">
+                <div class="wa-phone-bubble-inner">
+                  <div id="pvHeaderArea"></div>
+                  <div class="wa-phone-body-text" id="pvBody"></div>
+                  <div class="wa-phone-footer" id="pvFooter"></div>
+                  <div class="wa-phone-time">10:42 AM</div>
+                </div>
+                <div id="pvButtonsArea"></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="wa-hint" style="margin-top:14px;text-align:center;">Preview updates as you edit the body text.</div>
+        <div class="wa-hint" style="margin-top:14px;text-align:center;">Preview updates as you edit. This mirrors how WhatsApp renders approved templates.</div>
       </div>
     </div>
   </div>
 </div>
 
+<script src="../../../assets/js/config.js"></script>
+<script src="../../../assets/js/api.js"></script>
 <script src="../../../assets/js/whatsapp/wa-nav.js"></script>
 <script src="../../../assets/js/whatsapp/wa-ui.js"></script>
 <script>
 WA_UI.initTheme();
 WA_NAV.render('templates');
 
-const bodyInput = document.getElementById('tplBody');
-const pvBody = document.getElementById('pvBody');
+const params = new URLSearchParams(location.search);
+const editingId = params.get('id');
 const sample = { 'customer.name':'Priya', 'order.id':'#4821', 'order.eta':'Fri, 20 Jun', 'order.total':'₹1,299' };
 
-function renderPreview(){
-  let txt = bodyInput.value;
-  Object.keys(sample).forEach(k => { txt = txt.split('{{'+k+'}}').join(sample[k]); });
-  pvBody.textContent = txt;
+let tplButtons = []; // [{ type, label, url, payload }]
+let connections = [];
+let existingTemplate = null; // set when editing an already-submitted template (read-only)
+
+const bodyInput   = document.getElementById('tplBody');
+const footerInput = document.getElementById('tplFooter');
+const headerType  = document.getElementById('tplHeaderType');
+const headerText  = document.getElementById('tplHeaderText');
+const headerMedia = document.getElementById('tplHeaderMediaUrl');
+
+// Button icons matching Meta's real rendering
+const BTN_ICONS = {
+  URL: '<svg viewBox="0 0 24 24" fill="none"><path d="M10 14L21 3M21 3h-6M21 3v6M12 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  PHONE_NUMBER: '<svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  QUICK_REPLY: '<svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+
+// Load connections (for a picker if the user has more than one)
+async function loadConnections() {
+  const field = document.getElementById('tplConnectionField');
+  const sel = document.getElementById('tplConnection');
+  try {
+    const res = await API.getWhatsAppConnections();
+    connections = res.connections || [];
+    sel.innerHTML = connections.map(c => `<option value="${c._id}">${c.displayPhoneNumber || c.verifiedName || c._id}</option>`).join('');
+    field.style.display = connections.length > 1 ? '' : 'none';
+  } catch (e) {
+    connections = [];
+  }
 }
-bodyInput.addEventListener('input', renderPreview);
-document.getElementById('tplFooter').addEventListener('input', e => {
-  document.getElementById('pvFooter').textContent = e.target.value;
-});
-document.getElementById('tplHeaderType').addEventListener('change', e => {
-  const img = document.getElementById('pvHeaderImg');
-  img.style.display = e.target.value === 'Image' ? 'flex' : 'none';
-});
-function insertVar(v){
+
+function getSelectedConnectionId() {
+  const sel = document.getElementById('tplConnection');
+  if (sel.value) return sel.value;
+  return connections[0] ? connections[0]._id : null;
+}
+
+// Load existing template when editing (?id=...)
+async function loadExistingTemplate() {
+  if (!editingId) return;
+  try {
+    const t = await API.getWhatsAppTemplate(editingId);
+    existingTemplate = t;
+    document.getElementById('tbTitle').textContent = t.templateName;
+
+    document.getElementById('tplName').value = t.templateName;
+    document.getElementById('tplCat').value = t.category;
+    document.getElementById('tplLang').value = t.language || 'en_US';
+    bodyInput.value = t.body || '';
+    footerInput.value = t.footer || '';
+
+    if (t.header && t.header.type) {
+      headerType.value = String(t.header.type).toUpperCase();
+      if (t.header.type === 'TEXT') headerText.value = t.header.text || '';
+      if (['IMAGE','VIDEO','DOCUMENT'].includes(t.header.type)) headerMedia.value = t.header.mediaUrl || '';
+    }
+
+    tplButtons = Array.isArray(t.buttons) ? t.buttons.map(b => ({
+      type: metaTypeFromDmflow(b.type),
+      label: b.label || '',
+      url: b.url || '',
+      payload: b.payload || '',
+    })) : [];
+
+    // A template that's already been submitted to Meta is immutable —
+    // Meta template names can't be edited in place once PENDING/APPROVED.
+    // Lock the form and point the user at "duplicate as new" instead.
+    if (t.status !== 'DRAFT') {
+      lockFormAsReadOnly(t.status);
+    }
+
+    renderHeaderFields();
+    renderButtonsList();
+    renderPreview();
+  } catch (e) {
+    WA_UI.toast('Could not load this template', 'error');
+  }
+}
+
+function metaTypeFromDmflow(t) {
+  if (t === 'CALL_BUSINESS') return 'PHONE_NUMBER';
+  if (['CUSTOM_URL','OPEN_PRODUCT','OPEN_CATALOG','OPEN_COLLECTION','OPEN_WEBSITE'].includes(t)) return 'URL';
+  return 'QUICK_REPLY';
+}
+
+function lockFormAsReadOnly(status) {
+  const note = document.getElementById('tbStatusNote');
+  note.style.display = '';
+  note.textContent = `This template is ${status} on Meta and can no longer be edited here — Meta locks template content once submitted. Duplicate it under a new name to make changes.`;
+  document.querySelectorAll('.wa-tb-form input, .wa-tb-form textarea, .wa-tb-form select, #tplAddBtnBtn').forEach(el => el.disabled = true);
+  const saveBtn = document.getElementById('tbSaveDraftBtn');
+  const submitBtn = document.getElementById('tbSubmitBtn');
+  saveBtn.textContent = 'Duplicate as New';
+  saveBtn.disabled = false;
+  saveBtn.onclick = duplicateAsNew;
+  submitBtn.style.display = 'none';
+}
+
+function duplicateAsNew() {
+  location.href = 'template-builder.html'; // fresh builder; user re-keys details
+}
+
+// Header field visibility
+function renderHeaderFields() {
+  const type = headerType.value;
+  document.getElementById('tplHeaderTextField').style.display = type === 'TEXT' ? '' : 'none';
+  document.getElementById('tplHeaderMediaField').style.display = ['IMAGE','VIDEO','DOCUMENT'].includes(type) ? '' : 'none';
+}
+headerType.addEventListener('change', () => { renderHeaderFields(); renderPreview(); });
+
+// Buttons editor
+function addButton() {
+  if (tplButtons.length >= 3) { WA_UI.toast('Meta allows up to 3 buttons per template', 'error'); return; }
+  tplButtons.push({ type: 'QUICK_REPLY', label: '', url: '', payload: '' });
+  renderButtonsList();
+  renderPreview();
+}
+function removeButton(idx) {
+  tplButtons.splice(idx, 1);
+  renderButtonsList();
+  renderPreview();
+}
+function updateButton(idx, field, value) {
+  tplButtons[idx][field] = value;
+  renderPreview();
+}
+function renderButtonsList() {
+  const list = document.getElementById('tplButtonsList');
+  if (!tplButtons.length) {
+    list.innerHTML = `<div class="wa-hint">No buttons added.</div>`;
+    return;
+  }
+  list.innerHTML = tplButtons.map((b, i) => `
+    <div class="wa-card wa-btn-card">
+      <div class="wa-card-pad" style="display:flex;flex-direction:column;gap:8px;">
+        <div class="wa-btn-row">
+          <div class="wa-field" style="flex:1;"><label class="wa-label">Button label</label>
+            <input class="wa-input" value="${escapeAttr(b.label)}" oninput="updateButton(${i},'label',this.value)" placeholder="e.g. Track Order">
+          </div>
+          <div class="wa-field" style="flex:1;"><label class="wa-label">Type</label>
+            <select class="wa-select" onchange="updateButton(${i},'type',this.value); renderButtonsList(); renderPreview();">
+              <option value="QUICK_REPLY" ${b.type==='QUICK_REPLY'?'selected':''}>Quick Reply</option>
+              <option value="URL" ${b.type==='URL'?'selected':''}>Visit Website (URL)</option>
+              <option value="PHONE_NUMBER" ${b.type==='PHONE_NUMBER'?'selected':''}>Call Phone Number</option>
+            </select>
+          </div>
+          <button class="wa-btn-remove" onclick="removeButton(${i})" title="Remove">✕</button>
+        </div>
+        ${b.type === 'URL' ? `
+          <div class="wa-field"><label class="wa-label">URL</label>
+            <input class="wa-input" value="${escapeAttr(b.url)}" oninput="updateButton(${i},'url',this.value)" placeholder="https://example.com/order/{{1}}">
+          </div>` : ''}
+        ${b.type === 'PHONE_NUMBER' ? `
+          <div class="wa-field"><label class="wa-label">Phone number</label>
+            <input class="wa-input" value="${escapeAttr(b.payload)}" oninput="updateButton(${i},'payload',this.value)" placeholder="+91XXXXXXXXXX">
+          </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeAttr(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+function escapeHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Live preview — real WhatsApp structure
+function renderPreview() {
+  const headerArea = document.getElementById('pvHeaderArea');
+  const type = headerType.value;
+  if (type === 'TEXT') {
+    headerArea.innerHTML = `<div class="wa-phone-header-text">${escapeHtml(applySample(headerText.value) || 'Header text')}</div>`;
+  } else if (type === 'IMAGE') {
+    const url = headerMedia.value.trim();
+    headerArea.innerHTML = url
+      ? `<img class="wa-phone-header-img" src="${escapeAttr(url)}" onerror="this.outerHTML='<div class=&quot;wa-phone-header-img&quot;>Image header</div>'">`
+      : `<div class="wa-phone-header-img">Image header</div>`;
+  } else if (type === 'VIDEO') {
+    headerArea.innerHTML = `<div class="wa-phone-header-img">▶ Video header</div>`;
+  } else if (type === 'DOCUMENT') {
+    headerArea.innerHTML = `<div class="wa-phone-header-doc"><div class="wa-phone-header-doc-icon">📄</div><div style="font-size:11px;font-weight:600;color:#111;">document.pdf</div></div>`;
+  } else {
+    headerArea.innerHTML = '';
+  }
+
+  document.getElementById('pvBody').textContent = applySample(bodyInput.value) || 'Your message body will appear here.';
+
+  const footerEl = document.getElementById('pvFooter');
+  const footerVal = footerInput.value.trim();
+  footerEl.textContent = footerVal;
+  footerEl.style.display = footerVal ? '' : 'none';
+
+  const btnArea = document.getElementById('pvButtonsArea');
+  const visibleButtons = tplButtons.slice(0, 3);
+  if (!visibleButtons.length) {
+    btnArea.innerHTML = '';
+  } else {
+    btnArea.innerHTML = visibleButtons.map(b => `
+      <div class="wa-phone-btn">${BTN_ICONS[b.type] || ''}${escapeHtml(b.label) || (b.type === 'PHONE_NUMBER' ? 'Call' : b.type === 'URL' ? 'Visit Website' : 'Quick Reply')}</div>
+    `).join('');
+  }
+}
+
+function applySample(txt) {
+  let out = txt || '';
+  Object.keys(sample).forEach(k => { out = out.split('{{'+k+'}}').join(sample[k]); });
+  return out;
+}
+
+function insertVar(v) {
   bodyInput.value += ' {{' + v + '}}';
   renderPreview();
 }
-renderPreview();
+
+bodyInput.addEventListener('input', renderPreview);
+footerInput.addEventListener('input', renderPreview);
+headerText.addEventListener('input', renderPreview);
+headerMedia.addEventListener('input', renderPreview);
+
+// Save / Submit
+function collectFormData() {
+  const type = headerType.value;
+  let header = null;
+  if (type === 'TEXT') header = { type: 'TEXT', text: headerText.value.trim() };
+  else if (['IMAGE','VIDEO','DOCUMENT'].includes(type)) header = { type, mediaUrl: headerMedia.value.trim() };
+
+  return {
+    connectionId: getSelectedConnectionId(),
+    templateName: document.getElementById('tplName').value.trim(),
+    category: document.getElementById('tplCat').value,
+    language: document.getElementById('tplLang').value,
+    header,
+    body: bodyInput.value.trim(),
+    footer: footerInput.value.trim(),
+    buttons: tplButtons
+      .filter(b => b.label.trim())
+      .map(b => ({
+        type: b.type === 'URL' ? 'CUSTOM_URL' : b.type === 'PHONE_NUMBER' ? 'CALL_BUSINESS' : 'QUICK_REPLY',
+        label: b.label.trim(),
+        url: b.url.trim(),
+        payload: b.payload.trim(),
+      })),
+  };
+}
+
+async function saveTemplate(submit) {
+  const data = collectFormData();
+  if (!data.connectionId) return WA_UI.toast('No WhatsApp connection found — connect a number first', 'error');
+  if (!data.templateName) return WA_UI.toast('Template name is required', 'error');
+  if (!/^[a-z0-9_]+$/.test(data.templateName)) return WA_UI.toast('Template name must be lowercase letters, numbers, and underscores only', 'error');
+  if (!data.body) return WA_UI.toast('Body text is required', 'error');
+
+  const btn = submit ? document.getElementById('tbSubmitBtn') : document.getElementById('tbSaveDraftBtn');
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = submit ? 'Submitting…' : 'Saving…';
+
+  try {
+    await API.createWhatsAppTemplate({ ...data, submit });
+    WA_UI.toast(submit ? 'Submitted to Meta for review' : 'Draft saved', 'success');
+    location.href = 'templates.html';
+  } catch (e) {
+    WA_UI.toast(e.message || 'Could not save template', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+}
+
+// Init
+(async function init() {
+  await loadConnections();
+  if (editingId) {
+    await loadExistingTemplate();
+  } else {
+    renderButtonsList();
+    renderPreview();
+  }
+})();
 </script>
 </body>
 </html>
