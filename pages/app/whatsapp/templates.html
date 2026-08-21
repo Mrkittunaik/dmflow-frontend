@@ -9,15 +9,29 @@
 <link rel="stylesheet" href="../../../assets/css/whatsapp/wa-core.css">
 <style>
 .wa-tabs{display:flex;gap:4px;border-bottom:1px solid var(--wa-border);flex-wrap:wrap;}
-.wa-tab{font-size:12.5px;font-weight:700;padding:9px 14px;color:var(--wa-text-2);cursor:pointer;border-bottom:2px solid transparent;}
+.wa-tab{font-size:12.5px;font-weight:700;padding:9px 14px;color:var(--wa-text-2);cursor:pointer;border-bottom:2px solid transparent;background:none;border-left:none;border-right:none;border-top:none;}
 .wa-tab.active{color:var(--wa-green-dark);border-bottom-color:var(--wa-green-dark);}
 .wa-tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.wa-tpl-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;}
-.wa-tpl-name{font-family:var(--wa-font-head);font-weight:800;font-size:13.5px;}
+.wa-tpl-card{background:var(--wa-bg-panel);border:1px solid var(--wa-border);border-radius:var(--wa-r);padding:16px 18px;display:flex;flex-direction:column;gap:10px;}
+.wa-tpl-name{font-family:var(--wa-font-head);font-weight:800;font-size:13.5px;word-break:break-all;}
 .wa-tpl-meta{font-size:11.5px;color:var(--wa-text-3);}
-.wa-tpl-actions{display:flex;gap:6px;margin-top:6px;}
+.wa-tpl-actions{display:flex;gap:6px;margin-top:2px;}
 @media(max-width:1100px){.wa-tpl-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:680px){.wa-tpl-grid{grid-template-columns:1fr;}}
+
+/* ── Mini WhatsApp bubble preview, matching the builder's real rendering ── */
+.wa-tpl-preview-wrap{background:#E5DDD5;border-radius:10px;padding:10px;}
+.wa-tpl-bubble{background:#fff;border-radius:7px 7px 7px 2px;overflow:hidden;box-shadow:0 1px 1px rgba(0,0,0,.08);font-size:11.5px;line-height:1.45;}
+.wa-tpl-bubble-inner{padding:8px 9px 6px;}
+.wa-tpl-header-img{width:100%;height:74px;object-fit:cover;background:linear-gradient(135deg,var(--wa-green),var(--wa-green-teal));display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700;border-radius:4px;margin-bottom:6px;}
+.wa-tpl-header-doc{display:flex;align-items:center;gap:7px;background:#f5f5f5;border-radius:6px;padding:8px;margin-bottom:6px;}
+.wa-tpl-header-doc-icon{width:26px;height:26px;border-radius:5px;background:var(--wa-green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.wa-tpl-header-text{font-weight:700;font-size:12px;margin-bottom:3px;color:#111;}
+.wa-tpl-body-text{color:#111;white-space:pre-wrap;word-break:break-word;}
+.wa-tpl-footer{font-size:9.5px;color:#8696a0;margin-top:4px;}
+.wa-tpl-btn{border-top:1px solid #f0f0f0;text-align:center;padding:6px 0;font-size:11.5px;color:#00a5f4;font-weight:500;display:flex;align-items:center;justify-content:center;gap:5px;}
+.wa-tpl-btn svg{width:11px;height:11px;flex-shrink:0;}
+.wa-tpl-btn-overflow{color:#54656f;font-size:11px;}
 </style>
 </head>
 <body class="wa-scope">
@@ -34,14 +48,14 @@
     <div class="wa-scroll"><div class="wa-pad">
 
       <div class="wa-flex wa-between">
-        <div class="wa-tabs">
-          <div class="wa-tab active">All</div>
-          <div class="wa-tab">Marketing</div>
-          <div class="wa-tab">Utility</div>
-          <div class="wa-tab">Authentication</div>
-          <div class="wa-tab">Approved</div>
-          <div class="wa-tab">Pending</div>
-          <div class="wa-tab">Rejected</div>
+        <div class="wa-tabs" id="waTabs">
+          <button class="wa-tab active" data-filter="all">All</button>
+          <button class="wa-tab" data-filter="cat:MARKETING">Marketing</button>
+          <button class="wa-tab" data-filter="cat:UTILITY">Utility</button>
+          <button class="wa-tab" data-filter="cat:AUTHENTICATION">Authentication</button>
+          <button class="wa-tab" data-filter="status:APPROVED">Approved</button>
+          <button class="wa-tab" data-filter="status:PENDING">Pending</button>
+          <button class="wa-tab" data-filter="status:REJECTED">Rejected</button>
         </div>
         <div class="wa-flex wa-gap-8">
           <button class="wa-btn wa-btn-outline wa-btn-sm" id="waSyncBtn">Sync from Meta</button>
@@ -49,7 +63,7 @@
         </div>
       </div>
 
-      <div class="wa-tpl-grid" id="waTplGrid"><div class="wa-muted" style="padding:16px;">Loading…</div></div>
+      <div class="wa-tpl-grid" id="waTplGrid" style="margin-top:16px;"><div class="wa-muted" style="padding:16px;">Loading…</div></div>
 
     </div></div>
   </div>
@@ -64,42 +78,136 @@ WA_UI.initTheme();
 WA_NAV.render('templates');
 
 const statusColor = { APPROVED:'green', PENDING:'amber', REJECTED:'red', DRAFT:'gray', PAUSED:'amber' };
+const sample = { 'customer.name':'Priya', 'order.id':'#4821', 'order.eta':'Fri, 20 Jun', 'order.total':'₹1,299' };
+
+const BTN_ICONS = {
+  URL: '<svg viewBox="0 0 24 24" fill="none"><path d="M10 14L21 3M21 3h-6M21 3v6M12 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  CUSTOM_URL: '<svg viewBox="0 0 24 24" fill="none"><path d="M10 14L21 3M21 3h-6M21 3v6M12 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  PHONE_NUMBER: '<svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  CALL_BUSINESS: '<svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  QUICK_REPLY: '<svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+
+let allTemplates = [];
+let activeFilter = 'all';
+
+function escapeHtml(s) {
+  return (s || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeAttr(s) {
+  return (s || '').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+function applySample(txt) {
+  let out = txt || '';
+  Object.keys(sample).forEach(k => { out = out.split('{{'+k+'}}').join(sample[k]); });
+  return out;
+}
+
+// Builds the same real WhatsApp-bubble markup used in template-builder.html,
+// scaled down to card size, from a saved WhatsAppTemplate doc.
+function renderMiniPreview(t) {
+  let headerHtml = '';
+  const h = t.header;
+  if (h && h.type) {
+    const type = String(h.type).toUpperCase();
+    if (type === 'TEXT') {
+      headerHtml = `<div class="wa-tpl-header-text">${escapeHtml(applySample(h.text))}</div>`;
+    } else if (type === 'IMAGE') {
+      headerHtml = h.mediaUrl
+        ? `<img class="wa-tpl-header-img" src="${escapeAttr(h.mediaUrl)}" onerror="this.outerHTML='<div class=&quot;wa-tpl-header-img&quot;>Image header</div>'">`
+        : `<div class="wa-tpl-header-img">Image header</div>`;
+    } else if (type === 'VIDEO') {
+      headerHtml = `<div class="wa-tpl-header-img">▶ Video header</div>`;
+    } else if (type === 'DOCUMENT') {
+      headerHtml = `<div class="wa-tpl-header-doc"><div class="wa-tpl-header-doc-icon">📄</div><div style="font-size:10px;font-weight:600;color:#111;">document.pdf</div></div>`;
+    }
+  }
+
+  const bodyText = escapeHtml(applySample(t.body)) || '<span style="color:#9aa;">No body text</span>';
+  const footerHtml = t.footer ? `<div class="wa-tpl-footer">${escapeHtml(t.footer)}</div>` : '';
+
+  const buttons = Array.isArray(t.buttons) ? t.buttons.slice(0, 3) : [];
+  const buttonsHtml = buttons.map(b => `
+    <div class="wa-tpl-btn">${BTN_ICONS[b.type] || ''}${escapeHtml(b.label) || 'Button'}</div>
+  `).join('');
+
+  return `
+    <div class="wa-tpl-preview-wrap">
+      <div class="wa-tpl-bubble">
+        <div class="wa-tpl-bubble-inner">
+          ${headerHtml}
+          <div class="wa-tpl-body-text">${bodyText}</div>
+          ${footerHtml}
+        </div>
+        ${buttonsHtml}
+      </div>
+    </div>`;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('waTplGrid');
+  const filtered = allTemplates.filter(t => {
+    if (activeFilter === 'all') return true;
+    const [kind, val] = activeFilter.split(':');
+    if (kind === 'cat') return t.category === val;
+    if (kind === 'status') return t.status === val;
+    return true;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="wa-muted" style="padding:16px;">No templates match this filter.</div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(t => `
+    <div class="wa-tpl-card">
+      <div class="wa-flex wa-between">
+        <div class="wa-tpl-name">${escapeHtml(t.templateName)}</div>
+        <span class="wa-badge ${statusColor[t.status] || 'gray'}">${t.status}</span>
+      </div>
+      <div class="wa-tpl-meta">${escapeHtml(t.category)} · ${escapeHtml(t.language)}</div>
+      ${renderMiniPreview(t)}
+      <div class="wa-tpl-actions">
+        <a href="template-builder.html?id=${t._id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
+      </div>
+    </div>`).join('');
+}
 
 async function loadTemplates() {
   const grid = document.getElementById('waTplGrid');
   try {
     const { templates } = await API.getWhatsAppTemplates();
-    if (!templates.length) {
+    allTemplates = templates || [];
+    if (!allTemplates.length) {
       grid.innerHTML = '<div class="wa-muted" style="padding:16px;">No templates yet. Create one or sync from Meta.</div>';
       return;
     }
-    grid.innerHTML = templates.map(t => `
-      <div class="wa-tpl-card">
-        <div class="wa-flex wa-between">
-          <div class="wa-tpl-name">${t.templateName}</div>
-          <span class="wa-badge ${statusColor[t.status] || 'gray'}">${t.status}</span>
-        </div>
-        <div class="wa-tpl-meta">${t.category} · ${t.language}</div>
-        <div class="wa-tpl-actions">
-          <a href="template-builder.html?id=${t._id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
-        </div>
-      </div>`).join('');
+    renderGrid();
   } catch (err) {
     console.error('Failed to load templates:', err);
     grid.innerHTML = '<div class="wa-muted" style="padding:16px;">Could not load templates.</div>';
   }
 }
 
+document.getElementById('waTabs').addEventListener('click', (e) => {
+  const tab = e.target.closest('.wa-tab');
+  if (!tab) return;
+  document.querySelectorAll('#waTabs .wa-tab').forEach(el => el.classList.remove('active'));
+  tab.classList.add('active');
+  activeFilter = tab.dataset.filter;
+  renderGrid();
+});
+
 document.getElementById('waSyncBtn').addEventListener('click', async (e) => {
   const btn = e.currentTarget;
   btn.disabled = true; btn.textContent = 'Syncing…';
   try {
     const conn = await API.getWhatsAppConnection();
-    if (!conn.connected) { alert('Connect a WhatsApp number first.'); return; }
+    if (!conn.connected) { WA_UI.toast('Connect a WhatsApp number first.', 'error'); return; }
     await API.syncWhatsAppTemplates(conn._id);
     await loadTemplates();
   } catch (err) {
-    alert('Sync failed: ' + err.message);
+    WA_UI.toast('Sync failed: ' + err.message, 'error');
   } finally {
     btn.disabled = false; btn.textContent = 'Sync from Meta';
   }
