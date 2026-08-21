@@ -215,6 +215,27 @@ const API = (() => {
     createWhatsAppTemplate: (data)        => { _cacheInvalidate('/api/whatsapp/templates'); return req('POST', '/api/whatsapp/templates', data); },
     deleteWhatsAppTemplate: (id)          => { _cacheInvalidate('/api/whatsapp/templates'); return req('DELETE', '/api/whatsapp/templates/' + id); },
     syncWhatsAppTemplates: (connectionId) => { _cacheInvalidate('/api/whatsapp/templates'); return req('POST', '/api/whatsapp/templates/sync', { connectionId }); },
+    // Multipart upload — bypasses req()'s JSON-only body, since this sends a
+    // real file. Returns { mediaHandle } to attach to a template header.
+    uploadWhatsAppTemplateMedia: async (connectionId, headerType, file) => {
+      const form = new FormData();
+      form.append('connectionId', connectionId);
+      form.append('headerType', headerType);
+      form.append('file', file);
+      const token = getToken();
+      const headers = {};
+      if (token) headers['Authorization'] = 'Bearer ' + token;
+      const res = await fetch(BASE_URL + '/api/whatsapp/templates/media', {
+        method: 'POST',
+        headers,
+        credentials: 'include',
+        body: form,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) { _handleUnauth(); throw new Error('Session expired. Please log in again.'); }
+      if (!res.ok) throw new Error(data.error || 'Media upload failed.');
+      return data;
+    },
 
     // ── WhatsApp Keyword Rules (auto-tag categories) ────────────────
     getWhatsAppKeywordRules:    (connectionId) => req('GET', '/api/whatsapp/keyword-rules' + (connectionId ? '?connectionId=' + connectionId : '')),
