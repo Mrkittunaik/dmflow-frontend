@@ -170,6 +170,7 @@ WA_NAV.render('templates');
 
 const params = new URLSearchParams(location.search);
 const editingId = params.get('id');
+const duplicateFromId = params.get('dupe');
 const sample = { 'customer.name':'Priya', 'order.id':'#4821', 'order.eta':'Fri, 20 Jun', 'order.total':'₹1,299' };
 const positionalSample = ['Priya', '#4821', 'Fri, 20 Jun', '₹1,299']; // fills {{1}}, {{2}}, {{3}}, {{4}} for Meta-style positional templates
 
@@ -234,35 +235,7 @@ async function loadExistingTemplate() {
     existingTemplate = t;
     document.getElementById('tbTitle').textContent = t.templateName;
 
-    document.getElementById('tplName').value = t.templateName;
-    document.getElementById('tplCat').value = t.category;
-    document.getElementById('tplLang').value = t.language || 'en_US';
-    bodyInput.value = t.body || '';
-    footerInput.value = t.footer || '';
-
-    if (t.header && t.header.type) {
-      headerType.value = String(t.header.type).toUpperCase();
-      if (t.header.type === 'TEXT') headerText.value = t.header.text || '';
-      if (['IMAGE','VIDEO','DOCUMENT'].includes(t.header.type)) {
-        // Existing templates already have their media on Meta's side (as a
-        // handle or a synced-down URL) — nothing to re-upload unless the
-        // person picks a new file, so just show it for reference.
-        headerMediaPreviewUrl = t.header.mediaUrl || '';
-        headerMediaHandle = t.header.mediaHandle || 'existing';
-        if (headerMediaPreviewUrl) {
-          headerMediaStatus.style.display = '';
-          headerMediaStatus.style.color = 'var(--wa-text-2)';
-          headerMediaStatus.textContent = 'Using existing media from Meta.';
-        }
-      }
-    }
-
-    tplButtons = Array.isArray(t.buttons) ? t.buttons.map(b => ({
-      type: metaTypeFromDmflow(b.type),
-      label: b.label || '',
-      url: b.url || '',
-      payload: b.payload || '',
-    })) : [];
+    populateFormFrom(t);
 
     // A template that's already been submitted to Meta is immutable —
     // Meta template names can't be edited in place once PENDING/APPROVED.
@@ -277,6 +250,79 @@ async function loadExistingTemplate() {
   } catch (e) {
     WA_UI.toast('Could not load this template', 'error');
   }
+}
+
+// Load a template as a *starting point* for a new one (?dupe=...) — used by
+// "Duplicate as New" on a locked/approved template. Unlike loadExistingTemplate,
+// this never locks the form: the result is a brand new, unsubmitted template
+// that just happens to start with the source template's content.
+async function loadDuplicateSource() {
+  if (!duplicateFromId) return;
+  try {
+    const t = await API.getWhatsAppTemplate(duplicateFromId);
+    document.getElementById('tbTitle').textContent = 'Duplicate of ' + t.templateName;
+
+    populateFormFrom(t);
+    // Meta template names are unique — never carry the original name over,
+    // and don't keep Meta's mediaHandle (it belongs to the old submission;
+    // a media header here must be re-uploaded before this can be submitted).
+    document.getElementById('tplName').value = '';
+    document.getElementById('tplName').placeholder = 'e.g. ' + t.templateName + '_v2';
+    if (headerMediaHandle) {
+      headerMediaHandle = '';
+      if (headerMediaPreviewUrl) {
+        headerMediaStatus.style.display = '';
+        headerMediaStatus.style.color = 'var(--wa-text-2)';
+        headerMediaStatus.textContent = 'Re-upload this image to submit — the original file isn\'t reusable.';
+      }
+    }
+
+    WA_UI.toast('Loaded ' + t.templateName + ' as a starting point — give it a new name and edit as needed', 'success');
+
+    renderHeaderFields();
+    renderButtonsList();
+    renderPreview();
+  } catch (e) {
+    WA_UI.toast('Could not load the source template to duplicate', 'error');
+  }
+}
+
+// Shared field population used by both the edit flow and the duplicate flow.
+function populateFormFrom(t) {
+  document.getElementById('tplName').value = t.templateName;
+  document.getElementById('tplCat').value = t.category;
+  document.getElementById('tplLang').value = t.language || 'en_US';
+  bodyInput.value = t.body || '';
+  footerInput.value = t.footer || '';
+
+  headerType.value = 'NONE';
+  headerText.value = '';
+  headerMediaPreviewUrl = '';
+  headerMediaHandle = '';
+
+  if (t.header && t.header.type) {
+    headerType.value = String(t.header.type).toUpperCase();
+    if (t.header.type === 'TEXT') headerText.value = t.header.text || '';
+    if (['IMAGE','VIDEO','DOCUMENT'].includes(t.header.type)) {
+      // Existing templates already have their media on Meta's side (as a
+      // handle or a synced-down URL) — nothing to re-upload unless the
+      // person picks a new file, so just show it for reference.
+      headerMediaPreviewUrl = t.header.mediaUrl || '';
+      headerMediaHandle = t.header.mediaHandle || 'existing';
+      if (headerMediaPreviewUrl) {
+        headerMediaStatus.style.display = '';
+        headerMediaStatus.style.color = 'var(--wa-text-2)';
+        headerMediaStatus.textContent = 'Using existing media from Meta.';
+      }
+    }
+  }
+
+  tplButtons = Array.isArray(t.buttons) ? t.buttons.map(b => ({
+    type: metaTypeFromDmflow(b.type),
+    label: b.label || '',
+    url: b.url || '',
+    payload: b.payload || '',
+  })) : [];
 }
 
 function metaTypeFromDmflow(t) {
@@ -300,7 +346,11 @@ function lockFormAsReadOnly(status) {
 }
 
 function duplicateAsNew() {
-  location.href = 'template-builder.html'; // fresh builder; user re-keys details
+  // Carries the approved template's content into a fresh, fully-editable
+  // draft instead of sending the person to a blank builder. ?dupe=<id> is
+  // read on load below and pre-fills the form without locking it, since
+  // this is a brand new (not-yet-submitted) template.
+  location.href = 'template-builder.html?dupe=' + editingId;
 }
 
 // Header field visibility
@@ -551,6 +601,8 @@ async function saveTemplate(submit) {
   await loadConnections();
   if (editingId) {
     await loadExistingTemplate();
+  } else if (duplicateFromId) {
+    await loadDuplicateSource();
   } else {
     renderButtonsList();
     renderPreview();
