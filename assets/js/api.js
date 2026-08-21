@@ -211,6 +211,9 @@ const API = (() => {
 
     // ── WhatsApp Templates ──────────────────────────────────────────
     getWhatsAppTemplates:  ()             => req('GET', '/api/whatsapp/templates'),
+    getWhatsAppTemplate:   (id)           => req('GET', '/api/whatsapp/templates/' + id, null, { noCache: true }),
+    createWhatsAppTemplate: (data)        => { _cacheInvalidate('/api/whatsapp/templates'); return req('POST', '/api/whatsapp/templates', data); },
+    deleteWhatsAppTemplate: (id)          => { _cacheInvalidate('/api/whatsapp/templates'); return req('DELETE', '/api/whatsapp/templates/' + id); },
     syncWhatsAppTemplates: (connectionId) => { _cacheInvalidate('/api/whatsapp/templates'); return req('POST', '/api/whatsapp/templates/sync', { connectionId }); },
 
     // ── WhatsApp Keyword Rules (auto-tag categories) ────────────────
