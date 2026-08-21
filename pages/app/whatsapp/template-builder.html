@@ -12,6 +12,12 @@
 .wa-tb-form{flex:1;overflow-y:auto;padding:22px 26px 60px;display:flex;flex-direction:column;gap:16px;max-width:640px;}
 .wa-tb-preview-col{width:340px;flex-shrink:0;border-left:1px solid var(--wa-border);background:var(--wa-bg-sunken);display:flex;flex-direction:column;align-items:center;padding:26px 18px;overflow-y:auto;}
 
+/* .wa-card sets overflow:hidden globally (for rounded-corner clipping on
+   things like tables). This page's cards hold form fields that change
+   height as the person picks a header type / adds buttons, so clipping
+   would cut those fields off — override it to visible just here. */
+.wa-tb-form .wa-card{overflow:visible;}
+
 /* Phone chrome */
 .wa-phone{width:280px;background:#0A0A0F;border-radius:20px;padding:8px;box-shadow:var(--wa-shadow-lg);}
 .wa-phone-screen{background:#E5DDD5;border-radius:14px;overflow:hidden;min-height:420px;display:flex;flex-direction:column;}
