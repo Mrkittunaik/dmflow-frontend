@@ -221,6 +221,8 @@ const API = (() => {
 
     // ── WhatsApp Contacts ────────────────────────────────────────────
     getWhatsAppContacts: (page, search) => req('GET', '/api/whatsapp/contacts?page=' + (page || 1) + (search ? '&search=' + encodeURIComponent(search) : '')),
+    importWhatsAppContacts: (data) => { _cacheInvalidate('/api/whatsapp/contacts'); return req('POST', '/api/whatsapp/contacts/import', data); },
+    getWhatsAppContactBatches: (connectionId) => req('GET', '/api/whatsapp/contacts/batches' + (connectionId ? '?connectionId=' + connectionId : ''), null, { noCache: true }),
 
     // ── WhatsApp Analytics ───────────────────────────────────────────
     getWhatsAppAnalytics: (range, connectionId) => req('GET', '/api/whatsapp/analytics?range=' + (range || '7d') + (connectionId ? '&connectionId=' + connectionId : ''), null, { noCache: true }),
