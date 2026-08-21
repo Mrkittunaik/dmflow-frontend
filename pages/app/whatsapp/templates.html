@@ -173,7 +173,8 @@ function renderGrid() {
       <div class="wa-tpl-meta">${escapeHtml(t.category)} · ${escapeHtml(t.language)}</div>
       ${renderMiniPreview(t)}
       <div class="wa-tpl-actions">
-        <a href="template-builder.html?id=${t._id}" class="wa-btn wa-btn-outline wa-btn-sm">Edit</a>
+        <a href="template-builder.html?id=${t._id}" class="wa-btn wa-btn-outline wa-btn-sm">${t.status === 'DRAFT' ? 'Edit' : 'View'}</a>
+        ${t.status !== 'DRAFT' ? `<a href="template-builder.html?dupe=${t._id}" class="wa-btn wa-btn-outline wa-btn-sm">Duplicate</a>` : ''}
       </div>
     </div>`).join('');
 }
