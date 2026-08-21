@@ -79,6 +79,7 @@ WA_NAV.render('templates');
 
 const statusColor = { APPROVED:'green', PENDING:'amber', REJECTED:'red', DRAFT:'gray', PAUSED:'amber' };
 const sample = { 'customer.name':'Priya', 'order.id':'#4821', 'order.eta':'Fri, 20 Jun', 'order.total':'₹1,299' };
+const positionalSample = ['Priya', '#4821', 'Fri, 20 Jun', '₹1,299']; // fills {{1}}, {{2}}, {{3}}, {{4}} for Meta-synced templates
 
 const BTN_ICONS = {
   URL: '<svg viewBox="0 0 24 24" fill="none"><path d="M10 14L21 3M21 3h-6M21 3v6M12 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -100,6 +101,10 @@ function escapeAttr(s) {
 function applySample(txt) {
   let out = txt || '';
   Object.keys(sample).forEach(k => { out = out.split('{{'+k+'}}').join(sample[k]); });
+  out = out.replace(/\{\{(\d+)\}\}/g, (match, num) => {
+    const idx = parseInt(num) - 1;
+    return positionalSample[idx] !== undefined ? positionalSample[idx] : match;
+  });
   return out;
 }
 
