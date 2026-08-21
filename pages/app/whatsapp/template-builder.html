@@ -16,7 +16,11 @@
    things like tables). This page's cards hold form fields that change
    height as the person picks a header type / adds buttons, so clipping
    would cut those fields off — override it to visible just here. */
-.wa-tb-form .wa-card{overflow:visible;}
+.wa-tb-form .wa-card{overflow:visible;height:auto;max-height:none;}
+/* Basics and Header cards specifically must always show every field they
+   contain — never clipped, never scroll-locked internally. Height is
+   driven purely by content. */
+#tplBasicsCard,#tplHeaderCard{height:auto;max-height:none;overflow:visible;}
 
 /* Phone chrome */
 .wa-phone{width:280px;background:#0A0A0F;border-radius:20px;padding:8px;box-shadow:var(--wa-shadow-lg);}
@@ -38,7 +42,8 @@
 .wa-phone-btn{border-top:1px solid #f0f0f0;text-align:center;padding:8px 0;font-size:12.5px;color:#00a5f4;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:default;}
 .wa-phone-btn svg{width:13px;height:13px;flex-shrink:0;}
 
-.wa-btn-row{display:flex;gap:8px;align-items:flex-end;}
+.wa-btn-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;}
+.wa-btn-row > .wa-field{min-width:160px;}
 .wa-var-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;background:var(--wa-green-pale);color:var(--wa-green-dark);padding:3px 8px;border-radius:var(--wa-r-sm);cursor:pointer;border:none;}
 .wa-btn-card{border-color:var(--wa-border-soft);}
 .wa-btn-remove{color:#e11d48;font-size:11px;font-weight:700;cursor:pointer;background:none;border:none;padding:2px 4px;}
@@ -65,7 +70,7 @@
 
         <div class="wa-status-note" id="tbStatusNote" style="display:none;"></div>
 
-        <div class="wa-card wa-card-pad">
+        <div class="wa-card wa-card-pad" id="tplBasicsCard">
           <div class="wa-section-label" style="margin-bottom:10px;">Basics</div>
           <div class="wa-flex-col wa-gap-14">
             <div class="wa-field" id="tplConnectionField" style="display:none;">
@@ -92,7 +97,7 @@
           </div>
         </div>
 
-        <div class="wa-card wa-card-pad">
+        <div class="wa-card wa-card-pad" id="tplHeaderCard">
           <div class="wa-section-label" style="margin-bottom:10px;">Header (optional)</div>
           <select class="wa-select" id="tplHeaderType">
             <option value="NONE">None</option>
