@@ -168,6 +168,7 @@ WA_NAV.render('templates');
 const params = new URLSearchParams(location.search);
 const editingId = params.get('id');
 const sample = { 'customer.name':'Priya', 'order.id':'#4821', 'order.eta':'Fri, 20 Jun', 'order.total':'₹1,299' };
+const positionalSample = ['Priya', '#4821', 'Fri, 20 Jun', '₹1,299']; // fills {{1}}, {{2}}, {{3}}, {{4}} for Meta-style positional templates
 
 let tplButtons = []; // [{ type, label, url, payload }]
 let connections = [];
@@ -377,6 +378,10 @@ function renderPreview() {
 function applySample(txt) {
   let out = txt || '';
   Object.keys(sample).forEach(k => { out = out.split('{{'+k+'}}').join(sample[k]); });
+  out = out.replace(/\{\{(\d+)\}\}/g, (match, num) => {
+    const idx = parseInt(num) - 1;
+    return positionalSample[idx] !== undefined ? positionalSample[idx] : match;
+  });
   return out;
 }
 
